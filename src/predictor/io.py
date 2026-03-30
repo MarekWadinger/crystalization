@@ -28,11 +28,12 @@ def get_video_info(video_path: str) -> dict[str, int | float]:
 def load_video_snapshots(
     video_path: Path | str,
     config: PreprocessConfig,
-) -> tuple[NDArray[np.float64], tuple[int, int], float]:
+) -> tuple[NDArray[np.float64], NDArray[np.float64], tuple[int, int], float]:
     """Load video into a snapshot matrix.
 
     Returns:
-        X: snapshot matrix of shape (n_pixels, n_frames), float64 in [0, 1]
+        X_centered: mean-subtracted snapshot matrix (n_pixels, n_frames)
+        mean: temporal mean column (n_pixels, 1), add back for display
         frame_shape: (height, width) after downsampling
         fps: effective FPS after frame_skip
     """
@@ -58,21 +59,19 @@ def load_video_snapshots(
                 resized = cv2.resize(
                     gray, (new_w, new_h), interpolation=cv2.INTER_AREA
                 )
-                frames.append(
-                    resized.astype(np.float64).ravel() / 255.0
-                )
+                frames.append(resized.astype(np.float64).ravel() / 255.0)
             frame_idx += 1
     finally:
         cap.release()
 
     X = np.column_stack(frames)  # (n_pixels, n_frames)
+    mean = X.mean(axis=1, keepdims=True)  # temporal mean
+    X_centered = X - mean
     effective_fps = orig_fps / config.frame_skip
-    return X, frame_shape, effective_fps
+    return X_centered, mean, frame_shape, effective_fps
 
 
-def apply_hankel(
-    X: NDArray[np.float64], delay: int
-) -> NDArray[np.float64]:
+def apply_hankel(X: NDArray[np.float64], delay: int) -> NDArray[np.float64]:
     """Apply time-delay (Hankel) embedding.
 
     For delay=1, returns X unchanged.
