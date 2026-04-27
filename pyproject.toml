@@ -12,13 +12,15 @@ annotator-visualize = "annotator.cli:main_visualize"
 annotator-annotate = "annotator.cli:main_annotate"
 annotator-app = "annotator.app:main"
 predictor-app = "predictor.app:main"
+llm-annotator-annotate = "llm_annotator.cli:main_annotate"
+llm-annotator-app = "llm_annotator.app:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/annotator", "src/predictor"]
+packages = ["src/annotator", "src/predictor", "src/llm_annotator"]
 
 [tool.ruff]
 src = ["src"]
@@ -35,5 +37,14 @@ predictor = [
     "opencv-python-headless>=4.13.0.92",
     "pydmd>=1.1.0",
     "gradio>=5.0",
+]
+llm-annotator = [
+    "numpy>=2.4.3",
+    "opencv-python-headless>=4.13.0.92",
+    "pydantic>=2.11",
+    "pydantic-ai[openai]>=0.2",
+    "logfire>=3.0",
+    "gradio>=5.0",
+    "matplotlib>=3.10",
 ]
 dev = ["commitizen>=4.13.9", "pre-commit>=4.5.1", "ruff>=0.15.5", "ty>=0.0.21"]
