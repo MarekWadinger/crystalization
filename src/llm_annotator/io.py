@@ -135,11 +135,52 @@ def _next_crystal_id(
     return max_id + 1
 
 
+def _run_classical_detection(
+    gray: NDArray,
+    frame_idx: int,
+    scale: float,
+) -> str:
+    """Run classical CV and return detections as text."""
+    from annotator.detection import process_frame
+    from annotator.types import LayerConfig
+
+    result, _ = process_frame(gray, None, frame_idx, LayerConfig())
+
+    lines: list[str] = []
+    total = 0
+    for lr in result.layers:
+        layer_name = _LAYER_MAP.get(lr.layer_id, "far")
+        lines.append(f"Layer {layer_name}: {lr.count} crystals")
+        for i, c in enumerate(lr.crystals):
+            sx = c.x * scale
+            sy = c.y * scale
+            sw = c.width * scale
+            sh = c.height * scale
+            lines.append(
+                f"  det_{lr.layer_id}_{i:03d}: "
+                f"x={sx:.0f}, y={sy:.0f}, "
+                f"w={sw:.0f}, h={sh:.0f}, "
+                f"angle={c.angle:.0f}"
+            )
+        total += lr.count
+    lines.insert(0, f"Classical CV detected {total} crystals:")
+    return "\n".join(lines)
+
+
+# Map classical layer_id to layer name string
+_LAYER_MAP: dict[int, str] = {
+    0: "far",
+    1: "mid",
+    2: "near",
+}
+
+
 def _build_user_prompt(
     frame_idx: int,
     timestamp_s: float,
     jpeg_bytes: bytes,
     previous: list[FrameAnnotation],
+    cv_detections: str = "",
 ) -> list[Any]:
     """Build multimodal prompt with image and context."""
     context = _build_tracking_context(previous)
@@ -152,34 +193,34 @@ def _build_user_prompt(
         lines.append(
             "This is a crystal growth microscopy video"
             " showing crystals at different depths in a"
-            " liquid medium. Crystals appear as bright"
-            " shapes with dark edges against a bright"
-            " background. Expect 50-500+ crystals per"
-            " frame."
+            " liquid medium."
         )
         lines.append("")
 
     lines.append(f"Annotate frame {frame_idx} (timestamp {timestamp_s:.2f}s).")
     lines.append("")
 
-    lines.append(
-        "Use the count_crystals tool FIRST to get the"
-        " baseline detection count per layer. Then"
-        " annotate ALL crystals you can identify -- not"
-        " just the prominent ones. Your count must reach"
-        " at least 80% of the baseline."
-    )
+    if cv_detections:
+        lines.append(
+            "The classical CV detector found the "
+            "following crystals with EXACT positions. "
+            "USE THESE COORDINATES as your bounding "
+            "boxes — do NOT invent your own positions. "
+            "Your job is to classify each detection "
+            "(depth layer, crystal system) and assign "
+            "tracking IDs.\n"
+        )
+        lines.append(cv_detections)
+        lines.append("")
 
     if prev_count is not None:
-        lines.append("")
         lines.append(
-            f"The previous frame had {prev_count} crystals."
-            " Expect a similar number in this frame"
-            " (crystals persist between frames with small"
-            " position changes)."
+            f"The previous frame had {prev_count} "
+            "crystals. Match by proximity to assign "
+            "persistent IDs."
         )
+        lines.append("")
 
-    lines.append("")
     lines.append(f"Previous annotations:\n{context}")
     lines.append("")
     lines.append(f"Next available crystal ID number: {next_id}")
@@ -220,11 +261,20 @@ async def annotate_video(
         for frame_idx, timestamp_s, bgr in sampled:
             with logfire.span("annotate_frame", frame_idx=frame_idx):
                 jpeg = encode_frame_jpeg(bgr, config.process_size)
+
+                # Run classical CV on original frame,
+                # scale coords to process_size space
+                gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+                h, w = bgr.shape[:2]
+                scale = min(config.process_size / max(h, w), 1.0)
+                cv_dets = _run_classical_detection(gray, frame_idx, scale)
+
                 prompt = _build_user_prompt(
                     frame_idx,
                     timestamp_s,
                     jpeg,
                     annotations[-3:],
+                    cv_detections=cv_dets,
                 )
                 frame_ctx = FrameContext(
                     frame_bytes=jpeg,

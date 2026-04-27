@@ -14,6 +14,7 @@ from numpy.typing import NDArray
 from llm_annotator.agent import FrameContext, build_agent
 from llm_annotator.io import (
     _build_user_prompt,
+    _run_classical_detection,
     downscale,
     encode_frame_jpeg,
     extract_frames,
@@ -32,6 +33,18 @@ from llm_annotator.viz import (
     draw_legend,
     render_tracking_overlay,
 )
+
+
+def _get_known_models() -> list[str]:
+    """Get model names from pydantic-ai."""
+    import typing
+
+    from pydantic_ai.models import KnownModelName
+
+    value = getattr(KnownModelName, "__value__", None)
+    if value is None:
+        return ["openai:gpt-4o"]
+    return sorted(typing.get_args(value))
 
 
 def _on_video_upload(video_path: str) -> str:
@@ -93,11 +106,18 @@ async def _run_annotation(
         progress((i, total), desc=f"Frame {i + 1}/{total}")
 
         jpeg = encode_frame_jpeg(bgr, config.process_size)
+        import cv2
+
+        gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+        h, w = bgr.shape[:2]
+        scale = min(config.process_size / max(h, w), 1.0)
+        cv_dets = _run_classical_detection(gray, frame_idx, scale)
         prompt = _build_user_prompt(
             frame_idx,
             timestamp_s,
             jpeg,
             annotations[-3:],
+            cv_detections=cv_dets,
         )
         frame_ctx = FrameContext(
             frame_bytes=jpeg,
@@ -268,26 +288,10 @@ def build_app() -> gr.Blocks:
             with gr.Column(scale=1):
                 gr.Markdown("### Configuration")
                 model_name = gr.Dropdown(
-                    choices=[
-                        "openai:gpt-5.4",
-                        "openai:gpt-5.4-mini",
-                        "openai:gpt-5.4-nano",
-                        "openai:gpt-5.3-chat-latest",
-                        "openai:gpt-5.2",
-                        "openai:gpt-5.1",
-                        "openai:gpt-5",
-                        "openai:gpt-5-mini",
-                        "openai:gpt-4o",
-                        "openai:gpt-4o-mini",
-                        "openai:gpt-4.1",
-                        "openai:gpt-4.1-mini",
-                        "openai:gpt-4.1-nano",
-                        "openai:o3",
-                        "openai:o4-mini",
-                    ],
+                    choices=_get_known_models(),
                     value="openai:gpt-4o",
                     label="LLM Model",
-                    info=("Vision-capable OpenAI model for crystal analysis"),
+                    info="Model from pydantic-ai",
                     allow_custom_value=True,
                 )
                 frame_interval = gr.Slider(

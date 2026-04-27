@@ -12,8 +12,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from llm_annotator.agent import FrameContext, build_agent
+import cv2
+
 from llm_annotator.io import (
     _build_user_prompt,
+    _run_classical_detection,
     encode_frame_jpeg,
     extract_frames,
     get_video_info,
@@ -53,7 +56,17 @@ async def _run_pipeline(
 
     for i, (frame_idx, ts, bgr) in enumerate(sampled):
         jpeg = encode_frame_jpeg(bgr, config.process_size)
-        prompt = _build_user_prompt(frame_idx, ts, jpeg, annotations[-3:])
+        gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+        h, w = bgr.shape[:2]
+        scale = min(config.process_size / max(h, w), 1.0)
+        cv_dets = _run_classical_detection(gray, frame_idx, scale)
+        prompt = _build_user_prompt(
+            frame_idx,
+            ts,
+            jpeg,
+            annotations[-3:],
+            cv_detections=cv_dets,
+        )
         ctx = FrameContext(
             frame_bytes=jpeg,
             frame_bgr=bgr,
