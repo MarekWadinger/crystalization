@@ -168,14 +168,33 @@ class MeasureResult(BaseModel):
     )
 
 
+class DetectedCrystal(BaseModel):
+    """A crystal detected by the classical CV pipeline."""
+
+    layer: DepthLayer
+    x: float = Field(description="Centre x in pixels")
+    y: float = Field(description="Centre y in pixels")
+    width: float = Field(description="Bounding width")
+    height: float = Field(description="Bounding height")
+    angle: float = Field(description="Rotation degrees")
+
+
 class CountResult(BaseModel):
-    """Crystal counts grouped by depth layer."""
+    """Crystal detections grouped by depth layer."""
 
     layer_counts: dict[DepthLayer, int] = Field(
         default_factory=dict,
         description="Count per depth layer",
     )
     total: int = Field(description="Total crystal count")
+    crystals: list[DetectedCrystal] = Field(
+        default_factory=list,
+        description=(
+            "Individual crystal positions from CV "
+            "detector. Use these as bounding boxes "
+            "in your annotations."
+        ),
+    )
 
 
 class CompareResult(BaseModel):

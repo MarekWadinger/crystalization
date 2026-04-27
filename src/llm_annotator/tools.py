@@ -18,6 +18,7 @@ from llm_annotator.types import (
     CountResult,
     CrystalSystem,
     DepthLayer,
+    DetectedCrystal,
     FeatureMapResult,
     GrowthRateResult,
     HistogramResult,
@@ -102,8 +103,10 @@ async def count_crystals(
 ) -> CountResult:
     """Run classical CV detection on the current frame.
 
-    Uses ``annotator.detection.process_frame`` to count
-    crystals per depth layer.
+    Returns per-layer counts AND individual crystal
+    positions. Use the returned positions as bounding
+    boxes in your annotations — they are precise
+    pixel-level detections.
     """
     from annotator.detection import process_frame
     from annotator.types import LayerConfig
@@ -115,13 +118,29 @@ async def count_crystals(
         )
 
         layer_counts: dict[DepthLayer, int] = {}
+        crystals: list[DetectedCrystal] = []
         total = 0
         for lr in result.layers:
             depth = _LAYER_MAP.get(lr.layer_id, DepthLayer.FAR)
             layer_counts[depth] = lr.count
             total += lr.count
+            for c in lr.crystals:
+                crystals.append(
+                    DetectedCrystal(
+                        layer=depth,
+                        x=c.x,
+                        y=c.y,
+                        width=c.width,
+                        height=c.height,
+                        angle=c.angle,
+                    )
+                )
 
-    return CountResult(layer_counts=layer_counts, total=total)
+    return CountResult(
+        layer_counts=layer_counts,
+        total=total,
+        crystals=crystals,
+    )
 
 
 # ── Tool 3: compare_frames ─────────────────────────────────────

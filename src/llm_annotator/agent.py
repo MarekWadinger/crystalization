@@ -61,6 +61,7 @@ def build_agent(
         output_type=FrameAnnotation,
         system_prompt=_load_system_prompt(),
         deps_type=FrameContext,
+        model_settings={"timeout": 300},
         tools=[
             measure_crystal,
             count_crystals,
