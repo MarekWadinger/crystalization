@@ -269,15 +269,25 @@ def build_app() -> gr.Blocks:
                 gr.Markdown("### Configuration")
                 model_name = gr.Dropdown(
                     choices=[
+                        "openai:gpt-5.4",
+                        "openai:gpt-5.4-mini",
+                        "openai:gpt-5.4-nano",
+                        "openai:gpt-5.3-chat-latest",
+                        "openai:gpt-5.2",
+                        "openai:gpt-5.1",
+                        "openai:gpt-5",
+                        "openai:gpt-5-mini",
                         "openai:gpt-4o",
                         "openai:gpt-4o-mini",
+                        "openai:gpt-4.1",
+                        "openai:gpt-4.1-mini",
+                        "openai:gpt-4.1-nano",
                         "openai:o3",
                         "openai:o4-mini",
-                        "anthropic:claude-sonnet-4-20250514",
                     ],
                     value="openai:gpt-4o",
                     label="LLM Model",
-                    info=("Vision model for crystal analysis"),
+                    info=("Vision-capable OpenAI model for crystal analysis"),
                     allow_custom_value=True,
                 )
                 frame_interval = gr.Slider(
