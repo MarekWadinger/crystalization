@@ -203,12 +203,10 @@ def _build_user_prompt(
     if cv_detections:
         lines.append(
             "The classical CV detector found the "
-            "following crystals with EXACT positions. "
-            "USE THESE COORDINATES as your bounding "
-            "boxes — do NOT invent your own positions. "
-            "Your job is to classify each detection "
-            "(depth layer, crystal system) and assign "
-            "tracking IDs.\n"
+            "following crystals as a reference. Use "
+            "these as a starting point but correct "
+            "positions if needed and add any crystals "
+            "the detector missed.\n"
         )
         lines.append(cv_detections)
         lines.append("")
