@@ -45,6 +45,24 @@ uv sync --group predictor
 uv run predictor-app
 ```
 
+## LLM Annotator
+
+LLM-powered crystal annotation using a vision LLM (OpenAI GPT via pydantic-ai). Provides rich semantic annotation -- crystal system classification, growth stage assessment, and persistent crystal tracking across frames with structured Pydantic-validated output.
+
+See [src/llm_annotator/README.md](src/llm_annotator/README.md) for full documentation.
+
+### Usage
+
+```bash
+uv sync --group llm-annotator
+
+# Interactive UI
+uv run llm-annotator-app
+
+# CLI annotation
+uv run llm-annotator-annotate video.mov -o annotations.json
+```
+
 ## Development
 
 ```bash
