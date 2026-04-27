@@ -47,4 +47,11 @@ llm-annotator = [
     "gradio>=5.0",
     "matplotlib>=3.10",
 ]
-dev = ["commitizen>=4.13.9", "pre-commit>=4.5.1", "ruff>=0.15.5", "ty>=0.0.21"]
+dev = [
+    "commitizen>=4.13.9",
+    "pre-commit>=4.5.1",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.15.5",
+    "ty>=0.0.21",
+]
