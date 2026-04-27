@@ -64,7 +64,6 @@ async def _run_annotation(
     frame_interval: int,
     max_frames: int,
     process_size: int,
-    include_classical: bool,
     progress: gr.Progress = gr.Progress(),  # noqa: B008
 ) -> tuple[
     VideoAnnotation | None,
@@ -88,7 +87,6 @@ async def _run_annotation(
         frame_interval=int(frame_interval),
         max_frames=int(max_frames),
         process_size=int(process_size),
-        include_classical=include_classical,
     )
 
     agent = build_agent(config)
@@ -325,15 +323,6 @@ def build_app() -> gr.Blocks:
                         "less detail."
                     ),
                 )
-                include_classical = gr.Checkbox(
-                    value=True,
-                    label="Use CV pre-detection",
-                    info=(
-                        "Run classical computer vision "
-                        "crystal detector first to give "
-                        "the LLM a detection baseline."
-                    ),
-                )
 
         with gr.Row():
             run_btn = gr.Button("Run Annotation", variant="primary")
@@ -410,7 +399,6 @@ def build_app() -> gr.Blocks:
                 frame_interval,
                 max_frames,
                 process_size,
-                include_classical,
             ],
             outputs=[
                 annotation_state,

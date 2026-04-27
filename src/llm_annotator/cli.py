@@ -135,11 +135,6 @@ def main_annotate() -> None:
         help="Max dimension for processing (default: 960)",
     )
     parser.add_argument(
-        "--no-classical",
-        action="store_true",
-        help="Disable classical annotator tool",
-    )
-    parser.add_argument(
         "--logfire-token",
         type=str,
         default=None,
@@ -168,7 +163,6 @@ def main_annotate() -> None:
         frame_interval=args.frame_interval,
         max_frames=args.max_frames,
         process_size=args.process_size,
-        include_classical=not args.no_classical,
     )
 
     start = time.monotonic()

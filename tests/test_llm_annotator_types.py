@@ -151,4 +151,3 @@ class TestAnnotatorConfig:
         assert cfg.frame_interval == 30
         assert cfg.max_frames == 0
         assert cfg.process_size == 960
-        assert cfg.include_classical is True

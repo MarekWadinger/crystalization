@@ -146,10 +146,6 @@ class AnnotatorConfig(BaseModel):
         default=960,
         description=("Max dimension for resizing before sending to LLM"),
     )
-    include_classical: bool = Field(
-        default=True,
-        description=("Overlay classical CV detections as extra context"),
-    )
 
 
 # ── Tool result models ───────────────────────────────────────────
