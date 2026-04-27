@@ -36,7 +36,7 @@ from llm_annotator.viz import (
 
 
 def _get_known_models() -> list[str]:
-    """Get model names from pydantic-ai."""
+    """Get OpenAI model names from pydantic-ai."""
     import typing
 
     from pydantic_ai.models import KnownModelName
@@ -44,7 +44,7 @@ def _get_known_models() -> list[str]:
     value = getattr(KnownModelName, "__value__", None)
     if value is None:
         return ["openai:gpt-4o"]
-    return sorted(typing.get_args(value))
+    return sorted(m for m in typing.get_args(value) if m.startswith("openai:"))
 
 
 def _on_video_upload(video_path: str) -> str:
