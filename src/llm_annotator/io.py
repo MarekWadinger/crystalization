@@ -144,16 +144,52 @@ def _build_user_prompt(
     """Build multimodal prompt with image and context."""
     context = _build_tracking_context(previous)
     next_id = _next_crystal_id(previous)
+    prev_count = len(previous[-1].crystals) if previous else None
 
-    text = (
-        f"Analyse frame {frame_idx} "
-        f"(timestamp {timestamp_s:.2f}s).\n\n"
-        f"Previous annotations:\n{context}\n\n"
-        f"Next available crystal ID number: {next_id}\n"
-        "Reuse IDs for crystals that match previous "
-        "positions. Assign new sequential IDs for newly "
-        "appeared crystals."
+    lines: list[str] = []
+
+    if prev_count is None:
+        lines.append(
+            "This is a crystal growth microscopy video"
+            " showing crystals at different depths in a"
+            " liquid medium. Crystals appear as bright"
+            " shapes with dark edges against a bright"
+            " background. Expect 50-500+ crystals per"
+            " frame."
+        )
+        lines.append("")
+
+    lines.append(f"Annotate frame {frame_idx} (timestamp {timestamp_s:.2f}s).")
+    lines.append("")
+
+    lines.append(
+        "Use the count_crystals tool FIRST to get the"
+        " baseline detection count per layer. Then"
+        " annotate ALL crystals you can identify -- not"
+        " just the prominent ones. Your count must reach"
+        " at least 80% of the baseline."
     )
+
+    if prev_count is not None:
+        lines.append("")
+        lines.append(
+            f"The previous frame had {prev_count} crystals."
+            " Expect a similar number in this frame"
+            " (crystals persist between frames with small"
+            " position changes)."
+        )
+
+    lines.append("")
+    lines.append(f"Previous annotations:\n{context}")
+    lines.append("")
+    lines.append(f"Next available crystal ID number: {next_id}")
+    lines.append(
+        "Reuse IDs for crystals that match previous"
+        " positions. Assign new sequential IDs for newly"
+        " appeared crystals."
+    )
+
+    text = "\n".join(lines)
 
     return [
         text,
