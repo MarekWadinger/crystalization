@@ -49,6 +49,9 @@ def build_agent(
         count_crystals,
         estimate_growth_rate,
         generate_histogram,
+        get_depth_map,
+        get_layer_map,
+        get_sharpness_map,
         measure_crystal,
     )
 
@@ -65,6 +68,9 @@ def build_agent(
             classify_crystal_system,
             estimate_growth_rate,
             generate_histogram,
+            get_sharpness_map,
+            get_depth_map,
+            get_layer_map,
         ],
     )
     return agent

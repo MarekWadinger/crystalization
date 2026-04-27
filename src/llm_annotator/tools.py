@@ -18,6 +18,7 @@ from llm_annotator.types import (
     CountResult,
     CrystalSystem,
     DepthLayer,
+    FeatureMapResult,
     GrowthRateResult,
     HistogramResult,
     MeasureResult,
@@ -345,4 +346,109 @@ async def generate_histogram(
         bin_edges=[float(e) for e in edges_arr],
         counts=[int(c) for c in counts_arr],
         image_base64=img_b64,
+    )
+
+
+# ── Tool 7: get_sharpness_map ────────────────────────────────
+
+
+def _bgr_to_base64(img: NDArray) -> str:
+    """Encode a BGR image as base64 PNG."""
+    ok, buf = cv2.imencode(".png", img)
+    if not ok:
+        return ""
+    return base64.b64encode(bytes(buf)).decode()
+
+
+async def get_sharpness_map(
+    ctx: RunContext[FrameContext],
+) -> FeatureMapResult:
+    """Compute and return the sharpness (focus) map.
+
+    Bright = sharp/in-focus (far layer),
+    dark = blurry/out-of-focus (near layer).
+    """
+    from annotator.sharpness import compute_sharpness_map
+    from annotator.viz import colorize_map
+
+    with logfire.span("get_sharpness_map"):
+        gray = cv2.cvtColor(ctx.deps.frame_bgr, cv2.COLOR_BGR2GRAY)
+        sharpness = compute_sharpness_map(gray, kernel=15)
+        colored = colorize_map(sharpness, cv2.COLORMAP_INFERNO)
+
+    return FeatureMapResult(
+        description=(
+            "Sharpness map: bright = sharp/in-focus "
+            "(far layer), dark = blurry (near layer)"
+        ),
+        image_base64=_bgr_to_base64(colored),
+    )
+
+
+# ── Tool 8: get_depth_map ────────────────────────────────────
+
+
+async def get_depth_map(
+    ctx: RunContext[FrameContext],
+) -> FeatureMapResult:
+    """Compute and return the depth layer map.
+
+    Uses sharpness to estimate depth. Bright = near
+    (blurry), dark = far (sharp). Shows which depth
+    layer each pixel belongs to.
+    """
+    from annotator.depth import compute_depth_map
+    from annotator.sharpness import compute_sharpness_map
+    from annotator.types import LayerConfig
+    from annotator.viz import colorize_map
+
+    with logfire.span("get_depth_map"):
+        gray = cv2.cvtColor(ctx.deps.frame_bgr, cv2.COLOR_BGR2GRAY)
+        cfg = LayerConfig()
+        sharpness = compute_sharpness_map(gray, cfg.blur_kernel)
+        flow_mag = np.zeros_like(sharpness, dtype=np.float64)
+        depth = compute_depth_map(sharpness, flow_mag, cfg)
+        colored = colorize_map(depth, cv2.COLORMAP_VIRIDIS)
+
+    return FeatureMapResult(
+        description=("Depth map: bright = near (blurry), dark = far (sharp)"),
+        image_base64=_bgr_to_base64(colored),
+    )
+
+
+# ── Tool 9: get_layer_map ────────────────────────────────────
+
+
+async def get_layer_map(
+    ctx: RunContext[FrameContext],
+) -> FeatureMapResult:
+    """Compute and return the segmented layer map.
+
+    Shows the frame divided into discrete depth layers
+    (far=blue, mid=green, near=red), matching the
+    annotator module's layer decomposition.
+    """
+    from annotator.depth import (
+        compute_depth_map,
+        segment_layers,
+    )
+    from annotator.sharpness import compute_sharpness_map
+    from annotator.types import LayerConfig
+    from annotator.viz import colorize_layers
+
+    with logfire.span("get_layer_map"):
+        gray = cv2.cvtColor(ctx.deps.frame_bgr, cv2.COLOR_BGR2GRAY)
+        cfg = LayerConfig()
+        sharpness = compute_sharpness_map(gray, cfg.blur_kernel)
+        flow_mag = np.zeros_like(sharpness, dtype=np.float64)
+        depth = compute_depth_map(sharpness, flow_mag, cfg)
+        layers = segment_layers(depth, cfg.num_layers)
+        colored = colorize_layers(layers, cfg.num_layers)
+
+    return FeatureMapResult(
+        description=(
+            "Layer segmentation: blue = far (sharp), "
+            "green = mid, red = near (blurry)"
+        ),
+        image_base64=_bgr_to_base64(colored),
     )

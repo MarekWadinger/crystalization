@@ -229,3 +229,14 @@ class HistogramResult(BaseModel):
     image_base64: str = Field(
         description="Base64-encoded PNG histogram",
     )
+
+
+class FeatureMapResult(BaseModel):
+    """A CV feature map rendered as a colormapped image."""
+
+    description: str = Field(
+        description="What this map shows",
+    )
+    image_base64: str = Field(
+        description="Base64-encoded PNG image",
+    )
