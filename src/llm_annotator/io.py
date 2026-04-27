@@ -246,6 +246,7 @@ async def annotate_video(
 
         for frame_idx, timestamp_s, bgr in sampled:
             with logfire.span("annotate_frame", frame_idx=frame_idx):
+                small = downscale(bgr, config.process_size)
                 jpeg = encode_frame_jpeg(bgr, config.process_size)
                 prompt = _build_user_prompt(
                     frame_idx,
@@ -255,7 +256,7 @@ async def annotate_video(
                 )
                 frame_ctx = FrameContext(
                     frame_bytes=jpeg,
-                    frame_bgr=bgr,
+                    frame_bgr=small,
                     frame_idx=frame_idx,
                     timestamp_s=timestamp_s,
                     fps=float(info["fps"]),

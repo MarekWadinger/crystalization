@@ -52,6 +52,9 @@ async def _run_pipeline(
     start = time.monotonic()
 
     for i, (frame_idx, ts, bgr) in enumerate(sampled):
+        from llm_annotator.io import downscale
+
+        small = downscale(bgr, config.process_size)
         jpeg = encode_frame_jpeg(bgr, config.process_size)
         prompt = _build_user_prompt(
             frame_idx,
@@ -61,7 +64,7 @@ async def _run_pipeline(
         )
         ctx = FrameContext(
             frame_bytes=jpeg,
-            frame_bgr=bgr,
+            frame_bgr=small,
             frame_idx=frame_idx,
             timestamp_s=ts,
             fps=float(info["fps"]),

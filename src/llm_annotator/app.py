@@ -109,9 +109,10 @@ async def _run_annotation(
             jpeg,
             annotations[-3:],
         )
+        small_bgr = downscale(bgr, config.process_size)
         frame_ctx = FrameContext(
             frame_bytes=jpeg,
-            frame_bgr=bgr,
+            frame_bgr=small_bgr,
             frame_idx=frame_idx,
             timestamp_s=timestamp_s,
             fps=float(info["fps"]),
