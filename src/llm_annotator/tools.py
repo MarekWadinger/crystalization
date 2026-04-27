@@ -65,6 +65,13 @@ async def measure_crystal(
     """
     with logfire.span("measure_crystal"):
         crop = _crop_region(ctx.deps.frame_bgr, x, y, radius)
+        if crop.size == 0:
+            return MeasureResult(
+                width_px=0,
+                height_px=0,
+                area_px=0,
+                aspect_ratio=0,
+            )
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(
             gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
@@ -234,6 +241,8 @@ async def classify_crystal_system(
     """
     with logfire.span("classify_crystal_system"):
         crop = _crop_region(ctx.deps.frame_bgr, x, y, radius)
+        if crop.size == 0:
+            return CrystalSystem.UNKNOWN
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(
             gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU
@@ -371,9 +380,17 @@ async def generate_histogram(
 # ── Tool 7: get_sharpness_map ────────────────────────────────
 
 
-def _bgr_to_base64(img: NDArray) -> str:
-    """Encode a BGR image as base64 PNG."""
-    ok, buf = cv2.imencode(".png", img)
+def _bgr_to_base64(img: NDArray, max_dim: int = 120) -> str:
+    """Downscale and encode a BGR image as base64 JPEG."""
+    h, w = img.shape[:2]
+    if max(h, w) > max_dim:
+        scale = max_dim / max(h, w)
+        img = cv2.resize(
+            img,
+            (int(w * scale), int(h * scale)),
+            interpolation=cv2.INTER_AREA,
+        )
+    ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 70])
     if not ok:
         return ""
     return base64.b64encode(bytes(buf)).decode()
