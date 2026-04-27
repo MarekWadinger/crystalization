@@ -180,7 +180,6 @@ def _build_user_prompt(
     timestamp_s: float,
     jpeg_bytes: bytes,
     previous: list[FrameAnnotation],
-    cv_detections: str = "",
 ) -> list[Any]:
     """Build multimodal prompt with image and context."""
     context = _build_tracking_context(previous)
@@ -199,17 +198,6 @@ def _build_user_prompt(
 
     lines.append(f"Annotate frame {frame_idx} (timestamp {timestamp_s:.2f}s).")
     lines.append("")
-
-    if cv_detections:
-        lines.append(
-            "The classical CV detector found the "
-            "following crystals as a reference. Use "
-            "these as a starting point but correct "
-            "positions if needed and add any crystals "
-            "the detector missed.\n"
-        )
-        lines.append(cv_detections)
-        lines.append("")
 
     if prev_count is not None:
         lines.append(
@@ -259,20 +247,11 @@ async def annotate_video(
         for frame_idx, timestamp_s, bgr in sampled:
             with logfire.span("annotate_frame", frame_idx=frame_idx):
                 jpeg = encode_frame_jpeg(bgr, config.process_size)
-
-                # Run classical CV on original frame,
-                # scale coords to process_size space
-                gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-                h, w = bgr.shape[:2]
-                scale = min(config.process_size / max(h, w), 1.0)
-                cv_dets = _run_classical_detection(gray, frame_idx, scale)
-
                 prompt = _build_user_prompt(
                     frame_idx,
                     timestamp_s,
                     jpeg,
                     annotations[-3:],
-                    cv_detections=cv_dets,
                 )
                 frame_ctx = FrameContext(
                     frame_bytes=jpeg,

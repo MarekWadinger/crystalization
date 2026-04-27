@@ -14,7 +14,6 @@ from numpy.typing import NDArray
 from llm_annotator.agent import FrameContext, build_agent
 from llm_annotator.io import (
     _build_user_prompt,
-    _run_classical_detection,
     downscale,
     encode_frame_jpeg,
     extract_frames,
@@ -106,18 +105,11 @@ async def _run_annotation(
         progress((i, total), desc=f"Frame {i + 1}/{total}")
 
         jpeg = encode_frame_jpeg(bgr, config.process_size)
-        import cv2
-
-        gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-        h, w = bgr.shape[:2]
-        scale = min(config.process_size / max(h, w), 1.0)
-        cv_dets = _run_classical_detection(gray, frame_idx, scale)
         prompt = _build_user_prompt(
             frame_idx,
             timestamp_s,
             jpeg,
             annotations[-3:],
-            cv_detections=cv_dets,
         )
         frame_ctx = FrameContext(
             frame_bytes=jpeg,
