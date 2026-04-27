@@ -7,6 +7,8 @@ import asyncio
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from llm_annotator.agent import build_agent
 from llm_annotator.io import annotate_video
 from llm_annotator.types import AnnotatorConfig
@@ -62,6 +64,7 @@ def main_annotate() -> None:
     )
 
     args = parser.parse_args()
+    load_dotenv()
 
     if not args.video.exists():
         print(
@@ -82,7 +85,7 @@ def main_annotate() -> None:
         frame_interval=args.frame_interval,
         max_frames=args.max_frames,
         process_size=args.process_size,
-        use_classical=not args.no_classical,
+        include_classical=not args.no_classical,
     )
 
     agent = build_agent(config)
@@ -90,9 +93,9 @@ def main_annotate() -> None:
 
     args.output.write_text(result.model_dump_json(indent=2))
 
-    total_crystals = sum(len(f.crystals) for f in result.frames)
+    total_crystals = sum(len(f.crystals) for f in result.frame_annotations)
     print(
-        f"Annotated {len(result.frames)} frames, "
+        f"Annotated {len(result.frame_annotations)} frames, "
         f"{total_crystals} crystals total. "
         f"Output: {args.output}"
     )

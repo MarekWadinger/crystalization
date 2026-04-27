@@ -5,7 +5,6 @@ from __future__ import annotations
 import base64
 import io
 import math
-from typing import TYPE_CHECKING
 
 import cv2
 import logfire
@@ -13,6 +12,7 @@ import numpy as np
 from numpy.typing import NDArray
 from pydantic_ai import RunContext
 
+from llm_annotator.agent import FrameContext
 from llm_annotator.types import (
     CompareResult,
     CountResult,
@@ -22,9 +22,6 @@ from llm_annotator.types import (
     HistogramResult,
     MeasureResult,
 )
-
-if TYPE_CHECKING:
-    from llm_annotator.agent import FrameContext
 
 # Map classical annotator layer_id to DepthLayer.
 # layer 0 = far (sharpest), 1 = mid, 2 = near (blurriest)

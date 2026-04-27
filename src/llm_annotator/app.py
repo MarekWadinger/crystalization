@@ -39,7 +39,7 @@ async def _run_annotation(
     frame_interval: int,
     max_frames: int,
     process_size: int,
-    use_classical: bool,
+    include_classical: bool,
 ) -> tuple[
     VideoAnnotation | None,
     dict[int, NDArray[np.uint8]],
@@ -62,7 +62,7 @@ async def _run_annotation(
         frame_interval=int(frame_interval),
         max_frames=int(max_frames),
         process_size=int(process_size),
-        use_classical=use_classical,
+        include_classical=include_classical,
     )
 
     agent = build_agent(config)
@@ -75,8 +75,8 @@ async def _run_annotation(
         fi: img for fi, _, img in raw_frames
     }
 
-    n_frames = len(result.frames)
-    total_crystals = sum(len(f.crystals) for f in result.frames)
+    n_frames = len(result.frame_annotations)
+    total_crystals = sum(len(f.crystals) for f in result.frame_annotations)
 
     status = (
         f"Done. Annotated {n_frames} frames, {total_crystals} crystals found."
@@ -114,12 +114,12 @@ def _update_frame_display(
     result = annotation_state
     idx = int(frame_slider)
 
-    if idx < 0 or idx >= len(result.frames):
+    if idx < 0 or idx >= len(result.frame_annotations):
         return None, None, "", ""
 
-    frame_ann = result.frames[idx]
+    frame_ann = result.frame_annotations[idx]
 
-    raw_frame = frame_map_state.get(frame_ann.frame_index)
+    raw_frame = frame_map_state.get(frame_ann.frame_idx)
     if raw_frame is None:
         return None, None, "Frame not found in video.", ""
 
@@ -128,8 +128,8 @@ def _update_frame_display(
 
     tracking_rgb = None
     if idx > 0:
-        prev_ann = result.frames[idx - 1]
-        prev_frame = frame_map_state.get(prev_ann.frame_index)
+        prev_ann = result.frame_annotations[idx - 1]
+        prev_frame = frame_map_state.get(prev_ann.frame_idx)
         if prev_frame is not None:
             overlay = render_tracking_overlay(
                 raw_frame.copy(), frame_ann, prev_ann
@@ -137,8 +137,8 @@ def _update_frame_display(
             tracking_rgb = bgr_to_rgb(overlay)
 
     summary = (
-        f"Frame {frame_ann.frame_index} "
-        f"(t={frame_ann.timestamp:.2f}s): "
+        f"Frame {frame_ann.frame_idx} "
+        f"(t={frame_ann.timestamp_s:.2f}s): "
         f"{len(frame_ann.crystals)} crystals"
     )
     details = annotation_to_json_str(frame_ann)
@@ -206,7 +206,7 @@ def build_app() -> gr.Blocks:
                     step=40,
                     label="Process size (px)",
                 )
-                use_classical = gr.Checkbox(
+                include_classical = gr.Checkbox(
                     value=True,
                     label="Include classical annotator",
                 )
@@ -258,7 +258,7 @@ def build_app() -> gr.Blocks:
                 frame_interval,
                 max_frames,
                 process_size,
-                use_classical,
+                include_classical,
             ],
             outputs=[
                 annotation_state,
@@ -295,6 +295,10 @@ def build_app() -> gr.Blocks:
 
 def main() -> None:
     """Launch the LLM annotator app."""
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
     import logfire
 
     logfire.configure(send_to_logfire="if-token-present")

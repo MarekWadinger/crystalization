@@ -10,6 +10,7 @@ import logfire
 from numpy.typing import NDArray
 from pydantic_ai import BinaryContent
 
+from llm_annotator.agent import FrameContext
 from llm_annotator.types import (
     AnnotatorConfig,
     FrameAnnotation,
@@ -189,7 +190,16 @@ async def annotate_video(
                     jpeg,
                     annotations[-3:],
                 )
-                result = await agent.run(prompt)
+                frame_ctx = FrameContext(
+                    frame_bytes=jpeg,
+                    frame_bgr=bgr,
+                    frame_idx=frame_idx,
+                    timestamp_s=timestamp_s,
+                    fps=float(info["fps"]),
+                    previous_annotations=list(annotations[-3:]),
+                    config=config,
+                )
+                result = await agent.run(prompt, deps=frame_ctx)
                 annotations.append(result.output)
 
         return VideoAnnotation(
