@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -10,13 +11,25 @@ import gradio as gr
 import numpy as np
 from numpy.typing import NDArray
 
-from llm_annotator.agent import build_agent
-from llm_annotator.io import annotate_video, extract_frames, get_video_info
-from llm_annotator.types import AnnotatorConfig, VideoAnnotation
+from llm_annotator.agent import FrameContext, build_agent
+from llm_annotator.io import (
+    _build_user_prompt,
+    downscale,
+    encode_frame_jpeg,
+    extract_frames,
+    get_video_info,
+)
+from llm_annotator.types import (
+    AnnotatorConfig,
+    DepthLayer,
+    FrameAnnotation,
+    VideoAnnotation,
+)
 from llm_annotator.viz import (
     annotation_to_json_str,
     bgr_to_rgb,
     draw_annotations,
+    draw_legend,
     render_tracking_overlay,
 )
 
@@ -40,6 +53,7 @@ async def _run_annotation(
     max_frames: int,
     process_size: int,
     include_classical: bool,
+    progress: gr.Progress = gr.Progress(),  # noqa: B008
 ) -> tuple[
     VideoAnnotation | None,
     dict[int, NDArray[np.uint8]],
@@ -47,7 +61,7 @@ async def _run_annotation(
     dict[str, Any],
     str,
 ]:
-    """Run the LLM annotation pipeline."""
+    """Run the LLM annotation pipeline with progress."""
     if not video_path:
         return (
             None,
@@ -66,26 +80,78 @@ async def _run_annotation(
     )
 
     agent = build_agent(config)
-    result = await annotate_video(Path(video_path), config, agent)
 
-    # Cache extracted frames to avoid re-reading on each
-    # slider change
-    raw_frames = extract_frames(Path(video_path), config)
-    frame_map: dict[int, NDArray[np.uint8]] = {
-        fi: img for fi, _, img in raw_frames
-    }
+    # Extract frames and annotate inline for progress
+    info = get_video_info(video_path)
+    sampled = extract_frames(Path(video_path), config)
+    total = len(sampled)
 
-    n_frames = len(result.frame_annotations)
-    total_crystals = sum(len(f.crystals) for f in result.frame_annotations)
+    annotations: list[FrameAnnotation] = []
+    start_time = time.time()
 
-    status = (
-        f"Done. Annotated {n_frames} frames, {total_crystals} crystals found."
+    for i, (frame_idx, timestamp_s, bgr) in enumerate(sampled):
+        progress((i, total), desc=f"Frame {i + 1}/{total}")
+
+        jpeg = encode_frame_jpeg(bgr, config.process_size)
+        prompt = _build_user_prompt(
+            frame_idx,
+            timestamp_s,
+            jpeg,
+            annotations[-3:],
+        )
+        frame_ctx = FrameContext(
+            frame_bytes=jpeg,
+            frame_bgr=bgr,
+            frame_idx=frame_idx,
+            timestamp_s=timestamp_s,
+            fps=float(info["fps"]),
+            previous_annotations=list(annotations[-3:]),
+            config=config,
+        )
+        result = await agent.run(prompt, deps=frame_ctx)
+        annotations.append(result.output)
+
+    elapsed = time.time() - start_time
+
+    video_ann = VideoAnnotation(
+        video_path=str(video_path),
+        total_frames=int(info["frame_count"]),
+        sampled_frames=len(sampled),
+        fps=float(info["fps"]),
+        frame_annotations=annotations,
+        overall_summary=(
+            f"Annotated {len(annotations)} frames "
+            f"from {info['frame_count']} total."
+        ),
     )
 
+    # Cache downscaled frames for correct annotation display
+    frame_map: dict[int, NDArray[np.uint8]] = {
+        fi: downscale(img, config.process_size) for fi, _, img in sampled
+    }
+
+    total_crystals = sum(len(a.crystals) for a in annotations)
+    layer_counts: dict[str, int] = {}
+    for ann in annotations:
+        for c in ann.crystals:
+            key = c.layer.value
+            layer_counts[key] = layer_counts.get(key, 0) + 1
+    layer_summary = ", ".join(
+        f"{k}: {v}" for k, v in sorted(layer_counts.items())
+    )
+
+    n_frames = len(video_ann.frame_annotations)
     slider_max = max(0, n_frames - 1)
 
+    status = (
+        f"Done. {n_frames} frames, "
+        f"{total_crystals} crystals "
+        f"({layer_summary}). "
+        f"({elapsed:.1f}s)"
+    )
+
     return (
-        result,
+        video_ann,
         frame_map,
         gr.update(
             maximum=slider_max,
@@ -124,6 +190,7 @@ def _update_frame_display(
         return None, None, "Frame not found in video.", ""
 
     annotated = draw_annotations(raw_frame.copy(), frame_ann)
+    draw_legend(annotated)
     annotated_rgb = bgr_to_rgb(annotated)
 
     tracking_rgb = None
@@ -136,10 +203,20 @@ def _update_frame_display(
             )
             tracking_rgb = bgr_to_rgb(overlay)
 
+    # Per-layer crystal counts
+    counts: dict[str, int] = {}
+    for c in frame_ann.crystals:
+        key = c.layer.value
+        counts[key] = counts.get(key, 0) + 1
+    layer_detail = ", ".join(
+        f"{layer.value}: {counts.get(layer.value, 0)}" for layer in DepthLayer
+    )
+
     summary = (
         f"Frame {frame_ann.frame_idx} "
         f"(t={frame_ann.timestamp_s:.2f}s): "
-        f"{len(frame_ann.crystals)} crystals"
+        f"{len(frame_ann.crystals)} crystals "
+        f"[{layer_detail}]"
     )
     details = annotation_to_json_str(frame_ann)
 
@@ -167,6 +244,15 @@ def build_app() -> gr.Blocks:
     """Build the Gradio interface."""
     with gr.Blocks(title="LLM Crystal Annotator") as app:
         gr.Markdown("# LLM Crystal Annotator")
+        gr.Markdown(
+            "Analyze crystal microscopy video using a "
+            "vision LLM. "
+            "Crystals are classified into three depth "
+            "layers based on "
+            "focus (sharp to blurry), motion speed "
+            "(slow to fast), and "
+            "apparent size (small to large)."
+        )
 
         annotation_state = gr.State(value=None)
         frame_map_state = gr.State(value={})
@@ -181,9 +267,18 @@ def build_app() -> gr.Blocks:
                 )
             with gr.Column(scale=1):
                 gr.Markdown("### Configuration")
-                model_name = gr.Textbox(
-                    label="Model",
+                model_name = gr.Dropdown(
+                    choices=[
+                        "openai:gpt-4o",
+                        "openai:gpt-4o-mini",
+                        "openai:o3",
+                        "openai:o4-mini",
+                        "anthropic:claude-sonnet-4-20250514",
+                    ],
                     value="openai:gpt-4o",
+                    label="LLM Model",
+                    info=("Vision model for crystal analysis"),
+                    allow_custom_value=True,
                 )
                 frame_interval = gr.Slider(
                     1,
@@ -191,6 +286,12 @@ def build_app() -> gr.Blocks:
                     value=30,
                     step=1,
                     label="Frame interval",
+                    info=(
+                        "Extract every Nth frame from "
+                        "the video. Lower = more frames "
+                        "analyzed but slower and more "
+                        "expensive."
+                    ),
                 )
                 max_frames = gr.Slider(
                     0,
@@ -198,6 +299,12 @@ def build_app() -> gr.Blocks:
                     value=0,
                     step=1,
                     label="Max frames (0 = all)",
+                    info=(
+                        "Maximum number of frames to "
+                        "analyze. 0 = analyze all "
+                        "sampled frames. Start with "
+                        "3-5 for testing."
+                    ),
                 )
                 process_size = gr.Slider(
                     240,
@@ -205,10 +312,21 @@ def build_app() -> gr.Blocks:
                     value=960,
                     step=40,
                     label="Process size (px)",
+                    info=(
+                        "Downscale frames to this max "
+                        "dimension before sending to "
+                        "the LLM. Lower = faster but "
+                        "less detail."
+                    ),
                 )
                 include_classical = gr.Checkbox(
                     value=True,
-                    label="Include classical annotator",
+                    label="Use CV pre-detection",
+                    info=(
+                        "Run classical computer vision "
+                        "crystal detector first to give "
+                        "the LLM a detection baseline."
+                    ),
                 )
 
         with gr.Row():
@@ -216,7 +334,7 @@ def build_app() -> gr.Blocks:
             status = gr.Textbox(label="Status", interactive=False)
 
         # --- Phase 2: Results ---
-        gr.Markdown("---")
+        gr.Markdown("### Results")
         with gr.Row(visible=False) as results_row:
             with gr.Column(scale=1):
                 frame_slider = gr.Slider(
@@ -240,8 +358,36 @@ def build_app() -> gr.Blocks:
                 download_file = gr.File(label="Annotations JSON")
             with gr.Column(scale=2):
                 with gr.Row():
-                    img_annotated = gr.Image(label="Annotated Frame")
-                    img_tracking = gr.Image(label="Tracking Overlay")
+                    img_annotated = gr.Image(
+                        label="Annotated Frame",
+                        scale=2,
+                    )
+                    img_tracking = gr.Image(
+                        label="Tracking Overlay",
+                    )
+
+        # --- How It Works ---
+        gr.Markdown(
+            "### How It Works\n"
+            "The system analyzes crystal microscopy "
+            "video by:\n"
+            "1. **Sampling frames** at regular "
+            "intervals\n"
+            "2. **Running CV pre-detection** to "
+            "establish a baseline crystal count\n"
+            "3. **LLM vision analysis** to classify "
+            "each crystal by depth layer, shape, "
+            "and growth\n"
+            "4. **Tracking crystals** across frames "
+            "using persistent IDs\n\n"
+            "Crystals at different depths exhibit "
+            "correlated properties:\n"
+            "| Layer | Focus | Motion | Size |\n"
+            "|-------|-------|--------|------|\n"
+            "| Near | Blurry | Fast | Large |\n"
+            "| Mid | Moderate | Medium | Medium |\n"
+            "| Far | Sharp | Slow | Small |"
+        )
 
         # --- Callbacks ---
         video.change(
