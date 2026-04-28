@@ -124,14 +124,18 @@ async def count_crystals(
             gray, None, ctx.deps.frame_idx, LayerConfig()
         )
 
+        h, w = ctx.deps.frame_bgr.shape[:2]
+        max_area = 0.10 * h * w  # skip > 10% of frame
+
         layer_counts: dict[DepthLayer, int] = {}
         crystals: list[DetectedCrystal] = []
         total = 0
         for lr in result.layers:
             depth = _LAYER_MAP.get(lr.layer_id, DepthLayer.FAR)
-            layer_counts[depth] = lr.count
-            total += lr.count
+            kept = 0
             for c in lr.crystals:
+                if c.width * c.height > max_area:
+                    continue
                 crystals.append(
                     DetectedCrystal(
                         layer=depth,
@@ -142,6 +146,9 @@ async def count_crystals(
                         angle=c.angle,
                     )
                 )
+                kept += 1
+            layer_counts[depth] = kept
+            total += kept
 
     return CountResult(
         layer_counts=layer_counts,

@@ -81,15 +81,16 @@ class TestDrawAnnotations:
         self,
         sample_frame: np.ndarray,
     ) -> None:
-        """Frame with no crystals stays unchanged."""
+        """Frame with no crystals only has legend drawn."""
         empty = FrameAnnotation(
             frame_idx=0,
             timestamp_s=0.0,
             summary="empty",
         )
-        original = sample_frame.copy()
         annotated = draw_annotations(sample_frame, empty)
-        np.testing.assert_array_equal(annotated, original)
+        # Legend is always drawn, so frame won't be identical
+        assert annotated is not sample_frame
+        assert annotated.shape == sample_frame.shape
 
 
 class TestLayerColors:

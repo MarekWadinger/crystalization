@@ -34,40 +34,60 @@ def draw_annotations(
     thickness: int = 2,
     show_ids: bool = True,
     show_system: bool = False,
+    scale: float = 1.0,
 ) -> NDArray:
     """Draw crystal bounding boxes coloured by layer.
 
     Returns a copy of the frame; the original is unchanged.
     """
     out = frame_bgr.copy()
+    h, w = out.shape[:2]
+    auto_thick = max(1, int(min(h, w) / 200))
+    t = thickness or auto_thick
+    many = len(annotation.crystals) > 15
 
     for crystal in annotation.crystals:
         color = LAYER_COLORS.get(crystal.layer, (200, 200, 200))
         bb = crystal.bbox
-        rect = ((bb.x, bb.y), (bb.width, bb.height), bb.angle)
+        sx = bb.x * scale
+        sy = bb.y * scale
+        sw = bb.width * scale
+        sh = bb.height * scale
+        rect = ((sx, sy), (sw, sh), bb.angle)
         box = cv2.boxPoints(rect)
         box_int = box.astype(np.int32)
-        cv2.drawContours(out, [box_int], 0, color, thickness)
+        cv2.drawContours(out, [box_int], 0, color, t)
 
-        if show_ids or show_system:
-            label_parts: list[str] = []
+        if not many and (show_ids or show_system):
+            parts: list[str] = []
             if show_ids:
-                label_parts.append(crystal.crystal_id)
+                parts.append(crystal.crystal_id)
             if show_system:
-                label_parts.append(crystal.crystal_system.value)
-            label = " | ".join(label_parts)
-            tx = int(bb.x - bb.width / 2)
-            ty = int(bb.y - bb.height / 2) - 6
+                parts.append(crystal.crystal_system.value)
+            label = " | ".join(parts)
+            tx = int(sx - sw / 2)
+            ty = int(sy - sh / 2) - 4
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            fs = 0.35
+            (tw, th), _ = cv2.getTextSize(label, font, fs, 1)
+            cv2.rectangle(
+                out,
+                (tx - 1, ty - th - 2),
+                (tx + tw + 1, ty + 2),
+                (0, 0, 0),
+                -1,
+            )
             cv2.putText(
                 out,
                 label,
                 (tx, ty),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.4,
+                font,
+                fs,
                 color,
                 1,
             )
 
+    draw_legend(out)
     return out
 
 
@@ -76,10 +96,10 @@ def draw_legend(
     position: str = "top-left",
 ) -> None:
     """Draw layer colour legend on *frame* (in-place)."""
-    box_size = 16
-    line_h = 26
-    margin = 12
     h, w = frame.shape[:2]
+    box_size = max(6, int(min(h, w) / 30))
+    line_h = box_size + 6
+    margin = 6
 
     if position == "top-right":
         x0 = w - 140
