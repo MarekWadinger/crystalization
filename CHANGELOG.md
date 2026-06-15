@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.4.0 (2026-06-15)
+
+### Feat
+
+- **optics**: versioned camera config + auto-crop + observation schema
+
 ## v0.3.0 (2026-06-15)
 
 ### Feat
