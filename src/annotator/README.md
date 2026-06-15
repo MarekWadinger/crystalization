@@ -8,10 +8,11 @@ Crystal video layer decomposition and object detection. Decomposes microscopy vi
 
 Crystals at different depths exhibit three correlated properties:
 
-| Depth | Focus  | Speed | Apparent Size |
-| ----- | ------ | ----- | ------------- |
-| Near  | Blurry | Fast  | Large         |
-| Far   | Sharp  | Slow  | Small         |
+| Depth | Focus   | Speed  | Apparent Size |
+| ----- | ------- | ------ | ------------- |
+| Near  | Blurry  | Fast   | Large         |
+| Mid   | Sharper | Slower | Medium        |
+| Far   | Sharp   | Slow   | Small         |
 
 The pipeline exploits all three signals to separate layers and detect crystals within each.
 

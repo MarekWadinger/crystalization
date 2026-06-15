@@ -27,7 +27,9 @@ def fit_mrdmd(
         dt: time step between snapshots.
     """
     dmd = DMD(svd_rank=config.svd_rank)
-    mrdmd = MrDMD(dmd, max_level=config.max_level, max_cycles=config.max_cycles)
+    mrdmd = MrDMD(
+        dmd, max_level=config.max_level, max_cycles=config.max_cycles
+    )
     mrdmd.fit(X)
 
     # Collect modes and level info across all resolution levels
@@ -79,11 +81,10 @@ def reconstruct_modes(
         if mean is not None:
             return np.clip(
                 np.broadcast_to(mean, (mean.shape[0], n_cols)),
-                0.0, 1.0,
+                0.0,
+                1.0,
             )
-        return np.zeros(
-            (result.n_pixels, n_cols), dtype=np.float64
-        )
+        return np.zeros((result.n_pixels, n_cols), dtype=np.float64)
     modes = result.modes[: result.n_pixels, selected_indices]
     dynamics = result.dynamics[selected_indices, :]
     recon = (modes @ dynamics).real
@@ -115,11 +116,10 @@ def predict_frames(
         if mean is not None:
             return np.clip(
                 np.broadcast_to(mean, (mean.shape[0], n)),
-                0.0, 1.0,
+                0.0,
+                1.0,
             )
-        return np.zeros(
-            (result.n_pixels, n), dtype=np.float64
-        )
+        return np.zeros((result.n_pixels, n), dtype=np.float64)
     modes = result.modes[: result.n_pixels, selected_indices]
     eigs = result.eigs[selected_indices]
     dynamics = result.dynamics[selected_indices, :]
@@ -131,7 +131,7 @@ def predict_frames(
     last_col = dynamics[:, -1]  # (n_selected,)
     predicted_cols = []
     for step in range(1, n_predict + 1):
-        future_dyn = last_col * (eigs ** step)
+        future_dyn = last_col * (eigs**step)
         col = modes @ future_dyn
         predicted_cols.append(col.real)
 
@@ -171,11 +171,13 @@ def get_mode_info(result: DMDResult) -> list[dict]:
         freq = np.abs(np.angle(eig)) / (2 * np.pi)
         growth = np.log(np.abs(eig)) if np.abs(eig) > 0 else 0.0
         level = result.mode_levels[i] if i < len(result.mode_levels) else -1
-        info.append({
-            "index": i,
-            "level": level,
-            "frequency": float(freq),
-            "growth_rate": float(growth),
-            "eigenvalue_abs": float(np.abs(eig)),
-        })
+        info.append(
+            {
+                "index": i,
+                "level": level,
+                "frequency": float(freq),
+                "growth_rate": float(growth),
+                "eigenvalue_abs": float(np.abs(eig)),
+            }
+        )
     return info

@@ -1,6 +1,6 @@
 [project]
 name = "crystalization"
-version = "0.2.0"
+version = "0.4.0"
 description = "Crystal video layer decomposition and object detection"
 requires-python = ">=3.13"
 dependencies = []
@@ -14,13 +14,17 @@ annotator-app = "annotator.app:main"
 predictor-app = "predictor.app:main"
 llm-annotator-annotate = "llm_annotator.cli:main_annotate"
 llm-annotator-app = "llm_annotator.app:main"
+sharpness-layers-app = "sharpness_layers.app:main"
+scale-overlay-app = "scale_overlay.app:main"
+scale-overlay-demos = "scale_overlay.render_demos:main"
+optics-plots = "optics.plots:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/annotator", "src/predictor", "src/llm_annotator"]
+packages = ["src/annotator", "src/predictor", "src/llm_annotator", "src/sharpness_layers", "src/optics", "src/scale_overlay"]
 
 [tool.ruff]
 src = ["src"]
@@ -47,6 +51,24 @@ llm-annotator = [
     "gradio>=5.0",
     "matplotlib>=3.10",
 ]
+sharpness-layers = [
+    "numpy>=2.4.3",
+    "opencv-python-headless>=4.13.0.92",
+    "gradio>=5.0",
+]
+optics = [
+    "numpy>=2.4.3",
+    "matplotlib>=3.10",
+    "scipy>=1.15",
+    "opencv-python-headless>=4.13.0.92",
+    "scikit-image>=0.26.0",
+]
+scale-overlay = [
+    "numpy>=2.4.3",
+    "opencv-python-headless>=4.13.0.92",
+    "gradio>=5.0",
+    "matplotlib>=3.10",
+]
 dev = [
     "commitizen>=4.13.9",
     "pre-commit>=4.5.1",
@@ -55,3 +77,17 @@ dev = [
     "ruff>=0.15.5",
     "ty>=0.0.21",
 ]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.4.0"
+version_provider = "pep621"
+version_files = [
+    "pyproject.toml:^version",
+]
+update_changelog_on_bump = true
+changelog_file = "CHANGELOG.md"
+changelog_incremental = true
+tag_format = "v$version"
+major_version_zero = true
+bump_message = "bump: release v$current_version -> v$new_version"
