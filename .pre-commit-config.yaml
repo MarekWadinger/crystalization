@@ -22,7 +22,7 @@ repos:
         stages: [pre-commit]
       - id: check-added-large-files
         stages: [pre-commit]
-        args: ["--maxkb=5120"]  # 5 MB; scientific figures need headroom
+        args: ["--maxkb=51200"]  # 50 MB; reference PDFs + scientific figures
       - id: check-shebang-scripts-are-executable
         stages: [pre-commit]
       - id: check-case-conflict #Check for files with names that would conflict on a case-insensitive filesystem like MacOS HFS+ or Windows FAT
