@@ -107,3 +107,111 @@ def test_sight_glass_shift_independent_of_distance() -> None:
     delta = d - shifted
     assert np.allclose(delta, delta[0])
     assert delta[0] == pytest.approx(15.0 * (1.0 - 1.0 / 1.47), rel=1e-9)
+
+
+def test_load_camera_config_returns_native_pitch() -> None:
+    from optics.config import (
+        lens_from_config,
+        load_camera,
+        sight_glass_from_config,
+    )
+
+    cfg = load_camera("configs/camera_100.toml")
+    assert cfg.focal_length_mm == 35.0
+    assert cfg.f_number == 1.6
+    assert cfg.extension_tube_mm == 45.0
+    # Sensor-native pitch = sensor_width / native_width = 5370 / 1920.
+    assert cfg.native_pixel_pitch_um == pytest.approx(
+        5370.0 / 1920.0, rel=1e-9
+    )
+    lens = lens_from_config(cfg)
+    assert lens.pixel_pitch_um == pytest.approx(
+        cfg.native_pixel_pitch_um, rel=1e-9
+    )
+    glass = sight_glass_from_config(cfg)
+    assert glass.thickness == 15.0
+
+
+def test_lens_from_config_rescales_pitch_for_downsampled_video() -> None:
+    from optics.config import lens_from_config, load_camera
+
+    cfg = load_camera("configs/camera_100.toml")
+    # PAL DVR downsamples 1920 -> 720; effective pitch must scale.
+    lens_pal = lens_from_config(cfg, frame_width_px=720)
+    assert lens_pal.pixel_pitch_um == pytest.approx(5370.0 / 720.0, rel=1e-9)
+    # Sensor width itself is unchanged — only the per-pixel sampling.
+    assert lens_pal.sensor_width == cfg.sensor_width_mm
+
+
+def test_observations_schema_catches_stale_offset(tmp_path) -> None:
+    import json
+
+    from pydantic import ValidationError
+
+    from optics.observations_schema import load_validated
+
+    path = tmp_path / "obs.json"
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "video": {
+                    "filename_stub": "test",
+                    "start_wallclock_local": "2026-02-04T11:08:51",
+                    "timezone": "Europe/Bratislava",
+                    "fps_assumed": 30,
+                },
+                "events": [
+                    {
+                        "id": "e0",
+                        "wallclock_local": "2026-02-04T11:46:10",
+                        "video_offset_s": 2349,
+                        "video_offset_hms": "00:39:09",
+                        "video_frame_at_30fps": 70470,
+                        "phase": "discharge",
+                    }
+                ],
+            }
+        )
+    )
+    with pytest.raises(ValidationError) as exc_info:
+        load_validated(path)
+    msg = str(exc_info.value)
+    assert "2239" in msg and "video_offset_s=2349" in msg
+
+
+def test_observations_schema_fix_recomputes_offsets(tmp_path) -> None:
+    import json
+
+    from optics.observations_schema import load_validated, recompute_and_write
+
+    path = tmp_path / "obs.json"
+    path.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "video": {
+                    "filename_stub": "test",
+                    "start_wallclock_local": "2026-02-04T11:08:51",
+                    "timezone": "Europe/Bratislava",
+                    "fps_assumed": 30,
+                },
+                "events": [
+                    {
+                        "id": "e0",
+                        "wallclock_local": "2026-02-04T11:46:10",
+                        "video_offset_s": 9999,
+                        "video_offset_hms": "99:99:99",
+                        "video_frame_at_30fps": 0,
+                        "phase": "discharge",
+                    }
+                ],
+            }
+        )
+    )
+    changes = recompute_and_write(path)
+    assert len(changes) == 3
+    obs = load_validated(path)
+    assert obs.events[0].video_offset_s == 2239
+    assert obs.events[0].video_offset_hms == "00:37:19"
+    assert obs.events[0].video_frame_at_30fps == 67170
