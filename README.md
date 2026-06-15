@@ -6,7 +6,7 @@ Research into crystal formation analysis from microscopy video.
 
 Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
 
-## Annotator
+## **Annotator**
 
 Classical computer vision tool for layer decomposition and crystal detection. No ML — deterministic pipeline using focus, motion, and depth signals.
 
