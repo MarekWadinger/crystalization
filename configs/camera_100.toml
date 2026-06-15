@@ -1,0 +1,32 @@
+# Camera 100 — Slovenské cukrovary Sereď, sugar crystallizer sight-glass install.
+#
+# Hardware constants are versioned with the code that interprets them; do NOT
+# move these into .env — they are not secrets, they are physical facts about
+# the installation and every figure/KPI is invalidated if they change.
+#
+# Audit trail (FACT / DERIVED / ESTIMATE): see docs/optics/README.md.
+
+[camera]
+model = "Hanwha HCB-6000"             # FACT: datasheet + on-site label
+sensor_format = "1/2.8\""             # FACT: datasheet
+sensor_width_mm = 5.37                # FACT: 1/2.8" sensor active area (1920 × 2.8 µm)
+sensor_height_mm = 3.02               # FACT: 1/2.8" sensor active area
+native_width_px = 1920                # FACT: sensor native resolution
+native_height_px = 1080               # FACT: sensor native resolution
+
+[lens]
+model = "Fujinon HF35HA-1B"           # FACT: lens label
+focal_length_mm = 35.0                # FACT: lens engraving (optical, NOT body length)
+body_length_mm = 29.5                 # FACT: caliper measurement, operator 2026-06-15
+f_number = 1.6                        # FACT: operator inspection 2026-06-15, wide-open
+extension_tube_mm = 45.0              # FACT: caliper measurement, operator 2026-06-15
+
+[sight_glass]
+standard = "DIN 8902 borosilicate"    # ESTIMATE: stamped "DIN 890" → most likely 8902
+thickness_mm = 15.0                   # ESTIMATE: pending caliper
+refractive_index = 1.47               # FACT: borosilicate visible band
+
+[focus]
+# Derived from infinity-focus geometry: i_fixed = f + e = 80 mm
+#   ⇒ d_focus = f·i/(i−f) = 35·80/45 = 62.222… mm
+object_distance_mm = 62.2             # DERIVED from lens + extension above
