@@ -90,3 +90,17 @@ repos:
     hooks:
       - id: uv-sync
         args: ["--frozen", "--all-groups"]
+  - repo: local
+    hooks:
+      - id: optics-release
+        name: optics pipeline KPI + cz bump
+        # Fires after any commit that touches src/optics/. The hook
+        # script (scripts/optics-release.sh) re-runs the pipeline,
+        # updates CHANGELOG.md with a fresh KPI block, and bumps
+        # 0.x.0 -> 0.(x+1).0 with commitizen. Recursion-guarded by
+        # SKIP_OPTICS_RELEASE=1 inside the bump invocation.
+        entry: scripts/optics-release.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+        stages: [post-commit]
