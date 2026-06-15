@@ -243,14 +243,26 @@ block is implemented as a reproducible Python module under
 ### 2.1 Plant and vessel
 
 Camera 100 is installed on a vacuum pan at the Slovenské cukrovary
-sugar plant in Sereď, Slovakia. The camera observes the boiling
-massecuite through a circular borosilicate sight glass marked
-``DIN 8902``, mounted on an 8-bolt PN10 flange (geometry consistent
-with DN100, ≈ Ø100 mm clear, ≈ 15 mm thick). The lens stack is
-horizontal, with transmitted illumination from an LED inside the
-vessel on the opposite side of the slurry. Full hardware audit and
-photographs are in the project's lens documentation
-(``docs/lens/README.md``).
+sugar plant in Sereď, Slovakia. The vessel is a **TVA 30 boiling
+pan** (3 000 mm internal diameter, 1 200 mm central heating-
+circulation tube, ~165 m² heating surface, 21 m³ net volume, ~30 t
+massecuite output per strike — manufacturer specification). The
+annular slurry gap between the central downcomer and the outer wall
+is therefore **(3 000 − 1 200) / 2 = 900 mm radial**, traversed by a
+strong thermosiphon flow driven by the heating element. This bulk
+circulation regime is the physical justification for the homogeneous-
+slurry assumption invoked in § 6.2: the same crystal population
+recirculates past the sight glass many times per residence cycle, so
+the millimetre-thin slab actually imaged through the glass (§ 3.5) is
+a near-representative sample of bulk.
+
+The camera observes the boiling massecuite through a circular
+borosilicate sight glass marked ``DIN 8902``, mounted on an 8-bolt
+PN10 flange (geometry consistent with DN100, ≈ Ø100 mm clear,
+≈ 15 mm thick). The lens stack is horizontal, with transmitted
+illumination from an LED inside the vessel on the opposite side of
+the slurry. Full hardware audit and photographs are in the project's
+lens documentation (``docs/lens/README.md``).
 
 ### 2.2 Camera and lens
 
@@ -410,6 +422,167 @@ crystal sizes** typical of the first hour of a boiling-pan strike,
 when crystals have grown from ~0.05 mm seed-magma toward perhaps
 0.1 mm. The optical model and the in-scene measurement are mutually
 consistent under the corrected hardware parameters.
+
+### 3.5 Where the focal slab actually sits in the vessel
+
+Combining the verified macro geometry (§ 3.1) with the vessel
+geometry (§ 2.1) and an *in-situ* empty-tank measurement (described
+below) lets us pin down the axial position of the focal slab to
+within a few micrometres.
+
+The focused object distance is ``d_focus = 62.2 mm`` measured **from
+the front principal plane H**, not from any external surface of the
+lens. For a 35 mm machine-vision C-mount lens, H sits inside the
+optical assembly; the manufacturer datasheet specifies the back focal
+distance (BFD = 15.03 mm in air, rear vertex to sensor at infinity
+focus) but does not publish the H-to-front-element offset, so a
+purely geometric stack-up — lens-internal H position + unmeasured
+lens-to-glass air gap + 15 mm glass — leaves the slab's location
+in the slurry uncertain to order ±15 mm. Figure 5b illustrates the
+stack.
+
+![Figure 5b — Optical layout](../optics/figures/18_optical_layout.png)
+*Figure 5b — **What does the optical chain from sensor to slurry
+actually look like?** Schematic (not to scale). Variables: lens focal
+length ``f = 35 mm``, extension tube ``e = 45 mm``, sensor at
+image distance ``i = f + e = 80 mm``, glass thickness ``t = 15 mm``,
+glass index ``n_g = 1.47``, refractive shift
+``Δ = t(1−1/n_g) = 4.80 mm`` (the 15-mm-thick glass *appears*
+``t − Δ = 10.20 mm`` thick in the thin-lens model), focused object
+distance ``d_focus = 62.2 mm`` from the front principal plane H,
+and the focal-plane offset ``δ ≈ 13 µm`` past the inner glass face
+recovered from the in-situ measurement of § 3.5.1.*
+
+#### 3.5.1 Pinning the slab from glass-dent sharpness
+
+Across the case-study recording, fixed scratches/dents on the sight
+glass appear in every empty-tank frame (e.g. between the two
+discharge events of operator-note IDs ``e01b`` and ``e11``). Because
+the dents are at a *fixed physical depth*, their sharpness should be
+identical across all empty-tank frames, regardless of which strike
+the recording captures. We measured the median top-1 % per-pixel
+Laplacian² in 99 + 109 sampled frames across two empty-tank windows
+four hours apart (Figure 5c):
+
+* Window 1 (11:49:33 → 11:50:52, n = 99): median 11 664 (p5–p95
+  spread of ~11 %).
+* Window 2 (16:07:00 → 16:07:18, n = 109): median 12 996 (~9 %
+  spread).
+
+Cross-window medians agree to within 11 %, *across a four-hour gap*
+— exactly the stability one expects from a fixed-depth target, and
+incompatible with any bulk-slurry feature that would change with
+the strike progression.
+
+![Figure 5c — Glass-dent sharpness histograms](../optics/figures/17_dent_sharpness_histograms.png)
+*Figure 5c — **How far inside the slurry does the focal plane sit?**
+Per-frame glass-dent sharpness measured in two empty-tank windows
+4 hours apart in the case-study recording. The two distributions
+overlap to within 11 %, confirming the dents are at one fixed depth.
+Top axis: implied object distance ``d_o`` (near-side root) per
+sharpness, with ticks pinned to the bottom-axis log decades. The
+predicted focal-plane sharpness (green dashed) is ≈ 56× brighter
+than the dents, placing them ~13 µm in front of the focal plane.*
+
+Inverting the diffraction-floor PSF model (§ 4.2) with σ_floor ≈
+1.4 µm gives a dent circle of confusion ``c ≈ 5.8 µm``. Solving
+``c(d_o) = K · |d_o − d_focus|/d_o`` with
+``K = f²/(N(d_focus − f)) = 28.15 mm`` for the *near-side* root
+(the dents are between lens and slurry, so they cannot be on the
+far side):
+
+$$ d_\\mathrm{dent} \\approx \\frac{K \\cdot d_\\mathrm{focus}}{K + c}
+   \\approx 62.187 \\text{ mm}, $$
+
+i.e. the dents sit **≈ 13 µm in front of the focal plane**.
+
+#### 3.5.2 Which face of the glass
+
+A simple physical argument resolves which face of the sight glass the
+dents sit on. In thin-lens (apparent) coordinates, the 15 mm physical
+glass appears compressed to ``t − Δ = 10.20 mm`` thick (Figure 5b).
+Two hypotheses:
+
+| Dent location | Outer-face apparent ``d_o`` | Inner-face apparent ``d_o`` | Position of focal plane (62.200 mm) |
+|---|---:|---:|---|
+| **outer (lens-facing) face** | 62.187 mm | 72.387 mm | inside the glass slab — physically impossible |
+| **inner (slurry-facing) face** | 51.987 mm | 62.187 mm | **13 µm past the inner face, in the slurry** |
+
+The outer-face hypothesis places the focal plane inside the bulk
+glass material, which is incompatible with the camera ever yielding
+focused images of slurry features (which it manifestly does later
+in the strike). The inner-face hypothesis places the focal plane
+13 µm into the slurry past the inner glass surface — the *only*
+consistent geometry.
+
+#### 3.5.3 Operational consequences
+
+The focal slab therefore sits **~13 µm into the slurry beyond the
+inner sight-glass surface**, with the absolute number subject to a
+~2× uncertainty inherited from the c = 5.8 µm self-calibration of the
+sharpness model (a future calibration anchored against a focused
+crystal from mid-strike would tighten this to better than ±1 µm).
+The slab is sub-millimetre *thick*: DoF at F/1.6 has FWHM ≈ 7 µm of
+object depth (§ 4.3), and the usable detection range (where the
+circle of confusion exceeds one sensor pixel) extends to about
+±0.1 mm.
+
+Two consequences carried through the rest of the paper. First, the
+*spatial* sampling claim of the pipeline is not "this is the crystal
+population in the pan" but "this is the population in the slurry
+boundary layer pressed against the inner sight-glass surface".
+Section 6.2 leans on the strong thermosiphon circulation in TVA 30
+vessels to argue that this layer is representative of bulk; § 7.3
+records the caveat that this homogeneity is *assumed*, not directly
+measured. Second, the vessel geometry does *not* enter as a depth
+bound on the detection range — the sub-mm optical slab is many orders
+of magnitude tighter than the 900 mm annular gap, so any front/back-
+disambiguation discussion (§ 6) is bounded by optics, not by vessel
+walls.
+
+#### 3.5.4 The one remaining unknown: the lens-to-glass air gap
+
+The empirical measurement of § 3.5.1 pins the focal plane relative to
+the *inner glass face*. It does **not** pin the focal plane in the
+lab frame — i.e., where the optical assembly sits in space relative
+to the vessel wall — because the lens-internal position of the front
+principal plane H is not published in the HF35HA-1B datasheet. This
+leaves one open variable, the lens-to-glass air gap ``a`` of
+Figure 5b.
+
+From the §3.5.1 result and the refractive shift (§3.2), the real
+(unshifted) distance from H to the inner glass face is
+
+$$ \\mathrm{real}(H \\to \\text{inner glass}) =
+   d_\\mathrm{dent}^\\mathrm{(apparent)} + \\Delta
+   = 62.187 + 4.80 = 66.987 \\text{ mm}, $$
+
+so the real distance from H to the outer (lens-facing) glass face is
+``66.987 − t = 51.987 mm``. Decomposing this along the optical axis:
+
+$$ 51.987 \\text{ mm}
+   = \\underbrace{\\text{H} \\to \\text{front element}}_{\\text{lens-internal,
+   unpublished}}
+   + a, $$
+
+and therefore
+
+$$ \\boxed{a = 51.987 \\text{ mm} - (\\text{H} \\to \\text{front element})}. $$
+
+For a 35 mm machine-vision lens of this class, the lens-internal
+offset is plausibly in the range 0 – 29.5 mm (the lens body length),
+giving an admissible interval ``a ∈ [22.5, 52.0] mm``. Without an
+independent measurement of either ``a`` itself or the lens-internal
+offset, the absolute axial position of the focal slab in the lab
+frame remains uncertain by that interval — even though its position
+relative to the inner glass face is pinned to ±2 µm by the
+in-situ dent measurement.
+
+The cheapest closing measurement is a single caliper reading of the
+distance from the lens front rim to the outer glass face on the next
+plant visit; that number is ``a`` directly. The §3.5 result then
+locks the whole optical chain absolutely, with no remaining
+unpublished quantity.
 
 ---
 
@@ -850,6 +1023,42 @@ true CSD is depth-independent. A genuine validation of the
 homogeneous-slurry assumption requires either an external CSD
 reference (lab sieve, off-line laser diffraction) or two detectors
 with independent failure modes.
+
+A second clarification matters here. Sharpness alone gives no
+*per-crystal* near/far classification: the circle-of-confusion
+function is symmetric in the reciprocal object distance ``u = 1/d_o``
+(§ 4.1, § 6.1), so a single sharpness measurement maps to **two**
+candidate depths simultaneously — the front/back ambiguity of
+Zhou et al. (2011). The "near-side", "focal", and "far-side" labels
+in Figure 15 right panel and in Figure 13 are therefore best read as
+**ensemble bin populations**, not as confident per-crystal depth
+assignments. Three distinct levels of depth claim co-exist in this
+paper, and we keep them deliberately separate:
+
+1. **Ensemble counts (sharpness-only):** how many crystals fall in
+   each sharpness bin. *Confidence per crystal: none — the binning is
+   sharpness-monotone, but each bin contains a near/far pair the
+   sharpness cannot separate.*
+2. **Probabilistic per-crystal assignment (sharpness + size prior):**
+   the disambiguation step in § 6.3 uses the focal-plane apparent-size
+   distribution as a prior to favour one of the two candidate depths
+   per crystal. *Confidence per crystal: posterior odds under an
+   assumed homogeneous prior.*
+3. **Deterministic per-crystal assignment (future, sharpness +
+   motion):** with stable lighting and ≥ 2 consecutive frames,
+   optical-flow rate is linear in ``d_o`` (near crystals appear to
+   move faster than far crystals at the same physical velocity), so
+   the two candidate depths produce distinguishable apparent
+   velocities. *Confidence per crystal: near-certain once flow is
+   reliable.* This is on the § 8 outlook list; the present case-study
+   single-batch video does not yet exploit it.
+
+The CSD numbers in § 7.1 are reported in level (2), with the size
+prior estimated from the focal-plane subset. The homogeneous-slurry
+agreement in Figure 15 right panel is necessary but not sufficient
+for that prior to be correct; the operational consequence is that
+the *shape* of the recovered CSD is robust, while the absolute
+near/far apportionment carries the prior's uncertainty.
 
 ### 7.4 Detector failure mode and the immediate fix
 
