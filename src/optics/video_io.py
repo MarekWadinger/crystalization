@@ -62,6 +62,104 @@ class CropBox:
         x1 = w - self.right if self.right > 0 else w
         return np.ascontiguousarray(frame[y0:y1, x0:x1])
 
+    @classmethod
+    def auto_detect(
+        cls,
+        video_path: str,
+        *,
+        n_samples: int = 40,
+        letterbox_luma_thresh: float = 12.0,
+        overlay_sharpness_ratio: float = 3.0,
+        margin_px: int = 5,
+        max_edge_fraction: float = 0.25,
+    ) -> CropBox:
+        """Estimate per-edge crops from the video itself.
+
+        Two signals, sampled from ``n_samples`` evenly-spaced frames:
+
+        * **letterbox** — outer columns/rows whose mean luminance stays
+          below ``letterbox_luma_thresh`` (analogue black bars).
+        * **DVR overlay** — outer rows whose mean ``var(Laplacian)``
+          exceeds ``overlay_sharpness_ratio`` × the interior median
+          (timestamp/channel banners are an order of magnitude sharper
+          than the underwater image).
+
+        ``margin_px`` is added as a safety pad and each edge is capped at
+        ``max_edge_fraction`` of the frame dimension so a pathological
+        sample can never crop away the whole image.
+
+        Decodes only the sampled frames; safe to call on multi-GB videos.
+        """
+        cap = cv2.VideoCapture(video_path)
+        try:
+            n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+            w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            if n_frames <= 0 or w <= 0 or h <= 0:
+                raise RuntimeError(f"Bad video metadata for {video_path}")
+            indices = np.linspace(
+                0,
+                max(0, n_frames - 1),
+                num=min(n_samples, n_frames),
+                dtype=int,
+            )
+            luma_sum = np.zeros((h, w), dtype=np.float64)
+            sharp_sum = np.zeros((h, w), dtype=np.float64)
+            taken = 0
+            for idx in indices:
+                cap.set(cv2.CAP_PROP_POS_FRAMES, int(idx))
+                ret, frame = cap.read()
+                if not ret:
+                    continue
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY).astype(
+                    np.float64
+                )
+                lap = cv2.Laplacian(gray, cv2.CV_64F, ksize=3)
+                luma_sum += gray
+                sharp_sum += lap * lap
+                taken += 1
+            if taken == 0:
+                raise RuntimeError(
+                    f"Could not sample any frames from {video_path}"
+                )
+            luma_mean = luma_sum / taken
+            sharp_mean = sharp_sum / taken
+        finally:
+            cap.release()
+
+        max_top = int(h * max_edge_fraction)
+        max_bottom = int(h * max_edge_fraction)
+        max_left = int(w * max_edge_fraction)
+        max_right = int(w * max_edge_fraction)
+
+        col_luma = luma_mean.mean(axis=0)
+        # Letterbox: last column from edge whose mean luminance is dark.
+        left_dark = np.where(col_luma[:max_left] < letterbox_luma_thresh)[0]
+        left = int(left_dark.max()) + 1 if left_dark.size else 0
+        right_region = col_luma[w - max_right :]
+        right_dark = np.where(right_region < letterbox_luma_thresh)[0]
+        right = int(max_right - right_dark.min()) if right_dark.size else 0
+
+        sharp_view = sharp_mean[:, left : (w - right) if right > 0 else w]
+        row_sharp = sharp_view.mean(axis=1)
+        interior_lo = int(h * 0.30)
+        interior_hi = int(h * 0.70)
+        interior_median = float(np.median(row_sharp[interior_lo:interior_hi]))
+        sharp_thresh = overlay_sharpness_ratio * max(interior_median, 1e-6)
+        # Overlay band: last row from edge whose mean sharpness exceeds threshold.
+        top_hot = np.where(row_sharp[:max_top] > sharp_thresh)[0]
+        top = int(top_hot.max()) + 1 if top_hot.size else 0
+        bottom_region = row_sharp[h - max_bottom :]
+        bottom_hot = np.where(bottom_region > sharp_thresh)[0]
+        bottom = int(max_bottom - bottom_hot.min()) if bottom_hot.size else 0
+
+        return cls(
+            top=min(max_top, top + margin_px) if top > 0 else 0,
+            bottom=min(max_bottom, bottom + margin_px) if bottom > 0 else 0,
+            left=min(max_left, left + margin_px) if left > 0 else 0,
+            right=min(max_right, right + margin_px) if right > 0 else 0,
+        )
+
 
 DEFAULT_CROP = CropBox()
 

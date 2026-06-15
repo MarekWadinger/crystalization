@@ -12,32 +12,31 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+from optics.config import (
+    lens_from_config,
+    load_camera,
+    sight_glass_from_config,
+)
 from optics.model import (
     LensSetup,
-    SightGlass,
     circle_of_confusion,
     mm_per_pixel_at,
 )
 from optics.psf import sharpness_diffraction, sharpness_gaussian
 
-CAMERA_100 = LensSetup(
-    focal_length=35.0,
-    f_number=1.6,
-    extension_tube=45.0,
-    pixel_pitch_um=2.8,
-    sensor_width=5.37,
-    sensor_height=3.02,
+_CONFIG_PATH = (
+    Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
 )
-"""Verified setup for the plant's Camera 100 installation (operator
-inspection 2026-06-15): F-number 1.6 wide-open, extension tube 45 mm."""
+_CFG = load_camera(_CONFIG_PATH)
 
-SIGHT_GLASS = SightGlass(thickness=15.0, refractive_index=1.47)
-"""Best-estimate DIN 8902 borosilicate disc."""
+CAMERA_100 = lens_from_config(_CFG)
+"""Camera 100 install loaded from ``configs/camera_100.toml`` (sensor-native pitch)."""
 
-D_FOCUS = 62.2
-"""Focused object distance at infinity focus ring, mm.
+SIGHT_GLASS = sight_glass_from_config(_CFG)
+"""Sight glass geometry loaded from ``configs/camera_100.toml``."""
 
-Derived: i_fixed = f + e = 80 mm; d_focus = f·i/(i−f) = 35·80/45 = 62.2 mm."""
+D_FOCUS = _CFG.focus_object_distance_mm
+"""Focused object distance from config; derived from i_fixed = f + e."""
 
 PLT_STYLE: dict[str, object] = {
     "figure.dpi": 140,

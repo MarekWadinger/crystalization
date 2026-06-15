@@ -7,6 +7,8 @@ Launch with::
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import cv2
 import gradio as gr
 import numpy as np
@@ -19,6 +21,7 @@ from optics import (
     image_distance_for_focus,
     mm_per_pixel_at,
 )
+from optics.config import load_camera
 from scale_overlay.overlay import (
     annotate_optics_info,
     draw_grid,
@@ -27,12 +30,15 @@ from scale_overlay.overlay import (
 
 Mat = np.ndarray
 
-# Camera 100 verified hardware (operator inspection 2026-06-15).
-DEFAULT_FOCAL = 35.0
-DEFAULT_FNUMBER = 1.6
-DEFAULT_EXTENSION = 45.0
-DEFAULT_PITCH = 2.8
-DEFAULT_FOCUS = 62.2
+# Defaults loaded from versioned config (configs/camera_100.toml).
+_CFG = load_camera(
+    Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
+)
+DEFAULT_FOCAL = _CFG.focal_length_mm
+DEFAULT_FNUMBER = _CFG.f_number
+DEFAULT_EXTENSION = _CFG.extension_tube_mm
+DEFAULT_PITCH = _CFG.native_pixel_pitch_um
+DEFAULT_FOCUS = _CFG.focus_object_distance_mm
 
 
 def _make_lens(
