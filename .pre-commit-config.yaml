@@ -61,6 +61,13 @@ repos:
         language: system
         types_or: [python, pyi, jupyter]
         stages: [pre-commit]
+      - id: optics-sidecar-check
+        name: validate dataset sidecar JSONs
+        entry: uv run optics-sidecar check
+        language: system
+        files: ^datasets/.*\.json$
+        pass_filenames: true
+        stages: [pre-commit]
   - repo: local
     hooks:
       - id: pytest-check
