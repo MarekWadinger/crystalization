@@ -94,7 +94,7 @@
   },
   "events": [
     {
-      "id": "e00",
+      "id": "b1-e00",
       "phase": "discharge",
       "label_en": "start discharging (emptying)",
       "qualifier": "exact",
@@ -104,17 +104,17 @@
       "label": ""
     },
     {
-      "id": "e01",
+      "id": "b1-e01",
       "phase": "empty",
       "label_en": "fully discharged",
       "qualifier": "approximate (operator: 'okolo' = 'around')",
       "note": "End of the previous strike. Camera should show the vessel emptying out.",
-      "wallclock": "2026-02-04T11:49:33",
-      "t": 2453.5,
+      "wallclock": "2026-02-04T11:46:30",
+      "t": 2270.5,
       "label": "uplne vyprazdnenie"
     },
     {
-      "id": "e01b",
+      "id": "b2-e01b",
       "phase": "new_batch_vacuum_pull",
       "label_en": "16:07 — new batch begins; vacuum re-established",
       "qualifier": "approximate (operator: 'okolo' = 'around')",
@@ -124,7 +124,7 @@
       "label": "16:07 novy - vakuum"
     },
     {
-      "id": "e02",
+      "id": "b2-e02",
       "phase": "cleaning",
       "label_en": "cleaning continues until filling at 11:52",
       "qualifier": "exact",
@@ -134,7 +134,7 @@
       "label": "Čistenie do naplňanie 11:52"
     },
     {
-      "id": "e03",
+      "id": "b2-e03",
       "phase": "filling",
       "subphase": "bubbles_at_camera",
       "label_en": "12:03 — filling; bubbles appear at the camera",
@@ -145,7 +145,7 @@
       "label": "12:03 naplňanie - bublinky pri kamere"
     },
     {
-      "id": "e04",
+      "id": "b2-e04",
       "phase": "bubbles_intensify",
       "label_en": "12:05 — large amount of bubbles",
       "qualifier": "exact",
@@ -155,7 +155,7 @@
       "label": "12:05 velke množstvo bublin"
     },
     {
-      "id": "e05",
+      "id": "b2-e05",
       "phase": "concentration",
       "label_en": "12:10 — concentration (thickening)",
       "qualifier": "exact",
@@ -165,7 +165,7 @@
       "label": "12:10 - zahusťovanie"
     },
     {
-      "id": "e06",
+      "id": "b2-e06",
       "phase": "stabilization_and_seeding",
       "subphase": "first_crystals_visible",
       "label_en": "12:30 — stabilization; bubbles again; seeding (graining) with limited steam; first crystals visible as very small inclusions",
@@ -173,11 +173,11 @@
       "note": "GRAINING POINT — operationally critical. Pipeline KPI snapshots should mark this as t=0 of the growth phase. Crystals at this moment are seed-magma (~50 µm).",
       "wallclock": "2026-02-04T12:30:00",
       "t": 4880.5,
-      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť prve kryštaliky (velmi male inkluzie)",
+      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť pb2-rve kryštaliky (velmi male inkluzie)",
       "is_seeding": true
     },
     {
-      "id": "e07",
+      "id": "b2-e07",
       "phase": "boiling",
       "label_en": "12:39 — boiling (controlled growth)",
       "qualifier": "exact",
@@ -187,7 +187,7 @@
       "label": "12:39 navaranie"
     },
     {
-      "id": "e08",
+      "id": "b2-e08",
       "phase": "drying",
       "label_en": "15:41 — drying (final concentration)",
       "qualifier": "exact",
@@ -197,7 +197,7 @@
       "label": "15:41 susenie"
     },
     {
-      "id": "e09",
+      "id": "b2-e09",
       "phase": "aeration",
       "label_en": "15:58 — aeration (vacuum break)",
       "qualifier": "exact",
@@ -207,27 +207,27 @@
       "label": "15:58 zavzdušnenie"
     },
     {
-      "id": "e10",
-      "phase": "discharge_release",
-      "label_en": "15:59 — discharge/release of massecuite",
+      "id": "b2-e10",
+      "phase": "discharge",
+      "label_en": "discharge/release of massecuite",
       "qualifier": "exact",
       "note": "Finished massecuite released to centrifuge.",
-      "wallclock": "2026-02-04T15:59:00",
-      "t": 17420.5,
-      "label": "15:59 vypušťanie"
+      "wallclock": "2026-02-04T16:00:10",
+      "t": 17490.5,
+      "label": ""
     },
     {
-      "id": "e10b",
+      "id": "eb2-10b",
       "phase": "empty",
       "label_en": "fully discharged",
       "qualifier": "exact",
       "note": "Finished massecuite released to centrifuge.",
-      "wallclock": "2026-02-04T16:07:00",
-      "t": 17900.5,
+      "wallclock": "2026-02-04T16:00:30",
+      "t": 17510.5,
       "label": ""
     },
     {
-      "id": "e11",
+      "id": "b2-e11",
       "phase": "new_batch_vacuum_pull",
       "label_en": "16:07 — new batch begins; vacuum re-established",
       "qualifier": "exact",
@@ -235,6 +235,50 @@
       "wallclock": "2026-02-04T16:07:18",
       "t": 17918.5,
       "label": "16:07 novy - vakuum"
+    },
+    {
+      "id": "b1-e08_pred",
+      "phase": "drying",
+      "label": "15:41 susenie",
+      "label_en": "PREDICTED from b2-e08: 15:41 — drying (final concentration)",
+      "qualifier": "predicted",
+      "is_seeding": false,
+      "note": "PREDICTED from b2-e08 (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = 1150.0s).",
+      "wallclock": "2026-02-04T11:28:52.628866",
+      "t": 1213.128866
+    },
+    {
+      "id": "b1-e09_pred",
+      "phase": "aeration",
+      "label": "15:58 zavzdušnenie",
+      "label_en": "PREDICTED from b2-e09: 15:58 — aeration (vacuum break)",
+      "qualifier": "predicted",
+      "is_seeding": false,
+      "note": "PREDICTED from b2-e09 (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = 130.0s).",
+      "wallclock": "2026-02-04T11:44:12.731959",
+      "t": 2133.231959
+    },
+    {
+      "id": "b1-10b_pred",
+      "phase": "empty",
+      "label": "",
+      "label_en": "PREDICTED from eb2-10b: fully discharged",
+      "qualifier": "predicted",
+      "is_seeding": false,
+      "note": "PREDICTED from eb2-10b (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = -410.0s).",
+      "wallclock": "2026-02-04T11:52:19.845361",
+      "t": 2620.345361
+    },
+    {
+      "id": "b1-e11_pred",
+      "phase": "new_batch_vacuum_pull",
+      "label": "16:07 novy - vakuum",
+      "label_en": "PREDICTED from b2-e11: 16:07 — new batch begins; vacuum re-established",
+      "qualifier": "predicted",
+      "is_seeding": false,
+      "note": "PREDICTED from b2-e11 (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = -428.0s).",
+      "wallclock": "2026-02-04T11:52:36.082474",
+      "t": 2636.582474
     }
   ],
   "segments": [

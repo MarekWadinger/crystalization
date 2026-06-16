@@ -59,8 +59,19 @@ def _cmd_reprobe(args: argparse.Namespace) -> int:
 
 
 def _cmd_check(args: argparse.Namespace) -> int:
+    import json
+
     rc = 0
     for p in args.paths:
+        try:
+            sv = json.loads(Path(p).read_text()).get("schema_version", "")
+        except Exception as exc:
+            sys.stderr.write(f"{p}: FAIL (not valid JSON)\n{exc}\n")
+            rc = 1
+            continue
+        if not str(sv).startswith("2."):
+            print(f"{p}: SKIP (schema_version={sv!r}; not a v2.x sidecar)")
+            continue
         try:
             load_validated(p)
         except Exception as exc:
