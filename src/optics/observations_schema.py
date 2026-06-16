@@ -1,29 +1,34 @@
-"""Pydantic schema for ``docs/operator_notes/*.json`` annotation files.
+"""Pydantic schema for video-sidecar annotation JSONs (v2.0).
 
-The original ``Observations`` dataclass in :mod:`optics.observations` is a
-loader without validation. This module adds a Pydantic v2 schema that
-**enforces internal consistency**: the redundant fields
-``video_offset_s``, ``video_offset_hms`` and ``video_frame_at_30fps`` must
-all be derivable from the single source of truth ``wallclock_local`` and
-the file-level ``start_wallclock_local`` + ``fps_assumed``. The
-``derived_phase_windows`` chain must be monotone and reference real event
-ids. Loading a stale file raises ``ValidationError`` listing every
-mismatch.
+Each sidecar lives next to its video with the same stem
+(``datasets/<stem>.mp4`` ↔ ``datasets/<stem>.json``).
+
+The shape is aligned with **ActivityNet** (segment-based temporal
+localization) and **JAMS** (JSON Annotated Music Specification)
+conventions:
+
+* point-in-time events carry a single ``t`` (seconds since
+  ``media.start_wallclock``);
+* time intervals are ``segments`` with ``t_start`` / ``t_end``;
+* machine-derived container facts live under ``media.probe``;
+* operator-derived facts live at ``media`` top level (stem, anchor,
+  timezone, note) and inside ``events`` / ``segments``.
+
+Derived fields (``hms`` strings, frame indices) are **never stored** —
+they are computable from ``t`` + ``media.probe.fps``. Helpers exposed
+on the models compute them on demand for display.
 
 Two entry points:
 
-* :func:`load_validated(path)` — strict load; raises if anything is
-  inconsistent. Use this from production code paths.
-* :func:`recompute_and_write(path)` — derive ``video_offset_s``,
-  ``video_offset_hms``, ``video_frame_at_30fps`` from ``wallclock_local``
-  (the only field the operator hand-edits) and write the file back. Use
-  this after editing wallclocks so the rest stays in sync — no more
-  manual arithmetic.
+* :func:`load_validated(path)` — strict load; raises on inconsistency.
+* :func:`recompute_and_write(path)` — re-derive ``t`` from
+  ``wallclock`` and write back. Single button after operator edits a
+  wallclock.
 
 CLI::
 
-    uv run python -m optics.observations_schema check docs/.../foo.json
-    uv run python -m optics.observations_schema fix   docs/.../foo.json
+    uv run python -m optics.observations_schema check "datasets/<stem>.json"
+    uv run python -m optics.observations_schema fix   "datasets/<stem>.json"
 """
 
 from __future__ import annotations
@@ -31,18 +36,66 @@ from __future__ import annotations
 import json
 import sys
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+SCHEMA_VERSION = "2.0"
+
+
+class Phase(str, Enum):
+    """Canonical phase taxonomy for a sugar crystallization strike.
+
+    Ordered to roughly follow the chronological sequence of one strike
+    (cleaning → filling → … → discharge → empty → next-batch vacuum).
+    Adding a phase is a code change on purpose: the taxonomy is process
+    knowledge, not per-batch data.
+    """
+
+    cleaning = "cleaning"
+    filling = "filling"
+    filling_with_bubbles = "filling_with_bubbles"
+    bubbles_appear = "bubbles_appear"
+    bubbles_intensify = "bubbles_intensify"
+    concentration = "concentration"
+    stabilization_and_seeding = "stabilization_and_seeding"
+    first_crystals_visible = "first_crystals_visible"
+    boiling = "boiling"
+    drying = "drying"
+    aeration = "aeration"
+    discharge = "discharge"
+    discharge_release = "discharge_release"
+    empty = "empty"
+    new_batch_vacuum_pull = "new_batch_vacuum_pull"
+
+
+PHASE_GLOSSES: dict[Phase, str] = {
+    Phase.cleaning: "Sweetwater wash / line clearing before next charge.",
+    Phase.filling: "Vessel charged with syrup; pre-graining concentration.",
+    Phase.filling_with_bubbles: "Filling continues with bubble flux visible.",
+    Phase.bubbles_appear: "First bubbles visible at camera as syrup heats.",
+    Phase.bubbles_intensify: "Bubble flux peaks during pre-graining heat-up.",
+    Phase.concentration: "Evaporation past saturation toward seeding point.",
+    Phase.stabilization_and_seeding: (
+        "Supersaturation stabilised; seed magma injected; steam restricted."
+    ),
+    Phase.first_crystals_visible: (
+        "Seed crystals visible as small inclusions in the field of view."
+    ),
+    Phase.boiling: "Growth phase under controlled supersaturation (Slovak: navaranie).",
+    Phase.drying: "Final concentration stage before discharge.",
+    Phase.aeration: "Vacuum break / vessel aerated for discharge.",
+    Phase.discharge: "Active emptying of finished massecuite.",
+    Phase.discharge_release: "Massecuite released to centrifuge / receiver.",
+    Phase.empty: "Vessel fully discharged; waiting for next batch.",
+    Phase.new_batch_vacuum_pull: "Next batch begins; vacuum re-established.",
+}
+
 
 def _format_hms(total_s: float) -> str:
-    """Format a non-negative second count as ``HH:MM:SS`` or ``HH:MM:SS.NNN``.
-
-    If ``total_s`` is integer-valued, the millisecond suffix is omitted;
-    otherwise three decimal places are emitted.
-    """
+    """Format a non-negative second count as ``HH:MM:SS`` or ``HH:MM:SS.NNN``."""
     if total_s < 0:
         raise ValueError(f"_format_hms got negative seconds: {total_s}")
     total_ms = int(round(total_s * 1000))
@@ -55,51 +108,97 @@ def _format_hms(total_s: float) -> str:
     return f"{base}.{ms:03d}"
 
 
-class VideoMeta(BaseModel):
-    """File-level video metadata."""
+class VideoProbe(BaseModel):
+    """ffprobe-derived FACTS about the container (written by ``sidecar_init``)."""
 
     model_config = ConfigDict(extra="allow")
 
-    filename_stub: str
-    start_wallclock_local: datetime
+    container_format: str
+    video_codec: str
+    width: int
+    height: int
+    pix_fmt: str
+    r_frame_rate: str
+    avg_frame_rate: str
+    fps: float
+    duration_s: float
+    bit_rate_bps: int | None = None
+    has_audio: bool = False
+    file_size_bytes: int | None = None
+    probed_at: datetime
+    probe_tool: str = "ffprobe"
+
+
+class Media(BaseModel):
+    """Media-file-level metadata (operator anchor + machine probe)."""
+
+    model_config = ConfigDict(extra="allow")
+
+    stem: str
+    start_wallclock: datetime
     timezone: str
-    fps_assumed: float
-    duration_s: float | None = None
-    duration_source: str | None = None
     note: str | None = None
+    probe: VideoProbe | None = None
+
+    @property
+    def fps(self) -> float:
+        """Frame rate — from ``probe.fps`` if probed, else 30.0 fallback."""
+        return self.probe.fps if self.probe is not None else 30.0
+
+    @property
+    def duration_s(self) -> float | None:
+        """Container duration in seconds (None if not probed)."""
+        return self.probe.duration_s if self.probe is not None else None
 
 
 class Event(BaseModel):
-    """One operator-annotated event on the strike timeline."""
+    """A point-in-time annotation on the media timeline.
+
+    ``t`` is the canonical time coordinate (seconds since
+    ``media.start_wallclock``) and matches JAMS / ActivityNet usage.
+    ``wallclock`` is the operator's source of truth; ``t`` is derived
+    and cross-checked by the validator.
+    """
 
     model_config = ConfigDict(extra="allow")
 
     id: str
-    wallclock_local: datetime
-    video_offset_s: float
-    video_offset_hms: str
-    video_frame_at_30fps: int
-    phase: str
-    label_sk: str = ""
-    label_en: str = ""
+    t: float
+    wallclock: datetime
+    phase: Phase
+    label: str
+    label_en: str | None = None
     qualifier: str = "exact"
     subphase: str | None = None
-    is_seeding_event: bool = False
+    is_seeding: bool = False
     note: str | None = None
 
+    def hms(self) -> str:
+        """Render ``t`` as ``HH:MM:SS[.NNN]`` for display."""
+        return _format_hms(self.t)
 
-class PhaseWindow(BaseModel):
-    """A contiguous time interval annotated with a single phase label."""
+    def frame(self, fps: float) -> int:
+        """Compute the integer frame index at ``fps``."""
+        return int(round(self.t * fps))
+
+
+class Segment(BaseModel):
+    """A contiguous time interval with a single phase label (ActivityNet shape)."""
 
     model_config = ConfigDict(extra="allow")
 
-    phase: str
-    from_s: float
-    to_s: float | None = None
-    from_hms: str
-    to_hms: str | None = None
-    duration_min: int | None = None
+    phase: Phase
+    t_start: float
+    t_end: float | None = None
     note: str | None = None
+
+    def hms_start(self) -> str:
+        """Render ``t_start`` as ``HH:MM:SS[.NNN]`` for display."""
+        return _format_hms(self.t_start)
+
+    def hms_end(self) -> str | None:
+        """Render ``t_end`` as ``HH:MM:SS[.NNN]`` (None if open-ended)."""
+        return _format_hms(self.t_end) if self.t_end is not None else None
 
 
 class ObservationsFile(BaseModel):
@@ -107,21 +206,19 @@ class ObservationsFile(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    schema_version: str = "1.0"
-    video: VideoMeta
+    schema_version: str = SCHEMA_VERSION
+    media: Media
+    events: list[Event] = Field(default_factory=list)
+    segments: list[Segment] = Field(default_factory=list)
+    context: dict[str, Any] = Field(default_factory=dict)
     source_document: dict[str, Any] = Field(default_factory=dict)
-    process_context: dict[str, Any] = Field(default_factory=dict)
-    phase_taxonomy: dict[str, str] = Field(default_factory=dict)
-    scada_parameter_legend: dict[str, Any] = Field(default_factory=dict)
-    events: list[Event]
-    derived_phase_windows: list[PhaseWindow] = Field(default_factory=list)
+    scada_legend: dict[str, Any] = Field(default_factory=dict)
     kpi_pairing_hint: dict[str, Any] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def _check_consistency(self) -> ObservationsFile:
         errors: list[str] = []
-        start = self.video.start_wallclock_local
-        fps = self.video.fps_assumed
+        start = self.media.start_wallclock
 
         seen_ids: set[str] = set()
         for ev in self.events:
@@ -129,49 +226,25 @@ class ObservationsFile(BaseModel):
                 errors.append(f"duplicate event id: {ev.id!r}")
             seen_ids.add(ev.id)
 
-            expected_offset = (ev.wallclock_local - start).total_seconds()
-            if abs(ev.video_offset_s - expected_offset) > 1e-6:
+            expected_t = (ev.wallclock - start).total_seconds()
+            if abs(ev.t - expected_t) > 1e-6:
                 errors.append(
-                    f"{ev.id}: video_offset_s={ev.video_offset_s} "
-                    f"≠ wallclock-derived {expected_offset}"
+                    f"{ev.id}: t={ev.t} ≠ wallclock-derived {expected_t}"
                 )
 
-            expected_hms = _format_hms(expected_offset)
-            if ev.video_offset_hms != expected_hms:
+        prev_end: float = 0.0
+        for seg in self.segments:
+            if seg.t_start < prev_end:
                 errors.append(
-                    f"{ev.id}: video_offset_hms={ev.video_offset_hms!r} "
-                    f"≠ derived {expected_hms!r}"
+                    f"segment {seg.phase!r}: t_start={seg.t_start} "
+                    f"overlaps previous segment ending at {prev_end}"
                 )
-
-            expected_frame = int(round(expected_offset * fps))
-            if ev.video_frame_at_30fps != expected_frame:
+            if seg.t_end is not None and seg.t_end < seg.t_start:
                 errors.append(
-                    f"{ev.id}: video_frame_at_30fps={ev.video_frame_at_30fps} "
-                    f"≠ derived {expected_frame} (offset {expected_offset}s × {fps} fps)"
+                    f"segment {seg.phase!r}: t_end={seg.t_end} < "
+                    f"t_start={seg.t_start}"
                 )
-
-        prev_to: float = 0.0
-        for win in self.derived_phase_windows:
-            if win.from_s < prev_to:
-                errors.append(
-                    f"window {win.phase!r}: from_s={win.from_s} "
-                    f"overlaps previous window ending at {prev_to}"
-                )
-            if win.to_s is not None and win.to_s < win.from_s:
-                errors.append(
-                    f"window {win.phase!r}: to_s={win.to_s} < from_s={win.from_s}"
-                )
-            if win.from_hms != _format_hms(win.from_s):
-                errors.append(
-                    f"window {win.phase!r}: from_hms={win.from_hms!r} "
-                    f"≠ derived {_format_hms(win.from_s)!r}"
-                )
-            if win.to_s is not None and win.to_hms != _format_hms(win.to_s):
-                errors.append(
-                    f"window {win.phase!r}: to_hms={win.to_hms!r} "
-                    f"≠ derived {_format_hms(win.to_s)!r}"
-                )
-            prev_to = win.to_s if win.to_s is not None else prev_to
+            prev_end = seg.t_end if seg.t_end is not None else prev_end
 
         if errors:
             joined = "\n  - ".join(errors)
@@ -182,92 +255,112 @@ class ObservationsFile(BaseModel):
 
 
 def load_validated(path: str | Path) -> ObservationsFile:
-    """Load and strictly validate an observations file."""
+    """Load and strictly validate a sidecar JSON."""
     return ObservationsFile.model_validate_json(Path(path).read_text())
 
 
+def completeness_report(obs: ObservationsFile) -> list[str]:
+    """Return human-readable list of next-step suggestions for a sidecar.
+
+    A valid file can still be incomplete — e.g. no seeding event flagged,
+    no segments at all, no events at all. This is the "what's next"
+    feedback surfaced by the interactive wizard and the ``next`` CLI.
+    """
+    todo: list[str] = []
+    if obs.media.start_wallclock.year < 2000:
+        todo.append(
+            "media.start_wallclock looks like a placeholder; "
+            "confirm against DVR overlay at frame 0."
+        )
+    if not obs.events:
+        todo.append("no events annotated yet — add at least one.")
+    if obs.events and not any(e.is_seeding for e in obs.events):
+        todo.append(
+            "no seeding event flagged (is_seeding=True) — needed for "
+            "time_since_seeding_s growth-curve calibration."
+        )
+    if not obs.segments:
+        todo.append(
+            "no phase segments yet — KPI snapshots cannot be tagged with a phase."
+        )
+    if obs.media.probe is None:
+        todo.append(
+            "media.probe missing — run "
+            "`python -m optics.sidecar_init <video> --reprobe`."
+        )
+    return todo
+
+
 def recompute_and_write(path: str | Path) -> list[str]:
-    """Recompute every derived field from ``wallclock_local`` and write back.
+    """Re-derive ``event.t`` from ``event.wallclock`` and write back.
 
-    Returns the list of changes applied (event ids and field names). Use
-    after editing wallclocks: this is the "single button" that re-syncs
-    ``video_offset_s``, ``video_offset_hms`` and ``video_frame_at_30fps``
-    so no manual arithmetic is required.
-
-    Window timestamps (``from_s``/``to_s`` and their hms strings) are
-    *not* auto-recomputed because windows can encode operator-chosen
-    boundaries that don't coincide with any single event; their consistency
-    is still checked on the way out.
+    Returns the list of changes applied. Use after editing wallclocks:
+    this is the "single button" that re-syncs the canonical ``t``
+    coordinate.
     """
     path = Path(path)
     raw = json.loads(path.read_text())
-    start = datetime.fromisoformat(raw["video"]["start_wallclock_local"])
-    fps = float(raw["video"].get("fps_assumed", 30.0))
+    start = datetime.fromisoformat(raw["media"]["start_wallclock"])
 
     changes: list[str] = []
-    for ev in raw["events"]:
-        wc = datetime.fromisoformat(ev["wallclock_local"])
-        offset_s_f = (wc - start).total_seconds()
-        offset_s: float | int = (
-            int(offset_s_f) if offset_s_f == int(offset_s_f) else offset_s_f
-        )
-        hms = _format_hms(offset_s_f)
-        frame = int(round(offset_s_f * fps))
-        for key, new in (
-            ("video_offset_s", offset_s),
-            ("video_offset_hms", hms),
-            ("video_frame_at_30fps", frame),
-        ):
-            if ev.get(key) != new:
-                changes.append(f"{ev['id']}.{key}: {ev.get(key)!r} → {new!r}")
-                ev[key] = new
-
-    for win in raw.get("derived_phase_windows", []):
-        derived_from_hms = _format_hms(float(win["from_s"]))
-        if win.get("from_hms") != derived_from_hms:
-            changes.append(
-                f"window[{win['phase']}].from_hms: "
-                f"{win.get('from_hms')!r} → {derived_from_hms!r}"
-            )
-            win["from_hms"] = derived_from_hms
-        if win.get("to_s") is not None:
-            derived_to_hms = _format_hms(float(win["to_s"]))
-            if win.get("to_hms") != derived_to_hms:
-                changes.append(
-                    f"window[{win['phase']}].to_hms: "
-                    f"{win.get('to_hms')!r} → {derived_to_hms!r}"
-                )
-                win["to_hms"] = derived_to_hms
+    for ev in raw.get("events", []):
+        wc = datetime.fromisoformat(ev["wallclock"])
+        t_f = (wc - start).total_seconds()
+        new_t: float | int = int(t_f) if t_f == int(t_f) else t_f
+        if ev.get("t") != new_t:
+            changes.append(f"{ev['id']}.t: {ev.get('t')!r} → {new_t!r}")
+            ev["t"] = new_t
 
     ObservationsFile.model_validate(raw)
-
     path.write_text(json.dumps(raw, indent=2, ensure_ascii=False) + "\n")
     return changes
 
 
 def _cli(argv: list[str]) -> int:
-    if len(argv) != 2 or argv[0] not in {"check", "fix"}:
+    if not argv or argv[0] not in {"check", "fix", "next", "taxonomy"}:
         sys.stderr.write(
-            "usage: python -m optics.observations_schema {check|fix} <path>\n"
+            "usage: python -m optics.observations_schema "
+            "{check|fix|next} <path> [<path> ...]\n"
+            "       python -m optics.observations_schema taxonomy\n"
         )
         return 2
-    cmd, path = argv
-    if cmd == "check":
-        try:
-            load_validated(path)
-        except Exception as exc:
-            sys.stderr.write(f"{exc}\n")
-            return 1
-        print(f"{path}: OK")
+    if argv[0] == "taxonomy":
+        for p in Phase:
+            print(f"  {p.value:32s}  {PHASE_GLOSSES[p]}")
         return 0
-    changes = recompute_and_write(path)
-    if not changes:
-        print(f"{path}: already consistent")
-    else:
-        print(f"{path}: applied {len(changes)} change(s):")
-        for c in changes:
-            print(f"  {c}")
-    return 0
+    cmd, *paths = argv
+    if not paths:
+        sys.stderr.write(f"{cmd}: requires at least one path\n")
+        return 2
+    rc = 0
+    for path in paths:
+        if cmd == "check":
+            try:
+                load_validated(path)
+            except Exception as exc:
+                sys.stderr.write(f"{path}: FAIL\n{exc}\n")
+                rc = 1
+                continue
+            print(f"{path}: OK")
+            continue
+        if cmd == "next":
+            obs = load_validated(path)
+            todo = completeness_report(obs)
+            if not todo:
+                print(f"{path}: complete")
+            else:
+                print(f"{path}: what's next ({len(todo)})")
+                for t in todo:
+                    print(f"  - {t}")
+            continue
+        changes = recompute_and_write(path)
+        if not changes:
+            print(f"{path}: already consistent")
+        else:
+            print(f"{path}: applied {len(changes)} change(s):")
+            for c in changes:
+                print(f"  {c}")
+    return rc
 
 
 if __name__ == "__main__":

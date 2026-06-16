@@ -1,0 +1,307 @@
+{
+  "schema_version": "2.0",
+  "media": {
+    "stem": "Krystal_260204_110851",
+    "start_wallclock": "2026-02-04T11:08:39.500",
+    "timezone": "Europe/Bratislava",
+    "note": "Offsets and frame indices are computed relative to start_wallclock_local. The DVR-burnt clock reads 11:08:39 at frame 0; user-verified frame 15 corresponds exactly to the DVR clock rolling to 11:08:40, so the precise frame-0 wallclock is 11:08:39.500 (15/30 s before the rollover). fps confirmed 30/1 via ffprobe.",
+    "probe": {
+      "container_format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video_codec": "h264",
+      "width": 720,
+      "height": 576,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "fps": 30.0,
+      "duration_s": 18166.1,
+      "bit_rate_bps": 5889605,
+      "has_audio": true,
+      "file_size_bytes": 13373895244,
+      "probed_at": "2026-06-16T07:25:32.765626Z",
+      "probe_tool": "ffprobe"
+    }
+  },
+  "source_document": {
+    "path": "Krystal_260204_161114.pdf",
+    "language": "sk",
+    "kind": "operator_handwritten_timeline_+_scada_screenshots"
+  },
+  "context": {
+    "vessel": "Camera 100 — boiling vacuum pan, Slovenské cukrovary, Sereď",
+    "strike_type": "A-product (assumed from filling/seeding/boiling sequence)",
+    "campaign_end_dates_sk": "10.2 alebo 11.2 (ideal 10.2)",
+    "campaign_end_dates_en": "Campaign ends Feb 10 or Feb 11; operator-preferred end Feb 10, 2026",
+    "operator_raw_note": "Kampaň konči 10.2 11.2 ideal nazbierať fo 10.2"
+  },
+  "scada_legend": {
+    "PIC1002/A1/PV.CV": {
+      "label_sk": "Podtlak",
+      "label_en": "Vacuum (underpressure)",
+      "unit": "kPa",
+      "snapshot_value": -55.1,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "QI1003/A1/PV.CV": {
+      "label_sk": "Viskozita",
+      "label_en": "Viscosity",
+      "unit": "-",
+      "snapshot_value": 92.4,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "S_ZRAVZORCE/VISKOZITA.CV": {
+      "label_sk": "Sekvencia ZRA",
+      "label_en": "ZRA sequence step",
+      "unit": "-",
+      "snapshot_value": 89.42,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "LI1000/A1/PV.CV": {
+      "label_sk": "Hladina",
+      "label_en": "Vessel level",
+      "unit": "%",
+      "snapshot_value": 100.4,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "TI1006/A1/PV.CV": {
+      "label_sk": "Teplota",
+      "label_en": "Temperature",
+      "unit": "°C",
+      "snapshot_value": 71.7,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "EI1004/A1/PV.CV": {
+      "label_sk": "Prud miesadla",
+      "label_en": "Agitator current",
+      "unit": "A",
+      "snapshot_value": 13.2,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "PIC1001/A1/PV.CV": {
+      "label_sk": "Tlak vykurovacej pary ockovaci varostroj",
+      "label_en": "Heating steam pressure (graining vacuum pan)",
+      "unit": "kPa",
+      "snapshot_value": 8.0,
+      "snapshot_time": "2026-02-04T03:52:47"
+    },
+    "PIC1002_PID/AO1/OUT.CV": {
+      "label_sk": "Otvorenie klapky pary",
+      "label_en": "Steam valve opening",
+      "unit": "%",
+      "snapshot_value": 33.1,
+      "snapshot_time": "2026-02-04T03:52:47"
+    }
+  },
+  "events": [
+    {
+      "id": "e00",
+      "phase": "discharge",
+      "label_en": "start discharging (emptying)",
+      "qualifier": "exact",
+      "note": "End of the previous strike. Camera should show the vessel emptying out.",
+      "wallclock": "2026-02-04T11:46:10",
+      "t": 2250.5,
+      "label": ""
+    },
+    {
+      "id": "e01",
+      "phase": "empty",
+      "label_en": "fully discharged",
+      "qualifier": "approximate (operator: 'okolo' = 'around')",
+      "note": "End of the previous strike. Camera should show the vessel emptying out.",
+      "wallclock": "2026-02-04T11:49:33",
+      "t": 2453.5,
+      "label": "uplne vyprazdnenie"
+    },
+    {
+      "id": "e01b",
+      "phase": "new_batch_vacuum_pull",
+      "label_en": "16:07 — new batch begins; vacuum re-established",
+      "qualifier": "approximate (operator: 'okolo' = 'around')",
+      "note": "End of the previous strike. Camera should show the vessel emptying out.",
+      "wallclock": "2026-02-04T11:50:52",
+      "t": 2532.5,
+      "label": "16:07 novy - vakuum"
+    },
+    {
+      "id": "e02",
+      "phase": "cleaning",
+      "label_en": "cleaning continues until filling at 11:52",
+      "qualifier": "exact",
+      "note": "Sweetwater/cleaning cycle; transitions into filling at this timestamp.",
+      "wallclock": "2026-02-04T11:52:00",
+      "t": 2600.5,
+      "label": "Čistenie do naplňanie 11:52"
+    },
+    {
+      "id": "e03",
+      "phase": "filling",
+      "subphase": "bubbles_at_camera",
+      "label_en": "12:03 — filling; bubbles appear at the camera",
+      "qualifier": "exact",
+      "note": "First-charge syrup reaches the camera level; small bubbles visible.",
+      "wallclock": "2026-02-04T12:03:18",
+      "t": 3278.5,
+      "label": "12:03 naplňanie - bublinky pri kamere"
+    },
+    {
+      "id": "e04",
+      "phase": "bubbles_intensify",
+      "label_en": "12:05 — large amount of bubbles",
+      "qualifier": "exact",
+      "note": "Bubble flux peaks during pre-graining heat-up.",
+      "wallclock": "2026-02-04T12:05:00",
+      "t": 3380.5,
+      "label": "12:05 velke množstvo bublin"
+    },
+    {
+      "id": "e05",
+      "phase": "concentration",
+      "label_en": "12:10 — concentration (thickening)",
+      "qualifier": "exact",
+      "note": "Evaporation past saturation, syrup approaches seeding point.",
+      "wallclock": "2026-02-04T12:10:00",
+      "t": 3680.5,
+      "label": "12:10 - zahusťovanie"
+    },
+    {
+      "id": "e06",
+      "phase": "stabilization_and_seeding",
+      "subphase": "first_crystals_visible",
+      "label_en": "12:30 — stabilization; bubbles again; seeding (graining) with limited steam; first crystals visible as very small inclusions",
+      "qualifier": "exact",
+      "note": "GRAINING POINT — operationally critical. Pipeline KPI snapshots should mark this as t=0 of the growth phase. Crystals at this moment are seed-magma (~50 µm).",
+      "wallclock": "2026-02-04T12:30:00",
+      "t": 4880.5,
+      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť prve kryštaliky (velmi male inkluzie)",
+      "is_seeding": true
+    },
+    {
+      "id": "e07",
+      "phase": "boiling",
+      "label_en": "12:39 — boiling (controlled growth)",
+      "qualifier": "exact",
+      "note": "Steady-state growth phase begins (9 min after seeding). Expected crystal size growth from ~50 µm seeds toward end-of-strike target (~500–800 µm for A-product).",
+      "wallclock": "2026-02-04T12:39:00",
+      "t": 5420.5,
+      "label": "12:39 navaranie"
+    },
+    {
+      "id": "e08",
+      "phase": "drying",
+      "label_en": "15:41 — drying (final concentration)",
+      "qualifier": "exact",
+      "note": "End of growth phase. ~3 h 11 min after seeding. Crystals at near-final size.",
+      "wallclock": "2026-02-04T15:41:00",
+      "t": 16340.5,
+      "label": "15:41 susenie"
+    },
+    {
+      "id": "e09",
+      "phase": "aeration",
+      "label_en": "15:58 — aeration (vacuum break)",
+      "qualifier": "exact",
+      "note": "Vacuum broken to atmosphere in preparation for discharge.",
+      "wallclock": "2026-02-04T15:58:00",
+      "t": 17360.5,
+      "label": "15:58 zavzdušnenie"
+    },
+    {
+      "id": "e10",
+      "phase": "discharge_release",
+      "label_en": "15:59 — discharge/release of massecuite",
+      "qualifier": "exact",
+      "note": "Finished massecuite released to centrifuge.",
+      "wallclock": "2026-02-04T15:59:00",
+      "t": 17420.5,
+      "label": "15:59 vypušťanie"
+    },
+    {
+      "id": "e10b",
+      "phase": "empty",
+      "label_en": "fully discharged",
+      "qualifier": "exact",
+      "note": "Finished massecuite released to centrifuge.",
+      "wallclock": "2026-02-04T16:07:00",
+      "t": 17900.5,
+      "label": ""
+    },
+    {
+      "id": "e11",
+      "phase": "new_batch_vacuum_pull",
+      "label_en": "16:07 — new batch begins; vacuum re-established",
+      "qualifier": "exact",
+      "note": "End of THIS strike's video coverage. Next batch begins (cycle repeats).",
+      "wallclock": "2026-02-04T16:07:18",
+      "t": 17918.5,
+      "label": "16:07 novy - vakuum"
+    }
+  ],
+  "segments": [
+    {
+      "phase": "discharge",
+      "note": "Pre-event tail (video starts at 11:08:51; first observed event 11:48). The vessel is presumed to be in the discharge stage from a previous strike that operator did not annotate.",
+      "t_start": 0,
+      "t_end": 2453.5
+    },
+    {
+      "phase": "cleaning",
+      "t_start": 2453.5,
+      "t_end": 3278.5
+    },
+    {
+      "phase": "filling_with_bubbles",
+      "t_start": 3278.5,
+      "t_end": 3680.5
+    },
+    {
+      "phase": "concentration",
+      "t_start": 3680.5,
+      "t_end": 4880.5
+    },
+    {
+      "phase": "stabilization_and_seeding",
+      "note": "Graining window. Crystals first observable here.",
+      "t_start": 4880.5,
+      "t_end": 5420.5
+    },
+    {
+      "phase": "boiling",
+      "note": "Main growth phase, ~3 hours. Median crystal size grows from ~50 µm to ~500–800 µm if A-product.",
+      "t_start": 5420.5,
+      "t_end": 16340.5
+    },
+    {
+      "phase": "drying",
+      "t_start": 16340.5,
+      "t_end": 17360.5
+    },
+    {
+      "phase": "aeration",
+      "t_start": 17360.5,
+      "t_end": 17420.5
+    },
+    {
+      "phase": "discharge_release",
+      "t_start": 17420.5,
+      "t_end": 17900.5
+    },
+    {
+      "phase": "empty",
+      "note": "Short window between full discharge (e10b) and the next-batch vacuum-pull event (e11).",
+      "t_start": 17900.5,
+      "t_end": 17934.5
+    },
+    {
+      "phase": "new_batch_vacuum_pull",
+      "note": "Open-ended within this recording; ~231 s of footage remain after e11 (video duration 18166 s per ffprobe). Next strike continues here.",
+      "t_start": 17934.5,
+      "t_end": null
+    }
+  ],
+  "kpi_pairing_hint": {
+    "seeding_event_id": "e06",
+    "time_since_seeding_s_at": "video_offset_s - 4869",
+    "use_case": "When src/optics/kpi.py samples a frame during boiling phase, the time_since_seeding can be paired with median crystal size to produce one point on the per-batch growth curve G(t) discussed in docs/paper/manuscript.md §8."
+  }
+}
