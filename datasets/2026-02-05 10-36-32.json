@@ -1,0 +1,43 @@
+{
+  "schema_version": "2.0",
+  "media": {
+    "stem": "2026-02-05 10-36-32",
+    "start_wallclock": "2026-02-04T10:33:38",
+    "timezone": "Europe/Bratislava",
+    "note": "Batch-match prediction. Operator inputs: (1) camera DVR had wrong DATE field — true recording date = 2026-02-04; HH:MM:SS authoritative (read from frame-0 DVR overlay). (2) batch-1 phases scale to batch-2 by 70/77.6 = 0.9021 (SCADA-trace point-count ratio measured by operator). Anchor: observed b1-e00 @ 2026-02-04T11:46:10. Formula: b1_event_wallclock = anchor - (b2_e10.t - b2_event.t) * scale. Template: datasets/2026-02-04 11-08-51.json.",
+    "probe": {
+      "container_format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video_codec": "h264",
+      "width": 1920,
+      "height": 1080,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "fps": 30.0,
+      "duration_s": 52.266667,
+      "bit_rate_bps": 7468684,
+      "has_audio": true,
+      "file_size_bytes": 48795403,
+      "probed_at": "2026-06-16T08:46:28.146930Z",
+      "probe_tool": "ffprobe"
+    }
+  },
+  "events": [],
+  "segments": [
+    {
+      "phase": "boiling",
+      "t_start": 0.0,
+      "t_end": 52.267,
+      "note": "Predicted whole-clip phase. No predicted phase transitions fall inside this clip; entire window sits in b1's 'boiling' phase."
+    }
+  ],
+  "context": {
+    "batch_match_prediction": true,
+    "scale_factor": 0.9020618556701031,
+    "scale_source": "operator-measured ratio 70/77.6 of SCADA-trace point counts (b1/b2)",
+    "anchor": {
+      "event_id": "b1-e00",
+      "wallclock": "2026-02-04T11:46:10"
+    }
+  }
+}

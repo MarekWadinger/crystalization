@@ -17,7 +17,11 @@ wheels/
 
 # Raw video archives (track in DVC/external storage, not git).
 # Sidecar observation JSONs (one per video, same stem) ARE tracked.
-datasets/
+# Note: gitignore CANNOT un-ignore files inside an ignored directory, so we
+# ignore the directory CONTENTS (datasets/*) instead of the directory itself,
+# then re-include *.json. Without this, hand-edited sidecars stay invisible
+# to git and can be silently overwritten by tooling.
+datasets/*
 !datasets/*.json
 
 # Transient experiment outputs
