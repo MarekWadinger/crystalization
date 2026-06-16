@@ -143,7 +143,7 @@ def test_lens_from_config_rescales_pitch_for_downsampled_video() -> None:
     assert lens_pal.sensor_width == cfg.sensor_width_mm
 
 
-def test_observations_schema_catches_stale_offset(tmp_path) -> None:
+def test_observations_schema_catches_stale_t(tmp_path) -> None:
     import json
 
     from pydantic import ValidationError
@@ -154,21 +154,19 @@ def test_observations_schema_catches_stale_offset(tmp_path) -> None:
     path.write_text(
         json.dumps(
             {
-                "schema_version": "1.0",
-                "video": {
-                    "filename_stub": "test",
-                    "start_wallclock_local": "2026-02-04T11:08:51",
+                "schema_version": "2.0",
+                "media": {
+                    "stem": "test",
+                    "start_wallclock": "2026-02-04T11:08:51",
                     "timezone": "Europe/Bratislava",
-                    "fps_assumed": 30,
                 },
                 "events": [
                     {
                         "id": "e0",
-                        "wallclock_local": "2026-02-04T11:46:10",
-                        "video_offset_s": 2349,
-                        "video_offset_hms": "00:39:09",
-                        "video_frame_at_30fps": 70470,
+                        "wallclock": "2026-02-04T11:46:10",
+                        "t": 2349,
                         "phase": "discharge",
+                        "label": "discharge",
                     }
                 ],
             }
@@ -177,10 +175,10 @@ def test_observations_schema_catches_stale_offset(tmp_path) -> None:
     with pytest.raises(ValidationError) as exc_info:
         load_validated(path)
     msg = str(exc_info.value)
-    assert "2239" in msg and "video_offset_s=2349" in msg
+    assert "2239" in msg and "t=2349" in msg
 
 
-def test_observations_schema_fix_recomputes_offsets(tmp_path) -> None:
+def test_observations_schema_fix_recomputes_t(tmp_path) -> None:
     import json
 
     from optics.observations_schema import load_validated, recompute_and_write
@@ -189,29 +187,25 @@ def test_observations_schema_fix_recomputes_offsets(tmp_path) -> None:
     path.write_text(
         json.dumps(
             {
-                "schema_version": "1.0",
-                "video": {
-                    "filename_stub": "test",
-                    "start_wallclock_local": "2026-02-04T11:08:51",
+                "schema_version": "2.0",
+                "media": {
+                    "stem": "test",
+                    "start_wallclock": "2026-02-04T11:08:51",
                     "timezone": "Europe/Bratislava",
-                    "fps_assumed": 30,
                 },
                 "events": [
                     {
                         "id": "e0",
-                        "wallclock_local": "2026-02-04T11:46:10",
-                        "video_offset_s": 9999,
-                        "video_offset_hms": "99:99:99",
-                        "video_frame_at_30fps": 0,
+                        "wallclock": "2026-02-04T11:46:10",
+                        "t": 9999,
                         "phase": "discharge",
+                        "label": "discharge",
                     }
                 ],
             }
         )
     )
     changes = recompute_and_write(path)
-    assert len(changes) == 3
+    assert len(changes) == 1
     obs = load_validated(path)
-    assert obs.events[0].video_offset_s == 2239
-    assert obs.events[0].video_offset_hms == "00:37:19"
-    assert obs.events[0].video_frame_at_30fps == 67170
+    assert obs.events[0].t == 2239

@@ -15,8 +15,10 @@ wheels/
 # MacOS
 .DS_Store
 
-# Raw video archives (track in DVC/external storage, not git)
+# Raw video archives (track in DVC/external storage, not git).
+# Sidecar observation JSONs (one per video, same stem) ARE tracked.
 datasets/
+!datasets/*.json
 
 # Transient experiment outputs
 benchmarks/
