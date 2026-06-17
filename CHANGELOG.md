@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.6.0 (2026-06-17)
+
+### Feat
+
+- **optics**: sub-pixel image registration for static-rig frame subtraction
+
 ## v0.5.0 (2026-06-17)
 
 ### Feat
