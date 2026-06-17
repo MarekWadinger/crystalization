@@ -241,41 +241,36 @@ block is implemented as a reproducible Python module under
 
 ### 2.1 Plant and vessel
 
-> **Stage attribution — revised.** Earlier versions of this section
-> placed Camera 100 on the A-strike vacuum pan (the TVA 30 boiling
-> pan described below). Independent operator confirmation and the
-> Mastersizer granulometry of the imaged product
-> (``Dv(50) = 6.81 µm``, see § 7 preface and References) place the
-> camera **upstream of the A-strike, on the brine / seed-magma
-> preparation apparatus**. The TVA 30 description below is retained
-> for transparency but applies to the A-strike vessel, not to the
-> recording site. Vessel-level specifications of the seed-prep
-> apparatus have not been independently audited at the time of this
-> revision; the camera-side hardware (§ 2.2) is operator-verified
-> and unaffected.
+Camera 100 is installed at the Slovenské cukrovary sugar plant in
+Sereď, Slovakia, on the **brine / seed-magma preparation
+apparatus** — the unit operation that produces the seed slurry
+subsequently dosed into the A-strike vacuum pan. The product
+imaged by the camera is the Zuckerslurry Se intermediate, whose
+crystal-size distribution is independently characterised by
+laser-diffraction granulometry (Mastersizer, 2-propanol dispersant;
+see § 7 preface and References) with ``D[3;2] = 3.95 µm``,
+``D[4;3] = 8.71 µm`` and ``Dv(10) / Dv(50) / Dv(90) = 1.56 / 6.81 /
+18.5 µm``. Vessel-level dimensions, agitation regime, and
+operating temperature of the seed-prep apparatus have not yet been
+independently audited and are deferred to a follow-up revision;
+the camera-side hardware (§ 2.2) is operator-verified.
 
-The Slovenské cukrovary plant in Sereď, Slovakia operates a
-**TVA 30 boiling pan** in its A-strike stage (3 000 mm internal
-diameter, 1 200 mm central heating-circulation tube, ~165 m²
-heating surface, 21 m³ net volume, ~30 t massecuite output per
-strike — manufacturer specification). The annular slurry gap
-between the central downcomer and the outer wall is therefore
-**(3 000 − 1 200) / 2 = 900 mm radial**, traversed by a strong
-thermosiphon flow driven by the heating element. This bulk
-circulation regime is the physical justification for the
-homogeneous-slurry assumption invoked in § 6.2 *when applied to the
-A-strike*; the seed-prep apparatus imaged here is also a stirred /
-recirculated bath in normal operation, so the homogeneous-slurry
-assumption is expected to carry, but a stage-specific audit is
-deferred.
+The seed-prep apparatus is a stirred / recirculated bath in normal
+operation, which is the physical basis on which we invoke the
+homogeneous-slurry assumption of § 6.2: the circulating bath
+continually refreshes the slab actually imaged through the sight
+glass (§ 3.5), so the millimetre-thin slice is a near-
+representative sample of the bulk population. A stage-specific
+audit of the recirculation rate vs. residence time is on the
+follow-up list.
 
-The camera observes the boiling massecuite through a circular
-borosilicate sight glass marked ``DIN 8902``, mounted on an 8-bolt
-PN10 flange (geometry consistent with DN100, ≈ Ø100 mm clear,
-≈ 15 mm thick). The lens stack is horizontal, with transmitted
-illumination from an LED inside the vessel on the opposite side of
-the slurry. Full hardware audit and photographs are in the project's
-lens documentation (``docs/lens/README.md``).
+The camera observes the slurry through a circular borosilicate
+sight glass marked ``DIN 8902``, mounted on an 8-bolt PN10 flange
+(geometry consistent with DN100, ≈ Ø100 mm clear, ≈ 15 mm thick).
+The lens stack is horizontal, with transmitted illumination from
+an LED inside the vessel on the opposite side of the slurry. Full
+hardware audit and photographs are in the project's lens
+documentation (``docs/lens/README.md``).
 
 ### 2.2 Camera and lens
 
