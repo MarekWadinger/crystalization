@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.7.0 (2026-06-17)
+
+### Fix
+
+- **optics**: resolution-agnostic crop via auto-detect
+
 ## v0.6.0 (2026-06-17)
 
 ### Feat
