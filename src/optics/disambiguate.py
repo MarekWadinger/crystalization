@@ -69,6 +69,7 @@ def detect_observations(
     *,
     frame_stride: int = 10,
     max_frames: int = 80,
+    start_frame: int = 0,
     crop: CropBox = DEFAULT_CROP,
     detector: str = "edge",
 ) -> list[CrystalObservation]:
@@ -97,9 +98,8 @@ def detect_observations(
         )
     cap = cv2.VideoCapture(video_path)
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    indices = list(
-        range(0, min(n_frames, max_frames * frame_stride), frame_stride)
-    )[:max_frames]
+    stop = min(n_frames, start_frame + max_frames * frame_stride)
+    indices = list(range(start_frame, stop, frame_stride))[:max_frames]
     blur_kernel = config.blur_kernel | 1
     obs: list[CrystalObservation] = []
     prev_gray: np.ndarray | None = None
