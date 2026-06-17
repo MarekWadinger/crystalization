@@ -27,6 +27,7 @@ def collect_sharpness_histogram(
     *,
     frame_stride: int = 5,
     max_frames: int = 120,
+    start_frame: int = 0,
     blur_kernel: int = 15,
     n_bins: int = 200,
     crop: CropBox = DEFAULT_CROP,
@@ -39,9 +40,8 @@ def collect_sharpness_histogram(
     """
     cap = cv2.VideoCapture(video_path)
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    indices = list(
-        range(0, min(n_frames, max_frames * frame_stride), frame_stride)
-    )[:max_frames]
+    stop = min(n_frames, start_frame + max_frames * frame_stride)
+    indices = list(range(start_frame, stop, frame_stride))[:max_frames]
     k = blur_kernel | 1
     values: list[NDArray[np.float64]] = []
     for idx in indices:
