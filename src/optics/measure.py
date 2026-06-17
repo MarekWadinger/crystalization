@@ -19,7 +19,7 @@ from numpy.typing import NDArray
 
 from optics.model import LensSetup, circle_of_confusion
 from optics.psf import sharpness_diffraction
-from optics.video_io import DEFAULT_CROP, CropBox
+from optics.video_io import CropBox, resolve_crop
 
 
 def collect_sharpness_histogram(
@@ -30,14 +30,19 @@ def collect_sharpness_histogram(
     start_frame: int = 0,
     blur_kernel: int = 15,
     n_bins: int = 200,
-    crop: CropBox = DEFAULT_CROP,
+    crop: CropBox | None = None,
 ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     """Aggregate per-pixel Laplacian-variance sharpness over many frames.
 
     Returns ``(bin_centres, density)``: a normalised histogram of pixel
     sharpness scores accumulated across ``max_frames`` frames sampled
     every ``frame_stride``.
+
+    ``crop`` defaults to auto-detected per video via
+    :func:`optics.video_io.resolve_crop` so SD / HD / different DVR
+    layouts all get a layout-correct crop.
     """
+    crop = resolve_crop(video_path, crop)
     cap = cv2.VideoCapture(video_path)
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     stop = min(n_frames, start_frame + max_frames * frame_stride)

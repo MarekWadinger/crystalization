@@ -47,7 +47,7 @@ from optics.model import (
     circle_of_confusion,
     mm_per_pixel_at,
 )
-from optics.video_io import DEFAULT_CROP, CropBox
+from optics.video_io import CropBox, resolve_crop
 
 
 @dataclass(frozen=True, slots=True)
@@ -70,7 +70,7 @@ def detect_observations(
     frame_stride: int = 10,
     max_frames: int = 80,
     start_frame: int = 0,
-    crop: CropBox = DEFAULT_CROP,
+    crop: CropBox | None = None,
     detector: str = "edge",
 ) -> list[CrystalObservation]:
     """Run the crystal detector on sampled frames.
@@ -81,12 +81,18 @@ def detect_observations(
       (``optics.detect_watershed``) that handles dense in-focus
       clusters correctly. See manuscript §7.4.
 
+    ``crop`` defaults to ``None`` → auto-detected per video via
+    :func:`optics.video_io.resolve_crop`, so SD / HD / different DVR
+    layouts all get a layout-correct crop instead of inheriting the
+    HD-tuned ``DEFAULT_CROP``. Pass an explicit ``CropBox`` to override.
+
     Sharpness is *not* taken from the per-frame layer assignment — instead
     we recompute a per-pixel sharpness map and average it inside each
     crystal's bounding rectangle. This decouples the disambiguation from
     the existing layer segmentation and makes the per-crystal sharpness
     a continuous quantity rather than a discrete bin.
     """
+    crop = resolve_crop(video_path, crop)
     process_fn = process_frame
     if detector == "watershed":
         from optics.detect_watershed import process_frame_watershed
