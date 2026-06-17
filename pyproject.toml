@@ -1,6 +1,6 @@
 [project]
 name = "crystalization"
-version = "0.6.0"
+version = "0.7.0"
 description = "Crystal video layer decomposition and object detection"
 requires-python = ">=3.13"
 dependencies = []
@@ -81,7 +81,7 @@ dev = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.6.0"
+version = "0.7.0"
 version_provider = "pep621"
 version_files = [
     "pyproject.toml:^version",
