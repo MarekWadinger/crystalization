@@ -189,6 +189,15 @@ MODEL_PATH = Path(__file__).parent / "training_data" / "models" / "cpsam_YYYYMMD
 
 ## Model
 
-The trained Cellpose model is included in `training_data/models/` — no separate download needed.
+The model is too large to include in the repository. Download it from Google Drive and place it in `training_data/models/`:
+
+**[Download model (Google Drive)](https://drive.google.com/file/d/1N_FXECeT6KxDpBLueBGhNx4zF8w3I09Q/view?usp=sharing)**
+
+After downloading, your folder structure should look like:
+```
+training_data/
+  models/
+    cpsam_20260517_223507   ← the downloaded model file
+```
 
 GPU is used automatically when available. Falls back to CPU otherwise (slower but works).
