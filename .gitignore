@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Video files (too large for git)
+*.mp4
+*.avi
+*.mov
+
+# Generated output
+crystal_dataset/
+
+# Training images (local only — model is committed separately)
+training_data/frame_*
