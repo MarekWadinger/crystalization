@@ -63,6 +63,23 @@ uv run llm-annotator-app
 uv run llm-annotator-annotate video.mov -o annotations.json
 ```
 
+## Strike Annotation (optics-sidecar)
+
+Every video in `datasets/` is paired with a JSON sidecar that records
+operator-observed events on the crystallisation strike timeline (cleaning
+through filling, seeding, boiling, and discharge). The `optics-sidecar`
+CLI manages these files, validates them on every `git commit`, and provides
+an interactive wizard for annotating new recordings.
+
+```bash
+uv run optics-sidecar wizard "datasets/2026-02-05 10-18-50.mp4"
+uv run optics-sidecar check  "datasets/2026-02-04 11-08-51.json"
+```
+
+See [`docs/operator_notes/sidecar_guide.md`](docs/operator_notes/sidecar_guide.md)
+for the full operator guide, including a worked end-to-end example and
+troubleshooting reference.
+
 ## Development
 
 ```bash

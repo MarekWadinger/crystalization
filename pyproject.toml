@@ -1,6 +1,6 @@
 [project]
 name = "crystalization"
-version = "0.4.0"
+version = "0.7.0"
 description = "Crystal video layer decomposition and object detection"
 requires-python = ">=3.13"
 dependencies = []
@@ -18,6 +18,7 @@ sharpness-layers-app = "sharpness_layers.app:main"
 scale-overlay-app = "scale_overlay.app:main"
 scale-overlay-demos = "scale_overlay.render_demos:main"
 optics-plots = "optics.plots:main"
+optics-sidecar = "optics.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -80,7 +81,7 @@ dev = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.4.0"
+version = "0.7.0"
 version_provider = "pep621"
 version_files = [
     "pyproject.toml:^version",

@@ -2,6 +2,27 @@
 
 <!-- kpi:unreleased -->
 
+## v0.7.0 (2026-06-17)
+
+### Fix
+
+- **optics**: resolution-agnostic crop via auto-detect
+
+## v0.6.0 (2026-06-17)
+
+### Feat
+
+- **optics**: sub-pixel image registration for static-rig frame subtraction
+
+## v0.5.0 (2026-06-17)
+
+### Feat
+
+- **optics**: start_frame parameter for sub-window analysis
+- **optics**: batch-match b1 predictions for the short clips
+- **optics**: unified optics-sidecar CLI + pre-commit hook
+- **optics**: v2.0 sidecar schema with ffprobe probe + Phase enum
+
 ## v0.4.0 (2026-06-15)
 
 ### Feat

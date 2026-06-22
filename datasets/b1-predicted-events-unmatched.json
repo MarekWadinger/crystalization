@@ -1,0 +1,101 @@
+{
+  "schema_version": "predictions/1.0",
+  "purpose": "Predicted batch-1 (b1) events that fall outside every video sidecar's wallclock window. Reproduction: take the b2 phase sequence from datasets/2026-02-04 11-08-51.json, scale each event's gap to b2-e10 by 0.9021 (= 70/77.6 SCADA-trace point-count ratio, operator-measured), and offset backwards from observed b1-e00 @ 2026-02-04T11:46:10.",
+  "scale": 0.9020618556701031,
+  "anchor": {
+    "event_id": "b1-e00",
+    "phase": "discharge",
+    "wallclock": "2026-02-04T11:46:10",
+    "source": "Observed in datasets/2026-02-04 11-08-51.json (the long batch-2 recording, first event annotated)."
+  },
+  "secondary_anchor": {
+    "event_id": "b1-e01",
+    "phase": "empty",
+    "wallclock": "2026-02-04T11:46:30",
+    "note": "Observed empty event in b2 sidecar. Cross-check: observed discharge -> empty gap 20s, predicted 20 * 0.9021 = 18s, Δ = -2s."
+  },
+  "caveats": [
+    "Linear inter-event scaling is a first-order approximation but holds remarkably well on the only directly-comparable phase: observed b1 discharge -> empty gap is 20s vs b2's 20s (ratio 1.0000); the global 0.902 scale predicts 18s, off by only 2s. This validates using the 0.9021 factor uniformly across phases as a first cut, but a per-phase scale calibration will be needed before any quantitative claim depends on the exact predicted wallclock of a non-observed event.",
+    "Clip filenames (e.g. '2026-02-05 10-18-50.mp4') and the DVR-burnt date overlay are both unreliable — the camera/DVR clock had a wrong DATE field. HH:MM:SS ran true relative to the SCADA wallclock. Per operator, the clips' actual recording date is 2026-02-04 (the same day as the long batch-2 recording), and every wallclock here is rendered on that date.",
+    "All clips fall entirely inside b1's 'boiling' phase; zero predicted transitions fall inside any clip."
+  ],
+  "events": [
+    {
+      "id": "b1-e01b_pred",
+      "source_b2_event": "b2-e01b",
+      "phase": "new_batch_vacuum_pull",
+      "label": "16:07 novy - vakuum",
+      "label_en": "PREDICTED from b2-e01b: 16:07 — new batch begins; vacuum re-established",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:01:16.958763",
+      "gap_from_b2_e10_s": 14958.0,
+      "predicted_gap_to_b1_e00_s": 13493.041
+    },
+    {
+      "id": "b1-e02_pred",
+      "source_b2_event": "b2-e02",
+      "phase": "cleaning",
+      "label": "Čistenie do naplňanie 11:52",
+      "label_en": "PREDICTED from b2-e02: cleaning continues until filling at 11:52",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:02:18.298969",
+      "gap_from_b2_e10_s": 14890.0,
+      "predicted_gap_to_b1_e00_s": 13431.701
+    },
+    {
+      "id": "b1-e03_pred",
+      "source_b2_event": "b2-e03",
+      "phase": "filling",
+      "label": "12:03 naplňanie - bublinky pri kamere",
+      "label_en": "PREDICTED from b2-e03: 12:03 — filling; bubbles appear at the camera",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:12:29.896907",
+      "gap_from_b2_e10_s": 14212.0,
+      "predicted_gap_to_b1_e00_s": 12820.103
+    },
+    {
+      "id": "b1-e04_pred",
+      "source_b2_event": "b2-e04",
+      "phase": "bubbles_intensify",
+      "label": "12:05 velke množstvo bublin",
+      "label_en": "PREDICTED from b2-e04: 12:05 — large amount of bubbles",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:14:01.907216",
+      "gap_from_b2_e10_s": 14110.0,
+      "predicted_gap_to_b1_e00_s": 12728.093
+    },
+    {
+      "id": "b1-e05_pred",
+      "source_b2_event": "b2-e05",
+      "phase": "concentration",
+      "label": "12:10 - zahusťovanie",
+      "label_en": "PREDICTED from b2-e05: 12:10 — concentration (thickening)",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:18:32.525773",
+      "gap_from_b2_e10_s": 13810.0,
+      "predicted_gap_to_b1_e00_s": 12457.474
+    },
+    {
+      "id": "b1-e06_pred",
+      "source_b2_event": "b2-e06",
+      "phase": "stabilization_and_seeding",
+      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť pb2-rve kryštaliky (velmi male inkluzie)",
+      "label_en": "PREDICTED from b2-e06: 12:30 — stabilization; bubbles again; seeding (graining) with limited steam; first crystals visible as very small inclusions",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:36:35.000000",
+      "gap_from_b2_e10_s": 12610.0,
+      "predicted_gap_to_b1_e00_s": 11375.0
+    },
+    {
+      "id": "b1-e07_pred",
+      "source_b2_event": "b2-e07",
+      "phase": "boiling",
+      "label": "12:39 navaranie",
+      "label_en": "PREDICTED from b2-e07: 12:39 — boiling (controlled growth)",
+      "qualifier": "predicted",
+      "wallclock": "2026-02-04T08:44:42.113402",
+      "gap_from_b2_e10_s": 12070.0,
+      "predicted_gap_to_b1_e00_s": 10887.887
+    }
+  ]
+}
