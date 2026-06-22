@@ -2,6 +2,25 @@
 
 <!-- kpi:unreleased -->
 
+## v0.8.0 (2026-06-22)
+
+### Feat
+
+- **optics**: reusable high-pass preprocessing component
+- **crystal-detector**: video --time input, GUI launcher, Makefile
+- **crystal-detector**: add crystal-detector-gui group for Cellpose GUI
+- **crystal-detector**: add Cellpose-based crystal detection PoC
+- **optics**: sub-pixel image registration for static-rig frame subtraction
+- **optics**: start_frame parameter for sub-window analysis
+- **optics**: batch-match b1 predictions for the short clips
+- **optics**: unified optics-sidecar CLI + pre-commit hook
+- **optics**: v2.0 sidecar schema with ffprobe probe + Phase enum
+- add progress reporting with ETA to all CLI pipelines
+
+### Fix
+
+- **optics**: resolution-agnostic crop via auto-detect
+
 ## v0.7.0 (2026-06-17)
 
 ### Fix
