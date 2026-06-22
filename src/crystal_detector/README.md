@@ -19,11 +19,13 @@ Given a microscopy image, the tool:
 uv sync --group crystal-detector
 ```
 
-For training a new model you also need the Cellpose GUI (pulls Qt — kept out of
-the dependency group):
+Training/annotation needs the Cellpose GUI. It lives in a **separate** group
+(`crystal-detector-gui`) because it pulls Qt (~hundreds of MB) and needs a
+display — useless for inference, Docker, and CI, so it is not installed by the
+analyze path above:
 
 ```bash
-uv pip install "cellpose[gui]"
+uv sync --group crystal-detector-gui
 ```
 
 ## Analyze an image
@@ -61,10 +63,10 @@ Each yields `frame_XX_ORIGINAL.png` (raw crop) and `frame_XX_PRE_AI.png`
 
 ## Train your own model
 
-Requires `cellpose[gui]` (does **not** work in Docker).
+Requires `uv sync --group crystal-detector-gui` (does **not** work in Docker).
 
 1. Export frames (above). The `frame_XX_PRE_AI.png` files are your inputs.
-2. Open the GUI: `QT_API=pyqt6 python -m cellpose`
+2. Open the GUI: `QT_API=pyqt6 uv run python -m cellpose`
    (the `QT_API` prefix avoids a PyQt5/PyQt6 clash).
 3. Click **run cpsam**, then correct masks (right-click to draw,
    Ctrl+right-click to delete) and `Ctrl+S` to save `*_seg.npy` labels.
