@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import argparse
 import sys
-from collections import defaultdict
+import time
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import cv2
@@ -18,13 +19,21 @@ from annotator.depth import (
 from annotator.detection import detect_crystals_in_layer
 from annotator.flow import compute_flow_magnitude
 from annotator.io import (
+    fmt_duration,
     load_detections,
+    print_progress,
     process_video,
     write_csv,
     write_detailed_csv,
 )
 from annotator.sharpness import compute_sharpness_map
-from annotator.types import Crystal, Detection, LayerConfig, Mat
+from annotator.types import (
+    Crystal,
+    Detection,
+    FrameResult,
+    LayerConfig,
+    Mat,
+)
 from annotator.viz import (
     LAYER_COLORS,
     add_label,
@@ -119,6 +128,25 @@ def _config_from_args(args: argparse.Namespace) -> LayerConfig:
     )
 
 
+def _print_summary(
+    results: list[FrameResult],
+    output: Path,
+    num_layers: int,
+) -> None:
+    """Print per-layer crystal summary after analysis."""
+    total_crystals = sum(lr.count for fr in results for lr in fr.layers)
+    layer_totals: Counter[int] = Counter()
+    for fr in results:
+        for lr in fr.layers:
+            layer_totals[lr.layer_id] += lr.count
+
+    print(f"  Frames analyzed: {len(results)}")
+    print(f"  Total crystals: {total_crystals}")
+    for layer_id in range(num_layers):
+        print(f"    Layer {layer_id}: {layer_totals.get(layer_id, 0)}")
+    print(f"  Output: {output}")
+
+
 def main_analyze() -> None:
     """CLI entry point for crystal video analysis."""
     parser = argparse.ArgumentParser(
@@ -169,6 +197,8 @@ def main_analyze() -> None:
     write_csv(results, args.output)
     if args.detailed is not None:
         write_detailed_csv(results, args.detailed)
+
+    _print_summary(results, args.output, config.num_layers)
 
 
 def main_visualize() -> None:
@@ -334,11 +364,17 @@ def _run_visualize(
     )
     out_h, out_w = sample.shape[:2]
 
+    expected = total_frames // frame_skip
+    if max_frames > 0:
+        expected = min(expected, max_frames)
+
     print(
         f"Input:   {orig_w}x{orig_h}, {total_frames} frames, {in_fps:.1f} fps"
     )
     print(f"Process: {proc_w}x{proc_h} (downscaled for speed)")
     print(f"Output:  {out_w}x{out_h}, {out_fps:.1f} fps -> {output_path}")
+    print(f"Rendering {expected} frames")
+    print()
 
     fourcc = cv2.VideoWriter.fourcc(*"mp4v")
     writer = cv2.VideoWriter(str(output_path), fourcc, out_fps, (out_w, out_h))
@@ -347,6 +383,7 @@ def _run_visualize(
     prev_gray: Mat = first_gray
     frame_idx = 1
     processed = 1
+    start = time.monotonic()
 
     while True:
         ret, frame = cap.read()
@@ -372,10 +409,12 @@ def _run_visualize(
         prev_gray = gray
 
         processed += 1
-        if processed % 10 == 0:
-            print(
-                f"  Rendered {processed} frames (frame {frame_idx}/{total_frames})"
-            )
+        print_progress(
+            processed,
+            expected,
+            start,
+            label=f"(idx={frame_idx})",
+        )
 
         if max_frames > 0 and processed >= max_frames:
             break
@@ -384,7 +423,11 @@ def _run_visualize(
 
     writer.release()
     cap.release()
-    print(f"Done: rendered {processed} frames to {output_path}")
+    elapsed = time.monotonic() - start
+    print(
+        f"\nDone: rendered {processed} frames "
+        f"to {output_path} in {fmt_duration(elapsed)}"
+    )
 
 
 def main_annotate() -> None:
@@ -437,11 +480,18 @@ def main_annotate() -> None:
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print(f"Video: {width}x{height}, {total_frames} frames, {fps:.1f} fps")
 
+    expected = total_frames
+    if args.max_frames > 0:
+        expected = min(expected, args.max_frames)
+    print(f"Writing {expected} annotated frames")
+    print()
+
     fourcc = cv2.VideoWriter.fourcc(*"mp4v")
     writer = cv2.VideoWriter(str(args.output), fourcc, fps, (width, height))
 
     frame_idx = 0
     written = 0
+    start = time.monotonic()
 
     while True:
         ret, frame = cap.read()
@@ -454,9 +504,7 @@ def main_annotate() -> None:
 
         writer.write(frame)
         written += 1
-
-        if written % 50 == 0:
-            print(f"  Written {written}/{total_frames} frames")
+        print_progress(written, expected, start, interval=50)
 
         if args.max_frames > 0 and written >= args.max_frames:
             break
@@ -465,7 +513,11 @@ def main_annotate() -> None:
 
     writer.release()
     cap.release()
-    print(f"Done: {written} frames written to {args.output}")
+    elapsed = time.monotonic() - start
+    print(
+        f"\nDone: {written} frames written "
+        f"to {args.output} in {fmt_duration(elapsed)}"
+    )
 
 
 def _draw_annotate_counts(
