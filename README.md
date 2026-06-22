@@ -63,6 +63,26 @@ uv run llm-annotator-app
 uv run llm-annotator-annotate video.mov -o annotations.json
 ```
 
+## Crystal Detector
+
+Deep-learning crystal segmentation using a fine-tuned [Cellpose](https://github.com/MouseLand/cellpose) (`cpsam`) model. The ML counterpart to the deterministic Annotator -- detects and measures individual crystals in a microscopy image, exporting centroids and pixel areas. Includes a training-frame exporter and Cellpose-GUI training workflow.
+
+The model checkpoint is hosted on the [Hugging Face Hub](https://huggingface.co/MarekWadinger/crystal-detector-cpsam) (public, no token needed) and downloaded automatically on first run.
+
+See [src/crystal_detector/README.md](src/crystal_detector/README.md) for full documentation.
+
+### Usage
+
+```bash
+uv sync --group crystal-detector
+
+# Detect crystals in an image (downloads the model on first run)
+uv run crystal-detector-analyze image.png
+
+# Export training frames from a video
+uv run crystal-detector-export-frames video.mp4 -o training_data
+```
+
 ## Strike Annotation (optics-sidecar)
 
 Every video in `datasets/` is paired with a JSON sidecar that records
