@@ -462,6 +462,34 @@ Schema source of truth: `src/optics/observations_schema.py` (`Phase` enum,
 
 ---
 
+## 10.5 High-pass preprocessing (illumination + glass-rupture removal)
+
+The sight-glass carries a fixed pattern of cracks/ruptures and a slow LED
+illumination gradient that contaminate sharpness and detection. The high-pass
+filter removes both in one step — `residual = |image − GaussianBlur(image, σ)|`
+— with no reference frame or temporal window, so it works on a single image as
+well as a video. This is the reusable form of `scripts/rq4_rupture_removal_methods.py`
+Method 3 (σ = 25 px default).
+
+```bash
+# Image in, <name>_highpass.png out
+uv run optics-highpass datasets/frame.png
+
+# Video (apply the sight-glass crop first, custom sigma)
+uv run optics-highpass "datasets/2026-02-04 11-08-51.mp4" --crop --sigma 25 -o /tmp/hp.mp4
+```
+
+As a function for use in other pipelines (e.g. before crystal detection):
+
+```python
+from optics.highpass import highpass
+residual = highpass(frame, sigma_px=25.0)   # float32, same shape
+```
+
+Source: `src/optics/highpass.py` (`highpass`, `highpass_image`, `highpass_video`).
+
+---
+
 ## 11. Reproducing the figures
 
 ```bash
