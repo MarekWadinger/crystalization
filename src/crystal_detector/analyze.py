@@ -10,6 +10,10 @@ import numpy as np
 import torch
 from cellpose import models, utils
 
+from .export_frames import fmt, parse_time
+
+VIDEO_EXTS = {".mp4", ".mov", ".avi", ".mkv", ".m4v"}
+
 # Checkpoint is hosted on the Hugging Face Hub (public — no token needed) and
 # cached locally on first run. A local file at DEFAULT_MODEL_PATH, or any path
 # passed via --model, takes precedence over the download.
@@ -49,6 +53,39 @@ def flat_field_correction(img_bgr: np.ndarray) -> np.ndarray:
 def crop(img: np.ndarray) -> np.ndarray:
     h, w = img.shape[:2]
     return img[int(h * 0.10) : int(h * 0.90), int(w * 0.05) : int(w * 0.95)]
+
+
+def _read_input(path: str, time: str | None) -> tuple[np.ndarray, str]:
+    """Load a BGR image, or grab one frame from a video at ``time``.
+
+    Returns the raw frame plus a path used only for naming output files.
+    """
+    p = Path(path)
+    if p.suffix.lower() in VIDEO_EXTS:
+        cap = cv2.VideoCapture(path)
+        if not cap.isOpened():
+            print(f"Error: could not open video '{path}'")
+            sys.exit(1)
+        fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+        sec = parse_time(time) if time is not None else 0.0
+        cap.set(cv2.CAP_PROP_POS_FRAMES, int(sec * fps))
+        ok, frame = cap.read()
+        cap.release()
+        if not ok:
+            print(f"Error: could not read frame at {fmt(sec)} from '{path}'")
+            sys.exit(1)
+        print(f"Grabbed frame at {fmt(sec)} from {p.name}")
+        return frame, str(
+            p.with_name(f"{p.stem}_{fmt(sec).replace(':', '')}.png")
+        )
+
+    img = cv2.imread(path)
+    if img is None:
+        print(f"Error: file '{path}' not found.")
+        sys.exit(1)
+    if time is not None:
+        print("Note: --time is ignored for image input.")
+    return img, path
 
 
 def save_results(
@@ -107,11 +144,9 @@ def analyze(
     outlines_only: bool = False,
     save_mask_npy: bool = False,
     model_path: Path = DEFAULT_MODEL_PATH,
+    time: str | None = None,
 ) -> list[dict]:
-    img_bgr = cv2.imread(image_path)
-    if img_bgr is None:
-        print(f"Error: file '{image_path}' not found.")
-        sys.exit(1)
+    img_bgr, output_path = _read_input(image_path, time)
 
     img_bgr = crop(img_bgr)
     img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
@@ -166,14 +201,14 @@ def analyze(
         print(f"{i:>4}  {cx:>10}  {cy:>10}  {c['area_px']:>12}")
 
     _visualize(
-        img_rgb, masks, crystals, image_path, outlines_only=outlines_only
+        img_rgb, masks, crystals, output_path, outlines_only=outlines_only
     )
 
     if save_fmt:
-        save_results(crystals, image_path, save_fmt, model_path.name)
+        save_results(crystals, output_path, save_fmt, model_path.name)
 
     if save_mask_npy:
-        save_mask(masks, image_path)
+        save_mask(masks, output_path)
 
     return crystals
 
@@ -244,10 +279,18 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Detect crystals in a microscopy image."
+        description="Detect crystals in a microscopy image or video frame."
     )
     parser.add_argument(
-        "image", nargs="?", default="img.png", help="Path to input image"
+        "image",
+        nargs="?",
+        default="img.png",
+        help="Path to an input image, or a video (.mp4/.mov/...) — use --time to pick a frame.",
+    )
+    parser.add_argument(
+        "--time",
+        default=None,
+        help="For video input: timestamp to grab (HH:MM:SS, MM:SS, or seconds). Default: first frame.",
     )
     parser.add_argument(
         "--save",
@@ -278,13 +321,14 @@ def main():
     )
     args = parser.parse_args()
 
-    fmt = None if args.no_save else args.save
+    save_fmt = None if args.no_save else args.save
     analyze(
         args.image,
-        save_fmt=fmt,
+        save_fmt=save_fmt,
         outlines_only=args.outlines_only,
         save_mask_npy=args.save_mask,
         model_path=args.model,
+        time=args.time,
     )
 
 

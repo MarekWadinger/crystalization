@@ -21,6 +21,7 @@ optics-plots = "optics.plots:main"
 optics-sidecar = "optics.cli:main"
 crystal-detector-analyze = "crystal_detector.analyze:main"
 crystal-detector-export-frames = "crystal_detector.export_frames:main"
+crystal-detector-gui = "crystal_detector.gui:main"
 
 [build-system]
 requires = ["hatchling"]

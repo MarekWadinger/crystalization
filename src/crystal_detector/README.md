@@ -28,14 +28,19 @@ analyze path above:
 uv sync --group crystal-detector-gui
 ```
 
-## Analyze an image
+## Analyze an image or video frame
 
 ```bash
 uv run crystal-detector-analyze path/to/image.png
+
+# straight from a video — grabs the frame at the given timestamp:
+uv run crystal-detector-analyze path/to/video.mp4 --time 00:18:00
 ```
 
-By default this writes `<name>_analyzed.jpg` and `<name>_crystals.json` next to
-the input.
+Input can be an image, or a video plus `--time` (`HH:MM:SS`, `MM:SS`, or
+seconds; defaults to the first frame). By default this writes
+`<name>_analyzed.jpg` and `<name>_crystals.json` next to the input (for video,
+`<videostem>_HHMMSS_*`).
 
 ```bash
 uv run crystal-detector-analyze image.png --save csv      # Excel-friendly
@@ -61,18 +66,27 @@ Edit the `TIMES` list at the top of `export_frames.py` to choose timestamps.
 Each yields `frame_XX_ORIGINAL.png` (raw crop) and `frame_XX_PRE_AI.png`
 (flat-field corrected — this is what goes into Cellpose).
 
-## Train your own model
+## Annotate & retrain (improve the model)
 
-Requires `uv sync --group crystal-detector-gui` (does **not** work in Docker).
+One-time: install the GUI deps (Qt — does **not** work in Docker):
 
-1. Export frames (above). The `frame_XX_PRE_AI.png` files are your inputs.
-2. Open the GUI: `QT_API=pyqt6 uv run python -m cellpose`
-   (the `QT_API` prefix avoids a PyQt5/PyQt6 clash).
-3. Click **run cpsam**, then correct masks (right-click to draw,
-   Ctrl+right-click to delete) and `Ctrl+S` to save `*_seg.npy` labels.
+```bash
+uv sync --group crystal-detector-gui
+```
+
+Then the annotate → train loop:
+
+1. Export frames to label: `uv run crystal-detector-export-frames video.mp4 -o training_data`
+   (the `frame_XX_PRE_AI.png` files are your inputs).
+2. Launch the GUI: `uv run crystal-detector-gui`
+   (wraps `python -m cellpose`, pre-setting `QT_API=pyqt6` to dodge the
+   PyQt5/PyQt6 clash).
+3. Load a frame, click **run cpsam**, then correct masks (right-click to draw an
+   outline, Ctrl+right-click to delete) and `Ctrl+S` to save `*_seg.npy` labels.
 4. In the **Models** tab, **Train new model**, pointing at the folder with both
    images and `_seg.npy` files. The result lands in `training_data/models/`.
-5. Point `analyze` at it: `--model training_data/models/cpsam_YYYYMMDD_HHMMSS`.
+5. Use it: `crystal-detector-analyze image.png --model training_data/models/cpsam_YYYYMMDD_HHMMSS`.
+6. Publish the improved checkpoint (optional): `uv run hf upload MarekWadinger/crystal-detector-cpsam <new-model> <name>`.
 
 ## Docker (analyze only)
 
