@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -11,6 +12,38 @@ import cv2
 
 from annotator.detection import process_frame
 from annotator.types import Detection, FrameResult, LayerConfig, Mat
+
+
+def fmt_duration(seconds: float) -> str:
+    """Format seconds as a compact duration string."""
+    if seconds < 60:
+        return f"{seconds:.0f}s"
+    minutes = int(seconds) // 60
+    secs = int(seconds) % 60
+    return f"{minutes}m{secs:02d}s"
+
+
+def print_progress(
+    current: int,
+    total: int,
+    start: float,
+    *,
+    label: str = "",
+    interval: int = 10,
+) -> None:
+    """Print a progress line with ETA every *interval* items."""
+    if current % interval != 0 and current != total:
+        return
+    elapsed = time.monotonic() - start
+    avg = elapsed / current
+    remaining = avg * (total - current)
+    parts = [
+        f"  Frame {current}/{total}",
+        f" {label}" if label else "",
+        f" [{fmt_duration(elapsed)} elapsed, "
+        f"~{fmt_duration(remaining)} remaining]",
+    ]
+    print("".join(parts))
 
 
 def process_video(
@@ -32,10 +65,17 @@ def process_video(
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print(f"Video: {width}x{height}, {total_frames} frames, {fps:.1f} fps")
 
+    expected = total_frames // frame_skip
+    if max_frames > 0:
+        expected = min(expected, max_frames)
+    print(f"Processing {expected} frames (every {frame_skip} frame(s))")
+    print()
+
     results: list[FrameResult] = []
     prev_gray: Mat | None = None
     frame_idx = 0
     processed = 0
+    start = time.monotonic()
 
     while True:
         ret, frame = cap.read()
@@ -52,10 +92,13 @@ def process_video(
         prev_gray = gray
 
         processed += 1
-        if processed % 10 == 0:
-            print(
-                f"  Processed {processed} frames (frame {frame_idx}/{total_frames})"
-            )
+        n_crystals = sum(lr.count for lr in frame_result.layers)
+        print_progress(
+            processed,
+            expected,
+            start,
+            label=f"(idx={frame_idx}) -- {n_crystals} crystals",
+        )
 
         if max_frames > 0 and processed >= max_frames:
             break
@@ -63,7 +106,8 @@ def process_video(
         frame_idx += 1
 
     cap.release()
-    print(f"Done: processed {processed} frames")
+    elapsed = time.monotonic() - start
+    print(f"\nDone: processed {processed} frames in {fmt_duration(elapsed)}")
     return results
 
 
