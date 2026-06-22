@@ -434,7 +434,35 @@ does this automatically.
 
 ---
 
-## 10. Reproducing the figures
+## 10. Strike annotation (sidecar pipeline)
+
+Every video analysed in this chapter has a paired sidecar JSON that records
+operator-observed events on the strike timeline. The sidecar for the
+canonical Sereď batch is `datasets/2026-02-04 11-08-51.json`.
+
+The `optics-sidecar` CLI manages these files:
+
+```bash
+# Create a sidecar for a new video
+uv run optics-sidecar wizard "datasets/<stem>.mp4"
+
+# Validate a sidecar (also runs automatically on git commit)
+uv run optics-sidecar check "datasets/<stem>.json"
+
+# See what is still missing
+uv run optics-sidecar next "datasets/<stem>.json"
+```
+
+Full operator documentation is in
+[`../operator_notes/sidecar_guide.md`](../operator_notes/sidecar_guide.md).
+
+Schema source of truth: `src/optics/observations_schema.py` (`Phase` enum,
+`ObservationsFile` Pydantic model). Lightweight loader for hot-path code:
+`src/optics/observations.py` (`Observations.from_video(path)`).
+
+---
+
+## 11. Reproducing the figures
 
 ```bash
 # Type-check + tests
@@ -454,15 +482,15 @@ Outputs land in `docs/optics/figures/`.
 
 ---
 
-## 11. References (with links)
+## 12. References (with links)
 
 Cross-checked against an adversarially-verified literature sweep
 (22 of 25 atomic claims confirmed; 3 refuted and explicitly not used —
-see §12). Each entry shows the **type** (primary peer-reviewed, textbook,
+see §13). Each entry shows the **type** (primary peer-reviewed, textbook,
 secondary, or web cross-check), the **sections it supports**, and a
 clickable URL or DOI.
 
-### 11.1 Geometric optics — used in §§ 2, 3, 4
+### 12.1 Geometric optics — used in §§ 2, 3, 4
 
 | Source | Type | URL / DOI | Supports |
 |---|---|---|---|
@@ -471,7 +499,7 @@ clickable URL or DOI.
 | **Pertuz, S., Puig, D. & García, M. A.** "Analysis of focus measure operators for shape-from-focus." *Pattern Recognition* 46, 1415–1432 (2013) | primary | DOI [10.1016/j.patcog.2012.11.011](https://doi.org/10.1016/j.patcog.2012.11.011) — [PDF](http://isp-utb.github.io/seminario/papers/Pattern_Recognition_Pertuz_2013.pdf) | §4 ``mm/px(d_o) = pitch · d_o / i_fixed``; §6 Gaussian-PSF DfD model |
 | Photons-to-Photos, *How Extension Tubes Affect Magnification* | secondary web | [photonstophotos.net](https://photonstophotos.net/GeneralTopics/Close-up/How_Extension_Tubes_Affect_Magnification.htm) | §2 ``m = e/f`` at infinity, ``m_x = m + x/f`` |
 
-### 11.2 Defocus, DoF, and depth-from-defocus — used in §§ 5, 6
+### 12.2 Defocus, DoF, and depth-from-defocus — used in §§ 5, 6
 
 | Source | Type | URL / DOI | Supports |
 |---|---|---|---|
@@ -484,14 +512,14 @@ clickable URL or DOI.
 | Wikipedia, *Circle of confusion* | secondary web | [en.wikipedia.org](https://en.wikipedia.org/wiki/Circle_of_confusion) | §5 CoC formula — verbatim cross-check |
 | RP Photonics Encyclopedia, *Depth of field* | secondary web | [rp-photonics.com](https://www.rp-photonics.com/depth_of_field.html) | §5.1 DoF formulas, hyperfocal limit |
 
-### 11.3 Fourier optics — used in §§ 5, 6
+### 12.3 Fourier optics — used in §§ 5, 6
 
 | Source | Type | URL / DOI | Supports |
 |---|---|---|---|
 | **Goodman, J. W.** *Introduction to Fourier Optics*, 4th ed. (W. H. Freeman, 2017), Ch. 6 | textbook | ISBN 978-1-319-11916-4 — [Macmillan](https://www.macmillanlearning.com/college/us/product/Introduction-to-Fourier-Optics/p/1319119166) | §6 diffraction OTF and Airy PSF |
 | **Smith, W. J.** *Modern Optical Engineering*, 4th ed. (McGraw-Hill, 2008), §11 | textbook | ISBN 978-0071476874 | §6 σ_diff ≈ 0.42–0.45 · λ · N Gaussian fit to Airy |
 
-### 11.4 Sight-glass refraction — used in §2.1 and §6.3.3
+### 12.4 Sight-glass refraction — used in §2.1 and §6.3.3
 
 | Source | Type | URL / DOI | Supports |
 |---|---|---|---|
@@ -499,13 +527,13 @@ clickable URL or DOI.
 | **Chadebecq, F., Vasconcelos, F., Lacher, R., et al.** "Refractive two-view reconstruction for underwater 3D vision." *IJCV* 128, 1101–1117 (2020) | primary | DOI [10.1007/s11263-019-01218-9](https://doi.org/10.1007/s11263-019-01218-9) | §6.3.3 operational consequences |
 | Yao et al., underwater calibration comparison (PMC10781309) | primary | [PMC article](https://pmc.ncbi.nlm.nih.gov/articles/PMC10781309/) | §6.3.3 quantitative refraction RMSE |
 
-### 11.5 Crystal-size reference — used in §3.1
+### 12.5 Crystal-size reference — used in §3.1
 
 | Source | Type | URL / DOI | Supports |
 |---|---|---|---|
 | **Bubník, Z., Kadlec, P., Urban, D. & Bruhns, M.** *Sugar Technologists Manual*, 9th ed. (Bartens, 1995) | textbook | ISBN 978-3870403324 — [Bartens](https://www.bartens.com/en/books/sugar-technology) | §3.1 typical massecuite crystal size 0.5–1.0 mm |
 
-### 11.6 Specific physical laws referenced
+### 12.6 Specific physical laws referenced
 
 | Law | Formula | First cite | Used in |
 |---|---|---|---|
@@ -519,7 +547,7 @@ clickable URL or DOI.
 
 ---
 
-## 12. Cross-check audit (every numerical claim, where verified)
+## 13. Cross-check audit (every numerical claim, where verified)
 
 Walking the document claim-by-claim. ``D-R`` = deep-research vote
 (e.g., 3-0 = three confirm, zero refute); ``code`` = unit-tested in
@@ -565,7 +593,7 @@ cross-checked, please flag it — it is a bug, not a feature.
 
 ---
 
-## 13. Hallucination audit (assistant self-check)
+## 14. Hallucination audit (assistant self-check)
 
 Specific numerical claims I have made in §§ 1–8 and the trace I followed
 to verify they are not invented:

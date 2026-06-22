@@ -36,16 +36,27 @@ aggregation into the final CSD. The pipeline is validated on a
 1920 × 1080 video from a Fujinon HF35HA-1B + Hanwha HCB-6000 stack at
 Slovenské cukrovary, Sereď, operating at F/1.6 with a 45 mm extension
 tube (verified by operator caliper measurement). Across 60 sampled
-frames the pipeline recovers a CSD with **median 0.097 mm**, log-normal
-shape parameter ``s = 0.39`` (CV ≈ 0.40 on the depth-corrected sizes),
-consistent with **A-strike crystals in the first hour of a 4-hour
-boiling-pan strike**. (A prior version using the inherited edge-based
-detector recovered median 0.052 mm / CV 0.82 from the same video; §7.5
-documents the detector change and explains why both numbers are
-visible in the codebase.) We further outline a cross-batch **growth-curve self-
-validation** mechanism that promotes the pipeline to a soft sensor for
-time-since-graining, removing residual dependence on hardware
-calibration. Code, datasets, and the complete numerical audit trail
+frames the pipeline recovers an internally self-consistent
+distribution of detector-bandpassed features with **median 0.097
+mm**, log-normal shape parameter ``s = 0.39`` (CV ≈ 0.40 on the
+depth-corrected sizes). Independent Mastersizer granulometry of
+the same product (``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``)
+demonstrates that this distribution is *not* a measurement of the
+underlying crystal population — at 2.18 µm/px the detector area
+filter ``[80, 8000] px²`` bandpasses ≈ 20–200 µm features and
+categorically excludes the ≈ 9 µm crystal population imaged in the
+seed-magma preparation step (see § 7). (A prior version of the
+pipeline using the inherited edge-based detector recovered median
+0.052 mm / CV 0.82 from the same video; § 7.5 documents the
+detector change and explains why both numbers are visible in the
+codebase.) The geometric, defocus, and disambiguation stages are
+validated against textbook optics and against the per-pixel
+sharpness statistics of the recording; what the case study cannot
+yet deliver is a true crystal-size measurement, which requires a
+detector retuned to the correct length scale. We further outline a
+cross-batch **growth-curve self-validation** mechanism that
+promotes the pipeline to a soft sensor for time-since-graining,
+removing residual dependence on hardware calibration. Code, datasets, and the complete numerical audit trail
 are released open-source.
 
 **Keywords:** crystal-size distribution; depth from defocus; through-
@@ -241,27 +252,36 @@ block is implemented as a reproducible Python module under
 
 ### 2.1 Plant and vessel
 
-Camera 100 is installed on a vacuum pan at the Slovenské cukrovary
-sugar plant in Sereď, Slovakia. The vessel is a **TVA 30 boiling
-pan** (3 000 mm internal diameter, 1 200 mm central heating-
-circulation tube, ~165 m² heating surface, 21 m³ net volume, ~30 t
-massecuite output per strike — manufacturer specification). The
-annular slurry gap between the central downcomer and the outer wall
-is therefore **(3 000 − 1 200) / 2 = 900 mm radial**, traversed by a
-strong thermosiphon flow driven by the heating element. This bulk
-circulation regime is the physical justification for the homogeneous-
-slurry assumption invoked in § 6.2: the same crystal population
-recirculates past the sight glass many times per residence cycle, so
-the millimetre-thin slab actually imaged through the glass (§ 3.5) is
-a near-representative sample of bulk.
+Camera 100 is installed at the Slovenské cukrovary sugar plant in
+Sereď, Slovakia, on the **brine / seed-magma preparation
+apparatus** — the unit operation that produces the seed slurry
+subsequently dosed into the A-strike vacuum pan. The product
+imaged by the camera is the Zuckerslurry Se intermediate, whose
+crystal-size distribution is independently characterised by
+laser-diffraction granulometry (Mastersizer, 2-propanol dispersant;
+see § 7 preface and References) with ``D[3;2] = 3.95 µm``,
+``D[4;3] = 8.71 µm`` and ``Dv(10) / Dv(50) / Dv(90) = 1.56 / 6.81 /
+18.5 µm``. Vessel-level dimensions, agitation regime, and
+operating temperature of the seed-prep apparatus have not yet been
+independently audited and are deferred to a follow-up revision;
+the camera-side hardware (§ 2.2) is operator-verified.
 
-The camera observes the boiling massecuite through a circular
-borosilicate sight glass marked ``DIN 8902``, mounted on an 8-bolt
-PN10 flange (geometry consistent with DN100, ≈ Ø100 mm clear,
-≈ 15 mm thick). The lens stack is horizontal, with transmitted
-illumination from an LED inside the vessel on the opposite side of
-the slurry. Full hardware audit and photographs are in the project's
-lens documentation (``docs/lens/README.md``).
+The seed-prep apparatus is a stirred / recirculated bath in normal
+operation, which is the physical basis on which we invoke the
+homogeneous-slurry assumption of § 6.2: the circulating bath
+continually refreshes the slab actually imaged through the sight
+glass (§ 3.5), so the millimetre-thin slice is a near-
+representative sample of the bulk population. A stage-specific
+audit of the recirculation rate vs. residence time is on the
+follow-up list.
+
+The camera observes the slurry through a circular borosilicate
+sight glass marked ``DIN 8902``, mounted on an 8-bolt PN10 flange
+(geometry consistent with DN100, ≈ Ø100 mm clear, ≈ 15 mm thick).
+The lens stack is horizontal, with transmitted illumination from
+an LED inside the vessel on the opposite side of the slurry. Full
+hardware audit and photographs are in the project's lens
+documentation (``docs/lens/README.md``).
 
 ### 2.2 Camera and lens
 
@@ -388,10 +408,13 @@ mid-strike crystal size) and reported a CSD median of 0.25 mm.
 Operator caliper measurement on 2026-06-15 yielded
 **e = 45 mm** — a factor-of-4.5 revision that shrinks µm/px from
 10.4 to **2.18** and moves the working distance to **62 mm**
-(a true macro setup). The earlier "0.25 mm mid-strike" interpretation
-became "**0.052 mm seed-magma**" with the corrected scale — newly
-consistent with the operator's report that the recording captures
-the first hour of a 4-hour strike.
+(a true macro setup). The earlier "0.25 mm mid-strike"
+interpretation moved to "**0.052 mm**" with the corrected scale.
+At the time, this was read as "consistent with the first hour of
+a 4-hour strike"; § 7 retracts that interpretation — both numbers
+sit far above the actual ≈ 9 µm seed-magma population (Mastersizer
+ground truth), and the apparent agreement was an artefact of
+choosing a stage label that matched the bandpass.
 
 This episode is itself a generalisable finding: **for installations
 with undocumented extension-tube length, ad-hoc in-scene anchoring is
@@ -413,14 +436,21 @@ large.*
 
 ### 3.4 In-scene anchoring (now consistent with the verified hardware)
 
-A row-wise autocorrelation analysis on a single frame yields a median
-first-decorrelation pixel offset of 42.5 px. At the verified
-2.18 µm/px, the corresponding texture period of ~85 px corresponds to
-a physical period of ~0.19 mm — consistent with the **0.05–0.10 mm
-crystal sizes** typical of the first hour of a boiling-pan strike,
-when crystals have grown from ~0.05 mm seed-magma toward perhaps
-0.1 mm. The optical model and the in-scene measurement are mutually
-consistent under the corrected hardware parameters.
+A row-wise autocorrelation analysis on a single frame yields a
+median first-decorrelation pixel offset of 42.5 px. At the
+verified 2.18 µm/px the corresponding texture period is ~85 px
+≈ 0.19 mm. The earlier reading of this period as "the 0.05–0.10
+mm crystal sizes typical of the first hour of a boiling-pan
+strike" is retracted (see § 7): the imaged product is the ≈ 9 µm
+seed-magma population, well below the texture period this
+autocorrelation isolates. What the autocorrelation period is
+actually picking up — agglomerate spacing, droplet pattern,
+inter-cluster gap, or detector-bandpass structure — is an open
+question and not used elsewhere in the pipeline as a scale
+anchor. The optical model and the µm/px scale themselves remain
+mutually consistent with the verified hardware (§§ 2.2, 3.1, 3.3);
+the retraction is of the *interpretation* of the autocorrelation,
+not of the scale.
 
 ### 3.5 Where the focal slab actually sits in the vessel
 
@@ -762,13 +792,19 @@ annotated with its layer index and the local Laplacian-variance score
 sampled inside its bounding rectangle.
 
 ![Figure 11 — Detection overlay on a single frame](../optics/figures/11_detection_overlay.png)
-*Figure 11 — **What does the detector actually find?** Detector output
-on frame 750 of the case-study video. Each rotated bounding rectangle
-is a detected crystal, colour-coded by its sharpness layer. 55
-crystals are localised; the bulk lie in the centre band where the
-optics are nearly in focus, and the peripheral regions populate the
-defocused layers. The variability in crystal apparent size is real
-seed-magma distribution, not detector noise (cross-check with §7).*
+*Figure 11 — **What does the detector actually find?** Detector
+output on frame 750 of the case-study video. Each rotated bounding
+rectangle is a detected feature, colour-coded by its sharpness
+layer. 55 features are localised; the bulk lie in the centre band
+where the optics are nearly in focus, and the peripheral regions
+populate the defocused layers. The variability in apparent size
+across the detected set is structurally consistent across frames
+— it is detector output behaviour, not per-frame noise — but at
+2.18 µm/px the area filter ``[80, 8000] px²`` bandpasses ≈ 20–
+200 µm features, well above the ≈ 9 µm crystal population
+(Mastersizer ground truth, § 7). The features detected here are
+therefore not the seed-magma crystals themselves; cross-check
+with § 7.*
 
 ### 5.3 The detector's depth selectivity is the operational ceiling
 
@@ -925,27 +961,40 @@ only after stopping the lens down (§9.3).*
 
 ## 7 Aggregated crystal-size distribution — *detector-limited*
 
-> **Honesty preface.** Sections 1–6 establish a pipeline whose
-> geometric, defocus, and Bayesian-disambiguation stages are
+> **Honesty preface (revised).** Sections 1–6 establish a pipeline
+> whose geometric, defocus, and Bayesian-disambiguation stages are
 > validated against textbook optics and against the raw per-pixel
 > sharpness statistics of the case-study video. The CSD numbers in
-> §§ 7.1–7.2 below should be read with **one critical caveat**:
-> they depend on the edge-based crystal detector inherited from prior
-> work, **which Figure 11 makes clear is selection-biased**. The
-> detector preferentially finds peripheral isolated features against
-> the bright defocused background and systematically *misses* the
-> densely-packed central in-focus crystal cluster, where adjacent
-> edges merge under morphological closing and the resulting blob is
-> rejected by the area filter. Until that detection bias is closed
-> (§ 7.4 below sketches the immediate fix and § 9.3 lists the
-> longer-term replacements), the population-level numbers below are
-> properties of *what the detector found*, not of the slurry. We
-> publish them anyway, with the caveat in place, because (a) the
-> *shape* of the recovered distribution is internally self-
-> consistent (Figure 15 right panel), and (b) every downstream
-> reasoning step is documented and traceable, so any reader who
-> replaces the detector can re-run the pipeline and the only number
-> that changes is in this section.
+> §§ 7.1–7.5 below should be read with **two critical caveats**:
+>
+> *Caveat 1 — detector selection bias.* The CSD depends on the edge-
+> based crystal detector inherited from prior work, **which Figure 11
+> makes clear is selection-biased**. The detector preferentially
+> finds peripheral isolated features against the bright defocused
+> background and systematically *misses* the densely-packed central
+> in-focus crystal cluster, where adjacent edges merge under
+> morphological closing and the resulting blob is rejected by the
+> area filter. § 7.5 (watershed) closes this *within-detector* bias.
+>
+> *Caveat 2 — the detector cannot see the actual crystal population
+> (retracted size interpretation).* Independent laser-diffraction
+> granulometry on the same product (Mastersizer, 2-propanol
+> dispersant; ``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf``)
+> gives ``D[3;2] = 3.95 µm``, ``D[4;3] = 8.71 µm``, and
+> ``Dv(10) / Dv(50) / Dv(90) = 1.56 / 6.81 / 18.5 µm``. The recording
+> captures the brine / seed-magma preparation step — *not* the A-
+> strike — so the population in front of the lens is the ≈ 9 µm
+> Mastersizer distribution. The detector's area filter
+> ``[min_area = 80, max_area = 8000] px²`` at the documented
+> ``2.18 µm/px`` bandpasses **≈ 20–200 µm equivalent features**, so
+> *every* CSD number in §§ 7.1–7.5 lies entirely *above* the true
+> crystal-size distribution. The numbers measure agglomerate /
+> cluster / area-bandpassed structure that the detector picks up,
+> not the underlying single-crystal population. They are publishable
+> as evidence of *detector behaviour* and *pipeline self-
+> consistency*, but they are **not** a crystal-size measurement of
+> this product. Until the detector is rebuilt at the correct length
+> scale, the Mastersizer remains the size ground truth.
 
 ### 7.1 The depth-corrected CSD (detector-limited)
 
@@ -962,9 +1011,12 @@ for every detection. **Middle:** depth-corrected physical-size
 histogram with log-normal (red) and Gaussian (green dashed) fits
 superimposed. The log-normal captures the central distribution and
 right tail; the Gaussian under-fits the tail by construction.
-**Median = 0.097 mm, CV = 0.40, log-normal shape s = 0.39**,
-consistent with just-past-seeding A-strike crystals in the first
-hour of a 4-hour boiling-pan strike. **Right:** the homogeneous-
+**Median = 0.097 mm, CV = 0.40, log-normal shape s = 0.39** —
+these statistics describe the distribution of features the
+detector resolves (≈ 20–200 µm bandpass), not the underlying
+crystal population (Mastersizer ``Dv(50) = 6.81 µm``); see § 7
+for the size-interpretation retraction. **Right:** the
+homogeneous-
 slurry self-consistency check — focal-plane, near-side, and far-side
 density curves overlaid. Their close agreement is consistent with
 the homogeneous-slurry assumption, with the §7.3 caveat that this
@@ -985,29 +1037,39 @@ depth-independent.*
 
 The log-normal fit (Figure 15 middle, red curve) captures the
 distribution shape over its central range; the Gaussian fit
-(dashed green) is shown as a reference and clearly under-fits the
-right tail. The log-normal shape parameter ``s = 0.62`` corresponds
-to a geometric standard deviation of ``exp(s) ≈ 1.86``, characteristic
-of an industrial crystal population during the growth phase.
+(dashed green) is shown as a reference and clearly under-fits
+the right tail. The log-normal shape parameter ``s = 0.62``
+corresponds to a geometric standard deviation of
+``exp(s) ≈ 1.86``. This shape statistic is reported as a
+property of the detector's bandpassed feature distribution; see
+§ 7 preface for why it is not a statement about the underlying
+crystal population.
 
-### 7.2 Process interpretation
+### 7.2 Process interpretation — retracted
 
-A median of 0.052 mm with CV ≈ 0.8 is **squarely in the seed-magma
-range** (0.05–0.15 mm) — the size range of crystals during the first
-hour of a boiling-pan strike, before substantial growth has accrued.
-The operator independently confirmed that the recording captures the
-beginning of a 4-hour strike, so this number is process-consistent.
-The shape parameter (log-normal s = 0.62, CV ≈ 0.82) is also
-consistent with industrial CSDs reported in Bubník et al. (1995) and
-Asadi (2006) — the *shape* of the distribution is invariant under
-the scale revision, only the absolute number moved.
+*Earlier versions of this section interpreted the 0.052 mm median as
+"squarely in the seed-magma range (0.05–0.15 mm)" and as
+"consistent with just-past-seeding A-strike crystals … confirmed by
+the plant operator". Both readings are retracted.* The recording
+captures the **brine / seed-magma preparation step** upstream of the
+A-strike pan, and the size ground truth for this product is the
+Mastersizer granulometry cited in the § 7 preface
+(``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``) — roughly an order of
+magnitude **below** the 0.052 mm median this detector returns. The
+0.052 mm number is therefore not a measurement of the crystal
+population; it is the centroid of the area-bandpass window
+[20 µm, 200 µm] that the detector's
+``[min_area = 80, max_area = 8000] px²`` filter imposes at
+2.18 µm/px. The log-normal shape parameter (``s = 0.62``) and CV
+(0.82) describe the *bandpassed* distribution, not the underlying
+crystal CSD.
 
-The headline number to take from this section is:
-
-> **Median = 0.052 mm, CV = 0.82, single-component log-normal with
-> ``s = 0.62``** — *as recovered by the inherited edge-based detector
-> from the verified Camera 100 setup, with the detector-limited
-> caveat of § 7 preamble.*
+What this section *does* support is that the pipeline is internally
+self-consistent at the inherited detector — the depth-correction,
+disambiguation, and aggregation stages compose correctly and recover
+a stable distribution of whatever the detector happens to find. The
+size interpretation requires a detector that resolves the
+≈ 9 µm population.
 
 ### 7.3 What the homogeneous-slurry "self-consistency" check does and does not prove
 
@@ -1150,31 +1212,48 @@ statistics** from the edge-based run:
 | Log-normal scale | 0.097 | 0.059 | doubled |
 | Near / far Bayes split | 66 / 34 | 79 / 21 | more symmetric |
 
-Three things move in the directions a physically-correct detector
-should produce:
+Three things move in the directions a structurally better
+detector should produce *on the bandpassed feature population*
+(this comparison is between two detectors, both of which sit
+above the true crystal scale — see § 7 preface):
 
-1. **Median doubles** — because the edge-based detector was finding
-   sub-crystal facets and biased the median *down*. Watershed
-   recovers whole crystals.
-2. **CV halves** — because the edge-based detector mixed real
-   crystals with sub-crystal artefacts, inflating the spread. The
-   true seed-magma population at the start of an A-strike is much
-   more monodisperse, and CV ≈ 0.40 is now closer to the textbook
-   ~10–20 % CV expected for a controlled-growth crystal population
-   (Bubník et al., 1995).
+1. **Median doubles** — because the edge-based detector was
+   fragmenting features into sub-pieces and biased the median
+   *down*. Watershed recovers whole-feature blobs.
+2. **CV halves** — because the edge-based detector mixed whole-
+   feature blobs with sub-feature artefacts, inflating the spread.
+   A narrower CV at the same bandpass indicates fewer detector-
+   side artefacts; it is *not* evidence that the watershed
+   resolves a more monodisperse crystal population, since the
+   Mastersizer-confirmed crystals (≈ 9 µm) are below the
+   detector's bandpass either way.
 3. **Near/far split moves toward 50/50** — because the larger,
    better-distributed sample on both sides of focus reduces the
-   right-skew bias of the empirical prior that previously dominated
-   the §6.3 split.
+   right-skew bias of the empirical prior that previously
+   dominated the § 6.3 split. This is a property of the prior,
+   not of the underlying crystal population.
 
-The headline number to take from this revised section is:
+The watershed numbers for this section are:
 
 > **Median = 0.097 mm, CV = 0.40, single-component log-normal with
-> ``s = 0.39``** — recovered with the watershed detector. This is
-> consistent with **just-past-seeding A-strike crystals** (~0.1 mm,
-> first hour of a 4-hour strike), as confirmed by the plant
-> operator. The pre-watershed numbers in § 7.1 are kept in the
-> paper *as a transparent contrast*, not as a retracted claim.
+> ``s = 0.39``** — recovered with the watershed detector at the
+> verified Camera 100 hardware configuration.
+>
+> These numbers, like the pre-watershed numbers of § 7.1, are
+> **not a crystal-size measurement** of the imaged product. The
+> recording captures the brine / seed-magma preparation step, whose
+> true CSD is the ≈ 9 µm Mastersizer distribution cited in the § 7
+> preface. The watershed median at 97 µm sits well above the
+> Mastersizer's ``Dv(90) = 18.5 µm``, so the watershed has not
+> recovered the crystal population either — it has filled in the
+> within-detector selection bias of § 7.4 but inherits the same
+> length-scale mismatch as the edge-based detector. The earlier
+> framing of these numbers as "consistent with just-past-seeding A-
+> strike crystals … confirmed by the plant operator" is
+> **retracted**. What this section demonstrates is that two
+> structurally different detectors recover an internally consistent
+> distribution from the bandpassed feature population — a
+> *detector-comparison* result, not a process-state validation.
 
 #### Watershed limitations and known residual issues
 
@@ -1269,16 +1348,37 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
   variance tail exponent post-full-crop (α = 4.88) is consistent with the
   Gaussian-PSF + diffraction-floor model (theoretical 5.0) to within
   2.4 %.
-- **The homogeneous-slurry assumption is supported by the data.**
-  The focal-plane, near-side, and far-side density curves overlap
-  closely (Figure 15 right), confirming a single-component CSD.
-- **The pipeline produces a defensible CSD: median 0.097 mm,
-  CV 0.40, log-normal s = 0.39** (watershed detector + full crop) — derived from
+- **The within-detector homogeneous-slurry self-consistency check
+  passes.** The focal-plane, near-side, and far-side density
+  curves overlap closely (Figure 15 right). Per § 7.3 this
+  confirms that the detector behaves consistently across depth,
+  not that the underlying CSD is depth-independent; a genuine
+  validation requires an external reference (the Mastersizer
+  granulometry now cited in § 7 is one such reference but lies
+  below the detector's bandpass).
+- **The pipeline produces an internally self-consistent CSD of
+  detector-bandpassed features: median 0.097 mm, CV 0.40, log-
+  normal s = 0.39** (watershed detector + full crop) — derived from
   raw video with a complete numerical audit trail at the verified
-  Camera 100 hardware configuration.
+  Camera 100 hardware configuration. These numbers describe the
+  ≈ 20–200 µm feature population the detector resolves; they are
+  **not** a measurement of the crystal CSD (see § 7 preface and
+  § 9.2 for the size-ground-truth retraction).
 
 ### 9.2 Where the pipeline does not perform
 
+- **The detector cannot resolve the true crystal population on the
+  case-study recording.** Independent Mastersizer granulometry of
+  the same product gives ``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``
+  (``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf``). The
+  recording captures the brine / seed-magma preparation step rather
+  than the A-strike, and at the documented 2.18 µm/px scale the
+  area filter ``[80, 8000] px²`` bandpasses ≈ 20–200 µm features,
+  entirely above the ≈ 9 µm crystal population. The numbers
+  reported in § 7 therefore describe agglomerate / cluster /
+  bandpassed structure, not the underlying CSD. The fix is a
+  detector retuned to the correct length scale (or a CNN-based
+  segmentation; § 9.3), not a parameter sweep of the current one.
 - **Front/back disambiguation is geometrically valid but
   operationally degenerate at F/1.6.** The verified F/1.6 aperture
   produces a ±6 µm in-focus depth window — narrower than any single
@@ -1341,12 +1441,19 @@ decomposition, edge-based detection, Bayesian front/back
 disambiguation under a single-component homogeneous-slurry prior,
 per-detection thin-lens depth correction, and single-component
 aggregation. On the Slovenské cukrovary case-study video the
-pipeline recovers a CSD with **median 0.25 mm, CV 0.82, log-normal
-shape parameter s = 0.39** (watershed detector + full crop), **consistent with A-strike crystals at the start
-of a 4-hour boiling-pan strike** as confirmed by the plant operator.
-The optical model matches measured per-pixel sharpness statistics to
-~9 %, and the homogeneous-slurry assumption is supported by the data
-via §6.2's self-consistency check.
+pipeline recovers an internally self-consistent distribution of
+detector-bandpassed features (**median 0.097 mm, CV 0.40, log-
+normal shape parameter s = 0.39**, watershed detector + full crop).
+The independent Mastersizer granulometry of the same product
+(``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``) demonstrates that this
+distribution is *not* a measurement of the underlying crystal
+population — at the documented 2.18 µm/px scale, the area filter
+``[80, 8000] px²`` bandpasses ≈ 20–200 µm equivalent features and
+categorically excludes the 9 µm crystal population. The optical
+model nevertheless matches measured per-pixel sharpness statistics
+to ~9 %, the geometric and disambiguation chains are validated, and
+the within-detector self-consistency check of §6.2 holds; what is
+retracted is the size-interpretation of §§ 7.1–7.5.
 
 The principal remaining limitations are (i) the edge-based
 detector's narrow depth selectivity, which collapses the
@@ -1416,6 +1523,14 @@ the literature verification audit lives in
 - **Mannan, F., Langer, M. S., 2016.** Blur calibration for depth
   from defocus. *Proc. CRV 2016*, 281–288.
   DOI: 10.1109/CRV.2016.62.
+- **Mastersizer laser-diffraction granulometry, 2025-01-16.**
+  *Zuckerslurry Se sample, dispersant 2-propanol.* Plant report,
+  Slovenské cukrovary, s.r.o., Sereď. Archived as
+  ``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf`` in this
+  project's repository. Used as the size ground truth for the
+  brine / seed-magma stage imaged in the case-study video
+  (``D[3;2] = 3.95 µm``, ``D[4;3] = 8.71 µm``,
+  ``Dv(10)/Dv(50)/Dv(90) = 1.56 / 6.81 / 18.5 µm``).
 - **McCabe, W. L., 1929.** Crystal-growth rates. *Ind. Eng. Chem.*
   21 (1), 30–33. DOI: 10.1021/ie50229a009.
 - **Nagy, Z. K., Fevotte, G., Kramer, H., Simon, L. L., 2013.** Recent

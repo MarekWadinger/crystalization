@@ -1,0 +1,31 @@
+{
+  "schema_version": "2.0",
+  "media": {
+    "stem": "Záznam 2026-03-10 183943",
+    "start_wallclock": "2026-02-04T11:09:18",
+    "timezone": "Europe/Bratislava",
+    "note": "Screen-capture playback of clip 2026-02-05 10-37-26.mp4 around its end. Operator inputs and prediction formula identical to that clip — see its note.",
+    "probe": {
+      "container_format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video_codec": "h264",
+      "width": 1914,
+      "height": 1600,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "30/1",
+      "avg_frame_rate": "30/1",
+      "fps": 30.0,
+      "duration_s": 9.301313,
+      "bit_rate_bps": 13697599,
+      "has_audio": true,
+      "file_size_bytes": 15925708,
+      "probed_at": "2026-06-16T07:53:23.957766Z",
+      "probe_tool": "ffprobe"
+    }
+  },
+  "events": [],
+  "segments": [],
+  "context": {},
+  "source_document": {},
+  "scada_legend": {},
+  "kpi_pairing_hint": {}
+}

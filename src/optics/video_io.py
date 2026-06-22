@@ -164,6 +164,20 @@ class CropBox:
 DEFAULT_CROP = CropBox()
 
 
+def resolve_crop(video_path: str, crop: CropBox | None = None) -> CropBox:
+    """Return ``crop`` if provided, else auto-detect from the video.
+
+    Pipeline entry points should default ``crop=None`` and call this so
+    each input video gets a layout-correct crop instead of silently
+    inheriting the HD-tuned ``DEFAULT_CROP`` constants on, e.g., PAL SD
+    sources. Auto-detection is cheap (samples ~40 frames once at the
+    start of the run).
+    """
+    if crop is not None:
+        return crop
+    return CropBox.auto_detect(video_path)
+
+
 def read_frame_cropped(
     cap: cv2.VideoCapture,
     frame_idx: int,
