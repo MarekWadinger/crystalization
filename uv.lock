@@ -730,12 +730,12 @@ annotator = [
     { name = "scikit-image", specifier = ">=0.26.0" },
 ]
 crystal-detector = [
-    { name = "cellpose", specifier = ">=4.0" },
-    { name = "huggingface-hub", specifier = ">=0.25" },
-    { name = "matplotlib", specifier = ">=3.10" },
+    { name = "cellpose", specifier = ">=4.2.1.1" },
+    { name = "huggingface-hub", specifier = ">=1.6.0" },
+    { name = "matplotlib", specifier = ">=3.10.8" },
     { name = "numpy", specifier = ">=2.4.3" },
     { name = "opencv-python-headless", specifier = ">=4.13.0.92" },
-    { name = "torch", specifier = ">=2.2" },
+    { name = "torch", specifier = ">=2.12.1" },
 ]
 dev = [
     { name = "commitizen", specifier = ">=4.13.9" },
