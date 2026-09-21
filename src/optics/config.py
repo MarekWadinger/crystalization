@@ -17,7 +17,7 @@ Typical use::
 
     cfg = load_camera("configs/camera_100.toml")
     lens = lens_from_config_and_video(cfg, "datasets/2026-02-04 11-08-51.mp4")
-    # lens.pixel_pitch_um = 5370 / 720 ≈ 7.46 µm (PAL-downsampled feed)
+    # lens.pixel_pitch_um = 5568 / 720 ≈ 7.73 µm (PAL-downsampled feed)
 """
 
 from __future__ import annotations
@@ -43,6 +43,9 @@ class CameraConfig:
     focal_length_mm: float
     f_number: float
     extension_tube_mm: float
+    lens_body_length_mm: float
+    focus_travel_mm: float
+    air_gap_mm: float
     sight_glass_thickness_mm: float
     sight_glass_index: float
     focus_object_distance_mm: float
@@ -71,6 +74,9 @@ def load_camera(path: str | Path) -> CameraConfig:
         focal_length_mm=float(lens["focal_length_mm"]),
         f_number=float(lens["f_number"]),
         extension_tube_mm=float(lens["extension_tube_mm"]),
+        lens_body_length_mm=float(lens["body_length_mm"]),
+        focus_travel_mm=float(lens.get("focus_travel_mm", 0.0)),
+        air_gap_mm=float(lens["air_gap_mm"]),
         sight_glass_thickness_mm=float(glass["thickness_mm"]),
         sight_glass_index=float(glass["refractive_index"]),
         focus_object_distance_mm=float(focus["object_distance_mm"]),
