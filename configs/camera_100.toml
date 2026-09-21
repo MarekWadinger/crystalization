@@ -13,6 +13,7 @@ sensor_width_mm = 5.568               # FACT: 1920 × 2.9 µm — Sony IMX307/IM
 sensor_height_mm = 3.132              # FACT: 1080 × 2.9 µm
 native_width_px = 1920                # FACT: sensor native resolution
 native_height_px = 1080               # FACT: sensor native resolution
+body_length_mm = 40.0                 # ESTIMATE: camera housing depth behind the lens mount — NOT measured, caliper it; used only in the layout drawing
 flange_distance_mm = 17.526           # C-mount standard; HCB-6000 is CS-mount (12.526) + 5 mm adapter ring — OPEN whether the 60 mm below includes the ring
 
 [lens]
@@ -34,6 +35,7 @@ refractive_index = 1.47               # FACT: borosilicate visible band
 [figures]
 # What-if sweeps and drawing choices for docs/optics/figures — not the installation.
 extension_sweep_mm = [5.0, 10.0, 20.0, 40.0]  # standard C-mount extension-ring kit; the installed tube is appended
+slurry_depth_mm = 40.0                # width of the slurry band in 18_optical_layout; the pan is far deeper
 
 [focus]
 # Derived: i_fixed = f + e + focus_travel = 96 mm
