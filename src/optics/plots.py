@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import tomllib
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -24,10 +26,8 @@ from optics.model import (
 )
 from optics.psf import sharpness_diffraction, sharpness_gaussian
 
-_CONFIG_PATH = (
-    Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
-)
-_CFG = load_camera(_CONFIG_PATH)
+_CFG = load_camera()
+_FIG = tomllib.loads(_CFG.source_path.read_text())["figures"]
 
 CAMERA_100 = lens_from_config(_CFG)
 """Camera 100 install loaded from ``configs/camera_100.toml`` (sensor-native pitch)."""
@@ -313,8 +313,8 @@ def fig_dof_envelope(out_path: Path) -> None:
     pitch = CAMERA_100.pixel_pitch_um
 
     fig, ax = plt.subplots(figsize=(8.5, 4.8))
-    f_numbers = [1.6, 2.8, 4.0, 8.0, 16.0]
-    for fn, color in zip(f_numbers, ("C0", "C1", "C2", "C3", "C4")):
+    for idx, fn in enumerate(_CFG.iris_stops):
+        color = f"C{idx}"
         lens_f = LensSetup(
             focal_length=CAMERA_100.focal_length,
             f_number=fn,
@@ -380,8 +380,8 @@ def fig_sight_glass_shift(out_path: Path) -> None:
 
 def fig_extension_tube_sweep(out_path: Path) -> None:
     """Show how FOV / µm-per-px change with extension tube length."""
-    tubes = [5.0, 10.0, 20.0, 30.0, 45.0]
-    d_o = np.linspace(40.0, 400.0, 400)
+    tubes = [*_FIG["extension_sweep_mm"], _CFG.extension_tube_mm]
+    d_o = np.linspace(D_FOCUS * 0.75, D_FOCUS * 7.5, 400)
 
     fig, ax = plt.subplots(figsize=(7.5, 4.5))
     for e in tubes:
