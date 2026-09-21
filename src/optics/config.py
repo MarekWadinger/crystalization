@@ -44,6 +44,7 @@ class CameraConfig:
     sensor_height_mm: float
     native_width_px: int
     native_height_px: int
+    body_length_mm: float
     flange_distance_mm: float
     focal_length_mm: float
     f_number: float
@@ -77,6 +78,7 @@ def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
         sensor_height_mm=float(cam["sensor_height_mm"]),
         native_width_px=int(cam["native_width_px"]),
         native_height_px=int(cam["native_height_px"]),
+        body_length_mm=float(cam["body_length_mm"]),
         flange_distance_mm=float(cam["flange_distance_mm"]),
         focal_length_mm=float(lens["focal_length_mm"]),
         f_number=float(lens["f_number"]),
