@@ -33,6 +33,7 @@ packages = ["src/annotator", "src/predictor", "src/llm_annotator", "src/sharpnes
 
 [tool.ruff]
 src = ["src"]
+line-length = 79
 
 [dependency-groups]
 annotator = [
