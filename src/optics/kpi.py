@@ -31,10 +31,10 @@ from typing import Any
 import numpy as np
 
 from annotator.types import LayerConfig
+from optics.config import lens_from_config_and_video, load_camera
 from optics.csd import aggregate_csd
 from optics.disambiguate import detect_observations, disambiguate
 from optics.measure import collect_sharpness_histogram, fit_power_law_tail
-from optics.model import LensSetup
 
 CHANGELOG_PATH = Path("CHANGELOG.md")
 DEFAULT_VIDEO = "datasets/2026-02-05 10-36-32.mp4"
@@ -125,13 +125,9 @@ def run_pipeline(
         max_area=8000.0,
         max_aspect_ratio=3.0,
     )
-    lens = LensSetup(
-        focal_length=35.0,
-        f_number=1.6,
-        extension_tube=45.0,
-        pixel_pitch_um=2.8,
-    )
-    d_focus = 62.2
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, video)
+    d_focus = cfg.focus_object_distance_mm
 
     print("[kpi] detecting crystals…", file=sys.stderr)
     obs = detect_observations(

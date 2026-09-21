@@ -25,6 +25,9 @@ def hf35() -> LensSetup:
         focal_length=35.0,
         f_number=4.0,
         extension_tube=10.0,
+        pixel_pitch_um=2.9,
+        sensor_width=5.568,
+        sensor_height=3.132,
     )
 
 
@@ -116,10 +119,11 @@ def test_load_camera_config_returns_native_pitch() -> None:
         sight_glass_from_config,
     )
 
-    cfg = load_camera("configs/camera_100.toml")
+    cfg = load_camera()
     assert cfg.focal_length_mm == 35.0
     assert cfg.f_number == 1.6
     assert cfg.extension_tube_mm == 60.0
+    assert cfg.flange_distance_mm == pytest.approx(17.526)
     # Sensor-native pitch = sensor_width / native_width = 5568 / 1920.
     assert cfg.native_pixel_pitch_um == pytest.approx(
         5568.0 / 1920.0, rel=1e-9
@@ -135,7 +139,7 @@ def test_load_camera_config_returns_native_pitch() -> None:
 def test_lens_from_config_rescales_pitch_for_downsampled_video() -> None:
     from optics.config import lens_from_config, load_camera
 
-    cfg = load_camera("configs/camera_100.toml")
+    cfg = load_camera()
     # PAL DVR downsamples 1920 -> 720; effective pitch must scale.
     lens_pal = lens_from_config(cfg, frame_width_px=720)
     assert lens_pal.pixel_pitch_um == pytest.approx(5568.0 / 720.0, rel=1e-9)

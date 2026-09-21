@@ -16,6 +16,7 @@ import numpy as np
 from annotator.detection import process_frame
 from annotator.types import FrameResult, LayerConfig, Mat
 from annotator.viz import LAYER_COLORS
+from optics.config import lens_from_config_and_video, load_camera
 from optics.model import LensSetup, mm_per_pixel_at
 from optics.video_io import DEFAULT_CROP, CropBox
 
@@ -190,13 +191,9 @@ def main() -> None:
         max_area=8000.0,
         max_aspect_ratio=3.0,
     )
-    lens = LensSetup(
-        focal_length=35.0,
-        f_number=1.6,
-        extension_tube=45.0,
-        pixel_pitch_um=2.8,
-    )
-    d_focus = 62.2
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, "datasets/2026-02-05 10-36-32.mp4")
+    d_focus = cfg.focus_object_distance_mm
     frame_indices = [100, 370, 640, 910, 1180, 1450]
     out_path = Path("docs/optics/figures/16_detection_contact.png")
 

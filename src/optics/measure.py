@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
+from optics.config import lens_from_config_and_video, load_camera
 from optics.model import LensSetup, circle_of_confusion
 from optics.psf import sharpness_diffraction
 from optics.video_io import CropBox, resolve_crop
@@ -187,19 +188,16 @@ def fig_measured_vs_theory(
 
 def main() -> None:
     """Run the measurement on the plant video and print stats."""
-    lens = LensSetup(
-        focal_length=35.0,
-        f_number=1.6,
-        extension_tube=45.0,
-        pixel_pitch_um=2.8,
-    )
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, "datasets/2026-02-05 10-36-32.mp4")
+    d_focus = cfg.focus_object_distance_mm
     out_dir = Path("docs/optics/figures")
     out_dir.mkdir(parents=True, exist_ok=True)
     stats = fig_measured_vs_theory(
         "datasets/2026-02-05 10-36-32.mp4",
         out_dir / "08_measured_vs_theory.png",
         lens,
-        d_focus=62.2,
+        d_focus=d_focus,
     )
     print(stats)
 
