@@ -46,12 +46,13 @@ here so this chapter stands alone numerically.
 | N_max | Max aperture | **F/1.6** (full open) | Fujinon datasheet |
 | N_min | Min aperture | **F/22** | Fujinon datasheet |
 | MOD | Minimum object distance | **0.25 m** (≈ MOD relative to front element) | Fujinon datasheet |
-| pitch | Sensor pixel pitch | **2.8 µm/px** | derived from 1/2.8" 16:9 CMOS |
-| W_sensor | Sensor active width | **5.37 mm** | derived |
-| H_sensor | Sensor active height | **3.02 mm** | derived |
-| t_glass | Sight-glass thickness | **15 mm** (ESTIMATE, ±5 mm) | DIN 8902 disc, 8-bolt flange |
+| pitch | Sensor pixel pitch | **2.9 µm/px** | Sony IMX307/IMX327 datasheet (HCB-6000 total 1945×1097 px matches this die) |
+| W_sensor | Sensor active width | **5.57 mm** | 1920 × 2.9 µm |
+| H_sensor | Sensor active height | **3.13 mm** | 1080 × 2.9 µm |
+| t_glass | Sight-glass thickness | **20 mm** (FACT, operator measurement 2026-09-07) | DIN 8902 disc, Ø150 mm (DN150), 8-bolt flange |
+| a | Lens front → outer glass face (air gap) | **20 mm** (FACT, operator measurement 2026-09-07) | tape/caliper on site |
 | n_g | Sight-glass refractive index | **1.47** (ESTIMATE — borosilicate; sapphire would be 1.77, fused silica 1.46) | typical glass for pressure-vessel sight glasses |
-| e | Extension tube length | **45 mm** (FACT, operator measurement 2026-06-15) | callipered at the silver collar between lens flange and camera body |
+| e | Extension tube length | **60 mm** (FACT, operator measurement 2026-09-07; supersedes the 45 mm caliper of 2026-06-15) | silver collar between lens flange and camera body |
 | N_op | F-number in service | **F/1.6** (FACT — wide open) | operator inspection 2026-06-15 |
 
 ---
@@ -78,25 +79,27 @@ thin-lens equation in Hecht §5.2), giving ``m = e/f`` at infinity focus.
 
 For the verified Camera 100 setup (`LensSetup` in
 [`../../src/optics/model.py`](../../src/optics/model.py)):
-``f = 35 mm``, ``e = 45 mm`` → infinity-focus image distance
-``i_∞ = 80 mm`` → focused object distance at that ring setting
+``f = 35 mm``, ``e = 60 mm``, focus-ring travel ``x ≈ 1 mm`` → image distance
+``i = f + e + x = 96 mm`` → focused object distance at that ring setting
 
-$$ d_{\text{focus}} = \frac{f\,i}{i - f} = \frac{35 \cdot 80}{45} = \mathbf{62.2\ mm}. $$
+$$ d_{\text{focus}} = \frac{f\,i}{i - f} = \frac{35 \cdot 96}{61} = \mathbf{55.1\ mm}. $$
 
 This is a **macro setup** — working distance of about 6 cm, near 1:1
 magnification. The focus ring may be off the infinity tick, but the
 40 mm-plus extension tube fixes the regime: ``d_focus`` cannot exceed
-62 mm at infinity ring nor fall much below ~58 mm at MOD ring (where
+55 mm at infinity ring nor fall much below ~52 mm at MOD ring (where
 the lens adds ~5–6 mm of internal extension). For all calculations
-below we use the central value ``d_focus = 62.2 mm``.
+below we use the central value ``d_focus = 55.1 mm``.
 
 > **Historical note.** Earlier drafts of this document used
 > ``e = 10 mm`` (an estimate from snapshot FOV) and inferred
 > ``d_focus = 165 mm``. The operator caliper measurement on
-> 2026-06-15 revised both numbers: ``e = 45 mm``, ``d_focus = 62.2 mm``.
+> 2026-06-15 revised both numbers to ``e = 45 mm``, ``d_focus = 62.2 mm``;
+> the 2026-09-07 site measurement corrected them again to ``e = 60 mm``,
+> ``d_focus = 55.1 mm`` (1.66 µm/px) and fixed ``t = 20 mm``, ``a = 20 mm``.
 > Every µm/px and CSD number below reflects the corrected setup; the
 > revision moved the median crystal estimate from 0.25 mm
-> (≈ mid-strike, scale-wrong) to 0.05 mm (≈ seed magma / very
+> (≈ mid-strike, scale-wrong) to 0.037 mm (≈ seed magma / very
 > early strike, scale-correct).
 
 > **Compound-lens caveat.** The Fujinon HF35HA-1B is a multi-element
@@ -117,8 +120,8 @@ $$ \Delta = t\left(1 - \frac{1}{n_g}\right) $$
 
 (Hecht §5.6.1, paraxial limit; same formula in any introductory optics
 text — see [Concepts of Physics, "Refraction from a glass slab"](https://www.concepts-of-physics.com/optics/refraction-from-a-glass-slab.php)
-for a step-by-step derivation). With t = 15 mm and n_g = 1.47,
-**Δ = 4.80 mm**, independent of the object distance. The optical
+for a step-by-step derivation). With t = 20 mm and n_g = 1.47,
+**Δ = 6.39 mm**, independent of the object distance. The optical
 calculations are with **apparent** object distance; the real distance
 to a crystal is the apparent value plus Δ. (Caveat: this is the
 *first-order* paraxial form — see §6.3.3 for the exact 12th-degree
@@ -134,10 +137,10 @@ The object-plane pixel size at the focused plane is
 
 $$ \Delta x = \frac{\text{pitch}}{M} = \text{pitch}\,\frac{d_{\text{focus}} - f}{f}. $$
 
-| Quantity | Value (d_focus = 62.2 mm, e = 45 mm) |
+| Quantity | Value (d_focus = 55.1 mm, e = 60 mm) |
 |---|---|
-| M = f / (d_focus − f) | **1.286 ×** (DERIVED) |
-| Δx at focus | **2.18 µm/px** (DERIVED) |
+| M = f / (d_focus − f) | **1.743 ×** (DERIVED) |
+| Δx at focus | **1.66 µm/px** (DERIVED) |
 | Horizontal FOV at focus = W_sensor / M | **4.18 mm** (DERIVED) |
 | Vertical FOV at focus = H_sensor / M | **2.35 mm** (DERIVED) |
 | px/mm at focus | **459 px/mm** (DERIVED) |
@@ -147,8 +150,8 @@ $$ \Delta x = \frac{\text{pitch}}{M} = \text{pitch}\,\frac{d_{\text{focus}} - f}
 Autocorrelation of mid-frame rows gives a first-decorrelation length
 of **~42.5 px (median over 18 rows)** in `frame 0`. This corresponds to
 roughly half the spacing between adjacent crystal edges, so the
-dominant texture period is **~85 px**. At 2.18 µm/px this is a texture
-period of **~0.19 mm**, corresponding to crystals of order
+dominant texture period is **~85 px**. At 1.66 µm/px this is a texture
+period of **~0.14 mm**, corresponding to crystals of order
 **0.05–0.1 mm** — consistent with **seed magma / very early A-strike**
 (Bubník et al., *Sugar Technologists Manual*). The operator confirmed
 the recording captures the first hour of a 4-hour boiling-pan strike,
@@ -159,7 +162,7 @@ so this very small size is correct.
 This figure was decisive in the 2026-06-15 revision: at the (then-
 estimated) e = 10 mm the predicted µm/px ≈ 10 µm/px landed in the
 mid-strike crystal-size range and looked "self-consistent"; only the
-caliper measurement of the true e = 45 mm revealed that we were a
+caliper measurement of e = 45 mm (later corrected to 60 mm) revealed that we were a
 factor of ~5 off in the scale and looking at seed crystals rather
 than mid-strike ones.
 
@@ -193,11 +196,11 @@ mapping — defocus spreads each point across many pixels but the
 
 | d_o (mm) | µm/px | px/mm | FOV horizontal (mm) |
 |---:|---:|---:|---:|
-| 50 | 1.75 | 571 | 3.36 |
-| 60 | 2.10 | 476 | 4.03 |
-| **62.2 (focus)** | **2.18** | **459** | **4.18** |
-| 65 | 2.28 | 439 | 4.37 |
-| 80 | 2.80 | 357 | 5.37 |
+| 50 | 1.51 | 662 | 2.90 |
+| **55.1 (focus)** | **1.66** | **601** | **3.19** |
+| 60 | 1.81 | 552 | 3.48 |
+| 65 | 1.96 | 509 | 3.77 |
+| 80 | 2.42 | 413 | 4.64 |
 
 ---
 
@@ -233,20 +236,20 @@ This is the natural variable for fitting depth-from-defocus models.
 ### 5.1 Depth of field is *extraordinarily* tiny here
 
 DoF for F-numbers from 1.6 (the verified current setting) to 16, with
-focus at d_focus = 62.2 mm:
+focus at d_focus = 55.1 mm:
 
 ![depth of field envelope](./figures/04_dof_envelope.png)
 
-| F-number | DoF at 1-pixel blur (2.8 µm) | DoF at 2-pixel blur (5.6 µm) |
+| F-number | DoF at 1-pixel blur (2.9 µm) | DoF at 2-pixel blur (5.8 µm) |
 |---|---:|---:|
-| **F/1.6 (CURRENT)** | **≈ 0.012 mm** | **≈ 0.025 mm** |
-| F/2.8 | ≈ 0.022 mm | ≈ 0.043 mm |
-| F/4.0 | ≈ 0.031 mm | ≈ 0.062 mm |
-| F/8.0 | ≈ 0.062 mm | ≈ 0.124 mm |
-| F/16 | ≈ 0.124 mm | ≈ 0.248 mm |
+| **F/1.6 (CURRENT)** | **≈ 0.008 mm** | **≈ 0.017 mm** |
+| F/2.0 | ≈ 0.010 mm | ≈ 0.021 mm |
+| F/4.0 | ≈ 0.021 mm | ≈ 0.041 mm |
+| F/8.0 | ≈ 0.041 mm | ≈ 0.083 mm |
+| F/16 | ≈ 0.083 mm | ≈ 0.165 mm |
 
 **The current operating point is extreme.** At F/1.6 the in-focus
-slice is only **±6 µm** at 1-pixel blur — barely two seed crystals
+slice is only **±4 µm** at 1-pixel blur — barely two seed crystals
 thick. Detected crystals are essentially **all at one depth**, which
 makes the depth-aware machinery of §§5–6 of the manuscript
 *demonstrated but not load-bearing* at this aperture. The principal
@@ -584,13 +587,13 @@ Walking the document claim-by-claim. ``D-R`` = deep-research vote
 
 | § | Claim | Source(s) | Verification |
 |---|---|---|---|
-| 1 | Hanwha HCB-6000 1/2.8" sensor, 1920×1080, 2.8 µm pitch | datasheet + lens README | FACT |
+| 1 | Hanwha HCB-6000 1/2.8" sensor, 1920×1080, 2.9 µm pitch (IMX307/327 die) | datasheet + Sony flyer | FACT |
 | 1 | Fujinon HF35HA-1B, f=35 mm, F/1.6–22, MOD 0.25 m | Fujinon datasheet | FACT |
 | 1 | DIN 8902 sight-glass, 8-bolt flange | operator photo `lens/20260205_122524.jpg` | FACT |
-| 1 | Sight-glass thickness 15 mm (±5 mm), n_g ≈ 1.47 | DIN 8902 standard + borosilicate | ESTIMATE |
+| 1 | Sight-glass thickness 20 mm (FACT 2026-09-07), n_g ≈ 1.47 (ESTIMATE) | site measurement + borosilicate | FACT / ESTIMATE |
 | 2 | ``M = f / (d_o − f)`` | Hecht §5.2; thin-lens identity | code (`test_thin_lens_round_trip_finite_distance`), D-R 3-0 |
 | 2 | ``m = e/f`` at infinity focus; ``m_x = m + x/f`` | Photons-to-Photos, derived from Hecht §5.2 | D-R 3-0; verbatim quote retrieved 2026-06-13 |
-| 2.1 | ``Δ = t(1 − 1/n_g) = 4.80 mm`` | Hecht §5.6 paraxial | code (`test_sight_glass_shift_independent_of_distance`), D-R 3-0 |
+| 2.1 | ``Δ = t(1 − 1/n_g) = 6.39 mm`` | Hecht §5.6 paraxial | code (`test_sight_glass_shift_independent_of_distance`), D-R 3-0 |
 | 2.1 | Exact flat-port projection is 12th-degree polynomial | Agrawal CVPR 2012 | D-R 3-0 |
 | 3 | µm/px at focus = 10.40 µm with e=10 mm, d_focus=165 mm | derived from §2 | code (`test_magnification_matches_textbook_form`) |
 | 3.1 | First-decorrelation pixel offset = 42.5 px (median) | autocorrelation, this video | video MEASURED |
@@ -628,9 +631,9 @@ to verify they are not invented:
 
 | Number | Where | Trace |
 |---:|---|---|
-| **2.8 µm/px** sensor pitch | §1 | 5.37 mm sensor width / 1920 px = 2.797 µm — derived, not invented |
-| **5.37 × 3.02 mm** sensor active | §1 | 1/2.8" 16:9 OFM convention; Hanwha HCB-6000 datasheet inferred |
-| **4.80 mm** glass shift | §2.1 | 15 · (1 − 1/1.47) = 4.796 mm — Hecht §5.6 formula, verified in `test_sight_glass_shift_independent_of_distance` |
+| **2.9 µm/px** sensor pitch | §1 | Sony IMX307/IMX327 unit cell; HCB-6000 datasheet total-pixel count 1945×1097 identifies the die |
+| **5.57 × 3.13 mm** sensor active | §1 | 1920 × 1080 × 2.9 µm |
+| **6.39 mm** glass shift | §2.1 | 20 · (1 − 1/1.47) = 6.395 mm — Hecht §5.6 formula, verified in `test_sight_glass_shift_independent_of_distance` |
 | **157.5 mm** d_focus at infinity ring | §2 | 35 · 45 / (45 − 35) = 157.5 — thin-lens equation |
 | **165 mm** chosen d_focus | §2 | ESTIMATE within 157.5–200 mm bracket from infinity ring + 4 m ring |
 | **10.40 µm/px** at focus | §3 | 2.8 · 165 / 44.42 ≈ 10.40 — direct from `mm_per_pixel_at` |
@@ -659,3 +662,36 @@ numerical claim in §§ 1–8 has a verification trace in §13. Open items
 in §9 (extension-tube length, F-number, glass thickness) need on-site
 measurement before publishing — they are uncertainty bounds on the
 absolute scale, not on the structural results.*
+
+---
+
+## 12. Measurement-error budget (DERIVED)
+
+Generated by ``uv run python -m optics.error_budget`` from ``configs/camera_100.toml``.
+Key result: the object-plane scale is ``µm/px = p·f/(e + x)`` — the glass and the
+air gap do not enter it at all; focal-length tolerance and the focus-ring travel
+dominate.
+
+### Inputs (1 σ)
+
+| Symbol | Value | σ | Source |
+|---|---:|---:|---|
+| f | 35 | ±0.7 | datasheet 35 mm; ±2 % typical CCTV tolerance (ASSUMED) |
+| e | 60 | ±0.5 | operator tape/caliper 2026-09-07 |
+| x | 1 | ±1 | ~3 exposed helicoid turns ≈ 1 mm (operator estimate) |
+| p | 2.9 | ±0.02 | Sony IMX307/IMX327 unit cell 2.9 µm (datasheet) |
+| t | 20 | ±0.5 | operator 2026-09-07 |
+| a | 20 | ±1 | operator 2026-09-07 |
+| n | 1.47 | ±0.03 | borosilicate 1.47 assumed; soda-lime would be 1.52 |
+
+### Propagated 1 σ per derived quantity (linear; MC check in last column)
+
+| Quantity | Value | σ from f | σ from e | σ from x | σ from p | σ from t | σ from a | σ from n | total σ (lin) | total σ (MC) | rel. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| um_per_px | 1.664 | 0.033 | 0.014 | 0.027 | 0.011 | 0.000 | 0.000 | 0.000 | **0.047** | 0.047 | 2.8 % |
+| d_focus_mm | 55.082 | 1.503 | 0.165 | 0.329 | 0.000 | 0.000 | 0.000 | 0.000 | **1.548** | 1.544 | 2.8 % |
+| H_to_inner_face_mm | 61.477 | 1.503 | 0.165 | 0.329 | 0.000 | 0.160 | 0.000 | 0.278 | **1.580** | 1.576 | 2.6 % |
+| H_behind_front_mm | 21.477 | 1.503 | 0.165 | 0.329 | 0.000 | 0.340 | 1.000 | 0.278 | **1.894** | 1.888 | 8.8 % |
+| H2_behind_front_mm | 12.026 | 0.700 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **0.700** | 0.698 | 5.8 % |
+
+Not in the table (discrete, not Gaussian): the C-mount flange depth. If the measured 60 mm already includes the 5 mm C-mount adapter ring, e is 55 mm: µm/px +9 %, d_focus +2.0 mm, H′ shifts −5 mm.
