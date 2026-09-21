@@ -44,7 +44,7 @@ def _add_box(
     height: float,
     text: str,
     facecolor: str,
-    fontsize: float = 9.5,
+    fontsize: float = 8.5,
     fontweight: str = "normal",
     textcolor: str | None = None,
 ) -> tuple[float, float, float, float]:
@@ -144,7 +144,7 @@ def build_figure() -> plt.Figure:
     # Column geometry. Five columns across [0.2, 13.8].
     col_width: float = 2.5
     col_x: list[float] = [0.25, 3.0, 5.75, 8.5, 11.25]
-    box_h: float = 0.95
+    box_h: float = 1.05
     # Vertical band for stages A-E (validation bar sits below).
     top_y: float = 7.6
 
@@ -195,7 +195,7 @@ def build_figure() -> plt.Figure:
         b_top_y - 3 * box_h - 0.70,
         col_width,
         box_h,
-        "Edge-based crystal detector\nrotated bounding rects per layer",
+        "Edge-based crystal detector\nrotated rects per layer",
         COLOR_B,
     )
     _arrow(ax, _bottom_center(b1), _top_center(b2))
@@ -214,7 +214,7 @@ def build_figure() -> plt.Figure:
         box_h,
         "Focal-plane subset\n(top-quantile sharpness)\n→ apparent-size prior",
         COLOR_C,
-        fontsize=8.8,
+        fontsize=8.2,
     )
     c2 = _add_box(
         ax,
@@ -224,7 +224,7 @@ def build_figure() -> plt.Figure:
         box_h,
         "Off-focus crystals\n→ Gaussian-PSF inversion\n→ CoC, then d_near, d_far",
         COLOR_C,
-        fontsize=8.8,
+        fontsize=8.2,
     )
     c3 = _add_box(
         ax,
@@ -284,7 +284,7 @@ def build_figure() -> plt.Figure:
         e_box_h,
         "Depth-corrected\nphysical sizes per crystal",
         COLOR_E,
-        fontsize=10.0,
+        fontsize=9.0,
         fontweight="bold",
         textcolor="#111111",
     )
@@ -296,7 +296,7 @@ def build_figure() -> plt.Figure:
         e_box_h,
         "Final CSD\nmedian / CV / shape fit",
         COLOR_E,
-        fontsize=10.5,
+        fontsize=9.0,
         fontweight="bold",
         textcolor="#111111",
     )
@@ -330,7 +330,7 @@ def build_figure() -> plt.Figure:
         0.75,
         f_text,
         COLOR_F,
-        fontsize=10.5,
+        fontsize=9.0,
         fontweight="bold",
     )
     ax.text(
