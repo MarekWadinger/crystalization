@@ -30,6 +30,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import cv2
@@ -195,21 +196,32 @@ def annotate(name: str) -> None:
         _banner(
             name, png, len(frames) - len(todo), len(frames), model_path.name
         )
-        proc = subprocess.run(
+        proc = subprocess.Popen(
             [sys.executable, "-c", child, str(png)],
             env=env,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+        saved_at = None  # mtime of the label; report each Ctrl+S live
+        while proc.poll() is None:
+            label = _label(png)
+            if label.exists() and label.stat().st_mtime != saved_at:
+                verb = "saved" if saved_at is None else "saved again"
+                saved_at = label.stat().st_mtime
+                print(
+                    _ok(
+                        f"{verb} {label.name} — close the window for the next frame"
+                    )
+                )
+            time.sleep(0.5)
         if proc.returncode != 0:
             raise SystemExit(_bad(f"the GUI crashed — details in {log}"))
-        if not _label(png).exists():
+        if saved_at is None:
             print(_bad("window closed without saving — stopping here"))
             print(
                 f"  rerun  uv run crystal-detector-annotate {name}  to continue"
             )
             break
-        print(_ok(f"saved {_label(png).relative_to(ROOT)}"))
     done = sum(_label(p).exists() for p in frames)
     print("\n" + _c("36", "═" * 64))
     _leaderboard(name)
