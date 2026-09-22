@@ -96,6 +96,9 @@ negatives teach the model to ignore bubbles and glass scratches. Closing a
 frame without a label and answering `N` ends the session. When done, the command
 stages your `_seg.npy` files and prints the commit and push lines to run.
 
+`uv run crystal-detector-annotate patrik --review` reopens your labelled frames
+one at a time with the label loaded, so you can check and fix them.
+
 Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
 VIDEO --who a,b,c,d` (skips the `discharge` pre-tail and `empty` stages).
 For a cross-stage fine-tune, pool the images and labels into one folder first;
