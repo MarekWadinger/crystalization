@@ -6,7 +6,9 @@ Annotator (after ``git clone`` + ``uv sync --group crystal-detector-gui``)::
 
 opens the Cellpose GUI on the first of your frames that has no label yet
 (``annotations/patrik/<stage>/HHMMSS.png``). In the GUI: **run cpsam**,
-fix the outlines (right-drag draws, Ctrl+right-click deletes), **Ctrl+S**
+fix the outlines (Shift+click or right-click starts an outline, move
+the cursor, click again to close; Ctrl+click on a crystal deletes it;
+Cmd on macOS), **Ctrl+S**
 writes ``HHMMSS_seg.npy`` next to the image, then **File → Load image**
 for the next one. Stages before seeding have no crystals: delete every
 proposal and save the empty result — those are the negatives. Then commit
