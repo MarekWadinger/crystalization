@@ -80,8 +80,10 @@ uv sync --group crystal-detector-gui              # once
 uv run crystal-detector-annotate patrik           # opens the GUI on your next unlabelled frame
 ```
 
-In the GUI: **run cpsam** → fix outlines (right-drag draws, Ctrl+right-click
-deletes) → `Ctrl+S` → **File → Load image** for the next one. Stages before
+In the GUI: **run cpsam** → fix outlines (Shift+click or right-click starts an
+outline, move the cursor, click again to close it; Ctrl+click on a crystal
+deletes it; use Cmd on macOS) → `Ctrl+S` → **File → Load image** for the next
+one. Stages before
 seeding (cleaning, filling_with_bubbles, concentration) have no crystals:
 delete every proposal and save the empty result — these negatives teach the
 model to ignore bubbles and glass scratches. When done, commit the `_seg.npy`
@@ -105,8 +107,8 @@ Then the annotate → train loop:
 2. Launch the GUI: `uv run crystal-detector-gui`
    (wraps `python -m cellpose`, pre-setting `QT_API=pyqt6` to dodge the
    PyQt5/PyQt6 clash).
-3. Load a frame, click **run cpsam**, then correct masks (right-click to draw an
-   outline, Ctrl+right-click to delete) and `Ctrl+S` to save `*_seg.npy` labels.
+3. Load a frame, click **run cpsam**, then correct masks (Shift+click or right-click
+   starts an outline, click again to close it; Ctrl+click deletes) and `Ctrl+S` to save `*_seg.npy` labels.
 4. In the **Models** tab, **Train new model**, pointing at the folder with both
    images and `_seg.npy` files. The result lands in `training_data/models/`.
 5. Use it: `crystal-detector-analyze image.png --model training_data/models/cpsam_YYYYMMDD_HHMMSS`.
