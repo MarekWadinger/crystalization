@@ -84,11 +84,16 @@ The command registers the project's fine-tuned checkpoint with Cellpose and
 opens one frame at a time. In the GUI: pick the checkpoint under **custom
 models** and press **run** → fix outlines (Shift+click or right-click starts an
 outline, move the cursor, click again to close it; Ctrl+click on a crystal
-deletes it; use Cmd on macOS) → `Ctrl+S` → **close the window**; the next
-unlabelled frame opens by itself, closing without saving ends the session.
+deletes it; use Cmd on macOS). Cellpose **autosaves after every edit** and the
+terminal confirms each save; `Ctrl+S` is only needed if you changed nothing.
+Then **close the window**; the next unlabelled frame opens by itself.
+
 Stages before seeding (cleaning, filling_with_bubbles, concentration) have no
-crystals: delete every proposal and save the empty result — these negatives
-teach the model to ignore bubbles and glass scratches. When done, commit the
+crystals: delete every proposal (the last delete saves an empty label). If the
+model proposed nothing, Cellpose greys out saving — just close the window and
+answer `y` to "no crystals to mark?"; the command writes the empty label. These
+negatives teach the model to ignore bubbles and glass scratches. Closing a
+frame without a label and answering `N` ends the session. When done, commit the
 `_seg.npy` files and push (the command prints the exact git lines).
 
 Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export

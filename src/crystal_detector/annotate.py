@@ -34,6 +34,7 @@ import time
 from pathlib import Path
 
 import cv2
+import numpy as np
 
 from .analyze import resolve_model
 from .export_frames import crop, flat_field_correction
@@ -140,15 +141,36 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
     print(f" {step[0]} user-trained models → choose {_c('1;33', model)} → run")
     if stage in NEGATIVE_STAGES:
         no = _c("1;31", "NO crystals in this stage")
-        print(f" {step[1]} {no}: delete every proposal")
+        print(
+            f" {step[1]} {no}: delete every proposal (each delete autosaves)"
+        )
+        print("    if the model proposed nothing, just close the window")
     else:
         print(
             f" {step[1]} fix outlines: Shift+click starts, move, Shift+click closes;"
         )
-        print("    Ctrl+click (Cmd on Mac) on a crystal deletes it")
+        print("    Ctrl+click (Cmd on Mac) deletes. Every edit autosaves.")
     save, close = _c("1;33", "Ctrl+S / Cmd+S"), _c("1;33", "close the window")
-    print(f" {step[2]} {save} to save, then {close}")
+    print(f" {step[2]} {save} only if you changed nothing, then {close}")
     print(_c("36", "─" * 64))
+
+
+def _write_empty_label(png: Path) -> None:
+    """Zero-mask *_seg.npy in the GUI's own format (a negative sample)."""
+    img = cv2.imread(str(png), cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise SystemExit(_bad(f"cannot read {png}"))
+    h, w = img.shape
+    dat = {
+        "masks": np.zeros((h, w), np.uint16),
+        "outlines": np.zeros((h, w), np.uint16),
+        "colors": np.zeros((0, 3), np.uint8),
+        "ismanual": np.zeros(0, bool),
+        "filename": str(png),
+    }
+    np.save(
+        _label(png), np.asarray(dat, dtype=object)
+    )  # same as GUI's dict save
 
 
 def _git_lines(folder: Path, name: str) -> str:
@@ -202,7 +224,7 @@ def annotate(name: str) -> None:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
-        saved_at = None  # mtime of the label; report each Ctrl+S live
+        saved_at = None  # mtime of the label; report each autosave live
         while proc.poll() is None:
             label = _label(png)
             if label.exists() and label.stat().st_mtime != saved_at:
@@ -210,18 +232,26 @@ def annotate(name: str) -> None:
                 saved_at = label.stat().st_mtime
                 print(
                     _ok(
-                        f"{verb} {label.name} — close the window for the next frame"
+                        f"{verb} {label.name} — keep editing or close the window"
                     )
                 )
             time.sleep(0.5)
         if proc.returncode != 0:
             raise SystemExit(_bad(f"the GUI crashed — details in {log}"))
         if saved_at is None:
-            print(_bad("window closed without saving — stopping here"))
-            print(
-                f"  rerun  uv run crystal-detector-annotate {name}  to continue"
-            )
-            break
+            # Cellpose greys out Ctrl+S at zero masks, so an empty frame can
+            # only be labelled from here.
+            print(_bad("no label saved for this frame"))
+            answer = input(
+                _bold("  Were there NO crystals to mark? [y/N] ")
+            ).strip()
+            if answer.lower() != "y":
+                print(
+                    f"  rerun  uv run crystal-detector-annotate {name}  to continue"
+                )
+                break
+            _write_empty_label(png)
+            print(_ok(f"saved empty {_label(png).name}"))
     done = sum(_label(p).exists() for p in frames)
     print("\n" + _c("36", "═" * 64))
     _leaderboard(name)
