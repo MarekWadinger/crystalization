@@ -4,15 +4,16 @@ Annotator (after ``git clone`` + ``uv sync --group crystal-detector-gui``)::
 
     uv run crystal-detector-annotate patrik
 
-opens the Cellpose GUI on the first of your frames that has no label yet
-(``annotations/patrik/<stage>/HHMMSS.png``). In the GUI: **run cpsam**,
-fix the outlines (Shift+click or right-click starts an outline, move
-the cursor, click again to close; Ctrl+click on a crystal deletes it;
-Cmd on macOS), **Ctrl+S**
-writes ``HHMMSS_seg.npy`` next to the image, then **File → Load image**
-for the next one. Stages before seeding have no crystals: delete every
-proposal and save the empty result — those are the negatives. Then commit
-the ``_seg.npy`` files and push.
+opens the Cellpose GUI on your first unlabelled frame
+(``annotations/patrik/<stage>/HHMMSS.png``) with the project's fine-tuned
+checkpoint pre-registered under *custom models*. In the GUI: pick it and
+press **run**, fix the outlines (Shift+click or right-click starts an
+outline, move the cursor, click again to close; Ctrl+click on a crystal
+deletes it; Cmd on macOS), **Ctrl+S** writes ``HHMMSS_seg.npy`` next to
+the image, then **close the window** — the next frame opens by itself.
+Closing without saving ends the session. Stages before seeding have no
+crystals: delete every proposal and save the empty result — those are the
+negatives. Then commit the ``_seg.npy`` files and push.
 
 Maintainer, once::
 
@@ -27,11 +28,13 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
 import cv2
 
+from .analyze import resolve_model
 from .export_frames import crop, flat_field_correction
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -76,6 +79,10 @@ def _is_lfs_pointer(p: Path) -> bool:
     )
 
 
+def _label(png: Path) -> Path:
+    return png.with_name(png.stem + "_seg.npy")
+
+
 def annotate(name: str) -> None:
     folder = ANNOTATIONS / name
     frames = sorted(folder.glob("*/*.png"))
@@ -87,18 +94,26 @@ def annotate(name: str) -> None:
             "frames are Git LFS pointers, not images. Run once:\n"
             "  git lfs install && git lfs pull"
         )
-    todo = [p for p in frames if not p.with_name(p.stem + "_seg.npy").exists()]
-    print(f"{name}: {len(frames) - len(todo)}/{len(frames)} labelled")
-    if not todo:
-        print("all done — commit and push:")
-    else:
-        os.environ.setdefault("QT_API", "pyqt6")  # before cellpose import
-        from cellpose.gui import gui
+    from cellpose import io as cp_io
 
-        print(f"opening {todo[0].relative_to(ROOT)} — Ctrl+S saves the label")
-        gui.run(image=str(todo[0]))
-        done = sum(p.with_name(p.stem + "_seg.npy").exists() for p in frames)
-        print(f"\n{name}: {done}/{len(frames)} labelled. Commit and push:")
+    cp_io.add_model(str(resolve_model()))  # shows up under "custom models"
+    env = {**os.environ, "QT_API": os.environ.get("QT_API", "pyqt6")}
+    child = (
+        "import sys; from cellpose.gui import gui; gui.run(image=sys.argv[1])"
+    )
+    while todo := [p for p in frames if not _label(p).exists()]:
+        print(f"{name}: {len(frames) - len(todo)}/{len(frames)} labelled")
+        print(
+            f"opening {todo[0].relative_to(ROOT)} — Ctrl+S, then close the window"
+        )
+        subprocess.run(
+            [sys.executable, "-c", child, str(todo[0])], env=env, check=True
+        )
+        if not _label(todo[0]).exists():
+            print("closed without saving — stopping here; rerun to continue")
+            break
+    done = sum(_label(p).exists() for p in frames)
+    print(f"\n{name}: {done}/{len(frames)} labelled. Commit and push:")
     rel = folder.relative_to(ROOT)
     print(
         f"  git add {rel}\n"

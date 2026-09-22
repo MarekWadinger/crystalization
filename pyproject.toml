@@ -94,6 +94,7 @@ crystal-detector = [
 ]
 crystal-detector-gui = [
     "cellpose[gui]>=4.2.1.1",
+    { include-group = "crystal-detector" },
 ]
 
 [tool.commitizen]
