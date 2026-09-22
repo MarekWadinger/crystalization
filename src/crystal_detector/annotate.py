@@ -83,43 +83,112 @@ def _label(png: Path) -> Path:
     return png.with_name(png.stem + "_seg.npy")
 
 
+NEGATIVE_STAGES = {"cleaning", "filling_with_bubbles", "concentration"}
+_TTY = sys.stdout.isatty()
+
+
+def _bold(t: str) -> str:
+    return f"\033[1m{t}\033[0m" if _TTY else t
+
+
+def _ok(t: str) -> str:
+    return f"\033[32m✔ {t}\033[0m" if _TTY else f"OK  {t}"
+
+
+def _bad(t: str) -> str:
+    return f"\033[31m✘ {t}\033[0m" if _TTY else f"!!  {t}"
+
+
+def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
+    stage = png.parent.name
+    t = png.stem
+    print("\n" + "═" * 64)
+    print(
+        _bold(
+            f" {name} · frame {n_done + 1} of {n_all} · {stage} · {t[:2]}:{t[2:4]}:{t[4:]}"
+        )
+    )
+    print("═" * 64)
+    print(f" 1. user-trained models → choose {_bold(model)} → run")
+    if stage in NEGATIVE_STAGES:
+        print(
+            f" 2. {_bold('NO crystals in this stage')}: delete every proposal"
+        )
+    else:
+        print(
+            " 2. fix outlines: Shift+click starts, move, Shift+click closes;"
+        )
+        print("    Ctrl+click (Cmd on Mac) on a crystal deletes it")
+    print(
+        f" 3. {_bold('Ctrl+S / Cmd+S')} to save, then {_bold('close the window')}"
+    )
+    print("─" * 64)
+
+
+def _git_lines(folder: Path, name: str) -> str:
+    rel = folder.relative_to(ROOT)
+    return (
+        f"  git add {rel}\n"
+        f'  git commit -m "data(crystal-detector): {name} annotations"\n'
+        f"  git pull --rebase && git push"
+    )
+
+
 def annotate(name: str) -> None:
     folder = ANNOTATIONS / name
     frames = sorted(folder.glob("*/*.png"))
     if not frames:
         known = ", ".join(sorted(p.name for p in ANNOTATIONS.iterdir()))
-        raise SystemExit(f"no frames for '{name}'. Known: {known}")
+        raise SystemExit(_bad(f"no frames for '{name}'. Known: {known}"))
     if any(_is_lfs_pointer(p) for p in frames):
         raise SystemExit(
-            "frames are Git LFS pointers, not images. Run once:\n"
-            "  git lfs install && git lfs pull"
+            _bad("frames are Git LFS pointers, not images. Run once:")
+            + "\n  git lfs install && git lfs pull"
         )
+    import contextlib
+    import io as _io
+
     from cellpose import io as cp_io
 
-    cp_io.add_model(str(resolve_model()))  # shows up under "custom models"
+    print("preparing the fine-tuned model (1.2 GB download on first run)…")
+    with contextlib.redirect_stdout(_io.StringIO()):
+        model_path = resolve_model()
+        cp_io.add_model(str(model_path))  # listed under "custom models"
     env = {**os.environ, "QT_API": os.environ.get("QT_API", "pyqt6")}
     child = (
         "import sys; from cellpose.gui import gui; gui.run(image=sys.argv[1])"
     )
+    log = Path.home() / ".cellpose" / "run.log"
     while todo := [p for p in frames if not _label(p).exists()]:
-        print(f"{name}: {len(frames) - len(todo)}/{len(frames)} labelled")
-        print(
-            f"opening {todo[0].relative_to(ROOT)} — Ctrl+S, then close the window"
+        png = todo[0]
+        _banner(
+            name, png, len(frames) - len(todo), len(frames), model_path.name
         )
-        subprocess.run(
-            [sys.executable, "-c", child, str(todo[0])], env=env, check=True
+        proc = subprocess.run(
+            [sys.executable, "-c", child, str(png)],
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
-        if not _label(todo[0]).exists():
-            print("closed without saving — stopping here; rerun to continue")
+        if proc.returncode != 0:
+            raise SystemExit(_bad(f"the GUI crashed — details in {log}"))
+        if not _label(png).exists():
+            print(_bad("window closed without saving — stopping here"))
+            print(
+                f"  rerun  uv run crystal-detector-annotate {name}  to continue"
+            )
             break
+        print(_ok(f"saved {_label(png).relative_to(ROOT)}"))
     done = sum(_label(p).exists() for p in frames)
-    print(f"\n{name}: {done}/{len(frames)} labelled. Commit and push:")
-    rel = folder.relative_to(ROOT)
-    print(
-        f"  git add {rel}\n"
-        f'  git commit -m "data(crystal-detector): {name} annotations"\n'
-        f"  git push"
-    )
+    print("\n" + "═" * 64)
+    if done == len(frames):
+        print(_ok(_bold(f"all {done} frames labelled — now commit and push:")))
+    else:
+        print(
+            _bold(f" {done}/{len(frames)} labelled")
+            + " — commit what you have:"
+        )
+    print(_git_lines(folder, name))
 
 
 def main() -> None:
