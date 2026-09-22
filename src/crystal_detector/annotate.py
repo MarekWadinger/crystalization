@@ -114,6 +114,11 @@ def _bold(t: str) -> str:
     return _c("1", t)
 
 
+def _key(t: str) -> str:
+    """Anything the user clicks or presses."""
+    return _c("1;33", t)
+
+
 def _ok(t: str) -> str:
     return _c("32", f"✔ {t}") if _TTY else f"OK  {t}"
 
@@ -154,14 +159,20 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
         + _c("1;36", f" · {t[:2]}:{t[2:4]}:{t[4:]}")
     )
     print(rule)
+    k = _key  # every click / key / menu item in one style
     step = [_c("33", f"{i}.") for i in (1, 2, 3)]
-    print(f" {step[0]} user-trained models → choose {_c('1;33', model)} → run")
     print(
-        f" {step[1]} fix outlines: Shift+click starts, move, Shift+click closes;"
+        f" {step[0]} {k('user-trained models')} → choose {k(model)} → {k('run')}"
     )
-    print("    Ctrl+click (Cmd on Mac) deletes. Every edit autosaves.")
-    save, close = _c("1;33", "Ctrl+S / Cmd+S"), _c("1;33", "close the window")
-    print(f" {step[2]} {save} only if you changed nothing, then {close}")
+    print(
+        f" {step[1]} fix outlines: {k('Shift+click')} starts, move, {k('Shift+click')} closes;"
+    )
+    print(
+        f"    {k('Ctrl+click')} ({k('Cmd+click')} on Mac) deletes. Every edit autosaves."
+    )
+    print(
+        f" {step[2]} {k('Ctrl+S')} ({k('Cmd+S')}) only if you changed nothing, then {k('close the window')}"
+    )
     print(_c("36", "─" * 64))
 
 
