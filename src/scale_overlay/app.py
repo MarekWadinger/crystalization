@@ -7,7 +7,6 @@ Launch with::
 
 from __future__ import annotations
 
-from pathlib import Path
 
 import cv2
 import gradio as gr
@@ -31,9 +30,7 @@ from scale_overlay.overlay import (
 Mat = np.ndarray
 
 # Defaults loaded from versioned config (configs/camera_100.toml).
-_CFG = load_camera(
-    Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
-)
+_CFG = load_camera()
 DEFAULT_FOCAL = _CFG.focal_length_mm
 DEFAULT_FNUMBER = _CFG.f_number
 DEFAULT_EXTENSION = _CFG.extension_tube_mm
@@ -49,6 +46,8 @@ def _make_lens(
         f_number=float(f_number),
         extension_tube=float(e_mm),
         pixel_pitch_um=float(pitch),
+        sensor_width=_CFG.sensor_width_mm,
+        sensor_height=_CFG.sensor_height_mm,
     )
 
 

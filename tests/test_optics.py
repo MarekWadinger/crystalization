@@ -25,6 +25,9 @@ def hf35() -> LensSetup:
         focal_length=35.0,
         f_number=4.0,
         extension_tube=10.0,
+        pixel_pitch_um=2.9,
+        sensor_width=5.568,
+        sensor_height=3.132,
     )
 
 
@@ -101,12 +104,12 @@ def test_sharpness_gaussian_is_monotone_in_coc() -> None:
 
 
 def test_sight_glass_shift_independent_of_distance() -> None:
-    glass = SightGlass(thickness=15.0, refractive_index=1.47)
+    glass = SightGlass(thickness=20.0, refractive_index=1.47)
     d = np.array([100.0, 500.0, 1000.0])
     shifted = apparent_object_distance(d, glass)
     delta = d - shifted
     assert np.allclose(delta, delta[0])
-    assert delta[0] == pytest.approx(15.0 * (1.0 - 1.0 / 1.47), rel=1e-9)
+    assert delta[0] == pytest.approx(20.0 * (1.0 - 1.0 / 1.47), rel=1e-9)
 
 
 def test_load_camera_config_returns_native_pitch() -> None:
@@ -116,29 +119,30 @@ def test_load_camera_config_returns_native_pitch() -> None:
         sight_glass_from_config,
     )
 
-    cfg = load_camera("configs/camera_100.toml")
+    cfg = load_camera()
     assert cfg.focal_length_mm == 35.0
     assert cfg.f_number == 1.6
-    assert cfg.extension_tube_mm == 45.0
-    # Sensor-native pitch = sensor_width / native_width = 5370 / 1920.
+    assert cfg.extension_tube_mm == 60.0
+    assert cfg.flange_distance_mm == pytest.approx(17.526)
+    # Sensor-native pitch = sensor_width / native_width = 5568 / 1920.
     assert cfg.native_pixel_pitch_um == pytest.approx(
-        5370.0 / 1920.0, rel=1e-9
+        5568.0 / 1920.0, rel=1e-9
     )
     lens = lens_from_config(cfg)
     assert lens.pixel_pitch_um == pytest.approx(
         cfg.native_pixel_pitch_um, rel=1e-9
     )
     glass = sight_glass_from_config(cfg)
-    assert glass.thickness == 15.0
+    assert glass.thickness == 20.0
 
 
 def test_lens_from_config_rescales_pitch_for_downsampled_video() -> None:
     from optics.config import lens_from_config, load_camera
 
-    cfg = load_camera("configs/camera_100.toml")
+    cfg = load_camera()
     # PAL DVR downsamples 1920 -> 720; effective pitch must scale.
     lens_pal = lens_from_config(cfg, frame_width_px=720)
-    assert lens_pal.pixel_pitch_um == pytest.approx(5370.0 / 720.0, rel=1e-9)
+    assert lens_pal.pixel_pitch_um == pytest.approx(5568.0 / 720.0, rel=1e-9)
     # Sensor width itself is unchanged — only the per-pixel sampling.
     assert lens_pal.sensor_width == cfg.sensor_width_mm
 

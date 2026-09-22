@@ -6,8 +6,8 @@ the PyQt5/PyQt6 clash) so the annotate -> train loop is one command:
     uv sync --group crystal-detector-gui   # one-time: installs Qt
     uv run crystal-detector-gui
 
-In the GUI: load a frame, click **run cpsam**, correct masks (right-click to
-draw an outline, Ctrl+right-click to delete), then Ctrl+S to save the
+In the GUI: load a frame, click **run cpsam**, correct masks (Shift+click or
+right-click starts an outline, click again to close it; Ctrl+click deletes), then Ctrl+S to save the
 ``*_seg.npy`` label. Train via **Models -> Train new model** on the folder of
 images + ``_seg.npy`` files; the result lands in ``training_data/models/`` and
 is usable with ``crystal-detector-analyze --model <path>``.

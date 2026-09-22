@@ -68,6 +68,45 @@ Each yields `frame_XX_ORIGINAL.png` (raw crop) and `frame_XX_PRE_AI.png`
 
 ## Annotate & retrain (improve the model)
 
+### Team annotation
+
+Frames for the team live in `annotations/<name>/<stage>/HHMMSS.png`: three
+frames per person in each crystal-bearing stage (seeding → discharge, 15 per
+person), tracked with Git LFS. Labels are committed next to them as
+`HHMMSS_seg.npy`.
+
+```bash
+git lfs install && git lfs pull                   # once, if the PNGs are LFS pointers
+uv sync --group crystal-detector-gui              # once
+uv run crystal-detector-annotate patrik           # opens the GUI on your next unlabelled frame
+```
+
+The command registers the project's fine-tuned checkpoint with Cellpose and
+opens one frame at a time; the terminal prints the steps for each frame:
+
+1. *Optional:* under **user-trained models** choose the checkpoint and press
+   **run** — it pre-draws crystal outlines for you to correct.
+2. Fix outlines: **Shift+click** (or right-click) starts an outline, move the
+   cursor, click again to close it; **Ctrl+click** on a crystal deletes it
+   (Cmd on macOS). Cellpose autosaves after every edit and the terminal prints
+   a green *saved* line each time.
+3. Wait for the green line, then **close the window**; the next frame opens by
+   itself. If no green line appeared (you accepted the proposals untouched),
+   press `Ctrl+S` / `Cmd+S` first.
+
+Closing a frame without a label asks whether the frame had no crystals (`y`
+writes an empty label) or whether to stop (`n`, nothing lost). When done, the
+command stages your `_seg.npy` files and prints the commit and push lines.
+
+`uv run crystal-detector-annotate patrik --review` reopens your labelled frames
+one at a time with the label loaded, so you can check and fix them.
+
+Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
+VIDEO --who a,b,c,d` (three frames per person in each stage from seeding to
+discharge; earlier stages have no crystals and are not annotated). For a
+cross-stage fine-tune, pool the images and labels into one folder first; the
+GUI's **Train new model** only sees the folder of the loaded image.
+
 One-time: install the GUI deps (Qt — does **not** work in Docker):
 
 ```bash
@@ -81,8 +120,8 @@ Then the annotate → train loop:
 2. Launch the GUI: `uv run crystal-detector-gui`
    (wraps `python -m cellpose`, pre-setting `QT_API=pyqt6` to dodge the
    PyQt5/PyQt6 clash).
-3. Load a frame, click **run cpsam**, then correct masks (right-click to draw an
-   outline, Ctrl+right-click to delete) and `Ctrl+S` to save `*_seg.npy` labels.
+3. Load a frame, click **run cpsam**, then correct masks (Shift+click or right-click
+   starts an outline, click again to close it; Ctrl+click deletes) and `Ctrl+S` to save `*_seg.npy` labels.
 4. In the **Models** tab, **Train new model**, pointing at the folder with both
    images and `_seg.npy` files. The result lands in `training_data/models/`.
 5. Use it: `crystal-detector-analyze image.png --model training_data/models/cpsam_YYYYMMDD_HHMMSS`.

@@ -2,7 +2,7 @@
 
 **Author:** Marek Wadinger.
 **Affiliation:** (to be added).
-**Correspondence:** marekwadinger5506@gmail.com
+**Correspondence:** <marekwadinger5506@gmail.com>
 **Draft:** v0.2, 2026-06-15.
 **Target journals (ranked):** *Computers & Chemical Engineering*;
 *Journal of Process Control*; *Powder Technology*; *Crystal Research
@@ -34,20 +34,20 @@ homogeneous-slurry assumption, (v) per-detection depth-aware metric
 correction via the geometric thin-lens model, (vi) single-component
 aggregation into the final CSD. The pipeline is validated on a
 1920 × 1080 video from a Fujinon HF35HA-1B + Hanwha HCB-6000 stack at
-Slovenské cukrovary, Sereď, operating at F/1.6 with a 45 mm extension
+Slovenské cukrovary, Sereď, operating at F/1.6 with a 60 mm extension
 tube (verified by operator caliper measurement). Across 60 sampled
 frames the pipeline recovers an internally self-consistent
-distribution of detector-bandpassed features with **median 0.097
+distribution of detector-bandpassed features with **median 0.074
 mm**, log-normal shape parameter ``s = 0.39`` (CV ≈ 0.40 on the
 depth-corrected sizes). Independent Mastersizer granulometry of
 the same product (``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``)
 demonstrates that this distribution is *not* a measurement of the
-underlying crystal population — at 2.18 µm/px the detector area
+underlying crystal population — at 1.66 µm/px the detector area
 filter ``[80, 8000] px²`` bandpasses ≈ 20–200 µm features and
 categorically excludes the ≈ 9 µm crystal population imaged in the
 seed-magma preparation step (see § 7). (A prior version of the
 pipeline using the inherited edge-based detector recovered median
-0.052 mm / CV 0.82 from the same video; § 7.5 documents the
+0.037 mm / CV 0.83 from the same video; § 7.5 documents the
 detector change and explains why both numbers are visible in the
 codebase.) The geometric, defocus, and disambiguation stages are
 validated against textbook optics and against the per-pixel
@@ -277,7 +277,7 @@ follow-up list.
 
 The camera observes the slurry through a circular borosilicate
 sight glass marked ``DIN 8902``, mounted on an 8-bolt PN10 flange
-(geometry consistent with DN100, ≈ Ø100 mm clear, ≈ 15 mm thick).
+(Ø150 mm / DN150, 20 mm thick, both measured on site 2026-09-07).
 The lens stack is horizontal, with transmitted illumination from
 an LED inside the vessel on the opposite side of the slurry. Full
 hardware audit and photographs are in the project's lens
@@ -286,17 +286,25 @@ documentation (``docs/lens/README.md``).
 ### 2.2 Camera and lens
 
 The camera is a **Hanwha Vision HCB-6000**, an analogue HD box camera
-with a 1/2.8″ progressive-scan CMOS sensor (5.37 × 3.02 mm active
-area, 1920 × 1080 px, 2.8 µm pitch, 30 fps, AHD/TVI/CVI/CVBS-PAL
+with a 1/2.8″ progressive-scan CMOS sensor (Sony IMX307/IMX327 die,
+identified from the datasheet total-pixel count 1945 × 1097;
+5.57 × 3.13 mm active area, 1920 × 1080 px, 2.9 µm pitch, 30 fps, AHD/TVI/CVI/CVBS-PAL
 output). The lens is a **Fujinon HF35HA-1B**, a C-mount machine-
 vision lens with f = 35 mm, F-number range F/1.6 – F/22, image-format
 2/3″ (Ø 11 mm circle), minimum object distance 0.25 m, back focal
 distance 15.03 mm in air, manual iris with lock screws. Operator
-caliper measurement on 2026-06-15 yielded an extension tube of
-**e = 45 mm** between the lens C-mount thread and the camera body,
-and an F-number setting of **F/1.6** (wide open). These two numbers
-together fix the working distance d_focus = 62.2 mm and the scale
-2.18 µm/px (§3.1); they are used throughout this paper.
+measurement on site (2026-06-15, corrected 2026-09-07) yielded an
+extension tube of **e = 60 mm** between the lens C-mount thread and
+the camera body, an F-number setting of **F/1.6** (wide open), and a
+lens-front-to-glass air gap of **a = 20 mm**. These numbers together
+fix the working distance d_focus = 55.1 mm and the scale
+1.66 µm/px (§3.1); they are used throughout this paper.
+
+> **Revision note (2026-09-07).** Geometry and all detector outputs
+> (CSD, KPI tables) in this manuscript were rerun at the measured
+> e = 60 mm / t = 20 mm / a = 20 mm. The dent-sharpness figure
+> (Figure 5c) and its ``c = 5.8 µm`` calibration predate the
+> correction; its generating script is not in the repository.
 
 ### 2.3 Recording protocol and frame conditioning
 
@@ -372,10 +380,10 @@ places it (Pertuz et al., 2013).
 ![Figure 3 — Linear mm/px vs object distance](../optics/figures/01_mm_per_pixel.png)
 *Figure 3 — **How does the metric scale change with depth?**
 Object-plane pixel size as a function of object distance for the
-case-study lens (f = 35 mm, **e = 45 mm**, focus = 62.2 mm — verified
+case-study lens (f = 35 mm, **e = 60 mm**, focus = 55.1 mm — verified
 by operator caliper, 2026-06-15). **Strictly linear in d_o**, as
 predicted by the thin-lens identity ``M = i/d_o``. At the focused
-plane the scale is **2.18 µm/px**; doubling the depth doubles the
+plane the scale is **1.66 µm/px**; doubling the depth doubles the
 µm/px.*
 
 ### 3.2 Sight-glass refractive shift
@@ -383,7 +391,7 @@ plane the scale is **2.18 µm/px**; doubling the depth doubles the
 A parallel sight glass of thickness ``t`` and index ``n_g`` shifts the
 apparent object distance toward the lens by ``Δ = t · (1 − 1/n_g)``
 (Hecht §5.6, paraxial limit). For DIN 8902 borosilicate at the
-estimated 15 mm thickness and ``n_g = 1.47``, ``Δ = 4.80 mm``,
+measured 20 mm thickness and ``n_g = 1.47``, ``Δ = 6.39 mm``,
 independent of distance. The exact projection through a thick flat
 port is a 12th-degree polynomial (Agrawal et al., 2012); the paraxial
 form here is adequate for sub-percent pixel-pitch budgeting but not
@@ -392,7 +400,7 @@ for sub-pixel metric reconstruction — a limitation we discuss in §8.
 ![Figure 4 — Sight-glass refractive shift](../optics/figures/05_sight_glass_shift.png)
 *Figure 4 — **How much does the sight glass distort distances?**
 Apparent vs real object distance through the DIN 8902 borosilicate
-disc. The shift is a **constant 4.80 mm** (independent of object
+disc. The shift is a **constant 6.39 mm** (independent of object
 distance, by the paraxial identity ``Δ = t(1 − 1/n_g)``). It is
 folded into every ``d_o`` in subsequent analysis but **does not
 change the linear scaling rate** of Figure 3 — only the absolute
@@ -406,10 +414,11 @@ setting). An earlier revision of this manuscript used the estimated
 ``e ≈ 10 mm`` (inferred from snapshot FOV anchoring against assumed
 mid-strike crystal size) and reported a CSD median of 0.25 mm.
 Operator caliper measurement on 2026-06-15 yielded
-**e = 45 mm** — a factor-of-4.5 revision that shrinks µm/px from
-10.4 to **2.18** and moves the working distance to **62 mm**
+**e = 45 mm**, corrected on 2026-09-07 to **e = 60 mm** — a
+factor-of-6 revision that shrinks µm/px from
+10.4 to **1.63** and moves the working distance to **55 mm**
 (a true macro setup). The earlier "0.25 mm mid-strike"
-interpretation moved to "**0.052 mm**" with the corrected scale.
+interpretation moved to "**0.037 mm**" with the corrected scale.
 At the time, this was read as "consistent with the first hour of
 a 4-hour strike"; § 7 retracts that interpretation — both numbers
 sit far above the actual ≈ 9 µm seed-magma population (Mastersizer
@@ -427,8 +436,8 @@ verification step; longer-term, the growth-curve self-validation of
 ![Figure 5 — Extension-tube sweep](../optics/figures/06_extension_tube_sweep.png)
 *Figure 5 — **How does the extension tube control the macro range?**
 Object-plane pixel size as a function of object distance, parameterised
-by extension tube length e. The verified e = 45 mm (purple) places
-the focused plane at d_focus = 62.2 mm and the scale at 2.18 µm/px.
+by extension tube length e. The verified e = 60 mm places
+the focused plane at d_focus = 55.1 mm and the scale at 1.66 µm/px.
 A wrong estimate of e propagates as a *multiplicative* error on the
 final crystal size — the v0.1 manuscript's e = 10 mm (blue) was 4.5×
 too short, which is why the earlier reported median was 4.8× too
@@ -438,8 +447,8 @@ large.*
 
 A row-wise autocorrelation analysis on a single frame yields a
 median first-decorrelation pixel offset of 42.5 px. At the
-verified 2.18 µm/px the corresponding texture period is ~85 px
-≈ 0.19 mm. The earlier reading of this period as "the 0.05–0.10
+verified 1.66 µm/px the corresponding texture period is ~85 px
+≈ 0.14 mm. The earlier reading of this period as "the 0.05–0.10
 mm crystal sizes typical of the first hour of a boiling-pan
 strike" is retracted (see § 7): the imaged product is the ≈ 9 µm
 seed-magma population, well below the texture period this
@@ -459,27 +468,28 @@ geometry (§ 2.1) and an *in-situ* empty-tank measurement (described
 below) lets us pin down the axial position of the focal slab to
 within a few micrometres.
 
-The focused object distance is ``d_focus = 62.2 mm`` measured **from
+The focused object distance is ``d_focus = 55.1 mm`` measured **from
 the front principal plane H**, not from any external surface of the
 lens. For a 35 mm machine-vision C-mount lens, H sits inside the
 optical assembly; the manufacturer datasheet specifies the back focal
 distance (BFD = 15.03 mm in air, rear vertex to sensor at infinity
-focus) but does not publish the H-to-front-element offset, so a
-purely geometric stack-up — lens-internal H position + unmeasured
-lens-to-glass air gap + 15 mm glass — leaves the slab's location
-in the slurry uncertain to order ±15 mm. Figure 5b illustrates the
-stack.
+focus) but does not publish the H-to-front-element offset. With the
+air gap ``a = 20 mm`` and glass ``t = 20 mm`` now measured, the
+in-situ result of § 3.5.1 closes the stack-up and places H about
+21.5 mm behind the front element (§ 3.5.4). Figure 5b illustrates
+the stack.
 
 ![Figure 5b — Optical layout](../optics/figures/18_optical_layout.png)
 *Figure 5b — **What does the optical chain from sensor to slurry
 actually look like?** Schematic (not to scale). Variables: lens focal
-length ``f = 35 mm``, extension tube ``e = 45 mm``, sensor at
-image distance ``i = f + e = 80 mm``, glass thickness ``t = 15 mm``,
+length ``f = 35 mm``, extension tube ``e = 60 mm``, sensor at
+image distance ``i = f + e + x = 96 mm`` (x ≈ 1 mm focus-ring travel), lens-to-glass air gap
+``a = 20 mm``, glass thickness ``t = 20 mm``,
 glass index ``n_g = 1.47``, refractive shift
-``Δ = t(1−1/n_g) = 4.80 mm`` (the 15-mm-thick glass *appears*
-``t − Δ = 10.20 mm`` thick in the thin-lens model), focused object
-distance ``d_focus = 62.2 mm`` from the front principal plane H,
-and the focal-plane offset ``δ ≈ 13 µm`` past the inner glass face
+``Δ = t(1−1/n_g) = 6.39 mm`` (the 20-mm-thick glass *appears*
+``t − Δ = 13.61 mm`` thick in the thin-lens model), focused object
+distance ``d_focus = 55.1 mm`` from the front principal plane H,
+and the focal-plane offset ``δ ≈ 8 µm`` past the inner glass face
 recovered from the in-situ measurement of § 3.5.1.*
 
 #### 3.5.1 Pinning the slab from glass-dent sharpness
@@ -509,52 +519,56 @@ Per-frame glass-dent sharpness measured in two empty-tank windows
 4 hours apart in the case-study recording. The two distributions
 overlap to within 11 %, confirming the dents are at one fixed depth.
 Top axis: implied object distance ``d_o`` (near-side root) per
-sharpness, with ticks pinned to the bottom-axis log decades. The
+sharpness, with ticks pinned to the bottom-axis log decades (this
+axis was drawn for the superseded d_focus = 62.2 mm; the sharpness
+histograms themselves are pixel-domain and unaffected). The
 predicted focal-plane sharpness (green dashed) is ≈ 56× brighter
-than the dents, placing them ~13 µm in front of the focal plane.*
+than the dents, placing them ~8 µm in front of the focal plane.*
 
 Inverting the diffraction-floor PSF model (§ 4.2) with σ_floor ≈
 1.4 µm gives a dent circle of confusion ``c ≈ 5.8 µm``. Solving
 ``c(d_o) = K · |d_o − d_focus|/d_o`` with
-``K = f²/(N(d_focus − f)) = 28.15 mm`` for the *near-side* root
+``K = f²/(N(d_focus − f)) = 38.13 mm`` for the *near-side* root
 (the dents are between lens and slurry, so they cannot be on the
 far side):
 
 $$ d_\\mathrm{dent} \\approx \\frac{K \\cdot d_\\mathrm{focus}}{K + c}
-   \\approx 62.187 \\text{ mm}, $$
+   \\approx 55.074 \\text{ mm}, $$
 
-i.e. the dents sit **≈ 13 µm in front of the focal plane**.
+i.e. the dents sit **≈ 8 µm in front of the focal plane** (the
+``c ≈ 5.8 µm`` inversion was calibrated at the superseded 2.18 µm/px
+scale; a rerun at 1.66 µm/px is pending and may move δ by a few µm).
 
 #### 3.5.2 Which face of the glass
 
 A simple physical argument resolves which face of the sight glass the
-dents sit on. In thin-lens (apparent) coordinates, the 15 mm physical
-glass appears compressed to ``t − Δ = 10.20 mm`` thick (Figure 5b).
+dents sit on. In thin-lens (apparent) coordinates, the 20 mm physical
+glass appears compressed to ``t − Δ = 13.61 mm`` thick (Figure 5b).
 Two hypotheses:
 
-| Dent location | Outer-face apparent ``d_o`` | Inner-face apparent ``d_o`` | Position of focal plane (62.200 mm) |
+| Dent location | Outer-face apparent ``d_o`` | Inner-face apparent ``d_o`` | Position of focal plane (55.082 mm) |
 |---|---:|---:|---|
-| **outer (lens-facing) face** | 62.187 mm | 72.387 mm | inside the glass slab — physically impossible |
-| **inner (slurry-facing) face** | 51.987 mm | 62.187 mm | **13 µm past the inner face, in the slurry** |
+| **outer (lens-facing) face** | 55.074 mm | 68.679 mm | inside the glass slab — physically impossible |
+| **inner (slurry-facing) face** | 41.469 mm | 55.074 mm | **8 µm past the inner face, in the slurry** |
 
 The outer-face hypothesis places the focal plane inside the bulk
 glass material, which is incompatible with the camera ever yielding
 focused images of slurry features (which it manifestly does later
 in the strike). The inner-face hypothesis places the focal plane
-13 µm into the slurry past the inner glass surface — the *only*
+8 µm into the slurry past the inner glass surface — the *only*
 consistent geometry.
 
 #### 3.5.3 Operational consequences
 
-The focal slab therefore sits **~13 µm into the slurry beyond the
+The focal slab therefore sits **~8 µm into the slurry beyond the
 inner sight-glass surface**, with the absolute number subject to a
 ~2× uncertainty inherited from the c = 5.8 µm self-calibration of the
 sharpness model (a future calibration anchored against a focused
 crystal from mid-strike would tighten this to better than ±1 µm).
-The slab is sub-millimetre *thick*: DoF at F/1.6 has FWHM ≈ 7 µm of
+The slab is sub-millimetre *thick*: DoF at F/1.6 has FWHM ≈ 4.5 µm of
 object depth (§ 4.3), and the usable detection range (where the
 circle of confusion exceeds one sensor pixel) extends to about
-±0.1 mm.
+±0.07 mm.
 
 Two consequences carried through the rest of the paper. First, the
 *spatial* sampling claim of the pipeline is not "this is the crystal
@@ -569,49 +583,42 @@ of magnitude tighter than the 900 mm annular gap, so any front/back-
 disambiguation discussion (§ 6) is bounded by optics, not by vessel
 walls.
 
-#### 3.5.4 The one remaining unknown: the lens-to-glass air gap
+#### 3.5.4 Closing the stack-up with the measured air gap
 
 The empirical measurement of § 3.5.1 pins the focal plane relative to
-the *inner glass face*. It does **not** pin the focal plane in the
-lab frame — i.e., where the optical assembly sits in space relative
-to the vessel wall — because the lens-internal position of the front
-principal plane H is not published in the HF35HA-1B datasheet. This
-leaves one open variable, the lens-to-glass air gap ``a`` of
-Figure 5b.
+the *inner glass face*. Placing it in the lab frame additionally needs
+the lens-to-glass air gap ``a`` (Figure 5b), which was measured on
+site on 2026-09-07 as **a = 20 mm** (lens front rim to outer glass
+face), together with ``t = 20 mm`` and ``e = 60 mm``.
 
 From the §3.5.1 result and the refractive shift (§3.2), the real
 (unshifted) distance from H to the inner glass face is
 
 $$ \\mathrm{real}(H \\to \\text{inner glass}) =
    d_\\mathrm{dent}^\\mathrm{(apparent)} + \\Delta
-   = 62.187 + 4.80 = 66.987 \\text{ mm}, $$
+   = 55.074 + 6.39 = 61.47 \\text{ mm}, $$
 
 so the real distance from H to the outer (lens-facing) glass face is
-``66.987 − t = 51.987 mm``. Decomposing this along the optical axis:
+``61.47 − t = 41.47 mm``. With ``a = 20 mm`` measured, the only
+unpublished lens-internal quantity follows directly:
 
-$$ 51.987 \\text{ mm}
-   = \\underbrace{\\text{H} \\to \\text{front element}}_{\\text{lens-internal,
-   unpublished}}
-   + a, $$
+$$ \\boxed{\\text{H} \\to \\text{front element} = 41.47 - a = 21.5 \\text{ mm}}, $$
 
-and therefore
-
-$$ \\boxed{a = 51.987 \\text{ mm} - (\\text{H} \\to \\text{front element})}. $$
-
-For a 35 mm machine-vision lens of this class, the lens-internal
-offset is plausibly in the range 0 – 29.5 mm (the lens body length),
-giving an admissible interval ``a ∈ [22.5, 52.0] mm``. Without an
-independent measurement of either ``a`` itself or the lens-internal
-offset, the absolute axial position of the focal slab in the lab
-frame remains uncertain by that interval — even though its position
-relative to the inner glass face is pinned to ±2 µm by the
-in-situ dent measurement.
-
-The cheapest closing measurement is a single caliper reading of the
-distance from the lens front rim to the outer glass face on the next
-plant visit; that number is ``a`` directly. The §3.5 result then
-locks the whole optical chain absolutely, with no remaining
-unpublished quantity.
+which sits inside the 29.5 mm lens body. The image side fixes the
+rear principal plane independently: the sensor is recessed by the
+C-mount flange distance (17.53 mm), so ``i = 96 mm`` from the sensor
+puts H′ 12.0 mm behind the (extended) front element. H and H′ are thus ≈ 10 mm
+apart — the lens is a thick lens, not a thin one, and both planes
+land inside the 29.5 mm body. Inputs: the measured e, a, t and lens
+body; the observed fact that the glass dents are in focus (§ 3.5.1);
+the standard C-mount flange depth of 17.53 mm (the HCB-6000 is
+CS-mount with a 5 mm C-mount adapter ring; whether the measured 60 mm
+includes that ring is unconfirmed); and the focus-ring travel
+``x ≈ 1 mm``. The HF35HA-1B focus ring carries only NEAR/FAR direction
+labels and no index; the operator counted about three exposed helicoid
+turns, estimated at 1 mm of travel (2026-09-07). Each ±1 mm of
+travel moves the scale by ∓1.6 %; a caliper on the lens body length
+(29.5 mm at FAR per datasheet, plus travel) would fix it exactly.
 
 ---
 
@@ -642,7 +649,7 @@ plane?** **Left:** geometric CoC vs d_o, in *object-space coordinates*
 — the curve is asymmetric (blur grows fast on the near side, saturates
 at the hyperfocal limit on the far side). **Right:** same data plotted
 against reciprocal distance ``u = 1/d_o`` — **exactly symmetric and
-linear** about the focus point u_focus = 1/62.2 mm⁻¹. This reciprocal-
+linear** about the focus point u_focus = 1/55.1 mm⁻¹. This reciprocal-
 space symmetry is the algebraic origin of the front/back ambiguity
 that §6 addresses with a Bayesian prior.*
 
@@ -671,7 +678,7 @@ the focused plane, asymmetric in ``d_o``, symmetric in ``1/d_o`` —
 ![Figure 7 — Sharpness vs distance, three views](../optics/figures/03_sharpness_vs_distance.png)
 *Figure 7 — **Is the defocus sharpness profile really a power law, not
 a Gaussian?** Sharpness vs defocus δ = d_o − d_focus, plotted in µm
-because the FWHM at F/1.6 is only 6.5 µm. Three panels make the
+because the FWHM at F/1.6 is only 4.3 µm. Three panels make the
 power-law identity testable visually. **Left (linear y, ±100 µm):**
 the Gaussian-PSF model (blue) and diffraction-+-sensor-floor model
 (orange) coincide with a FWHM-matched Gaussian (red dashed) at the
@@ -800,8 +807,8 @@ where the optics are nearly in focus, and the peripheral regions
 populate the defocused layers. The variability in apparent size
 across the detected set is structurally consistent across frames
 — it is detector output behaviour, not per-frame noise — but at
-2.18 µm/px the area filter ``[80, 8000] px²`` bandpasses ≈ 20–
-200 µm features, well above the ≈ 9 µm crystal population
+1.66 µm/px the area filter ``[80, 8000] px²`` bandpasses ≈ 15–
+150 µm features, well above the ≈ 9 µm crystal population
 (Mastersizer ground truth, § 7). The features detected here are
 therefore not the seed-magma crystals themselves; cross-check
 with § 7.*
@@ -910,7 +917,7 @@ Figure 13.
 video, split by disambiguation outcome (focal-plane subset, near-side,
 far-side). **Middle:** recovered depth assignment per crystal — the
 two clusters sit symmetric in 1/d_o around the focal plane
-d_focus = 62.2 mm, with a spread of only ±0.15 mm because at F/1.6
+d_focus = 55.1 mm, with a spread of only ±0.005 mm because at F/1.6
 the in-focus slice is essentially flat. **Right:** naive (assume
 mm/px at focus for all) vs depth-corrected size estimates — the mean
 correction is only **0.01 %** of the median size, because the
@@ -937,10 +944,10 @@ actually be at that depth*.
 **d_o = 62.0 mm (near, 2.169 µm/px):**
 ![near](../optics/figures/07_overlay_near.png)
 
-**d_o = 62.2 mm (at focus, 2.176 µm/px):**
+**d_o = 55.1 mm (at focus, 1.664 µm/px):**
 ![focus](../optics/figures/07_overlay_at_focus.png)
 
-**d_o = 62.4 mm (far, 2.183 µm/px):**
+**d_o = 55.6 mm (far, 1.680 µm/px):**
 ![far](../optics/figures/07_overlay_far.png)
 
 *Figure 14 — **How much does mm/px actually change across the
@@ -986,7 +993,7 @@ only after stopping the lens down (§9.3).*
 > strike — so the population in front of the lens is the ≈ 9 µm
 > Mastersizer distribution. The detector's area filter
 > ``[min_area = 80, max_area = 8000] px²`` at the documented
-> ``2.18 µm/px`` bandpasses **≈ 20–200 µm equivalent features**, so
+> ``1.66 µm/px`` bandpasses **≈ 15–150 µm equivalent features**, so
 > *every* CSD number in §§ 7.1–7.5 lies entirely *above* the true
 > crystal-size distribution. The numbers measure agglomerate /
 > cluster / area-bandpassed structure that the detector picks up,
@@ -999,7 +1006,7 @@ only after stopping the lens down (§9.3).*
 ### 7.1 The depth-corrected CSD (detector-limited)
 
 With the inherited edge-based detector, the case-study video yields
-**14 654 detections across 60 sampled frames**, aggregated into a
+**18 823 detections across 60 sampled frames**, aggregated into a
 single-component CSD shown in Figure 15.
 
 ![Figure 15 — Final depth-corrected CSD](../optics/figures/14_csd_final.png)
@@ -1011,7 +1018,7 @@ for every detection. **Middle:** depth-corrected physical-size
 histogram with log-normal (red) and Gaussian (green dashed) fits
 superimposed. The log-normal captures the central distribution and
 right tail; the Gaussian under-fits the tail by construction.
-**Median = 0.097 mm, CV = 0.40, log-normal shape s = 0.39** —
+**Median = 0.074 mm, CV = 0.40, log-normal shape s = 0.40** —
 these statistics describe the distribution of features the
 detector resolves (≈ 20–200 µm bandpass), not the underlying
 crystal population (Mastersizer ``Dv(50) = 6.81 µm``); see § 7
@@ -1026,28 +1033,28 @@ depth-independent.*
 
 | Statistic | Value |
 |---|---:|
-| Detections | **14 654** (60 frames × ~244/frame) |
-| Median physical size | **0.052 mm** |
-| Mean physical size | **0.074 mm** |
-| Std deviation | 0.061 mm |
-| Coefficient of variation (CV) | **0.82** |
-| 5th / 25th / 75th / 95th percentiles | 0.016 / 0.036 / 0.085 / 0.203 mm |
-| Log-normal shape parameter ``s`` | 0.62 |
-| Log-normal scale ``σ`` | 0.059 |
+| Detections | **18 823** (60 frames × ~314/frame) |
+| Median physical size | **0.037 mm** |
+| Mean physical size | **0.051 mm** |
+| Std deviation | 0.042 mm |
+| Coefficient of variation (CV) | **0.83** |
+| 5th / 25th / 75th / 95th percentiles | 0.021 / 0.027 / 0.055 / 0.134 mm |
+| Log-normal shape parameter ``s`` | 0.57 |
+| Log-normal scale ``σ`` | 0.042 |
 
 The log-normal fit (Figure 15 middle, red curve) captures the
 distribution shape over its central range; the Gaussian fit
 (dashed green) is shown as a reference and clearly under-fits
-the right tail. The log-normal shape parameter ``s = 0.62``
+the right tail. The log-normal shape parameter ``s = 0.57``
 corresponds to a geometric standard deviation of
-``exp(s) ≈ 1.86``. This shape statistic is reported as a
+``exp(s) ≈ 1.77``. This shape statistic is reported as a
 property of the detector's bandpassed feature distribution; see
 § 7 preface for why it is not a statement about the underlying
 crystal population.
 
 ### 7.2 Process interpretation — retracted
 
-*Earlier versions of this section interpreted the 0.052 mm median as
+*Earlier versions of this section interpreted the 0.05 mm median as
 "squarely in the seed-magma range (0.05–0.15 mm)" and as
 "consistent with just-past-seeding A-strike crystals … confirmed by
 the plant operator". Both readings are retracted.* The recording
@@ -1055,12 +1062,12 @@ captures the **brine / seed-magma preparation step** upstream of the
 A-strike pan, and the size ground truth for this product is the
 Mastersizer granulometry cited in the § 7 preface
 (``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``) — roughly an order of
-magnitude **below** the 0.052 mm median this detector returns. The
-0.052 mm number is therefore not a measurement of the crystal
+magnitude **below** the 0.037 mm median this detector returns. The
+0.037 mm number is therefore not a measurement of the crystal
 population; it is the centroid of the area-bandpass window
 [20 µm, 200 µm] that the detector's
 ``[min_area = 80, max_area = 8000] px²`` filter imposes at
-2.18 µm/px. The log-normal shape parameter (``s = 0.62``) and CV
+1.66 µm/px. The log-normal shape parameter (``s = 0.62``) and CV
 (0.82) describe the *bandpassed* distribution, not the underlying
 crystal CSD.
 
@@ -1171,7 +1178,7 @@ adjustment per installation:
 
 | Constant | Value | Role |
 |---|---:|---|
-| `_PEAK_MIN_DISTANCE` | 12 px | minimum spacing between seeds (≈ ½ expected crystal diameter at 2.18 µm/px) |
+| `_PEAK_MIN_DISTANCE` | 12 px | minimum spacing between seeds (≈ ½ expected crystal diameter at 1.66 µm/px) |
 | `_PEAK_THRESHOLD_ABS` | 6.0 px | minimum distance-transform value to qualify as a seed (rejects slivers) |
 | `_H_MAXIMA_PARAM` | 2.5 | h-maxima height threshold; suppresses peaks not at least 2.5 above their plateau (kills speckle) |
 
@@ -1202,15 +1209,15 @@ statistics** from the edge-based run:
 
 | Statistic | **Watershed (this run)** | Edge-based (legacy, § 7.1) | Change |
 |---|---:|---:|---:|
-| Detections | **51 974** | 14 654 | **3.5× more crystals** |
-| Median physical size | **0.097 mm** | 0.052 mm | **+86 %** |
-| Mean | **0.105 mm** | 0.074 mm | +42 % |
-| Std deviation | 0.045 mm | 0.061 mm | −26 % |
-| **CV** | **0.41** | 0.82 | **−50 %** |
-| 5 / 25 / 75 / 95 percentiles | 0.053 / 0.076 / 0.133 / 0.195 | 0.016 / 0.036 / 0.085 / 0.203 | shifted up + tightened |
-| Log-normal shape ``s`` | **0.40** | 0.62 | tighter |
-| Log-normal scale | 0.097 | 0.059 | doubled |
-| Near / far Bayes split | 66 / 34 | 79 / 21 | more symmetric |
+| Detections | **52 302** | 18 823 | **2.8× more crystals** |
+| Median physical size | **0.074 mm** | 0.037 mm | **+103 %** |
+| Mean | **0.080 mm** | 0.051 mm | +59 % |
+| Std deviation | 0.032 mm | 0.042 mm | −23 % |
+| **CV** | **0.40** | 0.83 | **−52 %** |
+| 5 / 25 / 75 / 95 percentiles | 0.039 / 0.056 / 0.098 / 0.144 | 0.021 / 0.027 / 0.055 / 0.134 | shifted up + tightened |
+| Log-normal shape ``s`` | **0.40** | 0.57 | tighter |
+| Log-normal scale | 0.074 | 0.042 | +79 % |
+| Near / far Bayes split | 72 / 28 | 70 / 30 | unchanged |
 
 Three things move in the directions a structurally better
 detector should produce *on the bandpassed feature population*
@@ -1235,15 +1242,15 @@ above the true crystal scale — see § 7 preface):
 
 The watershed numbers for this section are:
 
-> **Median = 0.097 mm, CV = 0.40, single-component log-normal with
-> ``s = 0.39``** — recovered with the watershed detector at the
+> **Median = 0.074 mm, CV = 0.40, single-component log-normal with
+> ``s = 0.40``** — recovered with the watershed detector at the
 > verified Camera 100 hardware configuration.
 >
 > These numbers, like the pre-watershed numbers of § 7.1, are
 > **not a crystal-size measurement** of the imaged product. The
 > recording captures the brine / seed-magma preparation step, whose
 > true CSD is the ≈ 9 µm Mastersizer distribution cited in the § 7
-> preface. The watershed median at 97 µm sits well above the
+> preface. The watershed median at 74 µm sits well above the
 > Mastersizer's ``Dv(90) = 18.5 µm``, so the watershed has not
 > recovered the crystal population either — it has filled in the
 > within-detector selection bias of § 7.4 but inherits the same
@@ -1357,7 +1364,7 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
   granulometry now cited in § 7 is one such reference but lies
   below the detector's bandpass).
 - **The pipeline produces an internally self-consistent CSD of
-  detector-bandpassed features: median 0.097 mm, CV 0.40, log-
+  detector-bandpassed features: median 0.074 mm, CV 0.40, log-
   normal s = 0.39** (watershed detector + full crop) — derived from
   raw video with a complete numerical audit trail at the verified
   Camera 100 hardware configuration. These numbers describe the
@@ -1372,7 +1379,7 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
   the same product gives ``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``
   (``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf``). The
   recording captures the brine / seed-magma preparation step rather
-  than the A-strike, and at the documented 2.18 µm/px scale the
+  than the A-strike, and at the documented 1.66 µm/px scale the
   area filter ``[80, 8000] px²`` bandpasses ≈ 20–200 µm features,
   entirely above the ≈ 9 µm crystal population. The numbers
   reported in § 7 therefore describe agglomerate / cluster /
@@ -1388,7 +1395,7 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
   empirical prior.
 - **Paraxial sight-glass model breaks at sub-pixel scales.** Exact
   flat-port projection requires Agrawal et al. (2012)'s 12th-degree
-  polynomial; for the 0.05 mm crystals at 2.18 µm/px the residual
+  polynomial; for the 0.05 mm crystals at 1.66 µm/px the residual
   refractive distortion is < 1 % and below detector noise, but
   metric reconstruction to sub-pixel precision would require the
   refractive correction.
@@ -1399,7 +1406,7 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
 - **Soft-anchoring against expected crystal size is unreliable.** The
   v0.1 manuscript anchored e ≈ 10 mm by matching the in-frame
   autocorrelation period to "typical massecuite" — and was 4.5× off
-  the true e = 45 mm without any data-internal inconsistency flagging
+  the true e = 60 mm without any data-internal inconsistency flagging
   the error. Caliper measurement (or §8's growth-curve self-
   calibration) remains the only robust route.
 
@@ -1442,12 +1449,12 @@ disambiguation under a single-component homogeneous-slurry prior,
 per-detection thin-lens depth correction, and single-component
 aggregation. On the Slovenské cukrovary case-study video the
 pipeline recovers an internally self-consistent distribution of
-detector-bandpassed features (**median 0.097 mm, CV 0.40, log-
+detector-bandpassed features (**median 0.074 mm, CV 0.40, log-
 normal shape parameter s = 0.39**, watershed detector + full crop).
 The independent Mastersizer granulometry of the same product
 (``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``) demonstrates that this
 distribution is *not* a measurement of the underlying crystal
-population — at the documented 2.18 µm/px scale, the area filter
+population — at the documented 1.66 µm/px scale, the area filter
 ``[80, 8000] px²`` bandpasses ≈ 20–200 µm equivalent features and
 categorically excludes the 9 µm crystal population. The optical
 model nevertheless matches measured per-pixel sharpness statistics
