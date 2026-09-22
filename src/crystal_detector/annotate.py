@@ -173,7 +173,10 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
         f"    {k('Ctrl+click')} ({k('Cmd+click')} on Mac) deletes. Every edit autosaves."
     )
     print(
-        f" {step[2]} {k('Ctrl+S')} ({k('Cmd+S')}) only if you changed nothing, then {k('close the window')}"
+        f" {step[2]} wait for the green {_ok('saved')} line below, then {k('close the window')}"
+    )
+    print(
+        f"    no green line? (you accepted the proposals untouched) press {k('Ctrl+S')} ({k('Cmd+S')})"
     )
     print(_c("36", "─" * 64))
 
