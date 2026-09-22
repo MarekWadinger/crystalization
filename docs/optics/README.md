@@ -627,23 +627,25 @@ cross-checked, please flag it — it is a bug, not a feature.
 ## 14. Hallucination audit (assistant self-check)
 
 Specific numerical claims I have made in §§ 1–8 and the trace I followed
-to verify they are not invented:
+to verify they are not invented. Rows marked *superseded* trace the
+2026-06 setup (e = 45 mm, 2.8 µm pitch, d_focus 165 mm) and are kept
+only as the audit trail of that revision; current values are in §1 and §12.
 
 | Number | Where | Trace |
 |---:|---|---|
 | **2.9 µm/px** sensor pitch | §1 | Sony IMX307/IMX327 unit cell; HCB-6000 datasheet total-pixel count 1945×1097 identifies the die |
 | **5.57 × 3.13 mm** sensor active | §1 | 1920 × 1080 × 2.9 µm |
 | **6.39 mm** glass shift | §2.1 | 20 · (1 − 1/1.47) = 6.395 mm — Hecht §5.6 formula, verified in `test_sight_glass_shift_independent_of_distance` |
-| **157.5 mm** d_focus at infinity ring | §2 | 35 · 45 / (45 − 35) = 157.5 — thin-lens equation |
-| **165 mm** chosen d_focus | §2 | ESTIMATE within 157.5–200 mm bracket from infinity ring + 4 m ring |
-| **10.40 µm/px** at focus | §3 | 2.8 · 165 / 44.42 ≈ 10.40 — direct from `mm_per_pixel_at` |
-| **42.5 px** first-decorrelation | §3.1 | measured in this session, see Bash block above |
-| **96.2 px/mm** at focus | §3 | 1000 / 10.40 = 96.15 — reciprocal of µm/px |
-| **2355.8 µm** ``c_∞`` at F/4 | §5 | (35/4) · 35 / (165 − 35) = 2.356 mm — `circle_of_confusion(lens, 165, 1e9)` |
-| **0.26 mm** DoF at F/4, 1-px | §5.1 | numerical from `circle_of_confusion`; reproducible |
-| **4.57** measured α (cropped) | §6.2 | `polyfit` over the 50–95 % quantile histogram on overlay-cropped frames; reproducible by `uv run python -m optics.measure` |
+| *superseded* — **157.5 mm** d_focus at infinity ring | §2 | 35 · 45 / (45 − 35) = 157.5 — thin-lens equation |
+| *superseded* — **165 mm** chosen d_focus | §2 | ESTIMATE within 157.5–200 mm bracket from infinity ring + 4 m ring |
+| *superseded* — **10.40 µm/px** at focus | §3 | 2.8 · 165 / 44.42 ≈ 10.40 — direct from `mm_per_pixel_at` |
+| *superseded* — **42.5 px** first-decorrelation | §3.1 | measured in this session, see Bash block above |
+| *superseded* — **96.2 px/mm** at focus | §3 | 1000 / 10.40 = 96.15 — reciprocal of µm/px |
+| *superseded* — **2355.8 µm** ``c_∞`` at F/4 | §5 | (35/4) · 35 / (165 − 35) = 2.356 mm — `circle_of_confusion(lens, 165, 1e9)` |
+| *superseded* — **0.26 mm** DoF at F/4, 1-px | §5.1 | numerical from `circle_of_confusion`; reproducible |
+| *superseded* — **4.57** measured α (cropped) | §6.2 | `polyfit` over the 50–95 % quantile histogram on overlay-cropped frames; reproducible by `uv run python -m optics.measure` |
 | **5.00** theoretical α | §6.2 | analytic integral of u⁴ · exp(−4π²σ²u²) du in §6.1 |
-| **−8.6 %** measured vs theory (cropped) | §6.2 | (4.57 − 5.00) / 5.00 |
+| *superseded* — **−8.6 %** measured vs theory (cropped) | §6.2 | (4.57 − 5.00) / 5.00 |
 
 Every other number in the document is either:
 
