@@ -80,14 +80,16 @@ uv sync --group crystal-detector-gui              # once
 uv run crystal-detector-annotate patrik           # opens the GUI on your next unlabelled frame
 ```
 
-In the GUI: **run cpsam** → fix outlines (Shift+click or right-click starts an
+The command registers the project's fine-tuned checkpoint with Cellpose and
+opens one frame at a time. In the GUI: pick the checkpoint under **custom
+models** and press **run** → fix outlines (Shift+click or right-click starts an
 outline, move the cursor, click again to close it; Ctrl+click on a crystal
-deletes it; use Cmd on macOS) → `Ctrl+S` → **File → Load image** for the next
-one. Stages before
-seeding (cleaning, filling_with_bubbles, concentration) have no crystals:
-delete every proposal and save the empty result — these negatives teach the
-model to ignore bubbles and glass scratches. When done, commit the `_seg.npy`
-files and push (the command prints the exact git lines).
+deletes it; use Cmd on macOS) → `Ctrl+S` → **close the window**; the next
+unlabelled frame opens by itself, closing without saving ends the session.
+Stages before seeding (cleaning, filling_with_bubbles, concentration) have no
+crystals: delete every proposal and save the empty result — these negatives
+teach the model to ignore bubbles and glass scratches. When done, commit the
+`_seg.npy` files and push (the command prints the exact git lines).
 
 Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
 VIDEO --who a,b,c,d` (skips the `discharge` pre-tail and `empty` stages).
