@@ -70,8 +70,8 @@ Each yields `frame_XX_ORIGINAL.png` (raw crop) and `frame_XX_PRE_AI.png`
 
 ### Team annotation
 
-Frames for the team live in `annotations/<name>/<stage>/HHMMSS.png` (one
-frame per process stage per person, Git LFS). Labels are committed next to
+Frames for the team live in `annotations/<name>/<stage>/HHMMSS.png` (three
+frames per crystal-bearing stage per person, seeding → discharge, Git LFS). Labels are committed next to
 them as `HHMMSS_seg.npy`.
 
 ```bash
@@ -88,11 +88,7 @@ deletes it; use Cmd on macOS). Cellpose **autosaves after every edit** and the
 terminal confirms each save; `Ctrl+S` is only needed if you changed nothing.
 Then **close the window**; the next unlabelled frame opens by itself.
 
-Stages before seeding (cleaning, filling_with_bubbles, concentration) have no
-crystals: delete every proposal (the last delete saves an empty label). If the
-model proposed nothing, Cellpose greys out saving — just close the window and
-answer `y` to "no crystals to mark?"; the command writes the empty label. These
-negatives teach the model to ignore bubbles and glass scratches. Closing a
+Closing a
 frame without a label and answering `N` ends the session. When done, the command
 stages your `_seg.npy` files and prints the commit and push lines to run.
 
@@ -100,7 +96,8 @@ stages your `_seg.npy` files and prints the commit and push lines to run.
 one at a time with the label loaded, so you can check and fix them.
 
 Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
-VIDEO --who a,b,c,d` (skips the `discharge` pre-tail and `empty` stages).
+VIDEO --who a,b,c,d` (three frames per person in each stage from seeding to
+discharge; earlier stages have no crystals and are not annotated).
 For a cross-stage fine-tune, pool the images and labels into one folder first;
 the GUI's **Train new model** only sees the folder of the loaded image.
 
