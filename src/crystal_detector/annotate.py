@@ -87,42 +87,67 @@ NEGATIVE_STAGES = {"cleaning", "filling_with_bubbles", "concentration"}
 _TTY = sys.stdout.isatty()
 
 
+def _c(code: str, t: str) -> str:
+    return f"\033[{code}m{t}\033[0m" if _TTY else t
+
+
 def _bold(t: str) -> str:
-    return f"\033[1m{t}\033[0m" if _TTY else t
+    return _c("1", t)
 
 
 def _ok(t: str) -> str:
-    return f"\033[32m✔ {t}\033[0m" if _TTY else f"OK  {t}"
+    return _c("32", f"✔ {t}") if _TTY else f"OK  {t}"
 
 
 def _bad(t: str) -> str:
-    return f"\033[31m✘ {t}\033[0m" if _TTY else f"!!  {t}"
+    return _c("31", f"✘ {t}") if _TTY else f"!!  {t}"
+
+
+def _leaderboard(current: str) -> None:
+    scores = sorted(
+        (
+            (
+                len(list(d.glob("*/*_seg.npy"))),
+                len(list(d.glob("*/*.png"))),
+                d.name,
+            )
+            for d in ANNOTATIONS.iterdir()
+            if d.is_dir()
+        ),
+        reverse=True,
+    )
+    medals = ["🥇", "🥈", "🥉", "  "]
+    print(_c("1;35", " leaderboard"))
+    for rank, (done, total, who) in enumerate(scores):
+        bar = _c("32", "█" * done) + _c("90", "░" * (total - done))
+        name = _c("1;33", f"{who:<8}") if who == current else f"{who:<8}"
+        print(f"  {medals[min(rank, 3)]} {name} {bar} {done}/{total}")
 
 
 def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
     stage = png.parent.name
     t = png.stem
-    print("\n" + "═" * 64)
+    rule = _c("36", "═" * 64)
+    print("\n" + rule)
     print(
-        _bold(
-            f" {name} · frame {n_done + 1} of {n_all} · {stage} · {t[:2]}:{t[2:4]}:{t[4:]}"
-        )
+        _c("1;36", f" {name} · frame {n_done + 1} of {n_all} · ")
+        + _c("1;35", stage)
+        + _c("1;36", f" · {t[:2]}:{t[2:4]}:{t[4:]}")
     )
-    print("═" * 64)
-    print(f" 1. user-trained models → choose {_bold(model)} → run")
+    print(rule)
+    step = [_c("33", f"{i}.") for i in (1, 2, 3)]
+    print(f" {step[0]} user-trained models → choose {_c('1;33', model)} → run")
     if stage in NEGATIVE_STAGES:
-        print(
-            f" 2. {_bold('NO crystals in this stage')}: delete every proposal"
-        )
+        no = _c("1;31", "NO crystals in this stage")
+        print(f" {step[1]} {no}: delete every proposal")
     else:
         print(
-            " 2. fix outlines: Shift+click starts, move, Shift+click closes;"
+            f" {step[1]} fix outlines: Shift+click starts, move, Shift+click closes;"
         )
         print("    Ctrl+click (Cmd on Mac) on a crystal deletes it")
-    print(
-        f" 3. {_bold('Ctrl+S / Cmd+S')} to save, then {_bold('close the window')}"
-    )
-    print("─" * 64)
+    save, close = _c("1;33", "Ctrl+S / Cmd+S"), _c("1;33", "close the window")
+    print(f" {step[2]} {save} to save, then {close}")
+    print(_c("36", "─" * 64))
 
 
 def _git_lines(folder: Path, name: str) -> str:
@@ -150,7 +175,13 @@ def annotate(name: str) -> None:
 
     from cellpose import io as cp_io
 
-    print("preparing the fine-tuned model (1.2 GB download on first run)…")
+    _leaderboard(name)
+    print(
+        _c(
+            "90",
+            "preparing the fine-tuned model (1.2 GB download on first run)…",
+        )
+    )
     with contextlib.redirect_stdout(_io.StringIO()):
         model_path = resolve_model()
         cp_io.add_model(str(model_path))  # listed under "custom models"
@@ -180,7 +211,8 @@ def annotate(name: str) -> None:
             break
         print(_ok(f"saved {_label(png).relative_to(ROOT)}"))
     done = sum(_label(p).exists() for p in frames)
-    print("\n" + "═" * 64)
+    print("\n" + _c("36", "═" * 64))
+    _leaderboard(name)
     if done == len(frames):
         print(_ok(_bold(f"all {done} frames labelled — now commit and push:")))
     else:
@@ -188,7 +220,7 @@ def annotate(name: str) -> None:
             _bold(f" {done}/{len(frames)} labelled")
             + " — commit what you have:"
         )
-    print(_git_lines(folder, name))
+    print(_c("36", _git_lines(folder, name)))
 
 
 def main() -> None:
