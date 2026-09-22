@@ -164,10 +164,8 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
     print(
         f" {step[0]} {k('user-trained models')} → choose {k(model)} → {k('run')}"
     )
-    print(
-        "    optional: pre-draws crystal outlines for you to correct"
-        " (~10 s on CPU); skip it to draw everything yourself"
-    )
+    print("    optional: pre-draws the crystal outlines for you to correct;")
+    print("    skip it to draw everything yourself")
     print(
         f" {step[1]} fix outlines: {k('Shift+click')} starts, move, {k('Shift+click')} closes;"
     )
