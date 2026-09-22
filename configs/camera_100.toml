@@ -27,10 +27,10 @@ extension_tube_mm = 60.0              # FACT: operator measurement 2026-09-07 (w
 air_gap_mm = 20.0                     # FACT: lens front rim → outer glass face, operator 2026-09-07
 
 [sight_glass]
-standard = "DIN 8902 borosilicate"    # ESTIMATE: stamped "DIN 890" → most likely 8902; index still assumed
+standard = "DIN 8902"                 # ESTIMATE: stamped "DIN 890" → most likely 8902 (lens audit: likely soda-lime)
 thickness_mm = 20.0                   # FACT: operator measurement 2026-09-07
 diameter_mm = 150.0                   # FACT: operator measurement 2026-09-07 (DN150)
-refractive_index = 1.47               # FACT: borosilicate visible band
+refractive_index = 1.47               # ASSUMED: borosilicate; soda-lime (DIN 8902) would be 1.52 → Δ 6.85 mm instead of 6.39. Error budget carries ±0.03
 
 [figures]
 # What-if sweeps and drawing choices for docs/optics/figures — not the installation.
