@@ -185,13 +185,16 @@ def _write_empty_label(png: Path) -> None:
     )  # same as GUI's dict save
 
 
-def _git_lines(folder: Path, name: str) -> str:
-    rel = folder.relative_to(ROOT)
-    return (
-        f"  git add {rel}\n"
-        f'  git commit -m "data(crystal-detector): {name} annotations"\n'
-        f"  git pull --rebase && git push"
+def _stage_labels(folder: Path, name: str) -> str:
+    """git-add the person's labels; return the commands left for them."""
+    commit = f'git commit -m "data(crystal-detector): {name} annotations"'
+    push = "git pull --rebase && git push"
+    added = subprocess.run(
+        ["git", "add", str(folder)], cwd=ROOT, capture_output=True
     )
+    if added.returncode != 0:
+        return f"  git add {folder.relative_to(ROOT)}\n  {commit}\n  {push}"
+    return f"  {commit}\n  {push}"
 
 
 def annotate(name: str) -> None:
@@ -274,13 +277,14 @@ def annotate(name: str) -> None:
     print("\n" + _c("36", "═" * 64))
     _leaderboard(name)
     if done == len(frames):
-        print(_ok(_bold(f"all {done} frames labelled — now commit and push:")))
+        print(_ok(_bold(f"all {done} frames labelled")))
     else:
-        print(
-            _bold(f" {done}/{len(frames)} labelled")
-            + " — commit what you have:"
-        )
-    print(_c("36", _git_lines(folder, name)))
+        print(_bold(f" {done}/{len(frames)} labelled"))
+    lines = _stage_labels(folder, name)
+    staged = "git add" not in lines
+    what = "staged for commit" if staged else "to add and commit"
+    print(f" your labels are {what} — run:")
+    print(_c("36", lines))
 
 
 def main() -> None:

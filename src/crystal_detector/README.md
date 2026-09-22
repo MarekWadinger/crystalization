@@ -93,8 +93,8 @@ crystals: delete every proposal (the last delete saves an empty label). If the
 model proposed nothing, Cellpose greys out saving — just close the window and
 answer `y` to "no crystals to mark?"; the command writes the empty label. These
 negatives teach the model to ignore bubbles and glass scratches. Closing a
-frame without a label and answering `N` ends the session. When done, commit the
-`_seg.npy` files and push (the command prints the exact git lines).
+frame without a label and answering `N` ends the session. When done, the command
+stages your `_seg.npy` files and prints the commit and push lines to run.
 
 Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
 VIDEO --who a,b,c,d` (skips the `discharge` pre-tail and `empty` stages).
