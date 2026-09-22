@@ -145,7 +145,8 @@ def _leaderboard(current: str) -> None:
     for rank, (done, total, who) in enumerate(scores):
         bar = _c("32", "█" * done) + _c("90", "░" * (total - done))
         name = _c("1;33", f"{who:<8}") if who == current else f"{who:<8}"
-        print(f"  {medals[min(rank, 3)]} {name} {bar} {done}/{total}")
+        medal = medals[min(rank, 3)] if done else medals[3]
+        print(f"  {medal} {name} {bar} {done}/{total}")
 
 
 def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
