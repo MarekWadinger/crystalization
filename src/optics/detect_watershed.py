@@ -59,7 +59,7 @@ from optics.video_io import DEFAULT_CROP, CropBox
 
 # --- Watershed tuning knobs --------------------------------------------------
 # Calibrated for Camera 100 (configs/camera_100.toml, ~1.7 um/px) where the median
-# in-focus crystal is ~24 px wide (0.052 mm). Adjust per-installation if the
+# in-focus crystal is ~24 px wide (≈ 0.040 mm at 1.66 µm/px). Adjust per-installation if the
 # optical setup, pixel pitch, or expected crystal size changes.
 #
 # _PEAK_MIN_DISTANCE: minimum separation (px) between distance-transform

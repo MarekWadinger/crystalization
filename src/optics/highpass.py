@@ -44,7 +44,7 @@ def highpass(
     """
     if sigma_px <= 0:
         raise ValueError("sigma_px must be > 0")
-    k = int(sigma_px) * 6 + 1  # ~6σ support, forced odd
+    k = max(3, int(round(sigma_px * 6)) | 1)  # ~6σ support, odd, ≥ 3
     src = image.astype(np.float32)
     lowpass = cv2.GaussianBlur(src, (k, k), sigma_px)
     return np.abs(src - lowpass)
@@ -152,11 +152,16 @@ def main():
         if args.out
         else inp.with_name(f"{inp.stem}_highpass{inp.suffix}")
     )
-    crop = DEFAULT_CROP if args.crop else None
     if is_video:
+        crop = resolve_crop(str(inp)) if args.crop else None
         highpass_video(str(inp), str(out), args.sigma, crop=crop)
     else:
-        highpass_image(str(inp), str(out), args.sigma, crop=crop)
+        highpass_image(
+            str(inp),
+            str(out),
+            args.sigma,
+            crop=DEFAULT_CROP if args.crop else None,
+        )
 
 
 if __name__ == "__main__":

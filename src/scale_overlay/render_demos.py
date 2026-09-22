@@ -96,10 +96,10 @@ def main() -> None:
 
     out_dir = Path("docs/optics/figures")
     out_dir.mkdir(parents=True, exist_ok=True)
-    cases = [
-        ("near", 62.0),
+    cases = [  # ±0.2 mm around focus, as in the original demo
+        ("near", d_focus - 0.2),
         ("at_focus", d_focus),
-        ("far", 62.4),
+        ("far", d_focus + 0.2),
     ]
     for label, d_o in cases:
         composite = render_pair(frame_cropped, lens, d_focus, d_o, sharp_color)

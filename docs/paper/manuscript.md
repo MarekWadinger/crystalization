@@ -417,7 +417,7 @@ mid-strike crystal size) and reported a CSD median of 0.25 mm.
 Operator caliper measurement on 2026-06-15 yielded
 **e = 45 mm**, corrected on 2026-09-07 to **e = 60 mm** — a
 factor-of-6 revision that shrinks µm/px from
-10.4 to **1.63** and moves the working distance to **55 mm**
+10.4 to **1.66** and moves the working distance to **55 mm**
 (a true macro setup). The earlier "0.25 mm mid-strike"
 interpretation moved to "**0.037 mm**" with the corrected scale.
 At the time, this was read as "consistent with the first hour of
@@ -1068,8 +1068,8 @@ magnitude **below** the 0.037 mm median this detector returns. The
 population; it is the centroid of the area-bandpass window
 [20 µm, 200 µm] that the detector's
 ``[min_area = 80, max_area = 8000] px²`` filter imposes at
-1.66 µm/px. The log-normal shape parameter (``s = 0.62``) and CV
-(0.82) describe the *bandpassed* distribution, not the underlying
+1.66 µm/px. The log-normal shape parameter (``s = 0.57``) and CV
+(0.83) describe the *bandpassed* distribution, not the underlying
 crystal CSD.
 
 What this section *does* support is that the pipeline is internally
