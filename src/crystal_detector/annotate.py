@@ -11,9 +11,8 @@ press **run**, fix the outlines (Shift+click or right-click starts an
 outline, move the cursor, click again to close; Ctrl+click on a crystal
 deletes it; Cmd on macOS), **Ctrl+S** writes ``HHMMSS_seg.npy`` next to
 the image, then **close the window** — the next frame opens by itself.
-Closing without saving ends the session. Stages before seeding have no
-crystals: delete every proposal and save the empty result — those are the
-negatives. Then commit the ``_seg.npy`` files and push.
+Closing without saving ends the session. Then commit the ``_seg.npy``
+files and push.
 
 ``uv run crystal-detector-annotate patrik --review`` reopens your labelled
 frames one by one (Cellpose loads the label next to the image) so you can
@@ -23,8 +22,9 @@ Maintainer, once::
 
     uv run crystal-detector-annotate export VIDEO --who patrik,erika,marek,marian
 
-samples one frame per stage per person (distinct timestamps, evenly
-spread inside each stage) from the video's ``.json`` sidecar segments.
+samples three frames per crystal-bearing stage per person (seeding →
+discharge; distinct timestamps, evenly spread inside each stage) from the
+video's ``.json`` sidecar segments.
 """
 
 from __future__ import annotations
@@ -45,7 +45,15 @@ from .export_frames import crop, flat_field_correction
 
 ROOT = Path(__file__).resolve().parents[2]
 ANNOTATIONS = Path(__file__).resolve().parent / "annotations"
-SKIP_STAGES = {"discharge", "empty"}  # pre-recording tail / 34 s window
+# stages in which crystals are present (seeding → discharge)
+CRYSTAL_STAGES = (
+    "stabilization_and_seeding",
+    "boiling",
+    "drying",
+    "aeration",
+    "discharge_release",
+)
+PER_PERSON = 3
 
 
 def hhmmss(t: float) -> str:
@@ -60,22 +68,28 @@ def export(video: Path, who: list[str]) -> None:
         raise SystemExit(f"cannot open {video}")
     duration = cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS)
     for seg in events["segments"]:
-        if seg["phase"] in SKIP_STAGES:
+        if seg["phase"] not in CRYSTAL_STAGES:
             continue
         t0, t1 = seg["t_start"], seg["t_end"] or duration
-        width = (t1 - t0) / len(who)
+        width = (t1 - t0) / len(who)  # one slice of the stage per person
         for k, name in enumerate(who):
-            t = round(t0 + (k + 0.5) * width)  # whole s: name reproduces seek
             folder = ANNOTATIONS / name / seg["phase"]
             folder.mkdir(parents=True, exist_ok=True)
-            png = folder / f"{hhmmss(t)}.png"
-            cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
-            ok, frame = cap.read()
-            if not ok:
-                print(f"  skip {png} (read failed)")
-                continue
-            cv2.imwrite(str(png), flat_field_correction(crop(frame)))
-        print(f"{seg['phase']:<28} {hhmmss(t0)}–{hhmmss(t1)}  1 frame each")
+            for j in range(PER_PERSON):
+                # sub-bin midpoints; j=1 equals the old one-frame sample
+                t = round(t0 + (k + (j + 0.5) / PER_PERSON) * width)
+                png = folder / f"{hhmmss(t)}.png"
+                if png.exists():
+                    continue
+                cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
+                ok, frame = cap.read()
+                if not ok:
+                    print(f"  skip {png} (read failed)")
+                    continue
+                cv2.imwrite(str(png), flat_field_correction(crop(frame)))
+        print(
+            f"{seg['phase']:<28} {hhmmss(t0)}–{hhmmss(t1)}  {PER_PERSON} frames each"
+        )
     cap.release()
 
 
@@ -89,7 +103,6 @@ def _label(png: Path) -> Path:
     return png.with_name(png.stem + "_seg.npy")
 
 
-NEGATIVE_STAGES = {"cleaning", "filling_with_bubbles", "concentration"}
 _TTY = sys.stdout.isatty()
 
 
@@ -143,17 +156,10 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
     print(rule)
     step = [_c("33", f"{i}.") for i in (1, 2, 3)]
     print(f" {step[0]} user-trained models → choose {_c('1;33', model)} → run")
-    if stage in NEGATIVE_STAGES:
-        no = _c("1;31", "NO crystals in this stage")
-        print(
-            f" {step[1]} {no}: delete every proposal (each delete autosaves)"
-        )
-        print("    if the model proposed nothing, just close the window")
-    else:
-        print(
-            f" {step[1]} fix outlines: Shift+click starts, move, Shift+click closes;"
-        )
-        print("    Ctrl+click (Cmd on Mac) deletes. Every edit autosaves.")
+    print(
+        f" {step[1]} fix outlines: Shift+click starts, move, Shift+click closes;"
+    )
+    print("    Ctrl+click (Cmd on Mac) deletes. Every edit autosaves.")
     save, close = _c("1;33", "Ctrl+S / Cmd+S"), _c("1;33", "close the window")
     print(f" {step[2]} {save} only if you changed nothing, then {close}")
     print(_c("36", "─" * 64))
