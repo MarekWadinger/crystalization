@@ -68,6 +68,30 @@ Each yields `frame_XX_ORIGINAL.png` (raw crop) and `frame_XX_PRE_AI.png`
 
 ## Annotate & retrain (improve the model)
 
+### Team annotation
+
+Frames for the team live in `annotations/<name>/<stage>/HHMMSS.png` (one
+frame per process stage per person, Git LFS). Labels are committed next to
+them as `HHMMSS_seg.npy`.
+
+```bash
+git lfs install && git lfs pull                   # once, if the PNGs are LFS pointers
+uv sync --group crystal-detector-gui              # once
+uv run crystal-detector-annotate patrik           # opens the GUI on your next unlabelled frame
+```
+
+In the GUI: **run cpsam** → fix outlines (right-drag draws, Ctrl+right-click
+deletes) → `Ctrl+S` → **File → Load image** for the next one. Stages before
+seeding (cleaning, filling_with_bubbles, concentration) have no crystals:
+delete every proposal and save the empty result — these negatives teach the
+model to ignore bubbles and glass scratches. When done, commit the `_seg.npy`
+files and push (the command prints the exact git lines).
+
+Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
+VIDEO --who a,b,c,d` (skips the `discharge` pre-tail and `empty` stages).
+For a cross-stage fine-tune, pool the images and labels into one folder first;
+the GUI's **Train new model** only sees the folder of the loaded image.
+
 One-time: install the GUI deps (Qt — does **not** work in Docker):
 
 ```bash
