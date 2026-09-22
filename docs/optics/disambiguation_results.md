@@ -28,7 +28,7 @@ vs back of focus — has been wired end-to-end:
 ## Real numbers
 
 Running on `datasets/2026-02-05 10-36-32.mp4` with the **verified**
-Camera-100 setup (f=35 mm, **F/1.6**, **e=45 mm**, **d_focus=62.2 mm**;
+Camera-100 setup (f=35 mm, **F/1.6**, **e=45 mm**, **d_focus=62.2 mm** — superseded 2026-09-07 by e=60 mm, d_focus=55.1 mm, 1.66 µm/px. Rerun at the new geometry: edge detector median 0.037 mm (mean 0.051, CV 0.83), watershed median 0.074 mm (CV 0.40); depth spread ±0.005 mm. Body below is the historical 2026-06-15 run;
 operator inspection 2026-06-15):
 
 | Quantity | Value |

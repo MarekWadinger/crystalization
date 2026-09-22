@@ -35,6 +35,7 @@ import numpy as np
 from scipy import stats
 
 from annotator.types import LayerConfig
+from optics.config import lens_from_config_and_video, load_camera
 from optics.csd import aggregate_csd, fig_csd_final
 from optics.disambiguate import (
     DisambiguationResult,
@@ -97,13 +98,9 @@ def _run_window(
         max_area=8000.0,
         max_aspect_ratio=3.0,
     )
-    lens = LensSetup(
-        focal_length=35.0,
-        f_number=1.6,
-        extension_tube=45.0,
-        pixel_pitch_um=2.8,
-    )
-    d_focus = 62.2
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, LONG_VIDEO)
+    d_focus = cfg.focus_object_distance_mm
 
     print(
         f"[rq4][{label}] window t={t0:.1f}→{t1:.1f}s "

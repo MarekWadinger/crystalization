@@ -15,9 +15,9 @@ Typical use::
 
     from optics.config import load_camera, lens_from_config_and_video
 
-    cfg = load_camera("configs/camera_100.toml")
-    lens = lens_from_config_and_video(cfg, "datasets/2026-02-04 11-08-51.mp4")
-    # lens.pixel_pitch_um = 5370 / 720 ≈ 7.46 µm (PAL-downsampled feed)
+    cfg = load_camera()  # configs/camera_100.toml
+    lens = lens_from_config_and_video(cfg, video_path)
+    # lens.pixel_pitch_um = cfg.sensor_width_mm * 1000 / frame_width_px
 """
 
 from __future__ import annotations
@@ -30,6 +30,10 @@ import cv2
 
 from optics.model import LensSetup, SightGlass
 
+DEFAULT_CONFIG_PATH = (
+    Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
+)
+
 
 @dataclass(frozen=True, slots=True)
 class CameraConfig:
@@ -40,9 +44,15 @@ class CameraConfig:
     sensor_height_mm: float
     native_width_px: int
     native_height_px: int
+    body_length_mm: float
+    flange_distance_mm: float
     focal_length_mm: float
     f_number: float
+    iris_stops: tuple[float, ...]
     extension_tube_mm: float
+    lens_body_length_mm: float
+    focus_travel_mm: float
+    air_gap_mm: float
     sight_glass_thickness_mm: float
     sight_glass_index: float
     focus_object_distance_mm: float
@@ -54,7 +64,7 @@ class CameraConfig:
         return self.sensor_width_mm * 1000.0 / self.native_width_px
 
 
-def load_camera(path: str | Path) -> CameraConfig:
+def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
     """Load a ``configs/<camera>.toml`` file into a :class:`CameraConfig`."""
     path = Path(path)
     data = tomllib.loads(path.read_text())
@@ -68,9 +78,15 @@ def load_camera(path: str | Path) -> CameraConfig:
         sensor_height_mm=float(cam["sensor_height_mm"]),
         native_width_px=int(cam["native_width_px"]),
         native_height_px=int(cam["native_height_px"]),
+        body_length_mm=float(cam["body_length_mm"]),
+        flange_distance_mm=float(cam["flange_distance_mm"]),
         focal_length_mm=float(lens["focal_length_mm"]),
         f_number=float(lens["f_number"]),
+        iris_stops=tuple(float(n) for n in lens["iris_stops"]),
         extension_tube_mm=float(lens["extension_tube_mm"]),
+        lens_body_length_mm=float(lens["body_length_mm"]),
+        focus_travel_mm=float(lens.get("focus_travel_mm", 0.0)),
+        air_gap_mm=float(lens["air_gap_mm"]),
         sight_glass_thickness_mm=float(glass["thickness_mm"]),
         sight_glass_index=float(glass["refractive_index"]),
         focus_object_distance_mm=float(focus["object_distance_mm"]),

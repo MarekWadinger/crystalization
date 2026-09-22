@@ -58,7 +58,7 @@ from annotator.viz import LAYER_COLORS, draw_crystals
 from optics.video_io import DEFAULT_CROP, CropBox
 
 # --- Watershed tuning knobs --------------------------------------------------
-# Calibrated for Camera 100 (e=45 mm, F/1.6, 2.18 um/px) where the median
+# Calibrated for Camera 100 (configs/camera_100.toml, ~1.7 um/px) where the median
 # in-focus crystal is ~24 px wide (0.052 mm). Adjust per-installation if the
 # optical setup, pixel pitch, or expected crystal size changes.
 #

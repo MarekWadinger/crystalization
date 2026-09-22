@@ -37,16 +37,16 @@ class LensSetup:
     f_number: float
     """Working F-number N (= f / aperture_diameter)."""
 
-    extension_tube: float = 0.0
+    extension_tube: float
     """Extra distance e between the lens flange and the sensor."""
 
-    pixel_pitch_um: float = 2.8
+    pixel_pitch_um: float
     """Sensor pixel pitch in micrometres."""
 
-    sensor_width: float = 5.37
+    sensor_width: float
     """Sensor active-area width."""
 
-    sensor_height: float = 3.02
+    sensor_height: float
     """Sensor active-area height."""
 
     @property
@@ -67,7 +67,7 @@ class SightGlass:
     thickness: float
     """Glass thickness t."""
 
-    refractive_index: float = 1.47
+    refractive_index: float
     """Borosilicate n_g in the visible band."""
 
     @property

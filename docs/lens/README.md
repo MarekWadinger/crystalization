@@ -64,16 +64,44 @@ video.
 
 | Item | Value | Source |
 |---|---|---|
-| Standard mark | `DIN 8902` | engraving on glass, photos [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg) |
+| Standard mark | `DIN 89..` (last digit worn; `DIN 8902` most likely — see below) | engraving on glass, photos [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg) |
 | Flange bolt count | **8** | operator, from [`122524.jpg`](./20260205_122524.jpg) |
-| Material | borosilicate (the only material specified by DIN 8902) | DIN standard |
+| Material | tempered soda-lime (DIN 8902 disc, ≤ 150 °C, Ø 10–350 mm, 3–25 mm thick) | DIN standard |
 
-### 1.6 Installation
+DIN 89xx candidates: **8902** (round soda-lime, ≤ 150 °C) is the fit for a round
+disc on a ~70–80 °C vessel. **8901** is withdrawn; **8903** is rectangular. If
+the temperature margin is tight or the disc is quartz, cross-check against
+**DIN 7080** (round borosilicate, ≤ 280 °C).
+
+### 1.6 Illuminator
+
+| Item | Value | Source |
+|---|---|---|
+| Location | **inside the vessel** | operator |
+| Fixing screws (visible on the module) | 3 × **A2-70** stainless (ISO 3506, ~304 SS, 700 MPa) | engraving on bolt heads, operator |
+| Power feed | two cables (blue + brown — European mains colours) crossing the 8-bolt flange itself | operator |
+| Blue cable | 90° knee → straight run → taped joint after the knee; no other bends | operator |
+| Brown cable | red collar/bushing at the bolt where it crosses the flange | operator |
+| Manufacturer / model | **not identified** | — |
+
+### 1.7 Installation
+
+Camera outside the vessel, looking through the sight glass. Lamp inside the
+vessel, on the sight-glass side, facing the glass. Mains cables run through
+the 8-bolt flange to power the lamp. What the camera sees is a **thin layer
+of massecuite between the lamp face and the inner glass surface**,
+backlit by the lamp. Crystals in that thin layer appear as **dark
+silhouettes against the bright lamp**; the green-yellow spot in the video
+is the lamp itself seen through the lit slab.
+
+Only this geometry is consistent with all of: lamp inside, camera outside,
+a bright direct spot in the image, and the fact that massecuite is opaque
+over any longer path.
 
 | Item | Value | Source |
 |---|---|---|
 | Camera mount orientation | horizontal | operator |
-| Illumination | transmitted (LED inside vessel, opposite the lens) | green/yellow spot visible in [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg), [`122537.jpg`](./20260205_122537.jpg), [`122620.jpg`](./20260205_122620.jpg) |
+| Illumination | transmitted / backlit — lamp inside vessel, facing the sight glass | operator + green-yellow spot in [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg), [`122537.jpg`](./20260205_122537.jpg), [`122620.jpg`](./20260205_122620.jpg) |
 
 ---
 
@@ -83,8 +111,8 @@ video.
 
 | Item | Value | Formula |
 |---|---|---|
-| Sensor active area | ≈ 5.37 × 3.02 mm | 1/2.8" optical-format convention × 16:9 |
-| Pixel pitch at sensor | ≈ **2.8 µm/px** | 5.37 mm ÷ 1920 |
+| Sensor active area | 5.57 × 3.13 mm | 1920 × 1080 × 2.9 µm (Sony IMX307/IMX327 die, identified from the HCB-6000 total-pixel count 1945×1097) |
+| Pixel pitch at sensor | **2.9 µm/px** | Sony datasheet |
 
 ### 2.2 Forward optical scale at the user-reported focus reading
 
@@ -129,9 +157,8 @@ DN125, or DN150**. Using the lens body (29 × 29.5 mm per the Fujinon
 datasheet) as a known scale in photo [`122524.jpg`](./20260205_122524.jpg),
 the clear viewing aperture looks roughly 3–4× the lens width.
 
-> **Estimate: DN100, Ø100 mm clear, 15 mm thick borosilicate.**
-> Uncertainty: ±25 % on diameter (could be DN80 or DN125), ±5 mm on
-> thickness (could be 20 mm at higher PN class).
+> **Measured 2026-09-07: Ø150 mm (DN150), 20 mm thick.** Index still assumed borosilicate.
+> Superseded estimate: DN100, Ø100 mm clear, 15 mm thick.
 > Refractive index assumed n_g ≈ 1.47 (borosilicate, visible band).
 > **Verify by tape-measuring the flange OD or the bolt-circle diameter.**
 
@@ -173,17 +200,20 @@ Sensitivity to the FOV assumption:
 
 | Item | How to close |
 |---|---|
-| Lens-front → outside face of sight glass | tape measure, ±5 mm |
+| Lens-front → outside face of sight glass | **measured 2026-09-07: 20 mm** |
 | Sight-glass clear diameter | tape-measure flange OD or bolt-circle Ø |
-| Sight-glass thickness | vendor sheet, callipers at maintenance window |
+| Sight-glass thickness | **measured 2026-09-07: 20 mm** |
 | Inside of glass → typical crystal plane | tape measure or process-flow diagram |
 | Iris (F-stop) currently locked at | read the iris ring against the body index dot in person |
-| Extension tube length, exact | callipers between lens C-mount and camera body |
+| Extension tube length, exact | **measured 2026-09-07: 60 mm** |
 | Camera-side capture chain (DVR model, AHD/CVBS, codec, rescaling) | check the recorder rack |
 | DIP-switch state on the external control box | sharp photo of the switch row in [`122519.jpg`](./20260205_122519.jpg) |
 | °Brix and temperature of the liquor over the video archive period | DCS historian export |
 | Lab MA / CV sieve results over the same period | lab archive |
 | Maintenance log entries for Camera 100 | plant MaR records |
+| Illuminator manufacturer / model | photo of any nameplate on the module; measure module OD |
+| Gap between lamp face and inner sight-glass surface (= imaging slab thickness) | direct measurement at maintenance window; sets depth of field for µm/px |
+| Last visible digit of the sight-glass `DIN 89..` engraving | clean the disc rim, photograph obliquely |
 
 ---
 

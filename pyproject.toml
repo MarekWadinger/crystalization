@@ -1,6 +1,6 @@
 [project]
 name = "crystalization"
-version = "0.7.0"
+version = "0.8.0"
 description = "Crystal video layer decomposition and object detection"
 requires-python = ">=3.13"
 dependencies = []
@@ -19,9 +19,11 @@ scale-overlay-app = "scale_overlay.app:main"
 scale-overlay-demos = "scale_overlay.render_demos:main"
 optics-plots = "optics.plots:main"
 optics-sidecar = "optics.cli:main"
+optics-highpass = "optics.highpass:main"
 crystal-detector-analyze = "crystal_detector.analyze:main"
 crystal-detector-export-frames = "crystal_detector.export_frames:main"
 crystal-detector-gui = "crystal_detector.gui:main"
+crystal-detector-annotate = "crystal_detector.annotate:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -32,6 +34,7 @@ packages = ["src/annotator", "src/predictor", "src/llm_annotator", "src/sharpnes
 
 [tool.ruff]
 src = ["src"]
+line-length = 79
 
 [dependency-groups]
 annotator = [
@@ -91,11 +94,12 @@ crystal-detector = [
 ]
 crystal-detector-gui = [
     "cellpose[gui]>=4.2.1.1",
+    { include-group = "crystal-detector" },
 ]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.7.0"
+version = "0.8.0"
 version_provider = "pep621"
 version_files = [
     "pyproject.toml:^version",

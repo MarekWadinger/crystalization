@@ -24,6 +24,7 @@ from numpy.typing import NDArray
 
 from annotator.sharpness import compute_sharpness_map
 from annotator.viz import colorize_map
+from optics.config import lens_from_config, load_camera
 from optics import LensSetup, mm_per_pixel_at
 from optics.video_io import DEFAULT_CROP
 from scale_overlay.overlay import (
@@ -80,13 +81,9 @@ def render_pair(
 
 def main() -> None:
     """Render the three demo pairs."""
-    lens = LensSetup(
-        focal_length=35.0,
-        f_number=1.6,
-        extension_tube=45.0,
-        pixel_pitch_um=2.8,
-    )
-    d_focus = 62.2
+    cfg = load_camera()
+    lens = lens_from_config(cfg)
+    d_focus = cfg.focus_object_distance_mm
 
     frame = cv2.imread("docs/optics/frame_0.png")
     if frame is None:
@@ -101,7 +98,7 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     cases = [
         ("near", 62.0),
-        ("at_focus", 62.2),
+        ("at_focus", d_focus),
         ("far", 62.4),
     ]
     for label, d_o in cases:
