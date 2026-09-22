@@ -30,8 +30,14 @@ import cv2
 
 from optics.model import LensSetup, SightGlass
 
-DEFAULT_CONFIG_PATH = (
+_REPO_CONFIG = (
     Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
+)
+# Repo checkout first; otherwise the copy hatch force-includes into the wheel.
+DEFAULT_CONFIG_PATH = (
+    _REPO_CONFIG
+    if _REPO_CONFIG.exists()
+    else Path(__file__).with_name("camera_100.toml")
 )
 
 
