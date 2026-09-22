@@ -155,6 +155,18 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
     print(_c("36", "─" * 64))
 
 
+def _ask_yes_no() -> bool:
+    while True:
+        try:
+            answer = input(_bold("  your choice [y/n]: ")).strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            return False
+        if answer in ("y", "n"):
+            return answer == "y"
+        print("  please type y or n")
+
+
 def _write_empty_label(png: Path) -> None:
     """Zero-mask *_seg.npy in the GUI's own format (a negative sample)."""
     img = cv2.imread(str(png), cv2.IMREAD_GRAYSCALE)
@@ -242,12 +254,18 @@ def annotate(name: str) -> None:
             # Cellpose greys out Ctrl+S at zero masks, so an empty frame can
             # only be labelled from here.
             print(_bad("no label saved for this frame"))
-            answer = input(
-                _bold("  Were there NO crystals to mark? [y/N] ")
-            ).strip()
-            if answer.lower() != "y":
+            print(
+                f"  {_c('1;32', 'y')} = there were no crystals: save an EMPTY label, next frame"
+            )
+            print(
+                f"  {_c('1;31', 'n')} = stop for now (nothing lost, this frame comes up first next time)"
+            )
+            if not _ask_yes_no():
                 print(
-                    f"  rerun  uv run crystal-detector-annotate {name}  to continue"
+                    _c(
+                        "36",
+                        f"  stopped. To continue:  uv run crystal-detector-annotate {name}",
+                    )
                 )
                 break
             _write_empty_label(png)
