@@ -36,3 +36,11 @@ def test_highpass_preserves_shape_and_is_nonnegative():
     out = highpass(img, sigma_px=10.0)
     assert out.shape == img.shape
     assert out.min() >= 0.0
+
+
+def test_highpass_small_sigma_still_filters():
+    """σ < 1 px must not degenerate into a 1×1 kernel (identity blur)."""
+    img = np.zeros((32, 32), np.float32)
+    img[16, 16] = 100.0
+    out = highpass(img, sigma_px=0.5)
+    assert out.max() > 0.0
