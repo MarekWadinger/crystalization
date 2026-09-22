@@ -1,0 +1,2 @@
+src/crystal_detector/annotations/**/*_seg.npy filter=lfs diff=lfs merge=lfs -text
+src/crystal_detector/annotations/**/*.png filter=lfs diff=lfs merge=lfs -text

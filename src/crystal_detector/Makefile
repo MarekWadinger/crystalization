@@ -11,7 +11,7 @@ MODEL ?=
 OUT   ?= training_data
 MODEL_ARG := $(if $(MODEL),--model $(MODEL),)
 
-.PHONY: help install gui-install analyze analyze-video export gui
+.PHONY: help install gui-install analyze analyze-video export gui annotate
 
 help:
 	@echo "crystal_detector — make targets:"
@@ -21,6 +21,7 @@ help:
 	@echo "  make analyze-video VIDEO=v.mp4 TIME=00:18:00   detect in a video frame"
 	@echo "  make export VIDEO=v.mp4 [OUT=dir]     export training frames"
 	@echo "  make gui                              launch GUI to annotate / retrain"
+	@echo "  make annotate NAME=patrik             open the GUI on your unlabelled frames"
 	@echo "  optional: MODEL=path/to/checkpoint    use a non-default model"
 
 install:
@@ -43,3 +44,7 @@ export:
 
 gui:
 	cd $(ROOT) && uv run crystal-detector-gui
+
+annotate:
+	@test -n "$(NAME)" || { echo "Usage: make annotate NAME=<your folder under annotations/>"; exit 2; }
+	cd $(ROOT) && uv run crystal-detector-annotate "$(NAME)"
