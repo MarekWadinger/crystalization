@@ -243,6 +243,7 @@ def _prepare_model() -> Path:
     import io as _io
 
     from cellpose import io as cp_io
+    from cellpose.models import MODEL_DIR
 
     print(
         _c(
@@ -252,6 +253,9 @@ def _prepare_model() -> Path:
     )
     with contextlib.redirect_stdout(_io.StringIO()):
         model_path = resolve_model()
+        # add_model() assumes MODEL_DIR already exists (usually created as a
+        # side effect of an earlier cellpose run); make sure it's there.
+        MODEL_DIR.mkdir(parents=True, exist_ok=True)
         cp_io.add_model(str(model_path))  # listed under "custom models"
     return model_path
 
