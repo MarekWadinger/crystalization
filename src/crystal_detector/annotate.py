@@ -243,6 +243,7 @@ def _prepare_model() -> Path:
     import io as _io
 
     from cellpose import io as cp_io
+    from cellpose import models as cp_models
 
     print(
         _c(
@@ -250,9 +251,17 @@ def _prepare_model() -> Path:
             "preparing the fine-tuned model (1.2 GB download on first run)…",
         )
     )
+    # Cellpose's add_model copies into ~/.cellpose/models but never creates
+    # that folder, so on a machine where the GUI has not run yet the copy
+    # fails and the model never reaches the "custom models" dropdown.
+    model_dir = Path(cp_models.MODEL_DIR)
+    model_dir.mkdir(parents=True, exist_ok=True)
     with contextlib.redirect_stdout(_io.StringIO()):
         model_path = resolve_model()
         cp_io.add_model(str(model_path))  # listed under "custom models"
+    if not (model_dir / model_path.name).exists():
+        raise SystemExit(_bad(f"could not register the model in {model_dir}"))
+    print(_ok(f"{model_path.name} ready under user-trained models"))
     return model_path
 
 
