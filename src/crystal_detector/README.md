@@ -127,6 +127,26 @@ Then the annotate → train loop:
 5. Use it: `crystal-detector-analyze image.png --model training_data/models/cpsam_YYYYMMDD_HHMMSS`.
 6. Publish the improved checkpoint (optional): `uv run hf upload MarekWadinger/crystal-detector-cpsam <new-model> <name>`.
 
+## Fine-tune on the team's annotations
+
+```bash
+make -C src/crystal_detector finetune            # or: uv run crystal-detector-finetune
+make -C src/crystal_detector finetune EPOCHS=30  # shorter run
+```
+
+Pools every labelled frame under `annotations/`, holds out one frame per
+person (their middle boiling frame), continues training from the current checkpoint with the
+Cellpose GUI defaults (lr 1e-5, weight decay 0.1, 100 epochs), and writes:
+
+- `training_data/models/cpsam_YYYYMMDD_HHMMSS` — the new checkpoint (gitignored)
+- `training_data/eval/*.png` — each held-out frame as *label | current | new*
+- a terminal table of crystal counts and AP@0.5, current vs new
+
+Nothing switches over automatically. To adopt the new checkpoint, try it with
+`crystal-detector-analyze --model <path>`, upload it with `hf upload`, and
+change `HF_MODEL_FILE` in `analyze.py`. `--max-frames 4 --epochs 1` is a
+two-minute smoke test of the pipeline.
+
 ## Docker (analyze only)
 
 ```bash
