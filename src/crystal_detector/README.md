@@ -98,6 +98,14 @@ Closing a frame without a label asks whether the frame had no crystals (`y`
 writes an empty label) or whether to stop (`n`, nothing lost). When done, the
 command stages your `_seg.npy` files and prints the commit and push lines.
 
+Under **Image filtering** the GUI also offers the repo's deterministic
+preprocessors as buttons: **flat-field** (what `analyze.py` feeds the model),
+**high-pass** (`optics.highpass`) and **sharpness** (`annotator.sharpness`).
+They change what you see and what **run** segments; **none** restores the
+original. Labels stay bound to the original pixels: the filtered image is never
+written into `_seg.npy`, so training always sees the same flat-field frames as
+inference.
+
 `uv run crystal-detector-annotate patrik --review` reopens your labelled frames
 one at a time with the label loaded, so you can check and fix them.
 

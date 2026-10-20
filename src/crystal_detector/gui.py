@@ -25,7 +25,11 @@ def main():
         "Launching Cellpose GUI — run cpsam, correct masks, Ctrl+S to save "
         "_seg.npy labels, then Models -> Train new model."
     )
-    proc = subprocess.run([sys.executable, "-m", "cellpose"], env=env)
+    child = (
+        "from crystal_detector import gui_filters; gui_filters.install(); "
+        "from cellpose.gui import gui; gui.run()"
+    )
+    proc = subprocess.run([sys.executable, "-c", child], env=env)
     if proc.returncode != 0:
         print(
             "\nGUI failed to launch. Install the GUI deps with:\n"

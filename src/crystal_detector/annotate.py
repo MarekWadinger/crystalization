@@ -269,7 +269,9 @@ def _open_gui(png: Path) -> float | None:
     """Run the GUI on one frame; report autosaves live; return last save mtime."""
     env = {**os.environ, "QT_API": os.environ.get("QT_API", "pyqt6")}
     child = (
-        "import sys; from cellpose.gui import gui; gui.run(image=sys.argv[1])"
+        "import sys; from crystal_detector import gui_filters; "
+        "gui_filters.install(); from cellpose.gui import gui; "
+        "gui.run(image=sys.argv[1])"
     )
     label = _label(png)
     before = label.stat().st_mtime if label.exists() else None
