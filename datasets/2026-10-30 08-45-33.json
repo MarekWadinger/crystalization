@@ -1,0 +1,680 @@
+{
+  "schema_version": "2.0",
+  "media": {
+    "stem": "2026-10-30 08-45-33",
+    "start_wallclock": "2026-10-30T08:45:33",
+    "timezone": "Europe/Bratislava",
+    "note": "start_wallclock from the recorder filename. Cross-checked by two operator pairs in ZRA.docx: 10:57 ↔ video 2:12:00 and 11:30 ↔ video 2:44:00 (both 'cca'; filename predicts 10:57:33 and 11:29:33). Not yet confirmed against an on-screen clock. Three encodings share this timeline (identical duration 34975.25 s): the lossless FFV1 .mkv probed below, '<stem>_mp4_video.mp4' (H.264, 30 GB) and '<stem>_mp4_video_10GB_LQ.mp4' (H.264, 9.2 GB).",
+    "probe": {
+      "container_format": "matroska,webm",
+      "video_codec": "ffv1",
+      "width": 720,
+      "height": 576,
+      "pix_fmt": "yuv420p",
+      "r_frame_rate": "25/1",
+      "avg_frame_rate": "25/1",
+      "fps": 25.0,
+      "duration_s": 34975.24,
+      "bit_rate_bps": 30126977,
+      "has_audio": true,
+      "file_size_bytes": 131712282757,
+      "probed_at": "2026-11-02T14:59:57.592581Z",
+      "probe_tool": "ffprobe"
+    }
+  },
+  "source_document": {
+    "path": "ZRA.docx + ZRA.xlsx + Pictures/",
+    "location": "\\\\147.175.79.43\\Public\\Fedor\\CrystalisationData\\ZRA-2026-10-30",
+    "author": "Fedor",
+    "language": "sk",
+    "kind": "lab_event_log_docx_+_sample_sheet_xlsx_+_microscope_photos"
+  },
+  "context": {
+    "campaign": "ZRA, 30.10.2026 (xlsx header 'ZRA s p 30.10.2026')",
+    "batches": "Two strikes in one recording: b1 seeded 11:30, b2 started 14:50 and seeded 15:22.",
+    "operator_raw_note": "Očko pustene 10:57 video cca 2:12:00 cca\nKamera zaplavena v čase 43.4 % čas 2:27:20 cca\nOčkovanie 11:30 cca video 2:44:00\nPo očku 11 32\nVz 11:46 10x zoom\nVz 12:07 bez labaku 4x zoom\nVz 12:19\nVz 12:30 bez lab\nVz 12:49\nVz bez lab 13:06\nVz 13:32\nVz14:10 pred susenim\nVz 14:20 po sus\nNova varka 14:50 cca\n15:22 v čase očkovania 10x zoom a 40 x zoom\n15:33 po očku  10x\n15:54 s lab x4\n16:14 bez lab\n16:32 s lab\n16:58 s lab\n17:48 pred suš\n18:04 po suš"
+  },
+  "events": [
+    {
+      "id": "b1-e01",
+      "phase": "filling",
+      "label": "Očko pustene 10:57 video cca 2:12:00 cca",
+      "label_en": "10:57 — charge let in (video ≈ 2:12:00)",
+      "qualifier": "approximate (operator: 'cca')",
+      "is_seeding": false,
+      "note": "Wallclock from the operator's VIDEO time 2:12:00 (operator clock said 10:57). Reading 'očko pustené' as start of the syrup charge is an interpretation, supported by the 11:00 xlsx sample 'štandardny syrup ktory sa napušťa' — confirm with Fedor.",
+      "wallclock": "2026-10-30T10:57:33",
+      "t": 7920
+    },
+    {
+      "id": "b1-e02",
+      "phase": "filling",
+      "label": "Kamera zaplavena v čase 43.4 % čas 2:27:20 cca",
+      "label_en": "camera submerged at vessel level 43.4 % (video ≈ 2:27:20)",
+      "qualifier": "approximate (operator: 'cca')",
+      "is_seeding": false,
+      "note": "Wallclock from the operator's video time 2:27:20.",
+      "wallclock": "2026-10-30T11:12:53",
+      "t": 8840,
+      "subphase": "camera_submerged"
+    },
+    {
+      "id": "b1-e03",
+      "phase": "stabilization_and_seeding",
+      "label": "Očkovanie 11:30 cca video 2:44:00",
+      "label_en": "11:30 — seeding (video ≈ 2:44:00)",
+      "qualifier": "approximate (operator: 'cca')",
+      "is_seeding": true,
+      "note": "Wallclock from the operator's video time 2:44:00 (operator clock said 11:30, 27 s later). Pre-seed sample 11:30, post-seed sample 11:32.",
+      "wallclock": "2026-10-30T11:29:33",
+      "t": 9840
+    },
+    {
+      "id": "b1-e04",
+      "phase": "drying",
+      "label": "Vz14:10 pred susenim",
+      "label_en": "14:10 — sample before drying",
+      "qualifier": "approximate (bounded by samples)",
+      "is_seeding": false,
+      "note": "Drying lies between the 'pred sušením' (14:10) and 'po sušení' (14:20) samples; exact start not logged.",
+      "wallclock": "2026-10-30T14:10:00",
+      "t": 19467
+    },
+    {
+      "id": "b2-e01",
+      "phase": "new_batch_vacuum_pull",
+      "label": "Nova varka 14:50 cca",
+      "label_en": "14:50 — new batch",
+      "qualifier": "approximate (operator: 'cca')",
+      "is_seeding": false,
+      "note": "Second strike in the same recording. xlsx 14:55 'štandardny' = fresh standard syrup.",
+      "wallclock": "2026-10-30T14:50:00",
+      "t": 21867
+    },
+    {
+      "id": "b2-e02",
+      "phase": "stabilization_and_seeding",
+      "label": "15:22 v čase očkovania 10x zoom a 40 x zoom",
+      "label_en": "15:22 — seeding of batch 2",
+      "qualifier": "approximate (minute resolution)",
+      "is_seeding": true,
+      "note": "Post-seed sample 15:33.",
+      "wallclock": "2026-10-30T15:22:00",
+      "t": 23787
+    },
+    {
+      "id": "b2-e03",
+      "phase": "drying",
+      "label": "17:48 pred suš",
+      "label_en": "17:48 — sample before drying",
+      "qualifier": "approximate (bounded by samples)",
+      "is_seeding": false,
+      "note": "Drying lies between the 17:48 and 18:04 ('po suš') samples.",
+      "wallclock": "2026-10-30T17:48:00",
+      "t": 32547
+    }
+  ],
+  "segments": [
+    {
+      "phase": "filling",
+      "t_start": 7920,
+      "t_end": 9840,
+      "note": "Inferred from b1-e01 → b1-e03; concentration sub-phase not logged separately."
+    },
+    {
+      "phase": "stabilization_and_seeding",
+      "t_start": 9840,
+      "t_end": 9987,
+      "note": "Ends at the first post-seed sample; boiling start not logged."
+    },
+    {
+      "phase": "boiling",
+      "t_start": 9987,
+      "t_end": 19467,
+      "note": "Inferred: between post-seed and pre-drying samples."
+    },
+    {
+      "phase": "drying",
+      "t_start": 19467,
+      "t_end": 20067
+    },
+    {
+      "phase": "stabilization_and_seeding",
+      "t_start": 23787,
+      "t_end": 24447,
+      "note": "Ends at the first post-seed sample of batch 2."
+    },
+    {
+      "phase": "boiling",
+      "t_start": 24447,
+      "t_end": 32547,
+      "note": "Inferred: between post-seed and pre-drying samples."
+    },
+    {
+      "phase": "drying",
+      "t_start": 32547,
+      "t_end": 33507
+    }
+  ],
+  "lab_legend": {
+    "refract": {
+      "label_sk": "refract údaj",
+      "label_en": "refractometer reading of the diluted sample"
+    },
+    "polari": {
+      "label_sk": "polari údaj",
+      "label_en": "polarimeter reading of the diluted sample"
+    },
+    "dilution_refract": "xlsx: sacharizácia = refract × dilution_refract",
+    "dilution_polari": "xlsx: polarizácia = polari × dilution_polari (2 for standard syrup, 4 for massecuite)",
+    "purity_pct": "xlsx: čistota = polarizácia / sacharizácia × 100 — derived, not stored"
+  },
+  "samples": [
+    {
+      "id": "b1-s01",
+      "wallclock": "2026-10-30T11:00:00",
+      "t": 8067,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 35.45,
+      "polari": 32.54,
+      "dilution_refract": 2,
+      "dilution_polari": 2,
+      "comment": "štandardny syrup ktory sa napušťa",
+      "photos": []
+    },
+    {
+      "id": "b1-s02",
+      "wallclock": "2026-10-30T11:30:00",
+      "t": 9867,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 38.82,
+      "polari": 17.69,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "pred očkom",
+      "photos": [
+        {
+          "file": "PREDOCKOM.jpg",
+          "camera_time": "01:22:20"
+        }
+      ]
+    },
+    {
+      "id": "b1-s03",
+      "wallclock": "2026-10-30T11:32:00",
+      "t": 9987,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 39.52,
+      "polari": 18.5,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "po očku",
+      "docx_line": "Po očku 11 32",
+      "photos": [
+        {
+          "file": "POOCKU cca 1 MINUTA.jpg",
+          "camera_time": "01:25:19"
+        }
+      ]
+    },
+    {
+      "id": "b1-s04",
+      "wallclock": "2026-10-30T11:46:00",
+      "t": 10827,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 39.98,
+      "polari": 18.38,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "po formacii",
+      "docx_line": "Vz 11:46 10x zoom",
+      "photos": [
+        {
+          "file": "11-46.jpg",
+          "camera_time": "01:35:28"
+        }
+      ]
+    },
+    {
+      "id": "b1-s05",
+      "wallclock": "2026-10-30T12:07:00",
+      "t": 12087,
+      "qualifier": "approximate (minute resolution)",
+      "docx_line": "Vz 12:07 bez labaku 4x zoom",
+      "photos": [
+        {
+          "file": "12-07.jpg",
+          "camera_time": "01:57:28"
+        }
+      ]
+    },
+    {
+      "id": "b1-s06",
+      "wallclock": "2026-10-30T12:19:00",
+      "t": 12807,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 40.91,
+      "polari": 19.06,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": null,
+      "docx_line": "Vz 12:19",
+      "photos": [
+        {
+          "file": "12-19.jpg",
+          "camera_time": "02:09:08"
+        },
+        {
+          "file": "12-19 V2.jpg",
+          "camera_time": "02:13:29"
+        }
+      ]
+    },
+    {
+      "id": "b1-s07",
+      "wallclock": "2026-10-30T12:30:00",
+      "t": 13467,
+      "qualifier": "approximate (minute resolution)",
+      "docx_line": "Vz 12:30 bez lab",
+      "photos": [
+        {
+          "file": "12-30.jpg",
+          "camera_time": "02:19:18"
+        },
+        {
+          "file": "12-30-2.jpg",
+          "camera_time": "02:22:45"
+        }
+      ]
+    },
+    {
+      "id": "b1-s08",
+      "wallclock": "2026-10-30T12:49:00",
+      "t": 14607,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 42.18,
+      "polari": 19.29,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": null,
+      "docx_line": "Vz 12:49",
+      "photos": [
+        {
+          "file": "12-49.jpg",
+          "camera_time": "02:40:03"
+        },
+        {
+          "file": "12-49-2.jpg",
+          "camera_time": "02:40:50"
+        },
+        {
+          "file": "12-49-3.jpg",
+          "camera_time": "02:47:29"
+        }
+      ]
+    },
+    {
+      "id": "b1-s09",
+      "wallclock": "2026-10-30T13:06:00",
+      "t": 15627,
+      "qualifier": "approximate (minute resolution)",
+      "docx_line": "Vz bez lab 13:06",
+      "photos": [
+        {
+          "file": "13-06.jpg",
+          "camera_time": "02:57:48"
+        },
+        {
+          "file": "13-06-2.jpg",
+          "camera_time": "02:59:57"
+        },
+        {
+          "file": "13-06-3.jpg",
+          "camera_time": "03:01:48"
+        }
+      ]
+    },
+    {
+      "id": "b1-s10",
+      "wallclock": "2026-10-30T13:32:00",
+      "t": 17187,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 43.56,
+      "polari": 20.0,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": null,
+      "docx_line": "Vz 13:32",
+      "photos": [
+        {
+          "file": "13-32-3.jpg",
+          "camera_time": "03:19:15"
+        },
+        {
+          "file": "13-32-2.jpg",
+          "camera_time": "03:19:42"
+        },
+        {
+          "file": "13-32.jpg",
+          "camera_time": "03:20:14"
+        }
+      ]
+    },
+    {
+      "id": "b1-s11",
+      "wallclock": "2026-10-30T14:10:00",
+      "t": 19467,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 44.5,
+      "polari": 20.48,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "pred suš",
+      "docx_line": "Vz14:10 pred susenim",
+      "photos": [
+        {
+          "file": "14-10.jpg",
+          "camera_time": "03:57:06"
+        },
+        {
+          "file": "14-10-4.jpg",
+          "camera_time": "03:58:10"
+        },
+        {
+          "file": "14-10-3.jpg",
+          "camera_time": "03:58:37"
+        },
+        {
+          "file": "14-10-2.jpg",
+          "camera_time": "03:59:47"
+        }
+      ]
+    },
+    {
+      "id": "b1-s12",
+      "wallclock": "2026-10-30T14:20:00",
+      "t": 20067,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 45.39,
+      "polari": 20.96,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "po suš",
+      "docx_line": "Vz 14:20 po sus",
+      "photos": [
+        {
+          "file": "14-20.jpg",
+          "camera_time": "04:13:16"
+        },
+        {
+          "file": "14-20-2.jpg",
+          "camera_time": "04:13:49"
+        },
+        {
+          "file": "14-20-3.jpg",
+          "camera_time": "04:14:06"
+        },
+        {
+          "file": "14-20-4.jpg",
+          "camera_time": "04:14:38"
+        },
+        {
+          "file": "14-20-5.jpg",
+          "camera_time": "04:15:22"
+        }
+      ]
+    },
+    {
+      "id": "b2-s01",
+      "wallclock": "2026-10-30T14:55:00",
+      "t": 22167,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 35.27,
+      "polari": 32.42,
+      "dilution_refract": 2,
+      "dilution_polari": 2,
+      "comment": "štandardny",
+      "photos": []
+    },
+    {
+      "id": "b2-s02",
+      "wallclock": "2026-10-30T15:22:00",
+      "t": 23787,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 39.93,
+      "polari": 18.4,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "v čase očkovanie",
+      "docx_line": "15:22 v čase očkovania 10x zoom a 40 x zoom",
+      "photos": [
+        {
+          "file": "15-23.jpg",
+          "camera_time": "05:10:19"
+        },
+        {
+          "file": "15-23-2-40X.jpg",
+          "camera_time": "05:14:36"
+        }
+      ]
+    },
+    {
+      "id": "b2-s03",
+      "wallclock": "2026-10-30T15:33:00",
+      "t": 24447,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 39.68,
+      "polari": 18.21,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "po očku",
+      "docx_line": "15:33 po očku  10x",
+      "photos": [
+        {
+          "file": "15-33.jpg",
+          "camera_time": "05:21:56"
+        },
+        {
+          "file": "15-33-2.jpg",
+          "camera_time": "05:25:31"
+        }
+      ]
+    },
+    {
+      "id": "b2-s04",
+      "wallclock": "2026-10-30T15:52:00",
+      "t": 25587,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 41.22,
+      "polari": 18.98,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": null,
+      "docx_line": "15:54 s lab x4",
+      "docx_wallclock": "2026-10-30T15:54:00",
+      "photos": [
+        {
+          "file": "15-54-2.jpg",
+          "camera_time": "05:44:50"
+        },
+        {
+          "file": "15-54.jpg",
+          "camera_time": "05:45:22"
+        }
+      ]
+    },
+    {
+      "id": "b2-s05",
+      "wallclock": "2026-10-30T16:14:00",
+      "t": 26907,
+      "qualifier": "approximate (minute resolution)",
+      "docx_line": "16:14 bez lab",
+      "photos": [
+        {
+          "file": "16-14.jpg",
+          "camera_time": "06:03:00"
+        },
+        {
+          "file": "16-14-2.jpg",
+          "camera_time": "06:03:21"
+        },
+        {
+          "file": "16-14-3.jpg",
+          "camera_time": "06:03:47"
+        },
+        {
+          "file": "16-14-4.jpg",
+          "camera_time": "06:05:08"
+        }
+      ]
+    },
+    {
+      "id": "b2-s06",
+      "wallclock": "2026-10-30T16:31:00",
+      "t": 27927,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 42.47,
+      "polari": 19.38,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": null,
+      "docx_line": "16:32 s lab",
+      "docx_wallclock": "2026-10-30T16:32:00",
+      "photos": [
+        {
+          "file": "16-32.jpg",
+          "camera_time": "06:19:56"
+        },
+        {
+          "file": "16-32-2.jpg",
+          "camera_time": "06:20:05"
+        },
+        {
+          "file": "16-32-3.jpg",
+          "camera_time": "06:20:22"
+        },
+        {
+          "file": "16-32-4.jpg",
+          "camera_time": "06:20:54"
+        }
+      ]
+    },
+    {
+      "id": "b2-s07",
+      "wallclock": "2026-10-30T16:58:00",
+      "t": 29547,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 43.45,
+      "polari": 20.01,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": null,
+      "docx_line": "16:58 s lab",
+      "photos": [
+        {
+          "file": "16-58.jpg",
+          "camera_time": "06:47:38"
+        },
+        {
+          "file": "16-58-2.jpg",
+          "camera_time": "06:49:04"
+        },
+        {
+          "file": "16-58-3.jpg",
+          "camera_time": "06:49:28"
+        },
+        {
+          "file": "16-58-4.jpg",
+          "camera_time": "06:49:52"
+        }
+      ]
+    },
+    {
+      "id": "b2-s08",
+      "wallclock": "2026-10-30T17:48:00",
+      "t": 32547,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 44,
+      "polari": 20.34,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "pred suš",
+      "docx_line": "17:48 pred suš",
+      "photos": [
+        {
+          "file": "17-48.jpg",
+          "camera_time": "07:33:03"
+        },
+        {
+          "file": "17-48-2.jpg",
+          "camera_time": "07:33:26"
+        },
+        {
+          "file": "17-48-3.jpg",
+          "camera_time": "07:34:16"
+        },
+        {
+          "file": "17-48-4.jpg",
+          "camera_time": "07:34:30"
+        }
+      ]
+    },
+    {
+      "id": "b2-s09",
+      "wallclock": "2026-10-30T18:04:00",
+      "t": 33507,
+      "qualifier": "approximate (minute resolution)",
+      "refract": 45.12,
+      "polari": 20.65,
+      "dilution_refract": 2,
+      "dilution_polari": 4,
+      "comment": "po suš",
+      "docx_line": "18:04 po suš",
+      "photos": [
+        {
+          "file": "POSUS-18-04.jpg",
+          "camera_time": "07:56:33"
+        },
+        {
+          "file": "POSUS-18-04-2.jpg",
+          "camera_time": "07:56:51"
+        },
+        {
+          "file": "POSUS-18-04-3.jpg",
+          "camera_time": "07:57:07"
+        },
+        {
+          "file": "POSUS-18-04-4.jpg",
+          "camera_time": "07:57:48"
+        },
+        {
+          "file": "POSUS-18-04-5.jpg",
+          "camera_time": "07:58:38"
+        }
+      ]
+    }
+  ],
+  "photo_clock": {
+    "camera": "OptikaCam3 (microscope)",
+    "exif_field": "DateTimeOriginal",
+    "exif_date_invalid": "camera clock reads 2115-08-22; only time-of-day is used",
+    "offset_s_min": 36897,
+    "offset_s_max": 36991,
+    "wallclock_rule": "wallclock = 2026-10-30 + camera_time + offset (offset ∈ [min, max], ±47 s about the midpoint)",
+    "method": "Lower bound: every photo is taken at or after its own sample (tight on 17-48.jpg). Upper bound: every photo is taken before the next sample is drawn (tight on '12-19 V2.jpg'); the 11:30/11:32 seeding pair is excluded because both samples were drawn 2 min apart. Both bounds inherit the minute resolution of the sample labels.",
+    "unassigned_photos": [
+      {
+        "file": "MICRO.jpg",
+        "camera_time": "01:17:29",
+        "note": "Reference shot, not a vessel sample: uniform fine grains, operator measured 10–19 µm (0.318 mm scale line). Likely seed slurry ('očko') — unconfirmed."
+      }
+    ]
+  },
+  "kpi_pairing_hint": {
+    "seeding_event_ids": [
+      "b1-e03",
+      "b2-e02"
+    ],
+    "note": "Observations.seeding_event returns the FIRST is_seeding event only, so time_since_seeding_s is wrong for b2 frames (t > 14:50) until the loader is made batch-aware."
+  }
+}
