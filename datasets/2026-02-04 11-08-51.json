@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "media": {
-    "stem": "Krystal_260204_110851",
+    "stem": "2026-02-04 11-08-51",
     "start_wallclock": "2026-02-04T11:08:39.500",
     "timezone": "Europe/Bratislava",
     "note": "Offsets and frame indices are computed relative to start_wallclock_local. The DVR-burnt clock reads 11:08:39 at frame 0; user-verified frame 15 corresponds exactly to the DVR clock rolling to 11:08:40, so the precise frame-0 wallclock is 11:08:39.500 (15/30 s before the rollover). fps confirmed 30/1 via ffprobe.",
@@ -25,7 +25,8 @@
   "source_document": {
     "path": "Krystal_260204_161114.pdf",
     "language": "sk",
-    "kind": "operator_handwritten_timeline_+_scada_screenshots"
+    "kind": "operator_typed_phone_note_+_scada_trend_photos",
+    "note": "4 pages: pp. 1-2 a typed phone note of the strike timeline (not handwritten), pp. 2-3 phone photos of the DeltaV 'Varostroj ZRA' trend (2026-02-03 21:00 to 02-04 18:00). Times in the note are minute-rounded; 'okolo' = about."
   },
   "context": {
     "vessel": "Camera 100 — boiling vacuum pan, Slovenské cukrovary, Sereď",
@@ -96,9 +97,9 @@
     {
       "id": "b1-e00",
       "phase": "discharge",
-      "label_en": "start discharging (emptying)",
-      "qualifier": "exact",
-      "note": "End of the previous strike. Camera should show the vessel emptying out.",
+      "label_en": "massecuite level of the previous strike passes below the sight glass (discharge under way)",
+      "qualifier": "video-observed (1 fps)",
+      "note": "Observed in this video: picture changes from massecuite to drained glass at 11:46:10-11:46:16. SCADA: agitator off 11:45:30, pan vented 11:46:00, viscosity probe uncovered 11:48:00. Operator note: 'Okolo 11:48 vyprazdnenie' (about 11:48 emptying). Source: scripts/check_anchors.py (video 1 fps; SCADA Paulen_data.xlsx 30 s).",
       "wallclock": "2026-02-04T11:46:10",
       "t": 2250.5,
       "label": ""
@@ -106,22 +107,22 @@
     {
       "id": "b1-e01",
       "phase": "empty",
-      "label_en": "fully discharged",
-      "qualifier": "approximate (operator: 'okolo' = 'around')",
-      "note": "End of the previous strike. Camera should show the vessel emptying out.",
+      "label_en": "picture static: glass drained, level below the window",
+      "qualifier": "video-observed (1 fps)",
+      "note": "Observed in this video (motion stops at 11:46:30). The earlier label 'uplne vyprazdnenie' is not in the operator note and was removed 2026-11-03. Source: scripts/check_anchors.py (video 1 fps; SCADA Paulen_data.xlsx 30 s).",
       "wallclock": "2026-02-04T11:46:30",
       "t": 2270.5,
-      "label": "uplne vyprazdnenie"
+      "label": ""
     },
     {
       "id": "b2-e01b",
       "phase": "new_batch_vacuum_pull",
-      "label_en": "16:07 — new batch begins; vacuum re-established",
-      "qualifier": "approximate (operator: 'okolo' = 'around')",
-      "note": "End of the previous strike. Camera should show the vessel emptying out.",
+      "label_en": "vacuum re-established for the new strike (b2)",
+      "qualifier": "video-observed (1 fps)",
+      "note": "Observed in this video at 11:50:52; SCADA vacuum PIC1003 below -30 kPa at 11:51:30. Not in the operator note: the earlier label '16:07 novy - vakuum' was copied from b2-e11 and was removed 2026-11-03. Source: scripts/check_anchors.py (video 1 fps; SCADA Paulen_data.xlsx 30 s).",
       "wallclock": "2026-02-04T11:50:52",
       "t": 2532.5,
-      "label": "16:07 novy - vakuum"
+      "label": ""
     },
     {
       "id": "b2-e02",
@@ -170,10 +171,10 @@
       "subphase": "first_crystals_visible",
       "label_en": "12:30 — stabilization; bubbles again; seeding (graining) with limited steam; first crystals visible as very small inclusions",
       "qualifier": "exact",
-      "note": "GRAINING POINT — operationally critical. Pipeline KPI snapshots should mark this as t=0 of the growth phase. Seed injected here is slurry (mikroočko): Mastersizer Dv50 6.8 µm, D[4;3] 8.7 µm (docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf).",
+      "note": "GRAINING POINT, operator note 12:30. SCADA: steam valve PIC1002 cut from 100 % to <= 50 % at 12:31:30 (limited steam at seeding), so t=0 of growth lies in 12:30:00-12:31:30. Seed injected here is slurry (mikroocko): Mastersizer Dv50 6.8 um, D[4;3] 8.7 um (docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf).",
       "wallclock": "2026-02-04T12:30:00",
       "t": 4880.5,
-      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť pb2-rve kryštaliky (velmi male inkluzie)",
+      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť prve kryštaliky (velmi male inkluzie)",
       "is_seeding": true
     },
     {
@@ -181,7 +182,7 @@
       "phase": "boiling",
       "label_en": "12:39 — boiling (controlled growth)",
       "qualifier": "exact",
-      "note": "Steady-state growth phase begins (9 min after seeding). Crystals grow from the ~7–10 µm slurry; on this pan, microscope samples reached ~0.3–0.8 mm by end of strike (ZRA run 2026-10-30, datasets/2026-10-30 08-45-33.json; different day, hand-picked crystals, so a rough range).",
+      "note": "Steady-state growth begins (9 min after seeding). Size reference from another day on this pan (ZRA run 2026-10-30, datasets/microscope_annotations.csv, scripts/microscope_summary.py): median of operator-picked crystal chords 29 um at 2 min, 114 um at 37 min, 276 um at 79 min, 483 um at 122 min, 452-486 um at 160-170 min after seeding.",
       "wallclock": "2026-02-04T12:39:00",
       "t": 5420.5,
       "label": "12:39 navaranie"
@@ -191,7 +192,7 @@
       "phase": "drying",
       "label_en": "15:41 — drying (final concentration)",
       "qualifier": "exact",
-      "note": "End of growth phase. ~3 h 11 min after seeding. Crystals at near-final size.",
+      "note": "End of growth phase, 3 h 11 min after the 12:30 seeding note.",
       "wallclock": "2026-02-04T15:41:00",
       "t": 16340.5,
       "label": "15:41 susenie"
@@ -209,19 +210,19 @@
     {
       "id": "b2-e10",
       "phase": "discharge",
-      "label_en": "discharge/release of massecuite",
-      "qualifier": "exact",
-      "note": "Finished massecuite released to centrifuge.",
+      "label_en": "massecuite level passes below the sight glass (discharge under way)",
+      "qualifier": "video-observed (1 fps)",
+      "note": "Observed in this video: level passes the window at 16:00:10-16:00:23. SCADA: agitator off 15:59:30, vented 16:00:00, viscosity probe uncovered 16:02:00. Operator note: '15:59 vypustanie' (15:59 discharging). Source: scripts/check_anchors.py (video 1 fps; SCADA Paulen_data.xlsx 30 s).",
       "wallclock": "2026-02-04T16:00:10",
       "t": 17490.5,
       "label": ""
     },
     {
-      "id": "eb2-10b",
+      "id": "b2-e10b",
       "phase": "empty",
-      "label_en": "fully discharged",
-      "qualifier": "exact",
-      "note": "Finished massecuite released to centrifuge.",
+      "label_en": "picture static: glass drained, level below the window",
+      "qualifier": "video-observed (1 fps)",
+      "note": "Observed in this video (motion stops at 16:00:29-16:00:30). Source: scripts/check_anchors.py (video 1 fps; SCADA Paulen_data.xlsx 30 s).",
       "wallclock": "2026-02-04T16:00:30",
       "t": 17510.5,
       "label": ""
@@ -231,7 +232,7 @@
       "phase": "new_batch_vacuum_pull",
       "label_en": "16:07 — new batch begins; vacuum re-established",
       "qualifier": "exact",
-      "note": "End of THIS strike's video coverage. Next batch begins (cycle repeats).",
+      "note": "Operator note '16:07 novy - vakuum'. SCADA vacuum PIC1003 below -30 kPa at 16:08:00. ~248 s of footage remain after this event (video duration 18166.1 s).",
       "wallclock": "2026-02-04T16:07:18",
       "t": 17918.5,
       "label": "16:07 novy - vakuum"
@@ -243,7 +244,7 @@
       "label_en": "PREDICTED from b2-e08: 15:41 — drying (final concentration)",
       "qualifier": "predicted",
       "is_seeding": false,
-      "note": "PREDICTED from b2-e08 (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = 1150.0s).",
+      "note": "PREDICTED from b2-e08 (batch-match: gap to b2-e10 = 1150.0 s scaled by 70/77.6 = 0.9021, anchor b1-e00 @ 11:46:10). The 70/77.6 ratio is an operator input of June 2026 (commit 42aee0a); how it was measured is not recorded.",
       "wallclock": "2026-02-04T11:28:52.628866",
       "t": 1213.128866
     },
@@ -254,20 +255,20 @@
       "label_en": "PREDICTED from b2-e09: 15:58 — aeration (vacuum break)",
       "qualifier": "predicted",
       "is_seeding": false,
-      "note": "PREDICTED from b2-e09 (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = 130.0s).",
+      "note": "PREDICTED from b2-e09 (batch-match: gap to b2-e10 = 130.0 s scaled by 70/77.6 = 0.9021, anchor b1-e00 @ 11:46:10). The 70/77.6 ratio is an operator input of June 2026 (commit 42aee0a); how it was measured is not recorded. SCADA check: b1 agitator off 11:45:30, vented 11:46:00 (scripts/check_anchors.py).",
       "wallclock": "2026-02-04T11:44:12.731959",
       "t": 2133.231959
     },
     {
-      "id": "b1-10b_pred",
+      "id": "b1-e10b_pred",
       "phase": "empty",
       "label": "",
-      "label_en": "PREDICTED from eb2-10b: fully discharged",
+      "label_en": "PREDICTED from b2-e10b: picture static: glass drained, level below the window",
       "qualifier": "predicted",
       "is_seeding": false,
-      "note": "PREDICTED from eb2-10b (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = -410.0s).",
-      "wallclock": "2026-02-04T11:52:19.845361",
-      "t": 2620.345361
+      "note": "PREDICTED from b2-e10b (batch-match: gap to b2-e10 = -20.0 s scaled by 70/77.6 = 0.9021, anchor b1-e00 @ 11:46:10). The 70/77.6 ratio is an operator input of June 2026 (commit 42aee0a); how it was measured is not recorded. Observed counterpart: b1-e01 at 11:46:30.",
+      "wallclock": "2026-02-04T11:46:28.041237",
+      "t": 2268.541237
     },
     {
       "id": "b1-e11_pred",
@@ -276,26 +277,59 @@
       "label_en": "PREDICTED from b2-e11: 16:07 — new batch begins; vacuum re-established",
       "qualifier": "predicted",
       "is_seeding": false,
-      "note": "PREDICTED from b2-e11 (linear scale 0.9021 = 70/77.6 SCADA-points, anchor b1-e00 @ 2026-02-04T11:46:10; gap_to_b2-e10 = -428.0s).",
+      "note": "PREDICTED from b2-e11 (batch-match: gap to b2-e10 = -428.0 s scaled by 70/77.6 = 0.9021, anchor b1-e00 @ 11:46:10). The 70/77.6 ratio is an operator input of June 2026 (commit 42aee0a); how it was measured is not recorded. Observed counterpart: b2-e01b at 11:50:52 (video), SCADA vacuum 11:51:30.",
       "wallclock": "2026-02-04T11:52:36.082474",
       "t": 2636.582474
     }
   ],
   "segments": [
     {
-      "phase": "discharge",
-      "note": "Pre-event tail (video starts at 11:08:51; first observed event 11:48). The vessel is presumed to be in the discharge stage from a previous strike that operator did not annotate.",
+      "phase": "boiling",
       "t_start": 0,
-      "t_end": 2453.5
+      "t_end": 1213.128866,
+      "note": "Previous strike (b1); PREDICTED end (b1-e08_pred). SCADA: steam valve 100 % until 11:44:30."
+    },
+    {
+      "phase": "drying",
+      "t_start": 1213.128866,
+      "t_end": 2133.231959,
+      "note": "b1; PREDICTED boundaries."
+    },
+    {
+      "phase": "aeration",
+      "t_start": 2133.231959,
+      "t_end": 2250.5,
+      "note": "b1; PREDICTED start. SCADA vented 11:46:00."
+    },
+    {
+      "phase": "discharge_release",
+      "t_start": 2250.5,
+      "t_end": 2270.5
+    },
+    {
+      "phase": "empty",
+      "t_start": 2270.5,
+      "t_end": 2532.5
+    },
+    {
+      "phase": "new_batch_vacuum_pull",
+      "t_start": 2532.5,
+      "t_end": 2600.5
     },
     {
       "phase": "cleaning",
-      "t_start": 2453.5,
-      "t_end": 3278.5
+      "t_start": 2600.5,
+      "t_end": 3278.5,
+      "note": "Operator note 'Cistenie do naplnanie 11:52' (cleaning until filling, 11:52) is ambiguous: this interval may already be filling."
     },
     {
       "phase": "filling_with_bubbles",
       "t_start": 3278.5,
+      "t_end": 3380.5
+    },
+    {
+      "phase": "bubbles_intensify",
+      "t_start": 3380.5,
       "t_end": 3680.5
     },
     {
@@ -305,15 +339,15 @@
     },
     {
       "phase": "stabilization_and_seeding",
-      "note": "Graining window. Crystals first observable here.",
       "t_start": 4880.5,
-      "t_end": 5420.5
+      "t_end": 5420.5,
+      "note": "Graining window. Crystals first observable here."
     },
     {
       "phase": "boiling",
-      "note": "Main growth phase, ~3 hours. Crystals grow from ~7–10 µm slurry to roughly 0.3–0.8 mm (ZRA microscope run 2026-10-30; rough range).",
       "t_start": 5420.5,
-      "t_end": 16340.5
+      "t_end": 16340.5,
+      "note": "Main growth phase, 3 h 2 min."
     },
     {
       "phase": "drying",
@@ -323,29 +357,30 @@
     {
       "phase": "aeration",
       "t_start": 17360.5,
-      "t_end": 17420.5
+      "t_end": 17490.5
     },
     {
       "phase": "discharge_release",
-      "t_start": 17420.5,
-      "t_end": 17900.5
+      "t_start": 17490.5,
+      "t_end": 17510.5,
+      "note": "Level passes the window in ~20 s; after b2-e10b the camera sees drained glass, not massecuite."
     },
     {
       "phase": "empty",
-      "note": "Short window between full discharge (e10b) and the next-batch vacuum-pull event (e11).",
-      "t_start": 17900.5,
-      "t_end": 17934.5
+      "t_start": 17510.5,
+      "t_end": 17918.5
     },
     {
       "phase": "new_batch_vacuum_pull",
-      "note": "Open-ended within this recording; ~231 s of footage remain after e11 (video duration 18166 s per ffprobe). Next strike continues here.",
-      "t_start": 17934.5,
-      "t_end": null
+      "t_start": 17918.5,
+      "t_end": null,
+      "note": "Open-ended; ~248 s of footage remain after b2-e11."
     }
   ],
   "kpi_pairing_hint": {
-    "seeding_event_id": "e06",
-    "time_since_seeding_s_at": "video_offset_s - 4869",
-    "use_case": "When src/optics/kpi.py samples a frame during boiling phase, the time_since_seeding can be paired with median crystal size to produce one point on the per-batch growth curve G(t) discussed in papers/cep/sections/growth.tex."
+    "seeding_event_id": "b2-e06",
+    "time_since_seeding_s_at": "video_offset_s - 4880.5",
+    "uncertainty_s": "0 to +90 (SCADA steam cut 12:31:00-12:31:30)",
+    "use_case": "Pair a KPI frame sampled in b2 boiling with its time since seeding."
   }
 }
