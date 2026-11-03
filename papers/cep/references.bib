@@ -111,15 +111,29 @@
   doi     = {10.1016/j.ces.2008.08.007}
 }
 
-% UNVERIFIED 2026-11-03: no online record found (journal archive, Czech library catalogues); no local copy. The
-% author who added it (commit 3a83be5) must supply the issues or a scan.
+% Checked 2026-11-03 on the journal's open PDFs (cukr-listy.cz, contents 2020 and 2021): part 2 covers C
+% (Cukrovina = massecuite); parts 14-16 cover U-Z (Var, Varna, Varostroj, Zadel, Zrneni varu ockovanim incl.
+% mikroocko 5-10 um, Zrnic). No DOI is registered for the journal's articles.
+@article{GeblerHotovy2020,
+  author  = {Gebler, Jaroslav and Hotov{\'y}, Zden{\v{e}}k},
+  title   = {V{\'y}kladov{\'y} slovn{\'i}k cukrovarnick{\'y}ch pojm{\r{u}} -- {\v{c}}{\'a}st 2},
+  journal = {Listy cukrovarnick{\'e} a {\v{r}}epa{\v{r}}sk{\'e}},
+  volume  = {136},
+  number  = {2},
+  pages   = {89--91},
+  year    = {2020},
+  url     = {https://www.cukr-listy.cz/on_line/2020/PDF/89-91.pdf}
+}
+
 @article{GeblerHotovy2021,
-  author  = {Gebler, J. and Hotov{\'y}, Z.},
-  title   = {V{\'y}kladov{\'y} slovn{\'i}k cukrovarnick{\'y}ch pojm{\r{u}}, parts 14--16},
+  author  = {Gebler, Jaroslav and Hotov{\'y}, Zden{\v{e}}k},
+  title   = {V{\'y}kladov{\'y} slovn{\'i}k cukrovarnick{\'y}ch pojm{\r{u}} -- {\v{c}}{\'a}st 14--16},
   journal = {Listy cukrovarnick{\'e} a {\v{r}}epa{\v{r}}sk{\'e}},
   volume  = {137},
+  number  = {5--6, 7--8, 9--10},
   pages   = {229--231, 292--294, 353--354},
-  year    = {2021}
+  year    = {2021},
+  url     = {https://www.cukr-listy.cz/lc-obsah2021.html}
 }
 
 @book{Goodman2017,
@@ -383,7 +397,7 @@
 }
 
 % ---------------------------------------------------------------------------------------------------------------
-% Verified replacements and additions, not yet cited (see SOURCES.md for the claim each one supports)
+% Further entries (see SOURCES.md for the claim each one supports)
 % ---------------------------------------------------------------------------------------------------------------
 
 @inproceedings{SellentFavaro2014,
@@ -417,6 +431,29 @@
   pages   = {3344--3351},
   year    = {2009},
   doi     = {10.1016/j.ces.2009.04.016}
+}
+
+@article{Huo2020,
+  author  = {Huo, Yan and Liu, Tao and Yang, Yixuan and Ma, Cai Y. and Wang, Xue Z. and Ni, Xiongwei},
+  title   = {In situ measurement of {3D} crystal size distribution by double-view image analysis with case study on
+             {l}-glutamic acid crystallization},
+  journal = {Industrial \& Engineering Chemistry Research},
+  volume  = {59},
+  number  = {10},
+  pages   = {4646--4658},
+  year    = {2020},
+  doi     = {10.1021/acs.iecr.9b05828}
+}
+
+@article{Manee2019,
+  author  = {Manee, V. and Zhu, W. and Romagnoli, J. A.},
+  title   = {A deep learning image-based sensor for real-time crystal size distribution characterization},
+  journal = {Industrial \& Engineering Chemistry Research},
+  volume  = {58},
+  number  = {51},
+  pages   = {23175--23186},
+  year    = {2019},
+  doi     = {10.1021/acs.iecr.9b02450}
 }
 
 @article{Kempkes2008,
@@ -454,11 +491,13 @@
   doi     = {10.1021/ie2001499}
 }
 
-% Sugar Industry / Zuckerindustrie; Crossref gives no volume (2017 = vol. 142, issue 9; check on the PDF).
+% Volume and issue from the publisher page (sugarindustry.info/paper/18737); Crossref gives no volume.
 @article{Daniels2017,
   author  = {Dani{\"e}ls, Ren{\'e} and Nouws, Daniel and Wittenberg, Arend},
   title   = {Improved image analysis system for technical sugar crystal suspensions},
   journal = {Sugar Industry},
+  volume  = {142},
+  number  = {9},
   pages   = {538--543},
   year    = {2017},
   doi     = {10.36961/si18737}
@@ -506,6 +545,16 @@
                   4:3 and wide-screen 16:9 aspect ratios},
   howpublished = {International Telecommunication Union, \url{https://www.itu.int/rec/R-REC-BT.601}},
   year         = {2011}
+}
+
+% Table 1 (625-line): digital field blanking ends at lines 23 and 336 and starts at 311 and 624, so 2 x 288 = 576
+% active lines. BT.601-7 itself gives 13.5 MHz, 720 active samples and the 5.75 MHz luma passband (Fig. 3).
+@misc{ITUBT656,
+  author       = {{ITU-R}},
+  title        = {Recommendation {ITU-R} {BT}.656-5: Interface for digital component video signals in 525-line and
+                  625-line television systems operating at the 4:2:2 level of {Recommendation ITU-R BT}.601},
+  howpublished = {International Telecommunication Union, \url{https://www.itu.int/rec/R-REC-BT.656}},
+  year         = {2007}
 }
 
 @misc{AdemcoACM380E,

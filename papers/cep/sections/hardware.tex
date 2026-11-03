@@ -85,7 +85,7 @@ PAL raster & $720 \times 576$ & measured (recording) \\
 
 The picture reaches the recorder as an analogue PAL line, so the pixel grid of a recording is set by the recorder
 and not by the sensor. The digital video recorder (DVR) samples each line at the ITU-R BT.601 luma rate of 13.5~MHz
-into 720 samples and keeps 576 lines \citep{ITUBT601}. One recorded sample thus spans a CCD cell width times the
+into 720 samples and keeps 576 lines \citep{ITUBT601,ITUBT656}. One recorded sample thus spans a CCD cell width times the
 ratio of the CCD clock to the DVR rate, $6.50~\text{\textmu m} \times 14.1875 / 13.5 = 6.831$~\um{} on the sensor,
 and one line spans one cell row, 6.250~\um{} (\code{python -m optics.scale_chain}). The resulting sample aspect,
 1.093, is close to the PAL pixel aspect ratio $59/54$. Where the digitised window starts within the analogue line
