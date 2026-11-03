@@ -1,0 +1,227 @@
+% Section 3 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+\section{Geometric optics through the sight glass \emph{(RQ1)}}\label{sec:optics}
+
+\subsection{Thin-lens scale model}\label{sec:thinlens}
+
+Under the standard Gaussian thin-lens approximation \citep[\S\,5.2]{Hecht2017}, the image distance $i$ and object
+distance $d_o$ satisfy
+\begin{equation}\label{eq:thinlens}
+\frac{1}{f} = \frac{1}{d_o} + \frac{1}{i}, \qquad M = \frac{i}{d_o} = \frac{f}{d_o - f},
+\end{equation}
+with $M$ the transverse magnification. An extension tube of length $e$ placed between the lens flange and the sensor
+fixes the back focal distance to $i_\infty = f + e$ at infinity focus, with the focus ring trimming $i$ by a few
+millimetres at finite focus (\citealp{PhotonsToPhotos2024}; derived from \citealp[\S\,5.2]{Hecht2017}). Once focus
+is set, the lens-to-sensor distance $i_\mathrm{fixed}$ is fixed and \textbf{the object-plane pixel size at any object
+distance} $d_o$ is
+\begin{equation}\label{eq:pixelsize}
+\Delta x(d_o) = \frac{\text{pitch}}{M(d_o)} = \text{pitch} \cdot \frac{d_o}{i_\mathrm{fixed}},
+\end{equation}
+which is \textbf{strictly linear in $\boldsymbol{d_o}$}. This is the geometric scale even for \emph{defocused} image
+points --- defocus spreads each point across many pixels but the \emph{centroid} sits exactly where geometric optics
+places it \citep{Pertuz2013}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{01_mm_per_pixel}
+\caption{\textbf{How does the metric scale change with depth?} Object-plane pixel size as a function of object
+distance for the case-study lens ($f = 35$~mm, $\boldsymbol{e = 60}$~\textbf{mm}, focus = 55.1~mm --- verified by
+operator caliper, 2026-06-15). \textbf{Strictly linear in $\boldsymbol{d_o}$}, as predicted by the thin-lens
+identity $M = i/d_o$. At the focused plane the scale is \textbf{1.66~\umpx}; doubling the depth doubles the
+\textmu m/px.}\label{fig:mmpx}
+\end{figure}
+
+\subsection{Sight-glass refractive shift}\label{sec:shift}
+
+A parallel sight glass of thickness $t$ and index $n_g$ shifts the apparent object distance toward the lens by
+$\Delta = t \cdot (1 - 1/n_g)$ (\citealp[\S\,5.6]{Hecht2017}, paraxial limit). For DIN 8902 borosilicate at the
+measured 20~mm thickness and $n_g = 1.47$, $\Delta = 6.39$~mm, independent of distance. The exact projection through
+a thick flat port is a 12th-degree polynomial \citep{Agrawal2012}; the paraxial form here is adequate for
+sub-percent pixel-pitch budgeting but not for sub-pixel metric reconstruction --- a limitation we discuss in
+\secref{sec:growth}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{05_sight_glass_shift}
+\caption{\textbf{How much does the sight glass distort distances?} Apparent vs real object distance through the
+DIN 8902 borosilicate disc. The shift is a \textbf{constant 6.39~mm} (independent of object distance, by the paraxial
+identity $\Delta = t(1 - 1/n_g)$). It is folded into every $d_o$ in subsequent analysis but \textbf{does not change
+the linear scaling rate} of \figref{fig:mmpx} --- only the absolute offset.}\label{fig:shift}
+\end{figure}
+
+\subsection{Extension-tube sensitivity}\label{sec:tube}
+
+The extension tube length $e$ is one of the two parameters that historically had to be measured on-site (the other
+being the F-number setting). An earlier revision of this manuscript used the estimated $e \approx 10$~mm (inferred
+from snapshot FOV anchoring against assumed mid-strike crystal size) and reported a CSD median of 0.25~mm. Operator
+caliper measurement on 2026-06-15 yielded $\boldsymbol{e = 45}$~\textbf{mm}, corrected on 2026-09-07 to
+$\boldsymbol{e = 60}$~\textbf{mm} --- a factor-of-6 revision that shrinks \textmu m/px from 10.4 to \textbf{1.66} and
+moves the working distance to \textbf{55~mm} (a true macro setup). The earlier ``0.25~mm mid-strike'' interpretation
+moved to ``\textbf{0.037~mm}'' with the corrected scale. At the time, this was read as ``consistent with the first
+hour of a 4-hour strike''; \secref{sec:csd} retracts that interpretation --- both numbers sit far above the actual
+$\approx 9$~\um{} seed-magma population (Mastersizer ground truth), and the apparent agreement was an artefact of
+choosing a stage label that matched the bandpass.
+
+This episode is itself a generalisable finding: \textbf{for installations with undocumented extension-tube length,
+ad-hoc in-scene anchoring is not reliable}, because the anchor (typical crystal size) is itself mid-strike-dependent
+and can mask a scale error by $5\times$ without flagging an inconsistency. A caliper measurement remains the cheapest
+verification step; longer-term, the growth-curve self-validation of \secref{sec:growth} promises to remove the
+on-site step entirely.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{06_extension_tube_sweep}
+\caption{\textbf{How does the extension tube control the macro range?} Object-plane pixel size as a function of
+object distance, parameterised by extension tube length $e$. The verified $e = 60$~mm places the focused plane at
+$d_\mathrm{focus} = 55.1$~mm and the scale at 1.66~\umpx. A wrong estimate of $e$ propagates as a
+\emph{multiplicative} error on the final crystal size --- the v0.1 manuscript's $e = 10$~mm (blue) was $4.5\times$
+too short, which is why the earlier reported median was $4.8\times$ too large.}\label{fig:tube}
+\end{figure}
+
+\subsection{In-scene anchoring (now consistent with the verified hardware)}\label{sec:anchoring}
+
+A row-wise autocorrelation analysis on a single frame yields a median first-decorrelation pixel offset of 42.5~px. At
+the verified 1.66~\umpx{} the corresponding texture period is ${\sim}85$~px $\approx 0.14$~mm. The earlier reading of
+this period as ``the 0.05--0.10~mm crystal sizes typical of the first hour of a boiling-pan strike'' is retracted
+(see \secref{sec:csd}): the imaged product is the $\approx 9$~\um{} seed-magma population, well below the texture
+period this autocorrelation isolates. What the autocorrelation period is actually picking up --- agglomerate
+spacing, droplet pattern, inter-cluster gap, or detector-bandpass structure --- is an open question and not used
+elsewhere in the pipeline as a scale anchor. The optical model and the \textmu m/px scale themselves remain mutually
+consistent with the verified hardware (\S\S\,\ref{sec:camera}, \ref{sec:thinlens}, \ref{sec:tube}); the retraction
+is of the \emph{interpretation} of the autocorrelation, not of the scale.
+
+\subsection{Where the focal slab actually sits in the vessel}\label{sec:slab}
+
+Combining the verified macro geometry (\secref{sec:thinlens}) with the vessel geometry (\secref{sec:plant}) and an
+\emph{in-situ} empty-tank measurement (described below) lets us pin down the axial position of the focal slab to
+within a few micrometres.
+
+The focused object distance is $d_\mathrm{focus} = 55.1$~mm measured \textbf{from the front principal plane $H$},
+not from any external surface of the lens. For a 35~mm machine-vision C-mount lens, $H$ sits inside the optical
+assembly; the manufacturer datasheet specifies the back focal distance (BFD = 15.03~mm in air, rear vertex to sensor
+at infinity focus) but does not publish the $H$-to-front-element offset. With the air gap $a = 20$~mm and glass
+$t = 20$~mm now measured, the in-situ result of \secref{sec:dent} closes the stack-up and places $H$ about 21.5~mm
+behind the front element (\secref{sec:stackup}). \figref{fig:layout} illustrates the stack.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.85\textwidth]{18_optical_layout}
+\caption{\textbf{What does the optical chain from sensor to slurry actually look like?} Schematic (not to scale).
+Variables: lens focal length $f = 35$~mm, extension tube $e = 60$~mm, sensor at image distance
+$i = f + e + x = 96$~mm ($x \approx 1$~mm focus-ring travel), lens-to-glass air gap $a = 20$~mm, glass thickness
+$t = 20$~mm, glass index $n_g = 1.47$, refractive shift $\Delta = t(1 - 1/n_g) = 6.39$~mm (the 20-mm-thick glass
+\emph{appears} $t - \Delta = 13.61$~mm thick in the thin-lens model), focused object distance
+$d_\mathrm{focus} = 55.1$~mm from the front principal plane $H$, and the focal-plane offset $\delta \approx 8$~\um{}
+past the inner glass face recovered from the in-situ measurement of \secref{sec:dent}.}\label{fig:layout}
+\end{figure*}
+
+\subsubsection{Pinning the slab from glass-dent sharpness}\label{sec:dent}
+
+Across the case-study recording, fixed scratches/dents on the sight glass appear in every empty-tank frame (e.g.,
+between the two discharge events of operator-note IDs \code{e01b} and \code{e11}). Because the dents are at a
+\emph{fixed physical depth}, their sharpness should be identical across all empty-tank frames, regardless of which
+strike the recording captures. We measured the median top-1\,\% per-pixel Laplacian$^2$ in 99 + 109 sampled frames
+across two empty-tank windows four hours apart (\figref{fig:dents}):
+\begin{itemize}
+\item Window 1 (11:49:33 $\rightarrow$ 11:50:52, $n = 99$): median 11\,664 (p5--p95 spread of ${\sim}11$\,\%).
+\item Window 2 (16:07:00 $\rightarrow$ 16:07:18, $n = 109$): median 12\,996 (${\sim}9$\,\% spread).
+\end{itemize}
+
+Cross-window medians agree to within 11\,\%, \emph{across a four-hour gap} --- exactly the stability one expects from
+a fixed-depth target, and incompatible with any bulk-slurry feature that would change with the strike progression.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{17_dent_sharpness_histograms}
+\caption{\textbf{How far inside the slurry does the focal plane sit?} Per-frame glass-dent sharpness measured in two
+empty-tank windows 4 hours apart in the case-study recording. The two distributions overlap to within 11\,\%,
+confirming the dents are at one fixed depth. Top axis: implied object distance $d_o$ (near-side root) per sharpness,
+with ticks pinned to the bottom-axis log decades (this axis was drawn for the superseded
+$d_\mathrm{focus} = 62.2$~mm; the sharpness histograms themselves are pixel-domain and unaffected). The predicted
+focal-plane sharpness (green dashed) is $\approx 56\times$ brighter than the dents, placing them ${\sim}8$~\um{} in
+front of the focal plane.}\label{fig:dents}
+\end{figure}
+
+Inverting the diffraction-floor PSF model (\secref{sec:psf}) with $\sigma_\mathrm{floor} \approx 1.4$~\um{} gives a
+dent circle of confusion $c \approx 5.8$~\um. Solving $c(d_o) = K \cdot |d_o - d_\mathrm{focus}| / d_o$ with
+$K = f^2 / (N (d_\mathrm{focus} - f)) = 38.13$~mm for the \emph{near-side} root (the dents are between lens and
+slurry, so they cannot be on the far side):
+\begin{equation}\label{eq:dent}
+d_\mathrm{dent} \approx \frac{K \cdot d_\mathrm{focus}}{K + c} \approx 55.074~\text{mm},
+\end{equation}
+i.e., the dents sit \textbf{$\boldsymbol{\approx 8}$~\textmu m in front of the focal plane} (the $c \approx 5.8$~\um{}
+inversion was calibrated at the superseded 2.18~\umpx{} scale; a rerun at 1.66~\umpx{} is pending and may move
+$\delta$ by a few \textmu m).
+
+\subsubsection{Which face of the glass}\label{sec:face}
+
+A simple physical argument resolves which face of the sight glass the dents sit on. In thin-lens (apparent)
+coordinates, the 20~mm physical glass appears compressed to $t - \Delta = 13.61$~mm thick (\figref{fig:layout}). Two
+hypotheses (\tabref{tab:face}).
+
+\begin{table*}
+\centering\tabfont
+\caption{The two hypotheses for the face of the sight glass that carries the dents.}\label{tab:face}
+\begin{tabular}{@{}lrr>{\raggedright\arraybackslash}p{0.35\textwidth}@{}}
+\toprule
+Dent location & Outer-face apparent $d_o$ & Inner-face apparent $d_o$ & Position of focal plane (55.082~mm) \\
+\midrule
+\textbf{outer (lens-facing) face} & 55.074~mm & 68.679~mm & inside the glass slab --- physically impossible \\
+\textbf{inner (slurry-facing) face} & 41.469~mm & 55.074~mm & \textbf{8~\textmu m past the inner face, in the
+slurry} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The outer-face hypothesis places the focal plane inside the bulk glass material, which is incompatible with the
+camera ever yielding focused images of slurry features (which it manifestly does later in the strike). The inner-face
+hypothesis places the focal plane 8~\um{} into the slurry past the inner glass surface --- the \emph{only}
+consistent geometry.
+
+\subsubsection{Operational consequences}\label{sec:slabops}
+
+The focal slab therefore sits \textbf{${\sim}8$~\textmu m into the slurry beyond the inner sight-glass surface}, with
+the absolute number subject to a ${\sim}2\times$ uncertainty inherited from the $c = 5.8$~\um{} self-calibration of
+the sharpness model (a future calibration anchored against a focused crystal from mid-strike would tighten this to
+better than $\pm 1$~\um). The slab is sub-millimetre \emph{thick}: DoF at F/1.6 has FWHM $\approx 4.5$~\um{} of object
+depth (\secref{sec:dof}), and the usable detection range (where the circle of confusion exceeds one sensor pixel)
+extends to about $\pm 0.07$~mm.
+
+Two consequences carried through the rest of the paper. First, the \emph{spatial} sampling claim of the pipeline is
+not ``this is the crystal population in the pan'' but ``this is the population in the slurry boundary layer pressed
+against the inner sight-glass surface''. Section~\ref{sec:homog} leans on the strong thermosiphon circulation in
+TVA~30 vessels to argue that this layer is representative of bulk; \secref{sec:selfcheck} records the caveat that
+this homogeneity is \emph{assumed}, not directly measured. Second, the vessel geometry does \emph{not} enter as a
+depth bound on the detection range --- the sub-mm optical slab is many orders of magnitude tighter than the 900~mm
+annular gap, so any front/back-disambiguation discussion (\secref{sec:sizing}) is bounded by optics, not by vessel
+walls.
+
+\subsubsection{Closing the stack-up with the measured air gap}\label{sec:stackup}
+
+The empirical measurement of \secref{sec:dent} pins the focal plane relative to the \emph{inner glass face}. Placing
+it in the lab frame additionally needs the lens-to-glass air gap $a$ (\figref{fig:layout}), which was measured on
+site on 2026-09-07 as $\boldsymbol{a = 20}$~\textbf{mm} (lens front rim to outer glass face), together with
+$t = 20$~mm and $e = 60$~mm.
+
+From the \secref{sec:dent} result and the refractive shift (\secref{sec:shift}), the real (unshifted) distance from
+$H$ to the inner glass face is
+\begin{equation}\label{eq:hreal}
+\begin{aligned}
+\mathrm{real}(H \to \text{inner glass}) &= d_\mathrm{dent}^{(\mathrm{apparent})} + \Delta \\
+&= 55.074 + 6.39 = 61.47~\text{mm},
+\end{aligned}
+\end{equation}
+so the real distance from $H$ to the outer (lens-facing) glass face is $61.47 - t = 41.47$~mm. With $a = 20$~mm
+measured, the only unpublished lens-internal quantity follows directly:
+\begin{equation}\label{eq:hfront}
+\boxed{H \to \text{front element} = 41.47 - a = 21.5~\text{mm}},
+\end{equation}
+which sits inside the 29.5~mm lens body. The image side fixes the rear principal plane independently: the sensor is
+recessed by the C-mount flange distance (17.53~mm), so $i = 96$~mm from the sensor puts $H'$ 12.0~mm behind the
+(extended) front element. $H$ and $H'$ are thus $\approx 10$~mm apart --- the lens is a thick lens, not a thin one,
+and both planes land inside the 29.5~mm body. Inputs: the measured $e$, $a$, $t$ and lens body; the observed fact
+that the glass dents are in focus (\secref{sec:dent}); the standard C-mount flange depth of 17.53~mm (the HCB-6000
+is CS-mount with a 5~mm C-mount adapter ring; whether the measured 60~mm includes that ring is unconfirmed); and the
+focus-ring travel $x \approx 1$~mm. The HF35HA-1B focus ring carries only NEAR/FAR direction labels and no index;
+the operator counted about three exposed helicoid turns, estimated at 1~mm of travel (2026-09-07). Each $\pm 1$~mm
+of travel moves the scale by $\mp 1.6$\,\%; a caliper on the lens body length (29.5~mm at FAR per datasheet, plus
+travel) would fix it exactly.

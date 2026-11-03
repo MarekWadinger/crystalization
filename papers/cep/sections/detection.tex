@@ -1,0 +1,68 @@
+% Section 5 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+\section{Crystal detection and the in-focus selectivity \emph{(detector layer)}}\label{sec:detection}
+
+\subsection{Sharpness-layer decomposition}\label{sec:layers}
+
+We compute a per-pixel sharpness map using a windowed Laplacian-variance estimator (kernel = 15~px,
+Gaussian-smoothed; the \code{annotator.sharpness.compute_sharpness_map} helper), then segment the frame into
+$L = 3$ sharpness layers via min-max-normalised quantile binning. The detector is then run \emph{per layer}, with a
+morphological closing kernel that scales with the layer index (small for sharp-edge layers; large for blurry layers,
+to bridge thicker edge fragments).
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{12_sharpness_layers}
+\caption{\textbf{How does the pipeline split one frame into sharpness-based depth layers?} Four-panel decomposition
+of frame 750. \textbf{Top-left:} original cropped frame. \textbf{Top-right:} per-pixel Laplacian-variance sharpness
+map (bright = sharp, dark = blurry). \textbf{Bottom-left:} 3-layer segmentation overlaid (blue = sharpest / in-focus
+slice; green = mid; red = least sharp). \textbf{Bottom-right:} detected crystals colour-coded by their assigned
+layer. The decomposition is purely image-derived --- it identifies the depth \emph{structure} before any optical model
+is applied.}\label{fig:layers}
+\end{figure}
+
+\subsection{Edge-based detection}\label{sec:edge}
+
+The detector (inherited from prior project work, \code{src/annotator/detection.py}) executes per layer:
+\begin{enumerate}
+\item Adaptive threshold (Gaussian-mean, block 11) to isolate dark crystal edges.
+\item Morphological closing with a layer-scaled kernel.
+\item External-contour extraction; minimum-area rotated rectangle fit.
+\item Area filter (80 -- 8\,000~px$^2$) and aspect-ratio filter ($\le 3.0$) to reject elongated noodles.
+\end{enumerate}
+The output is, per frame, a list of rotated bounding rectangles, each annotated with its layer index and the local
+Laplacian-variance score sampled inside its bounding rectangle.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{11_detection_overlay}
+\caption{\textbf{What does the detector actually find?} Detector output on frame 750 of the case-study video. Each
+rotated bounding rectangle is a detected feature, colour-coded by its sharpness layer. 55 features are localised; the
+bulk lie in the centre band where the optics are nearly in focus, and the peripheral regions populate the defocused
+layers. The variability in apparent size across the detected set is structurally consistent across frames --- it is
+detector output behaviour, not per-frame noise --- but at 1.66~\umpx{} the area filter $[80, 8000]$~px$^2$
+bandpasses $\approx 15$--150~\um{} features, well above the $\approx 9$~\um{} crystal population (Mastersizer ground
+truth, \secref{sec:csd}). The features detected here are therefore not the seed-magma crystals themselves;
+cross-check with \secref{sec:csd}.}\label{fig:detection}
+\end{figure}
+
+\subsection{The detector's depth selectivity is the operational ceiling}\label{sec:selectivity}
+
+Adaptive thresholding requires edge contrast that vanishes once the PSF spreads over more than a few pixels;
+morphological closing preserves a contour only if the local edge is still locally bright against the background. The
+detector therefore implicitly selects for a \textbf{narrow in-focus slice} around the focused plane. For the
+case-study lens at F/4 the slice is approximately $\pm 1$~mm --- exactly the band in which the front/back size
+discrimination signal is ${\sim}1$\,\% (\figref{fig:discrim}). The disambiguation framework of \secref{sec:sizing}
+is therefore applicable to the data we have, but its discriminating power is set by the detector's depth-of-field
+aperture, not by any optics limitation per se.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{10_discriminability}
+\caption{\textbf{At what depth offset does the size signal break the near/far ambiguity?} Apparent-size ratio
+between symmetric near/far depth hypotheses (left axis, blue) and the corresponding sensor CoC (right axis, green) as
+a function of near-side offset $\delta$. The 5\,\% discrimination threshold (red dotted) is reached only at
+$\delta \approx 4$~mm --- but the 5-pixel CoC threshold (green dashed) at which the edge-based detector loses
+sensitivity is reached already at $\delta \approx 1$~mm. \textbf{The data the detector admits therefore live in the
+leftmost ${\sim}25$\,\% of the curve, where size-based discrimination is $<1.5$\,\%.} This is the operational ceiling
+that the \secref{sec:recs} recommendations are designed to break.}\label{fig:discrim}
+\end{figure}
