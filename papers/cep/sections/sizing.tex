@@ -1,108 +1,110 @@
-% Section 6 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
-\section{Per-crystal depth-aware sizing under a single-component prior \emph{(RQ3)}}\label{sec:sizing}
+% Section 6. Rewritten 2026-11-03 (branch docs/cep-grounded-draft) from src/optics/disambiguate.py and the rerun in
+% docs/optics/rerun_results.md (scripts/rerun_paper_numbers.py). Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Front/back disambiguation with a single-component size prior}\label{sec:sizing}
 
-\subsection{The front/back ambiguity and how the size signal breaks it}\label{sec:ambiguity}
+\subsection{The front/back ambiguity and the size signal}\label{sec:ambiguity}
 
-Section~\ref{sec:coc} established that circular-aperture defocus is symmetric in reciprocal object distance: two
-depths $d_\mathrm{near}$ and $d_\mathrm{far}$ with $1/d_\mathrm{near} + 1/d_\mathrm{far} = 2/d_\mathrm{focus}$
-produce identical sensor blur. This is the \textbf{front/back ambiguity} of \citet{Zhou2011}.
-
-However, the \textbf{apparent size} of a crystal of physical width $w$ is monotone in $d_o$:
+Circular-aperture defocus is symmetric in reciprocal object distance (\secref{sec:coc}): two depths with
+$1/d_\mathrm{near} + 1/d_\mathrm{far} = 2/d_\mathrm{focus}$ produce the same blur, so a single image does not tell
+whether a blurred object lies in front of or behind the focal plane~\citep{SellentFavaro2014}. The apparent size of a
+crystal of physical width $w$, however, is monotone in $d_o$. With the pixel scale proportional to object distance,
+$\Delta x(d_o) = \Delta x(d_\mathrm{focus})\, d_o / d_\mathrm{focus}$ (\secref{sec:thinlens}),
 \begin{equation}\label{eq:spx}
-s_\mathrm{px}(d_o) = \frac{w}{\Delta x(d_o)} = \frac{w \cdot i_\mathrm{fixed}}{\text{pitch} \cdot d_o},
+s_\mathrm{px}(d_o) = \frac{w}{\Delta x(d_o)}, \qquad
+\frac{s_\mathrm{px}(d_\mathrm{near})}{s_\mathrm{px}(d_\mathrm{far})} = \frac{d_\mathrm{far}}{d_\mathrm{near}},
 \end{equation}
-so for two symmetric depths
 \begin{equation}\label{eq:ratio}
-\frac{s_\mathrm{px}(d_\mathrm{near})}{s_\mathrm{px}(d_\mathrm{far})} = \frac{d_\mathrm{far}}{d_\mathrm{near}} \neq 1.
+\frac{d_\mathrm{far}}{d_\mathrm{near}} - 1 \approx \frac{2\delta}{d_\mathrm{focus}} \quad
+(\delta = d_\mathrm{focus} - d_\mathrm{near} \ll d_\mathrm{focus}).
 \end{equation}
-\textbf{Same blur, different apparent size --- that is the disambiguation signal.}
+Equal blur with unequal apparent size is the signal a size prior can exploit. Its strength is set by $\delta$, that
+is, by how far from focus the detector still finds crystals (\secref{sec:selectivity}).
 
-\subsection{The homogeneous-slurry assumption and the single-component prior}\label{sec:homog}
+\subsection{Homogeneous slurry and a single-component prior}\label{sec:homog}
 
-If the slurry is \emph{homogeneous} --- physical CSD identical at every depth --- then the focal-plane apparent-size
-distribution, converted to physical units via $\Delta x(d_\mathrm{focus})$, is \textbf{the} physical CSD at every
-depth, period. Off-focus detections at a different depth are just noisy realisations of the same single-component
-distribution, viewed at a different magnification. There is no mixture.
-
-This matters for the Bayes step. Earlier framings (Wadinger, internal working notes) suggested a two-component mixture
-(near + far), which double-counts the physics: the ``near'' and ``far'' detections are not two populations, they are
-two \textbf{hypothesis labels} on detections drawn from one population. The correct framing is:
-\begin{enumerate}
-\item Compute the \textbf{physical-size prior} $P_w(w)$ once from focal-plane detections.
-\item For every off-focus detection, given its blur (hence $d_\mathrm{near}$ and $d_\mathrm{far}$) and its apparent
-size $s_\mathrm{obs}$, compute the implied physical sizes $w_\mathrm{near} = s_\mathrm{obs} \cdot
-\Delta x(d_\mathrm{near})$ and $w_\mathrm{far} = s_\mathrm{obs} \cdot \Delta x(d_\mathrm{far})$.
-\item Pick the hypothesis (near or far) whose implied physical size has higher likelihood under $P_w$.
-\item Aggregate all (depth-corrected) physical sizes into the final CSD --- a single histogram, not a mixture.
-\end{enumerate}
-If the resulting histogram itself shows multiple modes the homogeneous-slurry assumption is wrong (e.g., fines
-settling near the glass) --- a diagnostic signal, not a modelling choice.
+We assume a homogeneous slurry: the physical size distribution $P_w$ is the same at every depth in the observed slab.
+Near and far are then two hypotheses about each detection, not two populations, and the aggregated sizes form one
+distribution rather than a mixture. The prior $P_w$ is estimated once from the sharpest detections, converted at
+$\Delta x(d_\mathrm{focus})$. A multimodal result would indicate that the assumption fails, for example by
+size-dependent settling near the glass.
 
 \subsection{Implementation}\label{sec:impl}
 
-The pipeline is implemented in \code{src/optics/disambiguate.py} and \code{src/optics/csd.py}. For each off-focus
-detection we:
-\begin{itemize}
-\item Recover the geometric CoC $c$ from the inverted Gaussian-PSF sharpness model:
-\[ c = 2 \sqrt{\sigma_\mathrm{floor}^2 (S^{-2/5} - 1)}. \]
-\item Solve $c(d_o) = K \cdot |d_o - d_\mathrm{focus}| / d_o$ for the two roots $d_\mathrm{near}$ and
-$d_\mathrm{far}$.
-\item Compute implied physical sizes under both hypotheses and pick the better-supported one.
-\end{itemize}
-The full disambiguation panel for the case-study video is in \figref{fig:disamb}.
+The step is implemented in \code{optics.disambiguate.disambiguate}:
+\begin{enumerate}
+\item Each detection receives the mean of the smoothed squared Laplacian inside its rectangle, normalised by the
+99.5th percentile of all detections, $S \in [0, 1]$.
+\item Detections with $S$ at or above the 85th percentile form the focal subset. Their sizes at
+$\Delta x(d_\mathrm{focus})$ give $P_w$ as a 60-bin histogram from 0 to 1.5 times its 99th percentile.
+\item For every other detection, the Gaussian-PSF sharpness model of \secref{sec:psf} is inverted for the circle of
+confusion, $c = 2\sqrt{\sigma_\mathrm{floor}^2 (S^{-2/5} - 1)}$, with $\sigma_\mathrm{floor}$ half a clip pixel, and
+$c(d_o) = K\,|d_o - d_\mathrm{focus}|/d_o$ is solved for $d_\mathrm{near}$ and $d_\mathrm{far}$.
+\item The implied sizes $w_\mathrm{near}$ and $w_\mathrm{far}$ are looked up in $P_w$, and
+$p_\mathrm{near} = P_w(w_\mathrm{near}) / [P_w(w_\mathrm{near}) + P_w(w_\mathrm{far})]$. The detection is labelled
+near if $p_\mathrm{near} > 0.5$ and far otherwise, and keeps the size of its label.
+\end{enumerate}
+
+\subsection{Result: the prior cannot separate near from far at F/1.6}\label{sec:disamb-result}
+
+On the 60 sampled frames of the case-study clip (watershed detector, configured window), the assigned depths lie
+3.1~\um{} (median) and 5.6~\um{} (99th percentile) from $d_\mathrm{focus}$ (\figref{fig:disamb}, middle). By
+\eqref{eq:ratio} the two hypotheses then differ in implied size by at most ${\approx}\,2 \times 10^{-4}$, far below
+the width of a prior bin, so both look up nearly the same prior density. Accordingly, 99.7\,\% of the off-focus
+detections have $p_\mathrm{near}$ within $0.500 \pm 0.002$; the share is 99.6--99.9\,\% for both detectors under
+either size window (\tabref{tab:ws-compare}).
+
+The reported near/far splits (76/24 here; 70/30 to 80/20 in the other runs) are therefore produced by the
+tie-break rule $p_\mathrm{near} > 0.5$, not by evidence. Because $w_\mathrm{near} < w_\mathrm{far}$, the near label
+wins wherever $P_w$ decreases with size, that is, above the prior mode, and the far label wins below it. This
+explains why the near and far subsets in \figref{fig:csd} (right) occupy different size ranges. The step does not
+change the sizes either: the mean depth correction is 0.005\,\% of the median size. At F/1.6, near/far
+disambiguation by a size prior is uninformative, and we do not interpret the splits. The size signal of
+\eqref{eq:ratio} becomes usable only if detections are admitted at $\delta$ of order a millimetre
+(\figref{fig:discrim}), which needs a smaller aperture or a blur-tolerant detector (\secref{sec:recs}).
 
 \begin{figure*}
 \centering
 \includegraphics[width=\textwidth]{09_disambiguation}
-\caption{\textbf{What does per-crystal depth-aware sizing produce?} \textbf{Left:} depth-corrected physical-size
-histogram for the case-study video, split by disambiguation outcome (focal-plane subset, near-side, far-side).
-\textbf{Middle:} recovered depth assignment per crystal --- the two clusters sit symmetric in $1/d_o$ around the focal
-plane $d_\mathrm{focus} = 55.1$~mm, with a spread of only $\pm 0.005$~mm because at F/1.6 the in-focus slice is
-essentially flat. \textbf{Right:} naive (assume mm/px at focus for all) vs depth-corrected size estimates --- the
-mean correction is only \textbf{0.01\,\%} of the median size, because the detector's narrow depth selectivity
-(\secref{sec:selectivity}) collapses to a near-infinitesimal slice. The Bayes step assigns 79\,\% of detections to
-the near side; under the homogeneous-slurry assumption this is interpreted as the slurry sitting slightly closer to
-the lens than the operator-set focal plane (or as right-skew of the empirical size prior --- see
-\secref{sec:notperform}).}\label{fig:disamb}
+\caption{Disambiguation output for the case-study clip (\texttt{optics.disambiguate}; watershed detector, configured
+window, 52\,784 detections). Left: sizes by label. Middle: assigned depths; the near (33\,957) and far (10\,909)
+clusters sit at 55.097 and 55.103~mm, a few micrometres either side of $d_\mathrm{focus} = 55.1$~mm, and 7\,918
+detections form the focal subset. Right: sizes at $\Delta x(d_\mathrm{focus})$ and after depth correction; the two
+histograms coincide. The near/far labels are tie-break outcomes (\secref{sec:disamb-result}).}\label{fig:disamb}
 \end{figure*}
 
-\subsection{Real demonstrations of the depth-aware scale}\label{sec:overlay}
+\subsection{Scale overlay at three assumed depths}\label{sec:overlay}
 
-\figref{fig:overlays} shows the live scale-overlay app (\code{uv run scale-overlay-app} for the interactive app,
-\code{uv run scale-overlay-demos} to regenerate the static figures) on a single frame of the case-study video, with
-the scale grid centred at three different depths to illustrate the linear-in-$d_o$ pixel scale of
-\secref{sec:thinlens}. Each panel below is a horizontal composite: \textbf{left} the cropped frame with grid + ruler +
-HUD, \textbf{right} the per-pixel sharpness map (Laplacian-variance, INFERNO colourisation) with the \emph{same} grid
-overlaid --- so the reader can see \emph{which pixels are sharp enough to actually be at that depth}.
+\figref{fig:overlays} draws a 0.1~mm grid and a 1~mm ruler on frame 750 at three assumed object distances. The clip
+rows are resampled by 1.306 so that one displayed pixel is the same length on both axes and the grid is true in $x$
+and $y$ (\code{scripts/rerun_paper_numbers.py --fig07}). Over $\pm 0.2$~mm the scale changes by $\pm 0.36$\,\%; the
+window is 21 times the F/1.6 in-focus half-slice of $\pm 9.4$~\um{} (one PAL sample, \secref{sec:dof}). A single
+scale at the focused plane is therefore adequate at this aperture. The sharpness map in the right panels is computed
+from the image alone and is identical in all three panels; it shows which pixels carry sharp outlines, not their
+depth.
 
 \begin{figure*}
 \centering
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=0.8\textwidth]{07_overlay_near}
-\caption{$\boldsymbol{d_o = 54.9}$~\textbf{mm (near, 1.659~\textmu m/px)}}\label{fig:overlay-near}
+\caption{$d_o = 54.9$~mm: $1.460 \times 1.907$~\umpx{} ($x \times y$)}\label{fig:overlay-near}
 \end{subfigure}
 
 \medskip
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=0.8\textwidth]{07_overlay_at_focus}
-\caption{$\boldsymbol{d_o = 55.1}$~\textbf{mm (at focus, 1.665~\textmu m/px)}}\label{fig:overlay-focus}
+\caption{$d_o = 55.1$~mm (focus): $1.465 \times 1.914$~\umpx}\label{fig:overlay-focus}
 \end{subfigure}
 
 \medskip
 \begin{subfigure}{\textwidth}
 \centering
 \includegraphics[width=0.8\textwidth]{07_overlay_far}
-\caption{$\boldsymbol{d_o = 55.3}$~\textbf{mm (far, 1.671~\textmu m/px)}}\label{fig:overlay-far}
+\caption{$d_o = 55.3$~mm: $1.471 \times 1.921$~\umpx}\label{fig:overlay-far}
 \end{subfigure}
-\caption{\textbf{How much does mm/px actually change across the in-focus slice, and which pixels does it apply to?}
-Real-world scale grid overlaid on the same frame at three different assumed object distances near focus.
-\textbf{Left-panel observation:} the mm/px shift across the $\pm 0.2$~mm window (which is already $48\times$ wider
-than the actual F/1.6 DoF of $\pm 4.2$~\um) is \textbf{only $\boldsymbol{\pm 0.36}$\,\%} --- well below any other source
-of uncertainty in the pipeline. \textbf{Right-panel observation:} the sharpness maps look \emph{visually
-indistinguishable} across the three depths, because at F/1.6 the DoF is so narrow that no pixel changes its sharpness
-category over a $\pm 0.2$~mm depth shift. \textbf{Conclusion:} at the current aperture, a single mm/px scale is fully
-sufficient --- the depth-aware machinery becomes load-bearing only after stopping the lens down
-(\secref{sec:recs}).}\label{fig:overlays}
+\caption{Scale grid (0.1~mm) and 1~mm ruler on frame 750 at three assumed object distances, with the rows resampled
+so that the grid is true on both axes. Left: frame; right: sharpness map with the same grid. The scales in the
+sub-captions are per clip pixel before resampling (ESTIMATE, $\pm\,{\approx}10$\,\% at 95\,\%); the on-image text
+gives the resampled 1.47~\umpx{} and rounds $d_o$ to whole millimetres.}\label{fig:overlays}
 \end{figure*}

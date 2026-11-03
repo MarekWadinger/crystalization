@@ -1,32 +1,33 @@
-% Section 8 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
-\section{Cross-batch growth-curve self-validation \emph{(RQ4 --- outlook)}}\label{sec:growth}
+% Section 8. Rewritten 2026-11-03 (branch docs/cep-grounded-draft): outlook only; no growth-curve fit exists in src/.
+% Microscope numbers: scripts/microscope_summary.py. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Growth-curve calibration: outlook}\label{sec:growth}
 
-\subsection{The mechanism}\label{sec:mechanism}
+\subsection{The model}\label{sec:mechanism}
 
-McCabe's $\Delta L$ law \citep{McCabe1929,RandolphLarson1988} predicts linear-in-time crystal growth at fixed
-supersaturation, modified across batches by per-batch supersaturation profile and seeding-magma size. The expected
-growth model is
+McCabe's $\Delta L$ law~\citep{McCabe1929,RandolphLarson1988} states that crystals of all sizes grow at the same
+rate, so at constant supersaturation the size grows linearly in time. Across strikes, the supersaturation profile and
+the seed differ. A shared growth curve $G$ with a per-batch time scale $\tau_b$ and offset $o_b$ gives
 \begin{equation}\label{eq:growth}
-s_\mathrm{median}(t; b) \cdot \Delta x(d_\mathrm{focus}) = G(t \cdot \tau_b) + \mathrm{offset}_b
-+ \varepsilon_b(t),
+s_\mathrm{med}(t; b)\, \Delta x(d_\mathrm{focus}) = G(\tau_b t) + o_b + \varepsilon_b(t),
 \end{equation}
-with $G$ a shared physical growth curve, $\tau_b$ a per-batch time scale, $\mathrm{offset}_b$ a per-batch seed
-offset, and $\varepsilon$ a noise term. Given multiple batches recorded with \textbf{known start-of-strike timestamps}
-(graining), the curve $G$ is identifiable; conversely, the \emph{single number $\Delta x(d_\mathrm{focus})$} that
-closes the calibration is identifiable simultaneously as the value that makes all batches collapse onto a single $G$.
+with $s_\mathrm{med}$ the camera's median apparent size in pixels and $t$ the time since seeding. Once $G$ is known,
+a measured median returns the time since seeding or flags a strike that leaves the nominal curve, which is the soft
+sensor this paper works towards.
 
-This converts the optics calibration into a \textbf{soft-sensor identification} problem solvable from data alone ---
-no caliper, no scale target, no plant intervention. It also provides a \textbf{continuously-running} soft sensor: at
-any point during a new strike, comparing the measured median crystal size against $G$ returns the
-time-since-graining, validating the process is on the nominal curve.
+The camera alone does not identify the pixel scale through \eqref{eq:growth}. For any $\lambda > 0$, the triple
+$(\lambda \Delta x, \lambda G, \lambda o_b)$ fits the same data, and likewise one $\tau_b$ must be fixed against the
+time argument of $G$. The scale is identified only if $G$ is anchored in physical units by an independent size
+reference at known times. The microscope series of 2026-10-30 (\tabref{tab:microscope}) provides such an anchor for
+two strikes of the seed pan: the median chord grows from 29~\um{} at 2~min to 483~\um{} at 122~min after seeding in
+b1, and from 10~\um{} at seeding to 399~\um{} at 162~min in b2. The strikes differ at equal times (at 96~min, 355
+against 225~\um), consistent with a per-batch $\tau_b$; these are medians of operator-picked crystals, not
+distributions.
 
 \subsection{Status}\label{sec:status}
 
-The growth-curve fit is implemented as scaffolding in \code{src/optics/csd.py} (single-batch path) and is ready to be
-promoted to multi-batch once batch-aligned video is supplied. The discriminability analysis of \secref{sec:selectivity}
-also benefits: a tight physical-size prior identified from the growth curve at the recording time replaces the
-in-frame focal-plane prior, breaking the symmetry between the ``slurry sits in front of focus'' and ``right-skewed
-prior asymmetry'' explanations of the 79 / 21 near-side split observed in \secref{sec:sizing}.
-
-A full multi-batch validation experiment is reserved for the v0.3 revision of this manuscript when batch-aligned
-video is available; this paper closes RQ1--RQ3 fully and frames RQ4 as the open extension.
+No fit of \eqref{eq:growth} is implemented: \code{optics.csd} aggregates one recording and contains no growth-curve
+code. The exploratory scripts \code{scripts/rq4_*.py} compare detector statistics between the end-of-strike windows of
+the two strikes in the 2026-02-04 PAL recording and test the removal of static sight-glass marks; they rely on the
+detectors of \secref{sec:csd} and inherit their failure, so we report no result from them. Fitting
+\eqref{eq:growth} requires camera medians against time since seeding from a validated detector on the 2026-10-30
+recording, paired with the microscope series \pending{validated camera size against time, 2026-10-30, both strikes}.

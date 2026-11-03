@@ -1,279 +1,161 @@
-% Section 7 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
-\section{Aggregated crystal-size distribution --- \emph{detector-limited}}\label{sec:csd}
+% Section 7. Rewritten 2026-11-03 (branch docs/cep-grounded-draft) as a failure analysis of the classical detectors.
+% Numbers: docs/optics/rerun_results.md (scripts/rerun_paper_numbers.py), scripts/microscope_summary.py,
+% optics.config. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Detector output is not yet a size measurement}\label{sec:csd}
 
-\begin{quote}
-\textbf{Honesty preface (revised).} Sections~\ref{sec:intro}--\ref{sec:sizing} establish a pipeline whose geometric,
-defocus, and Bayesian-disambiguation stages are validated against textbook optics and against the raw per-pixel
-sharpness statistics of the case-study video. The CSD numbers in \S\S\,\ref{sec:csd-edge}--\ref{sec:watershed}
-below should be read with \textbf{two critical caveats}:
+The pipeline of \secref{sec:detection}--\secref{sec:sizing} runs end to end and returns a size distribution. This
+section shows that, for both classical detectors, that distribution is set by detector parameters rather than by the
+crystals, compares it with what the camera should see according to the plant's microscope data, and defines the
+validation against hand-labelled crystals that will replace it. All runs use 60 frames (every 15th) of the
+case-study clip with the automatic crop; sizes are area-equivalent at the geometric-mean scale of 1.673~\umpx{}
+(ESTIMATE, $\pm\,{\approx}10$\,\% at 95\,\%).
 
-\emph{Caveat 1 --- detector selection bias.} The CSD depends on the edge-based crystal detector inherited from prior
-work, \textbf{which \figref{fig:detection} makes clear is selection-biased}. The detector preferentially finds
-peripheral isolated features against the bright defocused background and systematically \emph{misses} the
-densely-packed central in-focus crystal cluster, where adjacent edges merge under morphological closing and the
-resulting blob is rejected by the area filter. \secref{sec:watershed} (watershed) closes this
-\emph{within-detector} bias.
+\subsection{What the camera should see}\label{sec:expected}
 
-\emph{Caveat 2 --- the detector cannot see the actual crystal population (retracted size interpretation).}
-Independent laser-diffraction granulometry on the same product (Mastersizer, 2-propanol dispersant;
-\code{docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf}; \citealp{Mastersizer2025}) gives $D[3;2] = 3.95$~\um,
-$D[4;3] = 8.71$~\um, and $\mathrm{Dv}(10) / \mathrm{Dv}(50) / \mathrm{Dv}(90) = 1.56 / 6.81 / 18.5$~\um. The
-recording captures the seed pan (\secref{sec:plant}) --- \emph{not} the A-strike --- so the population in front of
-the lens is the $\approx 9$~\um{} Mastersizer distribution. The detector's area filter
-$[\mathit{min\_area} = 80,\allowbreak\ \mathit{max\_area} = 8000]$~px$^2$ at the documented 1.66~\umpx{} bandpasses
-\textbf{$\boldsymbol{\approx 15}$--150~\textmu m equivalent features}, so \emph{every} CSD number in
-\S\S\,\ref{sec:csd-edge}--\ref{sec:watershed} lies entirely \emph{above} the true crystal-size distribution. The
-numbers measure agglomerate / cluster / area-bandpassed structure that the detector picks up, not the underlying
-single-crystal population. They are publishable as evidence of \emph{detector behaviour} and \emph{pipeline
-self-consistency}, but they are \textbf{not} a crystal-size measurement of this product. Until the detector is
-rebuilt at the correct length scale, the Mastersizer remains the size ground truth.
-\end{quote}
-
-\subsection{The depth-corrected CSD (detector-limited)}\label{sec:csd-edge}
-
-With the inherited edge-based detector, the case-study video yields \textbf{18\,823 detections across 60 sampled
-frames}, aggregated into a single-component CSD shown in \figref{fig:csd}.
-
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{14_csd_final}
-\caption{\textbf{What is the final calibrated crystal-size distribution?} This is the headline output of the pipeline
-at the \textbf{watershed detector} (\secref{sec:watershed}; pre-watershed figures and numbers archived in git
-history). \textbf{Left:} naive size histogram assuming mm/px at focus for every detection. \textbf{Middle:}
-depth-corrected physical-size histogram with log-normal (red) and Gaussian (green dashed) fits superimposed. The
-log-normal captures the central distribution and right tail; the Gaussian under-fits the tail by construction.
-\textbf{Median = 0.074~mm, CV = 0.40, log-normal shape $\boldsymbol{s = 0.40}$} --- these statistics describe the
-distribution of features the detector resolves ($\approx 20$--200~\um{} bandpass), not the underlying crystal
-population (Mastersizer $\mathrm{Dv}(50) = 6.81$~\um); see \secref{sec:csd} for the size-interpretation retraction.
-\textbf{Right:} the homogeneous-slurry self-consistency check --- focal-plane, near-side, and far-side density curves
-overlaid. Their close agreement is consistent with the homogeneous-slurry assumption, with the
-\secref{sec:selfcheck} caveat that this agreement is a \emph{necessary but not sufficient} test --- it confirms the
-detector behaves consistently across depth, not that the true CSD is depth-independent.}\label{fig:csd}
-\end{figure*}
+The seed slurry dosed into the seed pan has $\mathrm{Dv}(10)/\mathrm{Dv}(50)/\mathrm{Dv}(90) = 1.56/6.81/18.5$~\um{}
+(Mastersizer, 2025 sample;~\citealp{Mastersizer2025}). In the seed pan the crystals grow. During the laboratory run
+of 2026-10-30, crystals in samples drawn from the same pan were measured under a microscope: one chord per
+operator-picked crystal, burned into 54 photos and transcribed into \code{datasets/microscope_annotations.csv}
+(1052 readable values, one AI reading; \tabref{tab:microscope}). The slurry reference photo shows 10--19~\um. About
+2~min after seeding the median chord is 29~\um; from about 30--40~min it exceeds 0.1~mm, and about 2~h after seeding
+it is 0.48~mm (b1, 122~min, range 0.22--1.14~mm). These are ranges and medians of chosen crystals, not
+distributions; the largest single values may be agglomerates.
 
 \begin{table}
 \centering\tabfont
-\caption{CSD statistics with the inherited edge-based detector.}\label{tab:csd-edge}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.38\columnwidth}r@{}}
+\caption{Microscope chords against time since seeding, seed pan, 2026-10-30 (PHOTO, AI transcription;
+\texttt{scripts/\allowbreak microscope\_summary.py}); $t$ is the time since seeding. Selected samples; all 20 are in \texttt{datasets/\allowbreak README.md}.}\label{tab:microscope}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-Statistic & Value \\
+Batch & Sample & $t$ (min) & $n$ & min / median / max (\textmu m) \\
 \midrule
-Detections & \textbf{18\,823} (60 frames $\times$ ${\sim}314$/frame) \\
-Median physical size & \textbf{0.037~mm} \\
-Mean physical size & \textbf{0.051~mm} \\
-Std deviation & 0.042~mm \\
-Coefficient of variation (CV) & \textbf{0.83} \\
-5th / 25th / 75th / 95th percentiles & 0.021 / 0.027 / 0.055 / 0.134~mm \\
-Log-normal shape parameter $s$ & 0.57 \\
-Log-normal scale $\sigma$ & 0.042 \\
+-- & slurry reference & -- & 4 & 10 / 13 / 19 \\
+b1 & 11:32 & 2 & 13 & 22 / 29 / 35 \\
+b1 & 12:07 & 37 & 50 & 38 / 114 / 271 \\
+b1 & 12:30 & 60 & 37 & 62 / 199 / 317 \\
+b1 & 13:32 & 122 & 26 & 220 / 483 / 1137 \\
+b1 & 14:20 & 170 & 51 & 189 / 452 / 995 \\
+b2 & 15:22 & 0 & 20 & 2 / 10 / 23 \\
+b2 & 15:52 & 30 & 50 & 22 / 103 / 218 \\
+b2 & 16:31 & 69 & 121 & 40 / 209 / 628 \\
+b2 & 17:48 & 146 & 103 & 117 / 299 / 695 \\
+b2 & 18:04 & 162 & 65 & 101 / 399 / 961 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The log-normal fit (\figref{fig:csd} middle, red curve) captures the distribution shape over its central range; the
-Gaussian fit (dashed green) is shown as a reference and clearly under-fits the right tail. The log-normal shape
-parameter $s = 0.57$ corresponds to a geometric standard deviation of $\exp(s) \approx 1.77$. This shape statistic
-is reported as a property of the detector's bandpassed feature distribution; see \secref{sec:csd} preface for why it
-is not a statement about the underlying crystal population.
+At the PAL scale of $3.92 \times 3.59$~\umpx{} (\secref{sec:camera}) the slurry crystals span about 2.5--5 samples
+and sit at the resolution limit, whereas crystals of the 0.1--0.5~mm medians found from about half an hour after
+seeding span tens to over a hundred samples and should be well resolved. The 1~mm upper bound of the size window
+(\secref{sec:window}) excludes the 1.14~mm chord at 122~min; that value was not in the first reading on which the
+bound was based. For the case-study clip itself no matched reference exists: its recording date is contradicted
+by the image data, so its time since seeding is unknown, and even under the operator's date it would be 1~h~41~min
+to 1~h~48~min after seeding (\secref{sec:recording}). The detector output below can therefore be checked only for
+internal behaviour, not against a size at a known process time.
 
-\subsection{Process interpretation --- retracted}\label{sec:interp}
+\subsection{The edge detector follows the size window}\label{sec:csd-edge}
 
-\emph{Earlier versions of this section interpreted the 0.05~mm median as ``squarely in the seed-magma range
-(0.05--0.15~mm)'' and as ``consistent with just-past-seeding A-strike crystals \dots{} confirmed by the plant
-operator''. Both readings are retracted.} The recording captures the \textbf{seed pan} upstream of the A-strike pan
-(\secref{sec:plant}), and the size ground truth for this product is the Mastersizer granulometry cited in the
-\secref{sec:csd} preface ($\mathrm{Dv}(50) = 6.81$~\um, $D[4;3] = 8.71$~\um) --- roughly an order of magnitude
-\textbf{below} the 0.037~mm median this detector returns. The 0.037~mm number is therefore not a measurement of the
-crystal population; it is the centroid of the area-bandpass window [20~\um, 200~\um] that the detector's
-$[\mathit{min\_area} = 80,\allowbreak\ \mathit{max\_area} = 8000]$~px$^2$ filter imposes at 1.66~\umpx. The log-normal shape
-parameter ($s = 0.57$) and CV (0.83) describe the \emph{bandpassed} distribution, not the underlying crystal CSD.
-
-What this section \emph{does} support is that the pipeline is internally self-consistent at the inherited detector
---- the depth-correction, disambiguation, and aggregation stages compose correctly and recover a stable distribution
-of whatever the detector happens to find. The size interpretation requires a detector that resolves the
-$\approx 9$~\um{} population.
-
-\subsection{What the homogeneous-slurry ``self-consistency'' check does and does not prove}\label{sec:selfcheck}
-
-\figref{fig:csd} right panel shows the focal-plane, near-side, and far-side \emph{density} curves overlapping
-closely. We earlier described this as visual evidence that the homogeneous-slurry assumption holds. The honest
-reading is weaker: \textbf{the same selection rule was applied to all three subsets}, so a consistent detection bias
-propagates to all three histograms equally. Their agreement therefore only shows that the \emph{detector behaves
-consistently across depth}, not that the true CSD is depth-independent. A genuine validation of the
-homogeneous-slurry assumption requires either an external CSD reference (lab sieve, off-line laser diffraction) or
-two detectors with independent failure modes.
-
-A second clarification matters here. Sharpness alone gives no \emph{per-crystal} near/far classification: the
-circle-of-confusion function is symmetric in the reciprocal object distance $u = 1/d_o$ (\secref{sec:coc},
-\secref{sec:ambiguity}), so a single sharpness measurement maps to \textbf{two} candidate depths simultaneously --- the
-front/back ambiguity of \citet{Zhou2011}. The ``near-side'', ``focal'', and ``far-side'' labels in \figref{fig:csd}
-right panel and in \figref{fig:disamb} are therefore best read as \textbf{ensemble bin populations}, not as confident
-per-crystal depth assignments. Three distinct levels of depth claim co-exist in this paper, and we keep them
-deliberately separate:
-\begin{enumerate}
-\item \textbf{Ensemble counts (sharpness-only):} how many crystals fall in each sharpness bin. \emph{Confidence per
-crystal: none --- the binning is sharpness-monotone, but each bin contains a near/far pair the sharpness cannot
-separate.}
-\item \textbf{Probabilistic per-crystal assignment (sharpness + size prior):} the disambiguation step in
-\secref{sec:impl} uses the focal-plane apparent-size distribution as a prior to favour one of the two candidate
-depths per crystal. \emph{Confidence per crystal: posterior odds under an assumed homogeneous prior.}
-\item \textbf{Deterministic per-crystal assignment (future, sharpness + motion):} with stable lighting and $\ge 2$
-consecutive frames, optical-flow rate is linear in $d_o$ (near crystals appear to move faster than far crystals at
-the same physical velocity), so the two candidate depths produce distinguishable apparent velocities.
-\emph{Confidence per crystal: near-certain once flow is reliable.} This is on the \secref{sec:growth} outlook list;
-the present case-study single-batch video does not yet exploit it.
-\end{enumerate}
-The CSD numbers in \secref{sec:csd-edge} are reported in level (2), with the size prior estimated from the
-focal-plane subset. The homogeneous-slurry agreement in \figref{fig:csd} right panel is necessary but not sufficient
-for that prior to be correct; the operational consequence is that the \emph{shape} of the recovered CSD is robust,
-while the absolute near/far apportionment carries the prior's uncertainty.
-
-\subsection{Detector failure mode and the immediate fix}\label{sec:failure}
-
-\figref{fig:detection} shows the detector marking 55 crystals on frame 750. A visual inspection of the same frame
-reveals \textbf{many tens of crystals that the detector did not find}, concentrated in the central in-focus cluster.
-Three causes, all rooted in the inherited edge-based design:
-\begin{enumerate}
-\item \textbf{Morphological closing merges adjacent crystal edges into one over-area blob}, which the
-$\mathit{max\_area} = 8\,000$~px$^2$ filter then rejects. Densely-packed in-focus crystals are therefore
-\emph{systematically deleted}.
-\item \textbf{Adaptive thresholding plus closing turns sub-crystal features (internal facets, fracture lines) into
-closed contours} that pass the area / aspect-ratio filters. The detector therefore \emph{invents} small ``crystals''
-that are actually internal structure.
-\item \textbf{Peripheral defocused crystals against bright defocused background are easiest to detect}, leading to a
-\emph{spatial} bias toward the frame edges that propagates as a \emph{size} bias because peripheral crystals have a
-different apparent-size distribution than central ones.
-\end{enumerate}
-
-The architecturally correct replacement is a \textbf{marker-controlled watershed segmentation} on the inverted
-sharpness map: local maxima of brightness (or sharpness) become crystal centres, the dark inter-crystal boundary
-network becomes the watershed barrier, and the segmented regions naturally separate touching crystals. This is the
-standard treatment in cell-biology image analysis \citep{Vincent1991,BeucherMeyer1993} and is a ${\sim}50$-line
-drop-in replacement that does not change the rest of the pipeline. We implement it in \secref{sec:watershed} below
-and recompute every CSD number against it. The CNN-based alternative discussed in \secref{sec:recs} is the
-longer-term path for cluttered out-of-focus regions where even watershed struggles.
-
-\subsection{Watershed detector and re-aggregated CSD}\label{sec:watershed}
-
-The watershed detector (\code{src/optics/detect_watershed.py}) replaces adaptive-threshold + morphological closing
-with: adaptive threshold for the dark inter-crystal boundary network $\rightarrow$ distance transform on the bright
-crystal-interior regions $\rightarrow$ h-maxima filtering of distance peaks (to suppress speckle over-segmentation)
-$\rightarrow$ local-maxima seeding $\rightarrow$ marker-controlled watershed. Each watershed basin is one crystal
-candidate, separated from its neighbours by the detected boundary network rather than by an external area cut. The
-three tuned constants (\tabref{tab:ws-constants}) live in the module top-level for easy adjustment per installation.
-
-\begin{table}
-\centering\tabfont
-\caption{Tuned constants of the watershed detector.}\label{tab:ws-constants}
-\begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.48\columnwidth}@{}}
-\toprule
-Constant & Value & Role \\
-\midrule
-\code{_PEAK_MIN_DISTANCE} & 12~px & minimum spacing between seeds ($\approx \frac{1}{2}$ expected crystal diameter at
-1.66~\umpx) \\
-\code{_PEAK_THRESHOLD_ABS} & 6.0~px & minimum distance-transform value to qualify as a seed (rejects slivers) \\
-\code{_H_MAXIMA_PARAM} & 2.5 & h-maxima height threshold; suppresses peaks not at least 2.5 above their plateau
-(kills speckle) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\paragraph{Single-frame detector comparison} \figref{fig:watershed} compares the two detectors on frame 750. The
-legacy edge-based detector finds \textbf{102 crystals}, almost all on the frame periphery. The watershed detector
-finds \textbf{740 crystals} densely tiling the central in-focus cluster that the edge detector missed entirely.
-Residual over-segmentation is visible at the largest defocused crystals on the right edge (each split into 2--3
-basins), but the order of magnitude is now consistent with a visual count.
-
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{17_watershed_vs_edge}
-\caption{\textbf{What does the watershed detector recover that the edge-based detector missed?} Same frame 750, two
-detectors. \textbf{Left} --- the inherited edge-based detector: 102 detections, almost all peripheral, with the dense
-central in-focus cluster invisible to it. \textbf{Right} --- the marker-controlled watershed detector: 740 detections,
-densely tiling the centre. The legacy detector was finding $\approx 14$\,\% of what's physically
-there.}\label{fig:watershed}
-\end{figure*}
-
-\paragraph{Re-aggregated CSD (watershed detector)} Replacing the detector and re-running the full pipeline on the
-same 60 sampled frames yields a CSD with \textbf{substantially different statistics} from the edge-based run
-(\tabref{tab:ws-compare}).
+\tabref{tab:ws-compare} lists the aggregated statistics of both detectors under the configured window and under
+the earlier $[80,\ 8000]$~px$^2$ window. Widening the window from 15--150~\um{} to 5--1000~\um{} (area-equivalent)
+raises the edge detections from 18\,823 to 47\,414, halves the median from 0.037 to 0.018~mm and raises the CV
+from 0.83 to 2.16. Under the configured window the distribution reaches towards the new lower bound (5th
+percentile 0.007~mm) from outline fragments and gains a long upper tail from rectangles around blurred regions
+(\figref{fig:detection}). The edge-detector distribution is thus a property of the area filter.
 
 \begin{table*}
 \centering\tabfont
-\caption{CSD statistics with the watershed detector against the edge-based detector on the same 60
-frames.}\label{tab:ws-compare}
-\begin{tabular}{@{}lrrr@{}}
+\caption{Aggregated detector output on the case-study clip, 60 frames (\texttt{scripts/\allowbreak rerun\_paper\_numbers.py}; sizes
+area-equivalent, ESTIMATE). These are detector artefacts, not crystal sizes. The near/far split is the tie-break
+outcome of \secref{sec:disamb-result}.}\label{tab:ws-compare}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-Statistic & \textbf{Watershed (this run)} & Edge-based (legacy, \secref{sec:csd-edge}) & Change \\
+ & \multicolumn{2}{c}{Watershed} & \multicolumn{2}{c}{Edge} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+Statistic & configured window & $[80, 8000]$~px$^2$ & configured window & $[80, 8000]$~px$^2$ \\
 \midrule
-Detections & \textbf{52\,302} & 18\,823 & \textbf{2.8$\boldsymbol{\times}$ more crystals} \\
-Median physical size & \textbf{0.074~mm} & 0.037~mm & $\boldsymbol{+103}$\,\% \\
-Mean & \textbf{0.080~mm} & 0.051~mm & $+59$\,\% \\
-Std deviation & 0.032~mm & 0.042~mm & $-23$\,\% \\
-\textbf{CV} & \textbf{0.40} & 0.83 & $\boldsymbol{-52}$\,\% \\
-5 / 25 / 75 / 95 percentiles & 0.039 / 0.056 / 0.098 / 0.144 & 0.021 / 0.027 / 0.055 / 0.134 & shifted up +
-tightened \\
-Log-normal shape $s$ & \textbf{0.40} & 0.57 & tighter \\
-Log-normal scale & 0.074 & 0.042 & $+79$\,\% \\
-Near / far Bayes split & 72 / 28 & 70 / 30 & unchanged \\
+Detections & 52\,784 & 52\,302 & 47\,414 & 18\,823 \\
+Median (mm) & 0.075 & 0.075 & 0.018 & 0.037 \\
+Mean (mm) & 0.082 & 0.081 & 0.034 & 0.051 \\
+Std (mm) & 0.035 & 0.033 & 0.073 & 0.042 \\
+CV & 0.43 & 0.40 & 2.16 & 0.83 \\
+5 / 25th percentile (mm) & 0.039 / 0.056 & 0.039 / 0.056 & 0.007 / 0.012 & 0.021 / 0.027 \\
+75 / 95th percentile (mm) & 0.100 / 0.149 & 0.099 / 0.145 & 0.032 / 0.092 & 0.056 / 0.135 \\
+Log-normal shape $s$ / scale (mm) & 0.41 / 0.076 & 0.40 / 0.075 & 0.80 / 0.021 & 0.57 / 0.042 \\
+Near / far split & 76 / 24 & 72 / 28 & 80 / 20 & 70 / 30 \\
+$p_\mathrm{near}$ within $0.500 \pm 0.002$ & 99.7\,\% & 99.6\,\% & 99.7\,\% & 99.9\,\% \\
+Mean depth correction / median & 0.005\,\% & 0.005\,\% & 0.013\,\% & 0.007\,\% \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Three things move in the directions a structurally better detector should produce \emph{on the bandpassed feature
-population} (this comparison is between two detectors, both of which sit above the true crystal scale --- see
-\secref{sec:csd} preface):
+\subsection{The watershed detector follows its seed constants}\label{sec:watershed}
+
+The watershed output hardly changes with the window: 52\,302 against 52\,784 detections and a median of 0.075~mm
+under both. Its sizes are instead bounded by its own seed constants (\tabref{tab:ws-constants}). A seed must lie at
+least 6~px from any outline, so every basin contains a disc 12~px across, about 0.02~mm, and the distribution in
+\figref{fig:csd} indeed starts near 0.02--0.025~mm although the window admits 5~\um. Seeds at least 12~px apart
+tile the frame; on frame 750 the watershed returns 966 basins against 840 edge detections under the configured
+window (\figref{fig:watershed} uses the code's default window and shows 981 against 441). The basins cover the frame
+whether or not a crystal outline separates them, so the count and the median largely reflect the tiling. A narrower CV
+than the edge detector's is therefore not evidence of a narrower crystal distribution.
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{17_watershed_vs_edge}
+\caption{Edge (left, 441 detections) and watershed (right, 981 basins) detectors on frame 750
+(\texttt{optics.detect\_watershed}). This figure uses the code's default area window of 50--50\,000~px$^2$ and aspect
+ratio 4, not the configured window; under the configured window the counts are 840 and 966. Colours are sharpness
+layers.}\label{fig:watershed}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{14_csd_final}
+\caption{Aggregated watershed output, configured window (\texttt{optics.csd}; 52\,784 detections). Left: sizes at
+$\Delta x(d_\mathrm{focus})$; median 0.075~mm. Middle: after depth correction, with log-normal ($s = 0.41$) and
+Gaussian fits; mean 0.082~mm, CV 0.43. Right: focal, near and far subsets. The distribution is a detector
+artefact (\secref{sec:watershed}), and the subsets differ because of the near/far tie-break
+(\secref{sec:disamb-result}).}\label{fig:csd}
+\end{figure*}
+
+\subsection{What the depth subsets do and do not show}\label{sec:selfcheck}
+
+A homogeneous slurry would give focal, near and far subsets of the same shape. \figref{fig:csd} (right) shows
+otherwise: the near subset is empty below about 0.05~mm, where the far subset concentrates. This is the signature of
+the tie-break rule (near above the prior mode, far below; \secref{sec:disamb-result}), not of depth-dependent
+crystal sizes. Agreement of the subsets would not have proven homogeneity either, because one detector and one
+selection rule produce all three. Testing the assumption needs either an external size reference at known depth or
+a detector admitting a depth range over which the size signal is measurable (\secref{sec:selectivity}).
+
+\subsection{Why the depth correction is negligible}\label{sec:depthsmall}
+
+The mean per-detection depth correction is 0.005--0.013\,\% of the median size in all four runs
+(\tabref{tab:ws-compare}). This follows from the geometry, not from the detector: at F/1.6 the in-focus half-slice is
+$\pm 9.4$~\um{} (one PAL sample, \secref{sec:dof}), and the detections lie within a few micrometres of focus
+(\secref{sec:disamb-result}). At this aperture a single scale at the focused plane suffices; the depth-aware
+correction carries weight only if detections are admitted much further from focus (\secref{sec:recs}).
+
+\subsection{Validation against hand-labelled crystals}\label{sec:validation}
+
+The size measurement will be established against hand-labelled crystal outlines, which are being drawn in the
+Cellpose annotation tool \pending{citation for Cellpose-SAM (\code{cpsam})} and do not exist yet. The protocol is
+fixed in advance:
 \begin{enumerate}
-\item \textbf{Median doubles} --- because the edge-based detector was fragmenting features into sub-pieces and biased
-the median \emph{down}. Watershed recovers whole-feature blobs.
-\item \textbf{CV halves} --- because the edge-based detector mixed whole-feature blobs with sub-feature artefacts,
-inflating the spread. A narrower CV at the same bandpass indicates fewer detector-side artefacts; it is \emph{not}
-evidence that the watershed resolves a more monodisperse crystal population, since the Mastersizer-confirmed crystals
-($\approx 9$~\um) are below the detector's bandpass either way.
-\item \textbf{Near/far split moves toward 50/50} --- because the larger, better-distributed sample on both sides of
-focus reduces the right-skew bias of the empirical prior that previously dominated the \secref{sec:impl} split. This
-is a property of the prior, not of the underlying crystal population.
+\item \emph{Label set.} Frames sampled from the crystal-bearing stages of two recordings: the 2026-02-04 PAL
+recording of the plant (15 frames for each of four annotators) and the 2026-10-30 seed-pan run (12 frames for each
+of five annotators). A fifth annotator relabels 15 frames of the first recording for inter-annotator agreement.
+\item \emph{Detection.} The edge detector, the watershed detector and the fine-tuned Cellpose model are run on the
+labelled frames at the scale of each recording, with the configured window. One frame per annotator is held out of fine-tuning.
+Detections are matched to labels one-to-one at intersection-over-union $\ge 0.5$.
+\item \emph{Metrics.} Precision, recall and $F_1$ per detector; average precision at IoU 0.5 for Cellpose on the
+held-out frames; the same metrics between annotators as the attainable ceiling; for matched pairs, the median
+relative error and bias of the area-equivalent size.
+\item \emph{Size against the microscope.} For the 2026-10-30 run, the camera's median chord, converted per axis,
+is compared with the microscope medians of \tabref{tab:microscope} at matched times since seeding (photo clock
+$\pm 47$~s). The acceptance criterion is that the camera distribution lies inside the microscope range at each
+matched time.
 \end{enumerate}
-
-The watershed numbers for this section are:
-\begin{quote}
-\textbf{Median = 0.074~mm, CV = 0.40, single-component log-normal with $\boldsymbol{s = 0.40}$} --- recovered with
-the watershed detector at the verified Camera 100 hardware configuration.
-
-These numbers, like the pre-watershed numbers of \secref{sec:csd-edge}, are \textbf{not a crystal-size measurement}
-of the imaged product. The recording captures the seed pan, whose true CSD is the $\approx 9$~\um{} Mastersizer
-distribution cited in the \secref{sec:csd} preface. The watershed median at 74~\um{} sits well above the
-Mastersizer's $\mathrm{Dv}(90) = 18.5$~\um, so the watershed has not recovered the crystal population either --- it
-has filled in the within-detector selection bias of \secref{sec:failure} but inherits the same length-scale mismatch
-as the edge-based detector. The earlier framing of these numbers as ``consistent with just-past-seeding A-strike
-crystals \dots{} confirmed by the plant operator'' is \textbf{retracted}. What this section demonstrates is that two
-structurally different detectors recover an internally consistent distribution from the bandpassed feature
-population --- a \emph{detector-comparison} result, not a process-state validation.
-\end{quote}
-
-\paragraph{Watershed limitations and known residual issues} The watershed is a major improvement but is not the
-final detector:
-\begin{itemize}
-\item \textbf{Mild residual over-segmentation} on the largest defocused crystals, where the distance transform has
-multiple shallow peaks inside one physical crystal. Increasing \code{_H_MAXIMA_PARAM} or using h-minima
-reconstruction would fix this at the cost of potentially merging touching crystals --- a CNN-based segmentation
-remains the long-term answer.
-\item \textbf{No ground-truth precision/recall yet}: the next milestone is a hand-labelled single frame
-(\secref{sec:recs}) against which we can quantify the watershed's recall and the residual error budget.
-\item \textbf{No temporal consistency}: each frame is segmented independently; a tracker would reject the few-percent
-of basins that flicker frame-to-frame.
-\end{itemize}
-
-Section~\ref{sec:depthsmall} (depth correction) below and \secref{sec:selfcheck} (homogeneous-slurry self-consistency
-check) above now refer to the \textbf{watershed} results.
-
-\subsection{Why the depth correction looks vanishingly small here}\label{sec:depthsmall}
-
-The mean per-crystal depth correction is \textbf{0.00001~mm (0.01\,\%)} at the verified F/1.6 aperture ---
-\emph{unchanged between detectors} because the correction is a property of the geometry, not of which crystals were
-found. For the current F/1.6 aperture, a \emph{single} mm/px scale (the one at the focused plane) is sufficient for
-population-level size readout. At the verified F/1.6 the DoF is $\pm 4.2$~\um{} --- a slab about the size of a median seed-slurry
-crystal --- so essentially \textbf{all detections come from one depth slice} and the depth-aware machinery has no 3-D
-structure to invert. The machinery becomes load-bearing only when (a) the aperture is stopped down by $\ge 4$ stops
-to widen the DoF, or (b) a blur-tolerant detector (CNN; Hough; learning-based focus measure) replaces the edge
-detector. Both are concrete recommendations for the next iteration (\secref{sec:recs}).
+Results: precision / recall / $F_1$ of the three detectors \pending{hand-labelled frames}; inter-annotator
+agreement \pending{duplicate-labelled frames}; Cellpose held-out AP@0.5 \pending{fine-tuning on the labels}; size
+bias of matched pairs \pending{hand-labelled frames}; camera against microscope medians, 2026-10-30
+\pending{validated detector run on the 2026-10-30 recording}.

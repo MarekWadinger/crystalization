@@ -1,68 +1,111 @@
-% Section 5 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
-\section{Crystal detection and the in-focus selectivity \emph{(detector layer)}}\label{sec:detection}
+% Section 5. Rewritten 2026-11-03 (branch docs/cep-grounded-draft) from the code as implemented and the rerun in
+% docs/optics/rerun_results.md (scripts/rerun_paper_numbers.py). Claim changes: papers/cep/CLAIM_CHANGES.md.
+\providecommand{\pending}[1]{\textbf{[PENDING: #1]}}% defined in main.tex; fallback for standalone builds
+\section{Crystal detection as implemented}\label{sec:detection}
 
-\subsection{Sharpness-layer decomposition}\label{sec:layers}
+This section describes the two classical detectors exactly as the code runs them, the size window they apply and the
+depth range they admit. Their output is analysed in \secref{sec:csd}; none of it has yet been compared with
+hand-labelled crystals (\secref{sec:validation}).
 
-We compute a per-pixel sharpness map using a windowed Laplacian-variance estimator (kernel = 15~px,
-Gaussian-smoothed; the \code{annotator.sharpness.compute_sharpness_map} helper), then segment the frame into
-$L = 3$ sharpness layers via min-max-normalised quantile binning. The detector is then run \emph{per layer}, with a
-morphological closing kernel that scales with the layer index (small for sharp-edge layers; large for blurry layers,
-to bridge thicker edge fragments).
+\subsection{Frame conditioning and sharpness layers}\label{sec:layers}
+
+Each frame of the case-study clip is cropped to the live camera picture. The automatic crop of
+\code{optics.video_io.resolve_crop} keeps $1826 \times 906$ of the $1920 \times 1080$ clip pixels (80\,\%); the
+single-frame figures use the fixed crop of $1800 \times 905$~px (79\,\%). At the scale of \secref{sec:camera}
+($1.464 \times 1.913$~\umpx{} at focus, ESTIMATE, $\pm\,{\approx}10$\,\% at 95\,\%) the automatic crop covers
+${\approx}\,2.7 \times 1.7$~mm of slurry.
+
+A per-pixel sharpness map is computed as the logarithm of the squared Laplacian smoothed by a $15 \times 15$~px
+Gaussian (\code{annotator.sharpness}). A depth score combines the min--max-normalised inverse sharpness (weight 0.7)
+with the normalised Farneb\"ack optical-flow magnitude to the previous sampled frame (weight 0.3; zero for a single
+frame). The score is quantised uniformly into $L = 3$ layers, and each detector runs once per layer
+(\figref{fig:layers}). The layers order pixels by sharpness and motion; they are not depth measurements, because a
+sharpness value maps to two depths (\secref{sec:ambiguity}).
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{12_sharpness_layers}
-\caption{\textbf{How does the pipeline split one frame into sharpness-based depth layers?} Four-panel decomposition
-of frame 750. \textbf{Top-left:} original cropped frame. \textbf{Top-right:} per-pixel Laplacian-variance sharpness
-map (bright = sharp, dark = blurry). \textbf{Bottom-left:} 3-layer segmentation overlaid (blue = sharpest / in-focus
-slice; green = mid; red = least sharp). \textbf{Bottom-right:} detected crystals colour-coded by their assigned
-layer. The decomposition is purely image-derived --- it identifies the depth \emph{structure} before any optical model
-is applied.}\label{fig:layers}
+\caption{Sharpness-layer decomposition of frame 750 (\texttt{optics.qualitative}). Top left: cropped frame. Top right:
+log-Laplacian sharpness map. Bottom left: three-layer quantisation (blue sharpest, green middle, red least sharp).
+Bottom right: edge-detector output coloured by layer, as in \figref{fig:detection}.}\label{fig:layers}
 \end{figure}
 
-\subsection{Edge-based detection}\label{sec:edge}
+\subsection{Edge and watershed detectors}\label{sec:edge}
 
-The detector (inherited from prior project work, \code{src/annotator/detection.py}) executes per layer:
-\begin{enumerate}
-\item Adaptive threshold (Gaussian-mean, block 11) to isolate dark crystal edges.
-\item Morphological closing with a layer-scaled kernel.
-\item External-contour extraction; minimum-area rotated rectangle fit.
-\item Area filter (80 -- 8\,000~px$^2$) and aspect-ratio filter ($\le 3.0$) to reject elongated noodles.
-\end{enumerate}
-The output is, per frame, a list of rotated bounding rectangles, each annotated with its layer index and the local
-Laplacian-variance score sampled inside its bounding rectangle.
+Both detectors start from the same Gaussian adaptive threshold (block 11~px, offset 2), which marks the dark crystal
+outlines on the bright background.
+
+\emph{Edge detector} (\code{annotator.detection}). The outline map is closed morphologically with an elliptical
+kernel of $3 + 4\ell$~px for layer $\ell$; external contours are fitted with minimum-area rotated rectangles, and a
+contour is kept if its area lies in the size window (\secref{sec:window}) and its aspect ratio is at most~3.
+
+\emph{Watershed detector} (\code{optics.detect_watershed}). The outline map is opened with a $3 \times 3$ kernel and
+its complement is distance-transformed. Seeds are the h-maxima ($h = 2.5$~px) of the distance map that lie at least
+6~px from any outline and at least 12~px from each other (\tabref{tab:ws-constants}). A marker-controlled watershed
+on the negative distance map, a standard image-segmentation method~\citep{Vincent1991,BeucherMeyer1993}, grows one
+basin per seed; each basin is fitted and filtered as above, with the basin pixel count as its area.
+
+\begin{table}
+\centering\tabfont
+\caption{Seed constants of the watershed detector (CHOICE, module constants of \texttt{optics.detect\_watershed}). The
+\textmu m values use the 1080p clip scale of \secref{sec:camera}.}\label{tab:ws-constants}
+\begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.5\columnwidth}@{}}
+\toprule
+Constant & Value & Role \\
+\midrule
+\code{_PEAK_MIN_DISTANCE} & 12~px & minimum seed spacing; $17.6 \times 23.0$~\um{} ($x \times y$) \\
+\code{_PEAK_THRESHOLD_ABS} & 6~px & minimum distance of a seed from any outline \\
+\code{_H_MAXIMA_PARAM} & 2.5~px & h-maxima height; suppresses plateau peaks \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A detection's size is the geometric mean $\sqrt{w h}$ of its rectangle sides, converted with the geometric-mean
+pixel scale ($1.673$~\umpx{} on the clips). Because a pixel is not square (\secref{sec:camera}), this
+area-equivalent size is exact under the anisotropic scale, whereas a chord length in a given direction is not: a
+pixel spans 1.464~\um{} along a row and 1.913~\um{} down a column, $-12$\,\% and $+14$\,\% of the geometric mean.
+
+\subsection{Size window from the configuration}\label{sec:window}
+
+The area window is read from \code{configs/camera_100.toml} by \code{optics.config.detection_area_px}. Its lower
+bound is $3^2 = 9$~px$^2$ (\code{min_side_px} $= 3$, CHOICE). Its upper bound is the pixel area of a 1~mm square at
+the focused plane, $\mathit{max\_size}^2 / (\mu_x \mu_y)$ with the per-axis scales $\mu_x, \mu_y$; the 1~mm
+(\code{max_size_um}, CHOICE) rounds up the 0.821~mm largest crystal of the first microscope reading
+(\secref{sec:expected}). On the 1080p clips the window is $[9,\ 356\,474]$~px$^2$, an area-equivalent 5--1000~\um;
+on the PAL recording it is $[9,\ 71\,020]$~px$^2$. Three clip pixels are $4.4 \times 5.7$~\um{} but only
+${\approx}\,1.1$ PAL samples, because the clips are upscaled PAL pictures; on PAL, three samples are
+$11.8 \times 10.8$~\um.
+
+The earlier fixed window $[80,\ 8000]$~px$^2$ corresponds on the clips to an area-equivalent 15--150~\um{}
+(13--131~\um{} along a row, 17--171~\um{} down a column). It is reported below only to show how the detector output
+depends on the window.
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{11_detection_overlay}
-\caption{\textbf{What does the detector actually find?} Detector output on frame 750 of the case-study video. Each
-rotated bounding rectangle is a detected feature, colour-coded by its sharpness layer. 55 features are localised; the
-bulk lie in the centre band where the optics are nearly in focus, and the peripheral regions populate the defocused
-layers. The variability in apparent size across the detected set is structurally consistent across frames --- it is
-detector output behaviour, not per-frame noise --- but at 1.66~\umpx{} the area filter $[80, 8000]$~px$^2$
-bandpasses $\approx 15$--150~\um{} features, well above the $\approx 9$~\um{} crystal population (Mastersizer ground
-truth, \secref{sec:csd}). The features detected here are therefore not the seed-magma crystals themselves;
-cross-check with \secref{sec:csd}.}\label{fig:detection}
+\caption{Edge-detector output on frame 750 with the configured window (\texttt{optics.qualitative}): 840 rotated
+rectangles, coloured by sharpness layer (the legend names are the code's layer names, not depth assignments). Many of
+the largest rectangles enclose blurred regions rather than single crystal outlines. The earlier $[80, 8000]$~px$^2$
+window gives 292 detections on the same frame.}\label{fig:detection}
 \end{figure}
 
-\subsection{The detector's depth selectivity is the operational ceiling}\label{sec:selectivity}
+\subsection{Depth range admitted by the detectors}\label{sec:selectivity}
 
-Adaptive thresholding requires edge contrast that vanishes once the PSF spreads over more than a few pixels;
-morphological closing preserves a contour only if the local edge is still locally bright against the background. The
-detector therefore implicitly selects for a \textbf{narrow in-focus slice} around the focused plane. For the
-case-study lens at F/1.6 the CoC reaches 5~px at $\delta \approx \pm 21$~\um{} --- a band in which the front/back
-size discrimination signal is only 0.08\,\% (\figref{fig:discrim}). The disambiguation framework of \secref{sec:sizing}
-is therefore applicable to the data we have, but its discriminating power is set by the detector's depth-of-field
-aperture, not by any optics limitation per se.
+Both detectors need dark outlines a few pixels wide, so they admit only crystals near the focused plane. The
+resolution element of the recording is the PAL sample ($6.83 \times 6.25$~\um{} at the sensor, geometric mean
+6.53~\um; \secref{sec:camera}), not the upscaled clip pixel. If a detector loses an outline once the circle of
+confusion exceeds five resolution elements (an assumption, not a measured threshold), the F/1.6 lens admits
+$\delta = \pm 47$~\um{} around focus (\secref{sec:coc}). Over that range the near/far apparent-size ratio of
+\eqref{eq:ratio} departs from one by only 0.17\,\%, whereas a 5\,\% difference requires $\delta \approx 1.3$~mm
+(\figref{fig:discrim}). Counting in clip pixels instead gives $\pm 21$~\um{} and 0.08\,\%. The size signal that
+\secref{sec:sizing} relies on is therefore negligible for any detection these detectors can make at F/1.6.
 
 \begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{10_discriminability}
-\caption{\textbf{At what depth offset does the size signal break the near/far ambiguity?} Apparent-size ratio
-between symmetric near/far depth hypotheses (left axis, blue) and the corresponding sensor CoC (right axis, green) as
-a function of near-side offset $\delta$. The 5\,\% discrimination threshold (red dotted) is reached only at
-$\delta \approx 1.3$~mm --- but the 5-pixel CoC threshold (green dashed) at which the edge-based detector loses
-sensitivity is reached already at $\delta \approx 21$~\um. \textbf{The data the detector admits therefore sit at
-$\delta \lesssim 21$~\um, where size-based discrimination is $<0.1$\,\%.} This is the operational ceiling
-that the \secref{sec:recs} recommendations are designed to break.}\label{fig:discrim}
+\caption{Near/far apparent-size ratio (left axis) and sensor circle of confusion (right axis) against the near-side
+offset $\delta$ at F/1.6 (\texttt{optics.disambiguate.fig\_discriminability}). The plotted range of 0--50~mm is far
+wider than the relevant one: the 5\,\% ratio is reached at $\delta \approx 1.3$~mm and the assumed five-element
+detection limit at $\pm 47$~\um, both at the left edge of the axis. The figure's 1-px line is a clip pixel
+(2.9~\um).}\label{fig:discrim}
 \end{figure}
