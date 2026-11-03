@@ -32,7 +32,7 @@ reported in \secref{sec:csd} therefore describe agglomerate / cluster / bandpass
 The fix is a detector retuned to the correct length scale (or a CNN-based segmentation; \secref{sec:recs}), not a
 parameter sweep of the current one.
 \item \textbf{Front/back disambiguation is geometrically valid but operationally degenerate at F/1.6.} The verified
-F/1.6 aperture produces a $\pm 6$~\um{} in-focus depth window --- narrower than any single crystal. The detector
+F/1.6 aperture produces a $\pm 4.2$~\um{} in-focus depth window --- about the size of a median seed-slurry crystal. The detector
 therefore sees one depth slice and the 79 / 21 near-side split observed in \secref{sec:sizing} is not robust evidence
 of a geometric offset; it could equally reflect the right-skew of the empirical prior.
 \item \textbf{Paraxial sight-glass model breaks at sub-pixel scales.} Exact flat-port projection requires
@@ -52,7 +52,7 @@ off the true $e = 60$~mm without any data-internal inconsistency flagging the er
 
 \begin{enumerate}
 \item \textbf{Stop the lens down by at least 4 stops} (from current F/1.6 to F/8 or further, ideally F/16). At F/16
-the in-focus depth widens $10\times$ to $\pm 60$~\um{} --- finally letting the disambiguation pipeline see real 3-D
+the in-focus depth widens $10\times$ to $\pm 42$~\um{} --- finally letting the disambiguation pipeline see real 3-D
 crystal distribution and pushing the apparent-size ratio for symmetric depth hypotheses past the discriminability
 threshold.
 \item \textbf{Replace the edge-based detector with a blur-tolerant scheme} (CNN fine-tuned on partially-defocused

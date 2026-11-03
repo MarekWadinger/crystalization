@@ -264,17 +264,16 @@ remains the long-term answer.
 of basins that flicker frame-to-frame.
 \end{itemize}
 
-% NOTE (conversion): manuscript v0.2 refers to "Sections 7.6 ... and 7.7"; there is no Section 7.7 in the source.
-Sections~\ref{sec:depthsmall} (depth correction) and 7.7 (homogeneous-slurry self-consistency check) below now refer
-to the \textbf{watershed} results.
+Section~\ref{sec:depthsmall} (depth correction) below and \secref{sec:selfcheck} (homogeneous-slurry self-consistency
+check) above now refer to the \textbf{watershed} results.
 
 \subsection{Why the depth correction looks vanishingly small here}\label{sec:depthsmall}
 
 The mean per-crystal depth correction is \textbf{0.00001~mm (0.01\,\%)} at the verified F/1.6 aperture ---
 \emph{unchanged between detectors} because the correction is a property of the geometry, not of which crystals were
 found. For the current F/1.6 aperture, a \emph{single} mm/px scale (the one at the focused plane) is sufficient for
-population-level size readout. At the verified F/1.6 the DoF is $\pm 6$~\um{} --- narrower than any single crystal
---- so essentially \textbf{all detections come from one depth slice} and the depth-aware machinery has no 3-D
+population-level size readout. At the verified F/1.6 the DoF is $\pm 4.2$~\um{} --- a slab about the size of a median seed-slurry
+crystal --- so essentially \textbf{all detections come from one depth slice} and the depth-aware machinery has no 3-D
 structure to invert. The machinery becomes load-bearing only when (a) the aperture is stopped down by $\ge 4$ stops
 to widen the DoF, or (b) a blur-tolerant detector (CNN; Hough; learning-based focus measure) replaces the edge
 detector. Both are concrete recommendations for the next iteration (\secref{sec:recs}).

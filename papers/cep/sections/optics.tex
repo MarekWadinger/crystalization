@@ -37,7 +37,7 @@ $\Delta = t \cdot (1 - 1/n_g)$ (\citealp[\S\,5.6]{Hecht2017}, paraxial limit). F
 measured 20~mm thickness and $n_g = 1.47$, $\Delta = 6.39$~mm, independent of distance. The exact projection through
 a thick flat port is a 12th-degree polynomial \citep{Agrawal2012}; the paraxial form here is adequate for
 sub-percent pixel-pitch budgeting but not for sub-pixel metric reconstruction --- a limitation we discuss in
-\secref{sec:growth}.
+\secref{sec:notperform}.
 
 \begin{figure}
 \centering
@@ -182,17 +182,16 @@ consistent geometry.
 The focal slab therefore sits \textbf{${\sim}8$~\textmu m into the slurry beyond the inner sight-glass surface}, with
 the absolute number subject to a ${\sim}2\times$ uncertainty inherited from the $c = 5.8$~\um{} self-calibration of
 the sharpness model (a future calibration anchored against a focused crystal from mid-strike would tighten this to
-better than $\pm 1$~\um). The slab is sub-millimetre \emph{thick}: DoF at F/1.6 has FWHM $\approx 4.5$~\um{} of object
-depth (\secref{sec:dof}), and the usable detection range (where the circle of confusion exceeds one sensor pixel)
-extends to about $\pm 0.07$~mm.
+better than $\pm 1$~\um). The slab is sub-millimetre \emph{thick}: DoF at F/1.6 has FWHM $\approx 4.9$~\um{} of object
+depth (\secref{sec:dof}), and the edge-based detector stops finding crystals once the circle of confusion exceeds
+about 5 pixels, at $\delta \approx \pm 21$~\um{} (\secref{sec:selectivity}).
 
 Two consequences carried through the rest of the paper. First, the \emph{spatial} sampling claim of the pipeline is
 not ``this is the crystal population in the pan'' but ``this is the population in the slurry boundary layer pressed
-against the inner sight-glass surface''. Section~\ref{sec:homog} leans on the strong thermosiphon circulation in
-TVA~30 vessels to argue that this layer is representative of bulk; \secref{sec:selfcheck} records the caveat that
+against the inner sight-glass surface''. Section~\ref{sec:homog} leans on the mechanical stirring of the seed pan
+(\secref{sec:plant}) to argue that this layer is representative of bulk; \secref{sec:selfcheck} records the caveat that
 this homogeneity is \emph{assumed}, not directly measured. Second, the vessel geometry does \emph{not} enter as a
-depth bound on the detection range --- the sub-mm optical slab is many orders of magnitude tighter than the 900~mm
-annular gap, so any front/back-disambiguation discussion (\secref{sec:sizing}) is bounded by optics, not by vessel
+depth bound on the detection range --- the sub-mm optical slab is far thinner than any vessel dimension, so any front/back-disambiguation discussion (\secref{sec:sizing}) is bounded by optics, not by vessel
 walls.
 
 \subsubsection{Closing the stack-up with the measured air gap}\label{sec:stackup}

@@ -26,7 +26,7 @@ limitations.
 
 \paragraph{Probe-based optical instruments} Mettler-Toledo's \emph{Focused Beam Reflectance Measurement} (FBRM) scans
 a laser through the slurry and infers a chord-length distribution from back-scattered pulses
-\citep{Worlitschek2004,Heath2002}. FBRM has become a \emph{de facto} research standard but suffers from three issues
+\citep{Worlitschek2003,Heath2002}. FBRM has become a \emph{de facto} research standard but suffers from three issues
 for sugar use: (i) the chord-length-to-size inversion is geometrically ill-posed and biases the recovered CSD by
 15--40\,\% depending on particle shape \citep{Czapla2010}; (ii) the optical window must be kept clean against viscous
 massecuite, a heavy maintenance burden at sugar-pan temperatures and concentrations; (iii) each FBRM probe costs
@@ -102,7 +102,7 @@ apparent-size distribution as a \textbf{single-component} Bayesian prior under a
 (\S\S\,\ref{sec:detection}--\ref{sec:sizing})
 \item[RQ4.] Across multiple boiling-pan strikes, does the per-batch median apparent crystal size as a function of
 time-into-strike collapse to a single curve, and can this collapse identify the lens-stack parameters that would
-otherwise be hardware-measured? (\secref{sec:csd} outlook)
+otherwise be hardware-measured? (\secref{sec:growth} outlook)
 \end{description}
 
 \subsection{The pipeline at a glance}\label{sec:glance}
@@ -128,7 +128,7 @@ integrating geometric optics, defocus analysis, Bayesian disambiguation, and gro
 licence, code at \emph{(URL)}.
 \item \textbf{A single-component depth-aware sizing framework} that breaks the front/back defocus ambiguity using the
 focal-plane apparent-size distribution as prior, under a documented homogeneous-slurry assumption that admits a
-built-in self-consistency check (\secref{sec:detection}).
+built-in self-consistency check (\secref{sec:sizing}).
 \item \textbf{A quantitative treatment of detector--depth interaction}, including the explicit conditions under which
 the disambiguation regime is operationally resolvable and the discriminability ceiling imposed by edge-based
 detectors (\secref{sec:selectivity}).

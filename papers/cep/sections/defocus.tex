@@ -4,8 +4,7 @@
 \subsection{Circle of confusion}\label{sec:coc}
 
 For a lens focused at $d_\mathrm{focus}$ with aperture $A = f / N$, the circle of confusion (CoC) diameter at the
-sensor for an object at $d_o$ is, by similar triangles applied to the thin-lens equation (\citealp{Pentland1987};
-verified against Wikipedia and against \citealp{Pertuz2013} verbatim):
+sensor for an object at $d_o$ is, by similar triangles applied to the thin-lens equation \citep{Pentland1987,Pertuz2013}:
 \begin{equation}\label{eq:coc}
 c(d_o) = \frac{f^2}{N (d_\mathrm{focus} - f)} \cdot \frac{|d_o - d_\mathrm{focus}|}{d_o}.
 \end{equation}
@@ -14,7 +13,7 @@ $|d_o - d_\mathrm{focus}|$ increases and the $1/d_o$ factor increases) and satur
 $c_\infty = f^2 / (N \cdot (d_\mathrm{focus} - f))$ as $d_o \to \infty$. In the reciprocal variable $u = 1/d_o$ the
 geometry is \textbf{linear and symmetric} about $u_\mathrm{focus}$:
 \begin{equation}\label{eq:cocu}
-c(u) = \frac{f^2}{N} \cdot |u - u_\mathrm{focus}|.
+c(u) = \frac{f^2\, d_\mathrm{focus}}{N (d_\mathrm{focus} - f)} \cdot |u - u_\mathrm{focus}|.
 \end{equation}
 
 \begin{figure*}
@@ -50,7 +49,7 @@ in object distance}: extremely tall and narrow at the focused plane, asymmetric 
 \centering
 \includegraphics[width=\textwidth]{03_sharpness_vs_distance}
 \caption{\textbf{Is the defocus sharpness profile really a power law, not a Gaussian?} Sharpness vs defocus
-$\delta = d_o - d_\mathrm{focus}$, plotted in \textmu m because the FWHM at F/1.6 is only 4.3~\um. Three panels make
+$\delta = d_o - d_\mathrm{focus}$, plotted in \textmu m because the FWHM at F/1.6 is only 4.9~\um. Three panels make
 the power-law identity testable visually. \textbf{Left (linear $y$, $\pm 100$~\textmu m):} the Gaussian-PSF model
 (blue) and diffraction-+-sensor-floor model (orange) coincide with a FWHM-matched Gaussian (red dashed) at the very
 peak but the actual cusp is \emph{taller and narrower}. \textbf{Middle (log $y$, $\pm 100$~\textmu m):} the Gaussian
@@ -71,7 +70,8 @@ Stopping the lens down increases the depth window over which CoC stays under any
 \includegraphics[width=\columnwidth]{04_dof_envelope}
 \caption{\textbf{How thick is the in-focus slice at each aperture?} Geometric CoC vs object distance for F/1.6
 (current), F/2.8, F/4, F/8, F/16. At the verified F/1.6 the in-focus slice (CoC $\le 1$ pixel) spans only
-$\pm$\textbf{6~\textmu m} --- narrower than a single seed crystal. Stopping down to F/16 widens it to $\pm 60$~\um{}
+$\pm$\textbf{4.2~\textmu m} (8.4~\um{} in total), about the size of a median seed-slurry crystal
+($\mathrm{Dv}(50) = 6.81$~\um, \citealp{Mastersizer2025}). Stopping down to F/16 widens it to $\pm 42$~\um{}
 ($10\times$). \textbf{This is the single most operationally important plant-side recommendation from the optics
 analysis}: the depth-aware pipeline of \S\S\,\ref{sec:detection}--\ref{sec:sizing} cannot extract 3-D structure
 until the iris is closed enough to admit it.}\label{fig:dof}

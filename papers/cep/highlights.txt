@@ -2,5 +2,5 @@
 Thin-lens model fixes the scale at 1.66 µm/px at a 55.1 mm working distance
 Measured sharpness tail exponent 4.88 matches the predicted 5.0 within 2.4 %
 A focal-plane size prior can break the front/back defocus ambiguity
-At F/1.6 the in-focus slice is ±6 µm; stopping down to F/16 widens it to ±60 µm
+At F/1.6 the in-focus slice is ±4.2 µm; stopping down to F/16 widens it to ±42 µm
 Mastersizer data show the detector sees 20–200 µm features, not the 9 µm crystals
