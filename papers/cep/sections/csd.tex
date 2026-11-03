@@ -214,14 +214,14 @@ bias of matched pairs \pending{hand-labelled frames}; camera against microscope 
 \pending{validated detector run on the 2026-10-30 recording}.
 
 \emph{First matched-time reading.} A first comparison of Cellpose outlines, not yet checked against labels, on
-frames of the 2026-10-30 recording with the microscope photographs at matched times, read once by eye, finds the
-camera crystals at the modelled scale about three times smaller than the microscope chords late in strike b1
-\pending{matched-time comparison script and figure}. At 13:32 (122~min) about 230 camera crystals, the largest
-${\approx}\,300$~\um, fill the field, whereas a microscope field of similar extent holds single well-formed crystals of
-0.3--1.1~mm. Neither clumping nor the detector explains the gap. Three causes remain: (i) the scale is off, most
-likely through the tube length; (ii) the sight glass sees another population than the sample tap, such as a wall
-layer or settled crystals; (iii) crystals lie flat on the slide but in random orientation in the pan, which accounts
-for only 20--30\,\%. If the plant's ``$\approx 6$~cm'' includes the 29.5~mm lens body, the tube is
-${\approx}\,30$~mm, and at 1~mm focus travel the magnification $(e + x)/f$ falls from 61/35 to 31/35, so that this
-reading alone makes the scale about 2 times coarser. Plant data cannot separate (i) from (ii); a ruler or graticule
-imaged at the inner glass face (\secref{sec:recs}) decides it.
+frames of the 2026-10-30 recording with the microscope photographs at matched times shows the camera sizes levelling
+off: the camera 90th percentile rises against the microscope one with a log-log slope of only 0.2--0.45, and the
+level it settles at follows the detector's diameter setting \pending{matched-time comparison script and figure}. The
+time-varying gap is therefore a detector failure. Late in strike b1 the raw frames show crystals of about 90--190 PAL samples across,
+comparable at the modelled scale to the microscope crystals; the flat-field division and CLAHE split them into facets
+of 30--50 samples, which Cellpose outlines as 220--290 crystals per frame where about 37 of microscope size fit.
+Frames 60~s apart are uncorrelated, so no static layer on the glass is imaged; up to 11:46 the crystals span 3--9
+samples and the outlines are texture. A residual constant factor of about 1.3--1.6 remains, undecided between the
+tube length (site photographs suggest ${\approx}\,40$~mm, which makes the scale about 1.5 times coarser;
+\secref{sec:tube}) and the operator's selection of the largest crystals. Hand-traced whole-crystal outlines at matched
+times and a stage micrometer imaged through the locked lens on a bench decide it.
