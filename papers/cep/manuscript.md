@@ -250,7 +250,7 @@ The work is organised around four research questions:
 
 The full pipeline composes six stages. Figure 1 shows the dataflow.
 
-![Figure 1 — Pipeline block diagram](../optics/figures/13_pipeline.png)
+![Figure 1 — Pipeline block diagram](../../docs/optics/figures/13_pipeline.png)
 *Figure 1 — **What is the full pipeline, end to end?** Stages A–E
 (top row) compose the forward measurement: raw video → DVR-overlay
 crop → per-frame sharpness analysis → per-crystal defocus inversion
@@ -375,11 +375,11 @@ recording if the DVR layout or analogue-aspect padding differs.
 Figure 2 shows the raw and cropped first frame side by side. Every
 figure below uses the cropped variant.
 
-![Figure 2a — Raw first frame](../optics/figures/00_first_frame.png)
+![Figure 2a — Raw first frame](../../docs/optics/figures/00_first_frame.png)
 *Figure 2a — Raw first frame, 1920 × 1080. Top: DVR timestamp band.
 Bottom: ``CH01`` label. Left & right: analogue-aspect black bars.*
 
-![Figure 2b — Cropped first frame](../optics/figures/00_first_frame_cropped.png)
+![Figure 2b — Cropped first frame](../../docs/optics/figures/00_first_frame_cropped.png)
 *Figure 2b — **What does the pipeline's input look like after frame
 conditioning?** Same frame after the two-step crop removes both the
 DVR overlay and the analogue-aspect black bars (1800 × 905 px ≈
@@ -418,7 +418,7 @@ even for *defocused* image points — defocus spreads each point across
 many pixels but the *centroid* sits exactly where geometric optics
 places it (Pertuz et al., 2013).
 
-![Figure 3 — Linear mm/px vs object distance](../optics/figures/01_mm_per_pixel.png)
+![Figure 3 — Linear mm/px vs object distance](../../docs/optics/figures/01_mm_per_pixel.png)
 *Figure 3 — **How does the metric scale change with depth?**
 Object-plane pixel size as a function of object distance for the
 case-study lens (f = 35 mm, **e = 60 mm**, focus = 55.1 mm — verified
@@ -438,7 +438,7 @@ port is a 12th-degree polynomial (Agrawal et al., 2012); the paraxial
 form here is adequate for sub-percent pixel-pitch budgeting but not
 for sub-pixel metric reconstruction — a limitation we discuss in §8.
 
-![Figure 4 — Sight-glass refractive shift](../optics/figures/05_sight_glass_shift.png)
+![Figure 4 — Sight-glass refractive shift](../../docs/optics/figures/05_sight_glass_shift.png)
 *Figure 4 — **How much does the sight glass distort distances?**
 Apparent vs real object distance through the DIN 8902 borosilicate
 disc. The shift is a **constant 6.39 mm** (independent of object
@@ -474,7 +474,7 @@ flagging an inconsistency. A caliper measurement remains the cheapest
 verification step; longer-term, the growth-curve self-validation of
 §8 promises to remove the on-site step entirely.
 
-![Figure 5 — Extension-tube sweep](../optics/figures/06_extension_tube_sweep.png)
+![Figure 5 — Extension-tube sweep](../../docs/optics/figures/06_extension_tube_sweep.png)
 *Figure 5 — **How does the extension tube control the macro range?**
 Object-plane pixel size as a function of object distance, parameterised
 by extension tube length e. The verified e = 60 mm places
@@ -520,7 +520,7 @@ in-situ result of § 3.5.1 closes the stack-up and places H about
 21.5 mm behind the front element (§ 3.5.4). Figure 5b illustrates
 the stack.
 
-![Figure 5b — Optical layout](../optics/figures/18_optical_layout.png)
+![Figure 5b — Optical layout](../../docs/optics/figures/18_optical_layout.png)
 *Figure 5b — **What does the optical chain from sensor to slurry
 actually look like?** Schematic (not to scale). Variables: lens focal
 length ``f = 35 mm``, extension tube ``e = 60 mm``, sensor at
@@ -554,7 +554,7 @@ Cross-window medians agree to within 11 %, *across a four-hour gap*
 incompatible with any bulk-slurry feature that would change with
 the strike progression.
 
-![Figure 5c — Glass-dent sharpness histograms](../optics/figures/17_dent_sharpness_histograms.png)
+![Figure 5c — Glass-dent sharpness histograms](../../docs/optics/figures/17_dent_sharpness_histograms.png)
 *Figure 5c — **How far inside the slurry does the focal plane sit?**
 Per-frame glass-dent sharpness measured in two empty-tank windows
 4 hours apart in the case-study recording. The two distributions
@@ -684,7 +684,7 @@ is **linear and symmetric** about ``u_focus``:
 
 $$ c(u) = \frac{f^2}{N} \cdot |u - u_\text{focus}|. $$
 
-![Figure 6 — CoC vs object distance and vs 1/d_o](../optics/figures/02_coc_vs_distance.png)
+![Figure 6 — CoC vs object distance and vs 1/d_o](../../docs/optics/figures/02_coc_vs_distance.png)
 *Figure 6 — **How does blur grow as crystals move off the focused
 plane?** **Left:** geometric CoC vs d_o, in *object-space coordinates*
 — the curve is asymmetric (blur grows fast on the near side, saturates
@@ -716,7 +716,7 @@ the diffraction term ``σ_\text{diff} ≈ 0.42 \, \lambda \, N``
 the focused plane, asymmetric in ``d_o``, symmetric in ``1/d_o`` —
 **not a Gaussian and not a gamma**.
 
-![Figure 7 — Sharpness vs distance, three views](../optics/figures/03_sharpness_vs_distance.png)
+![Figure 7 — Sharpness vs distance, three views](../../docs/optics/figures/03_sharpness_vs_distance.png)
 *Figure 7 — **Is the defocus sharpness profile really a power law, not
 a Gaussian?** Sharpness vs defocus δ = d_o − d_focus, plotted in µm
 because the FWHM at F/1.6 is only 4.3 µm. Three panels make the
@@ -739,7 +739,7 @@ Stopping the lens down increases the depth window over which CoC
 stays under any chosen pixel threshold. Figure 8 shows the DoF
 envelope for F-numbers F/1.6 through F/16 at the case-study focus.
 
-![Figure 8 — Depth-of-field envelope](../optics/figures/04_dof_envelope.png)
+![Figure 8 — Depth-of-field envelope](../../docs/optics/figures/04_dof_envelope.png)
 *Figure 8 — **How thick is the in-focus slice at each aperture?**
 Geometric CoC vs object distance for F/1.6 (current), F/2.8, F/4,
 F/8, F/16. At the verified F/1.6 the in-focus slice (CoC ≤ 1 pixel)
@@ -777,7 +777,7 @@ of the cusp. The honest qualitative reading is unchanged: *the
 sharpness distribution is a heavy-tailed power-law, not a Gaussian
 or gamma*.
 
-![Figure 9 — Measured vs theory after full crop](../optics/figures/08_measured_vs_theory.png)
+![Figure 9 — Measured vs theory after full crop](../../docs/optics/figures/08_measured_vs_theory.png)
 *Figure 9 — **Does the empirical sharpness distribution match the
 theoretical power-law tail?** **Left:** empirical pixel-sharpness
 distribution from the case-study video after full crop (DVR overlay
@@ -812,7 +812,7 @@ morphological closing kernel that scales with the layer index (small
 for sharp-edge layers; large for blurry layers, to bridge thicker
 edge fragments).
 
-![Figure 10 — Sharpness-layer decomposition](../optics/figures/12_sharpness_layers.png)
+![Figure 10 — Sharpness-layer decomposition](../../docs/optics/figures/12_sharpness_layers.png)
 *Figure 10 — **How does the pipeline split one frame into sharpness-
 based depth layers?** Four-panel decomposition of frame 750.
 **Top-left:** original cropped frame. **Top-right:** per-pixel
@@ -839,7 +839,7 @@ The output is, per frame, a list of rotated bounding rectangles, each
 annotated with its layer index and the local Laplacian-variance score
 sampled inside its bounding rectangle.
 
-![Figure 11 — Detection overlay on a single frame](../optics/figures/11_detection_overlay.png)
+![Figure 11 — Detection overlay on a single frame](../../docs/optics/figures/11_detection_overlay.png)
 *Figure 11 — **What does the detector actually find?** Detector
 output on frame 750 of the case-study video. Each rotated bounding
 rectangle is a detected feature, colour-coded by its sharpness
@@ -868,7 +868,7 @@ applicable to the data we have, but its discriminating power is set
 by the detector's depth-of-field aperture, not by any optics
 limitation per se.
 
-![Figure 12 — Discriminability ceiling](../optics/figures/10_discriminability.png)
+![Figure 12 — Discriminability ceiling](../../docs/optics/figures/10_discriminability.png)
 *Figure 12 — **At what depth offset does the size signal break the
 near/far ambiguity?** Apparent-size ratio between symmetric near/far
 depth hypotheses (left axis, blue) and the corresponding sensor CoC
@@ -952,7 +952,7 @@ The pipeline is implemented in ``src/optics/disambiguate.py`` and
 The full disambiguation panel for the case-study video is in
 Figure 13.
 
-![Figure 13 — Per-crystal disambiguation result](../optics/figures/09_disambiguation.png)
+![Figure 13 — Per-crystal disambiguation result](../../docs/optics/figures/09_disambiguation.png)
 *Figure 13 — **What does per-crystal depth-aware sizing produce?**
 **Left:** depth-corrected physical-size histogram for the case-study
 video, split by disambiguation outcome (focal-plane subset, near-side,
@@ -983,13 +983,13 @@ overlaid — so the reader can see *which pixels are sharp enough to
 actually be at that depth*.
 
 **d_o = 62.0 mm (near, 2.169 µm/px):**
-![near](../optics/figures/07_overlay_near.png)
+![near](../../docs/optics/figures/07_overlay_near.png)
 
 **d_o = 55.1 mm (at focus, 1.664 µm/px):**
-![focus](../optics/figures/07_overlay_at_focus.png)
+![focus](../../docs/optics/figures/07_overlay_at_focus.png)
 
 **d_o = 55.6 mm (far, 1.680 µm/px):**
-![far](../optics/figures/07_overlay_far.png)
+![far](../../docs/optics/figures/07_overlay_far.png)
 
 *Figure 14 — **How much does mm/px actually change across the
 in-focus slice, and which pixels does it apply to?** Real-world
@@ -1050,7 +1050,7 @@ With the inherited edge-based detector, the case-study video yields
 **18 823 detections across 60 sampled frames**, aggregated into a
 single-component CSD shown in Figure 15.
 
-![Figure 15 — Final depth-corrected CSD](../optics/figures/14_csd_final.png)
+![Figure 15 — Final depth-corrected CSD](../../docs/optics/figures/14_csd_final.png)
 *Figure 15 — **What is the final calibrated crystal-size distribution?**
 This is the headline output of the pipeline at the **watershed
 detector** (§ 7.5; pre-watershed figures and numbers archived in
@@ -1232,7 +1232,7 @@ entirely. Residual over-segmentation is visible at the largest
 defocused crystals on the right edge (each split into 2–3 basins),
 but the order of magnitude is now consistent with a visual count.
 
-![Figure 16 — Detector comparison](../optics/figures/17_watershed_vs_edge.png)
+![Figure 16 — Detector comparison](../../docs/optics/figures/17_watershed_vs_edge.png)
 *Figure 16 — **What does the watershed detector recover that the
 edge-based detector missed?** Same frame 750, two detectors.
 **Left** — the inherited edge-based detector: 102 detections, almost

@@ -6,6 +6,13 @@ One **sidecar JSON per recording**: `<video stem>.json`. The schema is in
 `uv run optics-sidecar check "<file>.json"`. Large videos are not in git;
 the table says where each one lives.
 
+## Data availability
+
+The CEP paper ([`papers/cep/`](../papers/cep/)) cites the archived
+recordings, sidecars and code at Zenodo DOI `10.5281/zenodo.XXXXXXX`
+(placeholder: not yet deposited). Until then, the table below says where
+each recording lives.
+
 ## Recordings
 
 | Sidecar | What it is | Video location |
