@@ -7,8 +7,8 @@ The pipeline of \secref{sec:detection}--\secref{sec:sizing} runs end to end and 
 section compares it with what the camera should see according to the plant's microscope data, shows without labels
 that for both classical detectors it does not track crystal size, and defines the validation against hand-labelled
 crystals that will replace it. Unless stated otherwise, runs use 60 frames (every 15th) of the case-study clip with
-the automatic crop; sizes are area-equivalent at the geometric-mean scale of 1.673~\umpx{} (ESTIMATE, conditional
-$\pm\,{\approx}10$\,\% at 95\,\%).
+the automatic crop; detection sizes are area-equivalent at the modelled geometric-mean scale of 1.673~\umpx{}
+($\pm\,{\approx}10$\,\% input budget, not validated in the image) and are detector outputs, not crystal sizes.
 
 \subsection{What the camera should see}\label{sec:expected}
 
@@ -50,7 +50,7 @@ b2 & 18:04 & 162 & 65 & 101 / 399 / 961 \\
 \end{tabular}
 \end{table}
 
-At the PAL scale of $3.92 \times 3.59$~\umpx{} (\secref{sec:budget}) the slurry crystals span about 2.5--5 samples
+At the modelled PAL scale of $3.92 \times 3.59$~\umpx{} (\secref{sec:budget}) the slurry crystals span about 2.5--5 samples
 and sit at the resolution limit, whereas crystals of the 0.1--0.5~mm medians found from about half an hour after
 seeding span tens to over a hundred samples and should be well resolved. The 1~mm upper bound of the size window
 (\secref{sec:window}) is an area-equivalent bound, whereas a microscope value is a single chord; it may exclude
@@ -144,7 +144,7 @@ artefact (\secref{sec:watershed}), and the subsets differ because of the near/fa
 The strongest label-free test is the time course. Strike b2 of the 2026-02-04 PAL recording is covered from
 concentration to discharge (\secref{sec:recording}). We ran both detectors on 10 frames, 1~s apart, at 13 times from
 40~min before seeding to 200~min after it, with the configured PAL window $[9,\ 71\,020]$~px$^2$ and sizes at the
-PAL scale (\code{scripts/detector_checks.py time}; \figref{fig:time}). The edge median stays at 31--36~\um{} and the
+modelled PAL scale (\code{scripts/detector_checks.py time}; \figref{fig:time}). The edge median stays at 31--36~\um{} and the
 watershed median at 180--216~\um{} over the whole strike, and both return before seeding, when the pan holds
 concentrating syrup, the same values as at its end. In the 2026-10-30 run of the same pan the microscope medians
 grow 17-fold, from 29 to 483~\um{} within 122~min. That run is from another day, but a growth of this order is what
@@ -156,7 +156,8 @@ before seeding from massecuite before discharge, does not measure crystal size.
 \includegraphics[width=\columnwidth]{19_detector_vs_time}
 \caption{\textbf{Do the detectors see the crystals grow?} Median and interquartile range of the edge and watershed
 detections against time since seeding, strike b2 of the 2026-02-04 PAL recording (10 frames per time; configured
-window; area-equivalent size at the PAL scale; \texttt{scripts/detector\_checks.py time}). Open triangles: microscope
+window; area-equivalent size at the modelled PAL scale, detector outputs rather than crystal sizes;
+\texttt{scripts/detector\_checks.py time}). Open triangles: microscope
 median chords of the 2026-10-30 run of the same pan, another day, for reference
 (\tabref{tab:microscope}).}\label{fig:time}
 \end{figure}
@@ -198,7 +199,7 @@ relative error and bias of the area-equivalent size.
 \item \emph{Size against the microscope.} For the 2026-10-30 run, the camera's median chord, converted per axis,
 is compared with the microscope medians of \tabref{tab:microscope} at matched times since seeding (photo clock
 $\pm 47$~s). Acceptance (an analysis choice) requires both (a) a ratio of camera to microscope median within a
-factor of 1.25 at each matched time from 30~min after seeding, which covers the $\pm 10$\,\% scale band and a
+factor of 1.25 at each matched time from 30~min after seeding, which covers the $\pm 10$\,\% input budget of the modelled scale and a
 margin for selection, and (b) a slope of the log median against time over 30--120~min within $\pm 25$\,\% of the
 microscope slope. The two methods select differently: the camera sees silhouettes of every crystal in a thin slice at
 the glass, with chords in random orientation, whereas the operator picks separated, well-formed crystals on a slide
@@ -211,3 +212,16 @@ Results: precision / recall / $F_1$ of the three detectors \pending{hand-labelle
 agreement \pending{duplicate-labelled frames}; Cellpose held-out AP@0.5 \pending{fine-tuning on the labels}; size
 bias of matched pairs \pending{hand-labelled frames}; camera against microscope medians, 2026-10-30
 \pending{validated detector run on the 2026-10-30 recording}.
+
+\emph{First matched-time reading.} A first comparison of Cellpose outlines, not yet checked against labels, on
+frames of the 2026-10-30 recording with the microscope photographs at matched times, read once by eye, finds the
+camera crystals at the modelled scale about three times smaller than the microscope chords late in strike b1
+\pending{matched-time comparison script and figure}. At 13:32 (122~min) about 230 camera crystals, the largest
+${\approx}\,300$~\um, fill the field, whereas a microscope field of similar extent holds single well-formed crystals of
+0.3--1.1~mm. Neither clumping nor the detector explains the gap. Three causes remain: (i) the scale is off, most
+likely through the tube length; (ii) the sight glass sees another population than the sample tap, such as a wall
+layer or settled crystals; (iii) crystals lie flat on the slide but in random orientation in the pan, which accounts
+for only 20--30\,\%. If the plant's ``$\approx 6$~cm'' includes the 29.5~mm lens body, the tube is
+${\approx}\,30$~mm, and at 1~mm focus travel the magnification $(e + x)/f$ falls from 61/35 to 31/35, so that this
+reading alone makes the scale about 2 times coarser. Plant data cannot separate (i) from (ii); a ruler or graticule
+imaged at the inner glass face (\secref{sec:recs}) decides it.

@@ -31,16 +31,18 @@ propagation over 200\,000 draws of the inputs of \tabref{tab:inputs}: $e$ unifor
 ``$\approx 6$~cm'' read as rounded to the centimetre), $x$ uniform over 0--2~mm, $f$ normal with $\sigma = 2$\,\%
 (assumed lens tolerance), the line-to-sample mapping uniform within $\pm 2$\,\% (x only), the camera candidate
 (x up to $+0.6$\,\%, y up to $+0.8$\,\%) and the measured 1080p stretch ($\pm 0.1$\,\%). Every entry is an estimate:
-it inherits the approximate tube length and the unconfirmed camera model. The interval is conditional on the
-modelling choices: the camera term spans only the two 1/3\,in candidates, and the recorder is assumed to sample at
+it inherits the approximate tube length and the unconfirmed camera model. The interval is the model's input-uncertainty budget, not
+a bound on the true scale, and is conditional on the modelling choices: the plant's ``$\approx 6$~cm'' is read as
+the extension tube alone, the camera term spans only the two 1/3\,in candidates, and the recorder is assumed to sample at
 13.5~MHz. The scale is proportional to the cell width and to $13.5~\text{MHz}/r$ for a recorder rate $r$, so a
 1/2\,in CCD with the same cell count (6.4 instead of 4.8~mm wide) would make it about 33\,\% coarser. No image of an
-object of known size checks the absolute scale.
+object of known size checks the absolute scale; the scale is not validated in the image.
 
 \begin{table}
 \centering\tabfont
 \caption{Object-plane pixel scale at the focused plane, \umpx{} (median and 95\,\% interval of the Monte Carlo
-budget, conditional on a 1/3\,in sensor and 13.5~MHz sampling; nominal in brackets). Last column: the same if the
+input-uncertainty budget, conditional on a 1/3\,in sensor, 13.5~MHz sampling and $e = 60 \pm 5$~mm; nominal in
+brackets; not validated in the image). Last column: the same if the
 stated tube length includes a 5~mm CS-to-C ring.
 Source: \texttt{python -m optics.scale\_chain}.}\label{tab:scale}
 \begin{tabular}{@{}llrrr@{}}
@@ -89,8 +91,8 @@ $\mp 1.64$\,\%. A 10~mm tube instead of
 The tube length cannot be recovered reliably from the image by anchoring a typical crystal size, because that size
 changes by more than an order of magnitude within a strike (the microscope medians of \secref{sec:plant} grow from
 29 to 483~\um{} in 122~min). A wrong tube length would rescale the whole distribution without making it
-internally inconsistent. The tube must therefore be measured; in the absence of a caliper reading the plant's
-``$\approx 6$~cm'' leaves the conditional $\pm 10$\,\% interval of \tabref{tab:scale}.
+internally inconsistent. The tube must therefore be measured: the $\pm 10$\,\% budget of \tabref{tab:scale} holds only if the
+plant's ``$\approx 6$~cm'' is the tube alone (\secref{sec:validation}).
 \subsection{Where the focal plane sits relative to the glass}\label{sec:slab}
 
 \figref{fig:layout} draws the optical stack to scale. The lens datasheet gives the back focal distance but not the

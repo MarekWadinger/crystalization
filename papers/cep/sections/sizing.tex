@@ -97,7 +97,7 @@ histograms coincide. The near/far labels are tie-break outcomes (\secref{sec:dis
 
 \subsection{Scale overlay at three assumed depths}\label{sec:overlay}
 
-\figref{fig:overlays} draws a 0.1~mm grid and a 1~mm ruler on frame 750 at the focused plane; the generator also
+\figref{fig:overlays} draws a 0.1~mm grid and a 1~mm ruler on frame 750 at the modelled scale of the focused plane; the generator also
 draws it at $d_o = 54.9$~mm ($1.460 \times 1.907$~\umpx) and 55.3~mm ($1.471 \times 1.921$~\umpx). The clip
 rows are resampled by 1.306 so that one displayed pixel is the same length on both axes and the grid is true in $x$
 and $y$ (\code{scripts/rerun_paper_numbers.py --fig07}). Over $\pm 0.2$~mm the scale changes by $\pm 0.36$\,\%; the
@@ -112,7 +112,7 @@ depth.
 \caption{Scale grid (0.1~mm) and 1~mm ruler on frame 750 at the focused plane, with the rows resampled so that the
 grid is true on both axes (\texttt{scripts/rerun\_paper\_numbers.py --fig07}, which also draws the panels at
 $d_o = 54.9$ and 55.3~mm). Left: frame; right: sharpness map with the same grid. The clip pixel is
-$1.465 \times 1.914$~\umpx{} at the rounded configuration value $d_\mathrm{focus} = 55.1$~mm (ESTIMATE,
-$\pm\,{\approx}10$\,\% at 95\,\%), 0.07\,\% above the $1.464 \times 1.913$~\umpx{} at the exact 55.08~mm; the
+$1.465 \times 1.914$~\umpx{} at the rounded configuration value $d_\mathrm{focus} = 55.1$~mm (modelled;
+$\pm\,{\approx}10$\,\% input budget, not validated in the image), 0.07\,\% above the $1.464 \times 1.913$~\umpx{} at the exact 55.08~mm; the
 on-image text gives the resampled 1.47~\umpx.}\label{fig:overlays}
 \end{figure*}

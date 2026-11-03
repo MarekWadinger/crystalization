@@ -8,7 +8,7 @@ White sugar is crystallized in batch vacuum pans. The Slovensk\'e cukrovary plan
 three-product scheme with A, B and C pans and a seed pan, ZRA, that grains the seed massecuite dosed into the A pans
 \citep{SlovenskeCukrovary2026}. The product is specified by the mean aperture (MA) and the coefficient of variation
 (CV) of its crystal-size distribution (CSD); for Sere\v{d} white sugar an MA of 0.76--0.95~mm is reported
-\citep{Bennar2010}, and MA and CV are the usual specification in the industry \citep{Daniels2017}. During a strike,
+\citep{Bennar2010}, and MA and CV are used to characterise sugar crystal size in the industry \citep{Daniels2017}. During a strike,
 operators judge the end of concentration by eye, by touch or conductometrically \citep{Bennar2010}, and the control
 system trends brix, vacuum and stirrer current \citep{SlovenskeCukrovary2026}. None of these signals is a crystal
 size. In-line CSD measurement remains an active topic of process analytical technology \citep{Nagy2013,Simon2015}.
@@ -23,12 +23,13 @@ distribution \citep{Heath2002,Worlitschek2003}; recovering a size distribution f
 needs a model of the probe optics and the particle shape \citep{Wynn2003,Kail2009,Czapla2010}. In situ microscopy
 and flow-cell imaging yield images from which sizes are extracted by image analysis \citep{Eggers2008,Kempkes2008}.
 Spectroscopic probes such as ATR-FTIR track solute concentration and supersaturation rather than size, and fouling
-of the probe crystal hinders routine use \citep{Borissova2009}. Laser diffraction is an off-line laboratory method:
+of the probe crystal can prevent routine use in unseeded crystallization \citep{Borissova2009}. Laser diffraction is an off-line laboratory method:
 the Sere\v{d} seed-slurry sample used in \secref{sec:plant}, labelled 2025-01-16, was measured on 2025-03-04 by a
-central laboratory \citep{Mastersizer2025}. Image-based CSD monitoring has been shown for sucrose in the laboratory
-\citep{Ferreira2011}, for massecuite samples off-line, reporting MA and CV \citep{Daniels2017}, through the wall of
-a crystallizer \citep{Huo2020}, and in situ for glycine \citep{Larsen2007} and potassium dihydrogen phosphate
-\citep{Borchert2014}, with deep-learning segmentation in recent work \citep{Gao2018,Manee2019}. We found no
+central laboratory \citep{Mastersizer2025}. Image-based CSD monitoring includes online image analysis of sucrose crystal size and
+morphology in the laboratory \citep{Ferreira2011}, off-line analysis of massecuite samples reporting MA and CV
+\citep{Daniels2017}, imaging through the wall of a crystallizer \citep{Huo2020}, and in situ imaging of glycine
+\citep{Larsen2007} and potassium dihydrogen phosphate \citep{Borchert2014}, with deep-learning segmentation in
+recent work \citep{Gao2018,Manee2019}. We found no
 peer-reviewed in-line CSD measurement through the sight glass of an industrial sugar pan; the sugar-technology trade
 literature and commercial pan-camera systems were not covered by this search \pending{search of the sugar-trade
 literature and vendor pan cameras}.
@@ -65,7 +66,8 @@ aggregates the sizes (\S\S\,\ref{sec:detection}--\ref{sec:csd}). The contributio
 \begin{enumerate}
 \item \textbf{A source-classed model of the signal chain} from CCD cell through recorder to screen recording
 (\tabref{tab:inputs}). It shows that the 1080p clips are anisotropically stretched PAL pictures without added
-resolution and gives the per-axis scale with a Monte Carlo budget of about $\pm 10$\,\% at 95\,\% (RQ1;
+resolution and gives the per-axis scale with a Monte Carlo input-uncertainty budget of about $\pm 10$\,\% at
+95\,\%, conditional on a tube of ${\approx}\,60$~mm and not validated in the image (RQ1;
 \S\S\,\ref{sec:chain}, \ref{sec:budget}).
 \item \textbf{A depth-of-field analysis} with the PAL sample as the resolution element, and the crop sensitivity of
 per-pixel sharpness statistics (RQ2; \S\S\,\ref{sec:dof}, \ref{sec:empirical}).

@@ -1,5 +1,5 @@
 # CEP highlights: 3-5 bullets, <= 85 characters each. Submitted as a separate file; not typeset in main.tex.
-PAL chain model: 1.46 × 1.91 µm per clip pixel, ±10 % if the sensor is 1/3 inch
+PAL chain model: 1.46 × 1.91 µm per clip pixel, ±10 % input budget, not validated
 1080p screen recordings of the PAL camera add no resolution
 At F/1.6 the in-focus slice is ±9.4 µm and front/back stays ambiguous
 Classical detector medians stay flat over a full strike, from before seeding on

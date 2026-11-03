@@ -11,8 +11,9 @@ hand-labelled crystals (\secref{sec:validation}).
 
 Each frame of the case-study clip is cropped to the live camera picture. The automatic crop of
 \code{optics.video_io.resolve_crop} keeps $1826 \times 906$ of the $1920 \times 1080$ clip pixels (80\,\%); the
-single-frame figures use the fixed crop of $1800 \times 905$~px (79\,\%). At the scale of \secref{sec:budget}
-($1.464 \times 1.913$~\umpx{} at focus, ESTIMATE, $\pm\,{\approx}10$\,\% at 95\,\%) the automatic crop covers
+single-frame figures use the fixed crop of $1800 \times 905$~px (79\,\%). At the modelled scale of \secref{sec:budget}
+($1.464 \times 1.913$~\umpx{} at focus; $\pm\,{\approx}10$\,\% input budget, not validated in the image) the
+automatic crop covers
 ${\approx}\,2.7 \times 1.7$~mm of slurry.
 
 A per-pixel sharpness map is computed as the logarithm of the squared Laplacian smoothed by a $15 \times 15$~px
@@ -40,7 +41,7 @@ basin per seed; each basin is fitted and filtered as above, with the basin pixel
 \begin{table}
 \centering\tabfont
 \caption{Seed constants of the watershed detector (CHOICE, module constants of \texttt{optics.detect\_watershed}). The
-\textmu m values use the 1080p clip scale of \secref{sec:budget}.}\label{tab:ws-constants}
+\textmu m values use the modelled 1080p clip scale of \secref{sec:budget}.}\label{tab:ws-constants}
 \begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.5\columnwidth}@{}}
 \toprule
 Constant & Value & Role \\
