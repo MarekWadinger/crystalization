@@ -248,7 +248,7 @@ def _write_empty_label(png: Path) -> None:
 
 def _stage_labels(folder: Path, name: str) -> str:
     """git-add the person's labels; return the commands left for them."""
-    commit = f'git commit -m "data(crystal-detector): {name} annotations"'
+    commit = f'git commit -m "chore(crystal-detector): {name} annotations"'
     push = "git pull --rebase && git push"
     added = subprocess.run(
         ["git", "add", str(folder)], cwd=ROOT, capture_output=True
