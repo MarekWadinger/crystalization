@@ -33,10 +33,15 @@ cd "${ROOT}"
 # Run KPI report, append/update CHANGELOG.md "unreleased" block.
 uv run python -m optics.kpi --update-changelog >/dev/null
 
-# Stage CHANGELOG.md so cz bump picks it up in the release commit.
-git add CHANGELOG.md
-
-# Bump minor: 0.X.0 -> 0.(X+1).0; this also writes the [Unreleased] block
-# into a versioned heading and creates a "bump: ..." commit + tag.
-SKIP_OPTICS_RELEASE=1 uv run cz bump --increment minor --yes >/dev/null
-echo "[optics-release] released v$(uv run cz version --project)"
+# Bump minor: 0.X.0 -> 0.(X+1).0. `cz bump` would commit with `git commit -a`
+# and sweep every dirty tracked file into the release, so bump files only
+# and commit exactly the release files ourselves.
+CUR=$(uv run cz version --project)
+NEXT=$(uv run cz bump --get-next --increment minor)
+SKIP_OPTICS_RELEASE=1 uv run cz bump --increment minor --yes --files-only \
+    >/dev/null
+SKIP_OPTICS_RELEASE=1 git commit --only \
+    -m "bump: release v${CUR} -> v${NEXT}" \
+    -- pyproject.toml uv.lock CHANGELOG.md
+git tag "v${NEXT}"
+echo "[optics-release] released v${NEXT}"

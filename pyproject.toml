@@ -103,14 +103,16 @@ crystal-detector-gui = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.10.0"
-version_provider = "pep621"
-version_files = [
-    "pyproject.toml:^version",
-]
+version_provider = "uv"  # bumps pyproject.toml and uv.lock together
 update_changelog_on_bump = true
 changelog_file = "CHANGELOG.md"
 changelog_incremental = true
 tag_format = "v$version"
 major_version_zero = true
 bump_message = "bump: release v$current_version -> v$new_version"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.logfire]
+ignore_no_config = true

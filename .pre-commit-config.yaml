@@ -1,6 +1,9 @@
 # https://pre-commit.com
 default_install_hook_types:
   - pre-commit
+  - commit-msg
+  - pre-push
+  - post-commit
   - post-checkout
   - post-merge
   - post-rewrite
@@ -43,16 +46,15 @@ repos:
     hooks:
       - id: ruff
         name: ruff
-        entry: ruff check
+        entry: uv run ruff check
         language: system
-        args: [--fix, --exit-non-zero-on-fix, --line-length=79]
+        args: [--fix, --exit-non-zero-on-fix]
         types_or: [python, pyi, jupyter]
         stages: [pre-commit]
       - id: ruff-format
         name: ruff-format
-        entry: ruff format
+        entry: uv run ruff format
         language: system
-        args: [--line-length=79]
         types_or: [python, pyi, jupyter]
         stages: [pre-commit]
       - id: ty
@@ -74,7 +76,7 @@ repos:
         name: pytest-check
         language: system
         types: [python]
-        entry: make test
+        entry: uv run pytest -q
         pass_filenames: false
         always_run: false
         stages: [pre-push]
