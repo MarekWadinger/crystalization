@@ -28,3 +28,21 @@ def test_copies_of_a_held_out_frame_stay_out_of_training():
         assert (p.parent.name, p.name) not in train_names
     assert ("boiling", "015306.png") not in train_names
     assert ("drying", "043428.png") in train_names
+
+
+def test_frames_still_in_progress_are_not_trained_on(tmp_path, monkeypatch):
+    import cv2
+
+    from crystal_detector import finetune
+    from crystal_detector.annotate import _label, _wip, _write_empty_label
+
+    folder = tmp_path / "ana" / "boiling"
+    folder.mkdir(parents=True)
+    finished, started = folder / "010000.png", folder / "020000.png"
+    for png in (finished, started):
+        cv2.imwrite(str(png), np.zeros((4, 4), np.uint8))
+        _write_empty_label(png)
+    _wip(started).touch()  # autosaved halfway, never marked done
+    monkeypatch.setattr(finetune, "ANNOTATIONS", tmp_path)
+    assert [p for p, _, _ in finetune._pairs()] == [finished]
+    assert _label(started).exists()

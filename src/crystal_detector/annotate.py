@@ -129,6 +129,18 @@ def _label(png: Path) -> Path:
     return png.with_name(png.stem + "_seg.npy")
 
 
+def _wip(png: Path) -> Path:
+    """Marker of a started frame: written by the first autosave, removed by
+    the GUI's *all crystals marked* button. Labels older than the marker
+    have none and count as done."""
+    return png.with_suffix(".wip")
+
+
+def done(png: Path) -> bool:
+    """Every crystal outlined (or marked empty), not just autosaved once."""
+    return _label(png).exists() and not _wip(png).exists()
+
+
 _TTY = sys.stdout.isatty()
 
 
@@ -157,11 +169,11 @@ MEDALS = ["🥇", "🥈", "🥉", "  "]
 
 
 def scores() -> list[tuple[int, int, str]]:
-    """(labelled, frames, name) per annotator, most labelled first."""
+    """(done, frames, name) per annotator, most done first."""
     return sorted(
         (
             (
-                len(list(d.glob("*/*_seg.npy"))),
+                sum(done(p) for p in d.glob("*/*.png")),
                 len(list(d.glob("*/*.png"))),
                 d.name,
             )
@@ -204,24 +216,15 @@ def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
         f"    {k('Ctrl+click')} ({k('Cmd+click')} on Mac) deletes. Every edit autosaves."
     )
     print(
-        f" {step[2]} wait for the green {_ok('saved')} line below, then {k('close the window')}"
+        f" {step[2]} every crystal outlined? {k('✓ all crystals marked · next')}"
     )
     print(
-        f"    no green line? (you accepted the proposals untouched) press {k('Ctrl+S')} ({k('Cmd+S')})"
+        f"    none in the frame? {k('no crystals')}. Only these two count a frame as done;"
+    )
+    print(
+        f"    autosaved frames stay in progress (◐). {k('◀ ▶')} switch, {k('close the window')} stops."
     )
     print(_c("36", "─" * 64))
-
-
-def _ask_yes_no() -> bool:
-    while True:
-        try:
-            answer = input(_bold("  your choice [y/n]: ")).strip().lower()
-        except (EOFError, KeyboardInterrupt):
-            print()
-            return False
-        if answer in ("y", "n"):
-            return answer == "y"
-        print("  please type y or n")
 
 
 def _write_empty_label(png: Path) -> None:
@@ -240,6 +243,7 @@ def _write_empty_label(png: Path) -> None:
     np.save(
         _label(png), np.asarray(dat, dtype=object)
     )  # same as GUI's dict save
+    _wip(png).unlink(missing_ok=True)  # an empty frame is a finished one
 
 
 def _stage_labels(folder: Path, name: str) -> str:
@@ -295,76 +299,64 @@ def _prepare_model() -> Path:
     return model_path
 
 
-def _open_gui(png: Path, progress: str = "") -> float | None:
-    """Run the GUI on one frame; report autosaves live; return last save mtime."""
-    env = {
-        **os.environ,
-        "QT_API": os.environ.get("QT_API", "pyqt6"),
-        "CRYSTAL_PROGRESS": progress,  # shown in the window title
-    }
+def _open_gui(png: Path, frames: list[Path]) -> bool:
+    """Run the GUI from one frame (the window can switch to any of *frames*);
+    report autosaves live; True if any label of *frames* changed."""
+    env = {**os.environ, "QT_API": os.environ.get("QT_API", "pyqt6")}
     child = (
         "import sys; from crystal_detector import gui_filters; "
         "gui_filters.install(); from cellpose.gui import gui; "
         "gui.run(image=sys.argv[1])"
     )
-    label = _label(png)
-    before = label.stat().st_mtime if label.exists() else None
+
+    def stamps() -> dict[Path, float]:
+        return {
+            p: _label(p).stat().st_mtime for p in frames if _label(p).exists()
+        }
+
+    start = seen = stamps()
     proc = subprocess.Popen(
         [sys.executable, "-c", child, str(png)],
         env=env,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
-    saved_at = before
     while proc.poll() is None:
-        if label.exists() and label.stat().st_mtime != saved_at:
-            verb = "saved" if saved_at is None else "saved again"
-            saved_at = label.stat().st_mtime
-            print(
-                _ok(f"{verb} {label.name} — keep editing or close the window")
-            )
+        now = stamps()
+        for p, t in now.items():
+            if seen.get(p) != t:
+                verb = "saved" if p not in seen else "saved again"
+                print(_ok(f"{verb} {frame_label(p)} — keep editing"))
+        seen = now
         time.sleep(0.5)
     if proc.returncode != 0:
         log = Path.home() / ".cellpose" / "run.log"
         raise SystemExit(_bad(f"the GUI crashed — details in {log}"))
-    return saved_at
+    return stamps() != start
 
 
 def annotate(name: str) -> None:
     folder, frames = _frames(name)
     _leaderboard(name)
     model = _prepare_model().name
-    while todo := [p for p in frames if not _label(p).exists()]:
-        png = todo[0]
-        _banner(name, png, len(frames) - len(todo), len(frames), model)
-        progress = f"{len(frames) - len(todo) + 1}/{len(frames)}"
-        if _open_gui(png, progress) is None:
-            # Cellpose greys out Ctrl+S at zero masks, so an empty frame can
-            # only be labelled from here.
-            print(_bad("no label saved for this frame"))
-            print(
-                f"  {_c('1;32', 'y')} = there were no crystals: save an EMPTY label, next frame"
-            )
-            print(
-                f"  {_c('1;31', 'n')} = stop for now (nothing lost, this frame comes up first next time)"
-            )
-            if not _ask_yes_no():
-                print(
-                    _c(
-                        "36",
-                        f"  stopped. To continue:  uv run crystal-detector-annotate {name}",
-                    )
-                )
-                break
-            _write_empty_label(png)
-            print(_ok(f"saved empty {_label(png).name}"))
-    done = sum(_label(p).exists() for p in frames)
+    todo = [p for p in frames if not done(p)]
+    if todo:  # the window walks all frames itself; closing it stops
+        _banner(name, todo[0], len(frames) - len(todo), len(frames), model)
+        _open_gui(todo[0], frames)
+    n_done = sum(done(p) for p in frames)
+    started = sum(_wip(p).exists() for p in frames)
     print("\n" + _c("36", "═" * 64))
     _leaderboard(name)
-    if done == len(frames):
-        print(_ok(_bold(f"all {done} frames labelled")))
+    if n_done == len(frames):
+        print(_ok(_bold(f"all {n_done} frames done")))
     else:
-        print(_bold(f" {done}/{len(frames)} labelled"))
+        print(
+            _bold(f" {n_done}/{len(frames)} done")
+            + (f", {started} in progress (◐)" if started else "")
+        )
+        print(
+            _c("36", f" to continue:  uv run crystal-detector-annotate {name}")
+        )
     lines = _stage_labels(folder, name)
     staged = "git add" not in lines
     what = "staged for commit" if staged else "to add and commit"
@@ -397,7 +389,7 @@ def review(name: str) -> None:
             f" {n} crystals labelled — fix if needed (edits autosave), then close"
         )
         before = _label(png).stat().st_mtime
-        _open_gui(png, f"review {i + 1}/{len(labelled)}")
+        _open_gui(png, frames)
         changed = _label(png).stat().st_mtime != before
         print(_ok("label updated") if changed else _c("90", " unchanged"))
         if i + 1 < len(labelled):

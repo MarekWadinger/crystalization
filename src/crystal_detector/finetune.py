@@ -28,7 +28,7 @@ import cv2
 import numpy as np
 
 from .analyze import CELLPROB_THRESHOLD, FLOW_THRESHOLD, resolve_model
-from .annotate import ANNOTATIONS, _label
+from .annotate import ANNOTATIONS, _label, done
 
 TRAINING = Path(__file__).resolve().parent / "training_data"
 
@@ -36,7 +36,7 @@ TRAINING = Path(__file__).resolve().parent / "training_data"
 def _pairs() -> list[tuple[Path, np.ndarray, np.ndarray]]:
     out = []
     for png in sorted(ANNOTATIONS.glob("*/*/*.png")):
-        if not _label(png).exists():
+        if not done(png):  # half-outlined frames teach crystals = background
             continue
         bgr = cv2.imread(str(png))
         if bgr is None:

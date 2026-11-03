@@ -90,7 +90,7 @@ fine-tune keeps every copy of a held-out frame out of training.
 ```bash
 git lfs install && git lfs pull                   # once, if the PNGs are LFS pointers
 uv sync --group crystal-detector-gui              # once
-uv run crystal-detector-annotate patrik           # opens the GUI on your next unlabelled frame
+uv run crystal-detector-annotate patrik           # opens the GUI on your first frame not done
 ```
 
 The command registers the project's fine-tuned checkpoint with Cellpose and
@@ -102,29 +102,35 @@ opens one frame at a time; the terminal prints the steps for each frame:
    cursor, click again to close it; **Ctrl+click** on a crystal deletes it
    (Cmd on macOS). Cellpose autosaves after every edit and the terminal prints
    a green *saved* line each time.
-3. Wait for the green line, then **close the window**; the next frame opens by
-   itself. If no green line appeared (you accepted the proposals untouched),
-   press `Ctrl+S` / `Cmd+S` first.
-
-Closing a frame without a label asks whether the frame had no crystals (`y`
-writes an empty label) or whether to stop (`n`, nothing lost). When done, the
-command stages your `_seg.npy` files and prints the commit and push lines.
+3. When every crystal in the frame is outlined, press **✓ all crystals marked ·
+   next**; a frame with no crystals gets **no crystals**. Only these two count
+   a frame as done (● in the frame list, on the leaderboard, used by
+   fine-tuning). A frame that only autosaved is *in progress* (◐, a
+   `<frame>.wip` file next to its label), so stopping halfway is safe and
+   honest. Labels made before the marker existed have none and count as done.
+4. **◀ ▶** or the frame list in **Frames** switch between all your frames
+   across stages. **Close the window** to stop; the command then stages your
+   labels and markers and prints the commit and push lines.
 
 The panel is trimmed for our grey frames: colour modes other than gray and
 spectral, the gradXY/cellprob views, the generic cpsam model box and
-Cellpose's own filter are hidden, and **Image filtering** sits right under
-**Views**. Run the fine-tuned model from **user-trained models** (preselected);
-its progress bar and ROI count sit there too. Below, **How to** lists the
-keys and **Progress** shows the team leaderboard (you in bold) and the last
-action ("saved ✓ …"); the window title names the frame and your count.
+Cellpose's own filter, the view dropdown (the filter dropdown switches it) and
+the green/blue saturation sliders are hidden. The sidebar is as wide as its
+content. From the top: **How to** (keys), **Frames** (switcher, crystals on this frame, **✓ all crystals
+marked · next**, **no crystals**), **Views**, **Image filtering**, **Drawing**,
+**user-trained models** (the fine-tuned model is preselected; its progress
+bar sits there too) and **Progress** (team leaderboard, you in
+bold, and the last action, "saved ✓ …"). The window title names the frame
+and its position in your list.
 
 Under **Image filtering** the GUI offers the repo's deterministic
-preprocessors as buttons: **Ananya** (Ananya Lohani's enhancement from
+preprocessors in a dropdown: **Ananya** (Ananya Lohani's enhancement from
 [Cryst_CNN](https://github.com/ananyalohani-bit/Cryst_CNN): CLAHE + sharpen,
 brightness leveling, CLAHE + sharpen; see `enhance.py`), **flat-field** (what
 `analyze.py` feeds the model), **high-pass** (`optics.highpass`) and
 **sharpness** (`annotator.sharpness`). They change what you see and what
-**run** segments; **none** restores the original. Labels stay bound to the
+**run** segments, and stay on when you switch frames; **none** restores the
+original. Labels stay bound to the
 original pixels: the filtered image is never written into `_seg.npy`, so
 training always sees the same flat-field frames as inference.
 
@@ -190,7 +196,7 @@ make -C src/crystal_detector finetune            # or: uv run crystal-detector-f
 make -C src/crystal_detector finetune EPOCHS=30  # shorter run
 ```
 
-Pools every labelled frame under `annotations/`, holds out one frame per
+Pools every done frame (no `.wip` marker) under `annotations/`, holds out one frame per
 person (their middle boiling frame), continues training from the current checkpoint with the
 Cellpose GUI defaults (lr 1e-5, weight decay 0.1, 100 epochs), and writes:
 
