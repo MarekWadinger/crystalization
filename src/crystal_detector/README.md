@@ -7,6 +7,7 @@ it trades reproducibility for the ability to segment crystals that classical
 focus/motion heuristics miss.
 
 Given a microscopy image, the tool:
+
 - finds all crystals with the trained model;
 - prints a table of each crystal's ID, centroid, and pixel area;
 - saves a side-by-side overlay (`<name>_analyzed.jpg`);
@@ -70,10 +71,21 @@ Each yields `frame_XX_ORIGINAL.png` (raw crop) and `frame_XX_PRE_AI.png`
 
 ### Team annotation
 
-Frames for the team live in `annotations/<name>/<stage>/HHMMSS.png`: three
-frames per person in each crystal-bearing stage (seeding → discharge, 15 per
-person), tracked with Git LFS. Labels are committed next to them as
-`HHMMSS_seg.npy`.
+Frames for the team live in `annotations/<name>/<stage>/`, tracked with Git
+LFS; labels are committed next to each frame as `<frame>_seg.npy`. Two videos
+are sampled, only in crystal-bearing stages, with timestamps from the
+video's sidecar in `datasets/`:
+
+| Video | Frame names | Stages | Per person | Annotators |
+| --- | --- | --- | --- | --- |
+| `2026-02-04 11-08-51` (plant strike, PAL) | `HHMMSS.png` | seeding, boiling, drying, aeration, discharge × 3 | 15 | patrik, erika, marian, marek |
+| `2026-10-30 08-45-33` (ZRA lab run on the NAS, two batches) | `2026-10-30_08-45-33_HHMMSS.png` | seeding, boiling, drying of each batch × 2 | 12 | patrik, erika, marian, marek, ananya |
+
+`HHMMSS` is the offset into that video (not the clock time), so a frame can
+be found again in the source video. Ananya also has 15 frames of the first
+video: copies of the middle frame of patrik's, erika's and marian's triplet
+in each stage, so her labels double as an inter-annotator check. The
+fine-tune keeps every copy of a held-out frame out of training.
 
 ```bash
 git lfs install && git lfs pull                   # once, if the PNGs are LFS pointers
@@ -84,7 +96,7 @@ uv run crystal-detector-annotate patrik           # opens the GUI on your next u
 The command registers the project's fine-tuned checkpoint with Cellpose and
 opens one frame at a time; the terminal prints the steps for each frame:
 
-1. *Optional:* under **user-trained models** choose the checkpoint and press
+1. *Optional:* under **user-trained models** (the checkpoint is preselected) press
    **run** — it pre-draws crystal outlines for you to correct.
 2. Fix outlines: **Shift+click** (or right-click) starts an outline, move the
    cursor, click again to close it; **Ctrl+click** on a crystal deletes it
@@ -98,20 +110,56 @@ Closing a frame without a label asks whether the frame had no crystals (`y`
 writes an empty label) or whether to stop (`n`, nothing lost). When done, the
 command stages your `_seg.npy` files and prints the commit and push lines.
 
-Under **Image filtering** the GUI also offers the repo's deterministic
-preprocessors as buttons: **flat-field** (what `analyze.py` feeds the model),
-**high-pass** (`optics.highpass`) and **sharpness** (`annotator.sharpness`).
-They change what you see and what **run** segments; **none** restores the
-original. Labels stay bound to the original pixels: the filtered image is never
-written into `_seg.npy`, so training always sees the same flat-field frames as
-inference.
+The panel is trimmed for our grey frames: colour modes other than gray and
+spectral, the gradXY/cellprob views, the generic cpsam model box and
+Cellpose's own filter are hidden, and **Image filtering** sits right under
+**Views**. Run the fine-tuned model from **user-trained models** (preselected);
+its progress bar and ROI count sit there too. Below, **How to** lists the
+keys and **Progress** shows the team leaderboard (you in bold) and the last
+action ("saved ✓ …"); the window title names the frame and your count.
+
+Under **Image filtering** the GUI offers the repo's deterministic
+preprocessors as buttons: **Ananya** (Ananya Lohani's enhancement from
+[Cryst_CNN](https://github.com/ananyalohani-bit/Cryst_CNN): CLAHE + sharpen,
+brightness leveling, CLAHE + sharpen; see `enhance.py`), **flat-field** (what
+`analyze.py` feeds the model), **high-pass** (`optics.highpass`) and
+**sharpness** (`annotator.sharpness`). They change what you see and what
+**run** segments; **none** restores the original. Labels stay bound to the
+original pixels: the filtered image is never written into `_seg.npy`, so
+training always sees the same flat-field frames as inference.
+
+Under **user-trained models**, **add rule candidates** runs her crystal rules
+on her enhanced frame and adds her *crystal* candidates as filled boxes
+wherever there is no outline yet, so it never touches what the model or you
+drew: on an empty frame you get all of them, after **run** only the ones the
+model missed. Ctrl+click the false ones away.
+
+Both are ports of her notebooks with her settings unchanged. They run on her
+pixel grid (her frames are the PAL channel upscaled to 1080 rows): the frame
+is resampled using `configs/camera_100.toml`, which works only for exported
+annotation frames (648 or 1728 px wide); on other images the GUI says so and
+does nothing. The enhancement leaves out her background reference image
+(`back.png`, not in her repo). The GUI applies both to the frame as Cellpose
+loaded it (contrast-stretched to 0–255), not to the PNG bytes. Her boxes
+cover the bright body, so few overlap a hand-drawn outline by half or more;
+her *skip* candidates were sorted by her CNN, whose trained model is not in
+her repo.
 
 `uv run crystal-detector-annotate patrik --review` reopens your labelled frames
 one at a time with the label loaded, so you can check and fix them.
 
-Maintainer, to (re)sample frames: `uv run crystal-detector-annotate export
-VIDEO --who a,b,c,d` (three frames per person in each stage from seeding to
-discharge; earlier stages have no crystals and are not annotated). For a
+Maintainer, to sample frames from a video: `uv run crystal-detector-annotate
+export VIDEO --who a,b,c,d [--per-stage 3]` (frames per person in each
+stage segment from seeding to discharge; earlier stages have no crystals and
+are not annotated). The sidecar is read from next to the video or from
+`datasets/<stem>.json`, so videos on the NAS work in place. The second video
+was exported with:
+
+```bash
+uv run crystal-detector-annotate export \
+  "/Volumes/Public/Fedor/CrystalisationData/ZRA-2026-10-30/Videos/2026-10-30 08-45-33.mkv" \
+  --who patrik,erika,marian,marek,ananya --per-stage 2
+``` For a
 cross-stage fine-tune, pool the images and labels into one folder first; the
 GUI's **Train new model** only sees the folder of the loaded image.
 
