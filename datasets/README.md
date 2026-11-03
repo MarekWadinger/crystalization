@@ -21,6 +21,7 @@ each recording lives.
 | `2026-02-05 10-18-50.json`, `10-36-32`, `10-37-26` | Short Camera 100 clips (DVR screen recordings, 1080p). Recording date disputed, see below. | `.mp4` next to the sidecar |
 | `Záznam 2026-03-10 183943.json` | Screen capture (2026-03-10) of a player showing the long PAL recording at t = 38.8 s | `.mp4` next to the sidecar |
 | `microscope_annotations.csv` | All burned-in microscope measurements of the 2026-10-30 run, one row per line (AI transcription, see below) | here (force-added: `datasets/*` is git-ignored) |
+| `camera_traced_chords.csv`, `camera_traced_outlines.json`, `camera_traced_frames/` | Blind AI annotation of 12 raw PAL frames of the 2026-10-30 run (b1 at 12:07, 12:30, 13:32, 14:20, each at −60/0/+60 s), see below | here |
 | `2026-10-30 08-45-33.json` | Seed-pan lab run by A. Fedor: 2 strikes (seeding 11:30 and 15:22), lab samples and microscope photos | NAS `\\147.175.79.43\Public\Fedor\CrystalisationData\ZRA-2026-10-30\Videos\`: lossless FFV1 `.mkv` (123 GB) + H.264 30 GB and 9.2 GB. Also Drive `sugar_plant/Data2026/` (9.2 GB LQ) |
 
 All recordings are from **the seed pan** (plant tag ZRA, *očkovací varostroj*):
@@ -114,3 +115,12 @@ If the clips are from 2026-02-05, no operator log or SCADA covers them, so their
 The DVR display scaling (PAL → 1080p) cannot be measured by frame registration, but it is measured from the DVR's on-screen display: stretch_x = 2.677, stretch_y = 1.875 (MEASURED in `configs/camera_100.toml`; method and fits in `docs/optics/scale_chain.md`). An earlier estimate here (sx = 2.553 from pillarbox columns 43–1881, assuming the full 720-sample raster is shown) is superseded. The picture edges check it independently: the camera picture spans 684.8 PAL samples (left 15.5, right 700.3) and 1827–1836 clip px, i.e. 2.668–2.681. The OSD method assumes the DVR draws the OSD into the PAL raster before rescaling.
 
 The ratio 70/77.6 behind the batch match is an operator input whose measurement is not recorded (plausibly lengths of the b1 and b2 cycles on the trend photo, Krystal PDF p. 3).
+
+## Camera crystals traced at matched times (2026-10-30, b1)
+
+`camera_traced_frames/raw_<t>.png` are untouched 720×576 frames of the LQ H.264 encoding of `2026-10-30 08-45-33`, cut with `ffmpeg -ss <t>` (t = video seconds = sample `t` from the sidecar ± 60 s; extracted by `crystal-detector` `scripts/tune_detector_to_lab.py`, crystalization-tune branch). Annotators saw the `crystal_detector` crop (rows 57–518, columns 36–684, no resize) with a global 1–99 % linear contrast stretch and a coordinate grid, under coded frame names, without times, lab sizes or scale. Coordinates in both files are in that 648×461 crop.
+
+- `camera_traced_chords.csv`: one row per crystal. `method = chord`: readers AI-A and AI-B drew the longest chord of each clearly bounded crystal. `method = outline`: annotators AI-C and AI-D outlined every crystal following the team's Cellpose labelling protocol; the row is the polygon's max Feret, crystals cut by the frame edge dropped.
+- `camera_traced_outlines.json`: the AI-C and AI-D polygons, `{reader: {sample: {offset_s: [{points, confidence, note}]}}}`.
+
+All are AI annotations (model output, not ground truth). On the packed frames (13:32, 14:20) the outline annotators could not close the outlines of large crystals and partly tiled the field. Analysis: `uv run python scripts/traced_vs_lab.py`.
