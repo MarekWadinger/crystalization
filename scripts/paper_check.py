@@ -64,7 +64,8 @@ def main() -> int:
 
 
 def _read(path: Path) -> str:
-    return path.read_text() if path.exists() else ""
+    # LaTeX logs are not guaranteed UTF-8.
+    return path.read_text(errors="replace") if path.exists() else ""
 
 
 if __name__ == "__main__":
