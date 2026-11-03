@@ -1,8 +1,9 @@
 # Depth-aware crystal-size-distribution measurement from a single sight-glass camera, with growth-curve self-validation
 
-**Author:** Marek Wadinger.
-**Affiliation:** (to be added).
-**Correspondence:** <marekwadinger5506@gmail.com>
+**Authors:** Marek Wadinger, Patrik Valábek, Erika Plšičík Pavlovičová, Ananya Lohani,
+Marián Choma, Radoslav Paulen.
+**Affiliation:** Slovak University of Technology in Bratislava (all authors).
+**Correspondence:** Marek Wadinger, <marek.wadinger@stuba.sk>
 **Draft:** v0.2, 2026-06-15.
 **Target journal:** *Control Engineering Practice* (Elsevier/IFAC;
 decided 2026-11-03).
@@ -1517,8 +1518,9 @@ generators are released open-source.
 ## Acknowledgements *(placeholder)*
 
 Slovenské cukrovary, s.r.o., Sereď, for plant access, hardware
-photographs, and historical video archives; Polz Instruments for
-camera-and-lens datasheet support.
+photographs, and historical video archives; A. Fedor for data
+provisioning and acquisition; Polz Instruments for camera-and-lens
+datasheet support.
 
 ---
 
