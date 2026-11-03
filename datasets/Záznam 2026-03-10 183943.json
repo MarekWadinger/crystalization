@@ -4,7 +4,7 @@
     "stem": "Záznam 2026-03-10 183943",
     "start_wallclock": "2026-02-04T11:09:18",
     "timezone": "Europe/Bratislava",
-    "note": "Screen-capture playback of clip 2026-02-05 10-37-26.mp4 around its end. Operator inputs and prediction formula identical to that clip — see its note.",
+    "note": "Screen capture (2026-03-10 18:39) of a media player playing the LONG PAL recording 2026-02-04 11-08-51.mp4 (\"...-kopia\"), not clip 10-37-26 as stated before 2026-11-03. scripts/check_clip_overlap.py matches its frame 0 to PAL t = 38.8 s (about 950 SIFT inliers per frame; isotropic player zoom 2.78x), i.e. DVR 11:09:18.3, consistent with start_wallclock 11:09:18 read from the overlay.",
     "probe": {
       "container_format": "mov,mp4,m4a,3gp,3g2,mj2",
       "video_codec": "h264",
