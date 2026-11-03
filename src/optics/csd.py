@@ -155,9 +155,11 @@ def fig_csd_final(
         linestyle=":",
         label=f"p75 = {np.quantile(naive_mm, 0.75):.3f} mm",
     )
-    ax_naive.set_xlabel("apparent size (mm) @ mm/px(d_focus)")
-    ax_naive.set_ylabel("crystal count")
-    ax_naive.set_title("Naive: apparent size at focus")
+    ax_naive.set_xlabel(
+        "area-equivalent detection size at focal-plane scale (mm)"
+    )
+    ax_naive.set_ylabel("detections")
+    ax_naive.set_title("Size at the focal-plane scale")
     ax_naive.legend(fontsize=8)
     ax_naive.grid(True, alpha=0.3)
 
@@ -168,7 +170,7 @@ def fig_csd_final(
         color="C1",
         alpha=0.7,
         edgecolor="white",
-        label="depth-corrected",
+        label="after depth correction",
     )
     centres = 0.5 * (edges[1:] + edges[:-1])
     n_total = float(sizes_mm.size)
@@ -199,9 +201,9 @@ def fig_csd_final(
         linestyle=":",
         label=f"mean = {mean:.3f} mm | CV = {cv:.2f}",
     )
-    ax_corr.set_xlabel("depth-corrected physical size (mm)")
-    ax_corr.set_ylabel("crystal count")
-    ax_corr.set_title("Depth-corrected CSD with single-component fits")
+    ax_corr.set_xlabel("area-equivalent detection size (mm)")
+    ax_corr.set_ylabel("detections")
+    ax_corr.set_title("After depth correction, with single-component fits")
     ax_corr.legend(fontsize=8)
     ax_corr.grid(True, alpha=0.3)
     _ = counts, centres, p25, p75  # silence unused
@@ -220,9 +222,9 @@ def fig_csd_final(
         dtype=np.float64,
     )
     for sample, color, label in (
-        (focus_sizes, "C0", f"focal-plane prior (n={focus_sizes.size})"),
-        (near_sizes, "C3", f"near side (n={near_sizes.size})"),
-        (far_sizes, "C2", f"far side (n={far_sizes.size})"),
+        (focus_sizes, "C0", f"focal subset (n={focus_sizes.size})"),
+        (near_sizes, "C3", f"near label, tie-break (n={near_sizes.size})"),
+        (far_sizes, "C2", f"far label, tie-break (n={far_sizes.size})"),
     ):
         if sample.size == 0:
             continue
@@ -236,14 +238,14 @@ def fig_csd_final(
             linewidth=1.8,
             label=label,
         )
-    ax_assump.set_xlabel("depth-corrected physical size (mm)")
+    ax_assump.set_xlabel("area-equivalent detection size (mm)")
     ax_assump.set_ylabel("density")
-    ax_assump.set_title("Homogeneous-slurry check: same shape across depths?")
+    ax_assump.set_title("Focal, near and far subsets")
     ax_assump.legend(fontsize=8)
     ax_assump.grid(True, alpha=0.3)
 
     fig.suptitle(
-        "Final depth-corrected crystal-size distribution at Camera 100",
+        "Watershed detector output (not a crystal-size measurement)",
         y=1.02,
         fontsize=12,
     )

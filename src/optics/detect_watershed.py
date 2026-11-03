@@ -299,15 +299,12 @@ def _build_comparison_figure(
 
     fig, axes = plt.subplots(1, 2, figsize=(20, 5.5))
     axes[0].imshow(edge_rgb)
-    axes[0].set_title(f"Edge-based (legacy): {edge_count} detections")
+    axes[0].set_title(f"Edge detector: {edge_count} detections")
     axes[0].set_axis_off()
     axes[1].imshow(ws_rgb)
-    axes[1].set_title(f"Watershed (new): {ws_count} detections")
+    axes[1].set_title(f"Watershed: {ws_count} basins")
     axes[1].set_axis_off()
-    fig.suptitle(
-        f"Detector comparison on frame {frame_idx}: "
-        "watershed recovers the dense in-focus cluster"
-    )
+    fig.suptitle(f"Frame {frame_idx}, same area window for both detectors")
     fig.tight_layout()
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=180, bbox_inches="tight")

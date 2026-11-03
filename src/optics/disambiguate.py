@@ -38,18 +38,18 @@ from pathlib import Path
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.typing import NDArray
+from numpy.typing import ArrayLike, NDArray
 
 from annotator.detection import process_frame
 from annotator.types import Crystal, LayerConfig
 from optics.config import (
     detection_area_px,
+    lens_from_config,
     lens_from_config_and_video,
     load_camera,
 )
 from optics.model import (
     LensSetup,
-    circle_of_confusion,
     mm_per_pixel_at,
 )
 from optics.video_io import CropBox, resolve_crop
@@ -373,66 +373,82 @@ def fig_discriminability(
     d_focus: float,
     out_path: Path,
     *,
-    deltas: tuple[float, ...] = (0.5, 1.0, 2.0, 5.0, 10.0, 20.0, 40.0),
-) -> None:
-    """Show *how far from focus* a crystal must be for size to disambiguate it.
+    resolution_pitch_um: float,
+    cutoff_elements: float = 5.0,
+    threshold: float = 0.05,
+) -> dict[str, float]:
+    """How far from focus must a detection be for its size to tell near from far?
 
-    For each near-side offset ``δ``, the same-blur far-side depth is the
-    1/d_o-symmetric partner; the implied apparent-size ratio (near/far)
-    is the y-axis. The right-hand x-axis marks the geometric blur c at
-    the sensor — the detector cannot find crystals once c exceeds a few
-    pixels, so the actually-usable region is a small subset of this
-    curve.
+    Plots the near/far apparent-size difference ``d_far/d_near − 1`` of the
+    1/d_o-symmetric same-blur pair against the near-side offset ``δ`` on log
+    axes from 1 µm to 5 mm. The top axis gives the sensor CoC in resolution
+    elements of ``resolution_pitch_um`` (the PAL sample). Vertical lines mark
+    the in-focus half-slice (CoC = 1 element) and an *assumed* detection
+    cutoff of ``cutoff_elements`` elements; the horizontal line marks
+    ``threshold``. Returns the offsets of the three markers in mm.
     """
-    deltas_arr = np.linspace(0.1, 50.0, 500)
-    u_focus = 1.0 / d_focus
-    d_near = d_focus - deltas_arr
-    u_far = 2.0 * u_focus - 1.0 / d_near
-    valid = u_far > 0
-    d_far = np.where(valid, 1.0 / np.where(valid, u_far, 1.0), np.nan)
-    ratio = d_far / d_near
-    c = circle_of_confusion(lens, d_focus, d_near) * 1000.0
+    k = lens.focal_length**2 / (lens.f_number * (d_focus - lens.focal_length))
+    p_mm = resolution_pitch_um * 1e-3
+    delta = np.geomspace(1e-3, 5.0, 600)
+    d_near = d_focus - delta
+    d_far = 1.0 / (2.0 / d_focus - 1.0 / d_near)
+    diff_pct = 100.0 * (d_far / d_near - 1.0)
 
-    fig, ax_l = plt.subplots(figsize=(8.5, 4.6))
-    ax_l.plot(
-        deltas_arr,
-        ratio,
-        color="C0",
-        label="apparent-size ratio (near / far at same blur)",
+    def delta_at(n_el: float) -> float:
+        """Near-side δ where c = K δ / (d − δ) equals ``n_el`` elements."""
+        c = n_el * p_mm
+        return d_focus * c / (k + c)
+
+    d1, dcut = delta_at(1.0), delta_at(cutoff_elements)
+    dthr = float(np.interp(100.0 * threshold, diff_pct, delta))
+
+    fig, ax = plt.subplots(figsize=(7.0, 4.2))
+    ax.loglog(
+        delta, diff_pct, color="C0", label="near/far apparent-size difference"
     )
-    ax_l.set_xlabel("near-side offset δ = d_focus − d_near (mm)")
-    ax_l.set_ylabel("apparent-size ratio")
-    ax_l.axhline(
-        1.05, color="C3", linestyle=":", label="5 % discrimination threshold"
-    )
-    ax_l.grid(True, alpha=0.3)
-    ax_r = ax_l.twinx()
-    ax_r.plot(deltas_arr, c, color="C2", label="CoC at sensor (µm)")
-    ax_r.set_ylabel("CoC at sensor (µm)")
-    ax_r.axhline(
-        lens.pixel_pitch_um,
-        color="C2",
+    ax.axhline(
+        100.0 * threshold,
+        color="C3",
         linestyle=":",
-        alpha=0.5,
-        label=f"1-px blur ({lens.pixel_pitch_um:.1f} µm)",
+        label=f"{100 * threshold:.0f} % at δ = {dthr:.1f} mm",
     )
-    ax_r.axhline(
-        5 * lens.pixel_pitch_um,
-        color="C2",
+    ax.axvline(
+        d1,
+        color="0.3",
+        linestyle="-",
+        linewidth=1.0,
+        label="in-focus half-slice (CoC = 1 sample)",
+    )
+    ax.axvline(
+        dcut,
+        color="0.3",
         linestyle="--",
-        alpha=0.5,
-        label="5-px blur — typical detection cutoff",
+        linewidth=1.0,
+        label=f"assumed detection cutoff (CoC = {cutoff_elements:g} samples)",
     )
-    ax_l.legend(loc="upper left", fontsize=9)
-    ax_r.legend(loc="upper right", fontsize=9)
-    fig.suptitle(
-        f"Discriminability: at f={lens.focal_length:.0f} mm, F/{lens.f_number:.1f},"
-        f" focus={d_focus:.0f} mm",
-        y=1.02,
+    ax.set_xlabel("near-side offset δ = d_focus − d_near (mm)")
+    ax.set_ylabel("d_far / d_near − 1 (%)")
+    ax.set_xlim(delta[0], delta[-1])
+    ax.grid(True, which="both", alpha=0.25)
+    ax.legend(loc="upper left", fontsize=8)
+
+    def to_el(dd: ArrayLike) -> ArrayLike:
+        dd = np.asarray(dd, dtype=np.float64)
+        return k * dd / ((d_focus - dd) * p_mm)
+
+    def from_el(n_el: ArrayLike) -> ArrayLike:
+        c = np.asarray(n_el, dtype=np.float64) * p_mm
+        return d_focus * c / (k + c)
+
+    top = ax.secondary_xaxis("top", functions=(to_el, from_el))
+    top.set_xlabel(
+        f"sensor CoC (PAL samples of {resolution_pitch_um:.2f} µm), "
+        f"F/{lens.f_number:.1f}"
     )
     fig.tight_layout()
     fig.savefig(out_path, dpi=180, bbox_inches="tight")
     plt.close(fig)
+    return {"delta_1_mm": d1, "delta_cut_mm": dcut, "delta_threshold_mm": dthr}
 
 
 def save_observations_csv(
@@ -474,15 +490,17 @@ def fig_disambiguation(
     sizes_far = [r.physical_size_mm for r in results if r.side == "far"]
     bins = np.linspace(0.0, 1.5, 40)
     ax_size.hist(
-        sizes_focus, bins=bins, alpha=0.5, label="focal plane", color="C0"
+        sizes_focus, bins=bins, alpha=0.5, label="focal subset", color="C0"
     )
     ax_size.hist(
-        sizes_near, bins=bins, alpha=0.5, label="near side", color="C3"
+        sizes_near, bins=bins, alpha=0.5, label="near (tie-break)", color="C3"
     )
-    ax_size.hist(sizes_far, bins=bins, alpha=0.5, label="far side", color="C2")
-    ax_size.set_xlabel("estimated physical size (mm)")
-    ax_size.set_ylabel("crystal count")
-    ax_size.set_title("Disambiguated physical-size distribution")
+    ax_size.hist(
+        sizes_far, bins=bins, alpha=0.5, label="far (tie-break)", color="C2"
+    )
+    ax_size.set_xlabel("area-equivalent detection size (mm)")
+    ax_size.set_ylabel("detections")
+    ax_size.set_title("Sizes by near/far label (tie-break)")
     ax_size.legend()
     ax_size.grid(True, alpha=0.3)
 
@@ -506,13 +524,11 @@ def fig_disambiguation(
         linestyle="-",
         linewidth=2.2,
         alpha=0.8,
-        label=f"focal plane @ d_focus={d_focus:.1f} mm  (n={n_focus})",
+        label=f"focal subset at d_focus={d_focus:.1f} mm (n={n_focus})",
     )
-    ax_depth.set_xlabel("estimated object distance (mm)")
-    ax_depth.set_ylabel("crystal count")
-    ax_depth.set_title(
-        f"Per-crystal depth assignment (total n={n_near + n_far + n_focus})"
-    )
+    ax_depth.set_xlabel("inverted object distance, model output (mm)")
+    ax_depth.set_ylabel("detections")
+    ax_depth.set_title(f"Inverted depths (n={n_near + n_far + n_focus})")
     # Fewer tick locations to avoid overlap in the narrow x-range.
     ax_depth.xaxis.set_major_locator(plt.MaxNLocator(nbins=6))
     ax_depth.legend(fontsize=8, loc="upper right")
@@ -527,24 +543,24 @@ def fig_disambiguation(
         naive_sizes,
         bins=bins,
         alpha=0.5,
-        label="naive (use mm/px at focus)",
+        label="at focal-plane scale",
         color="C0",
     )
     ax_naive.hist(
         corrected_sizes,
         bins=bins,
         alpha=0.5,
-        label="depth-corrected",
+        label="after depth correction",
         color="C1",
     )
-    ax_naive.set_xlabel("physical size (mm)")
-    ax_naive.set_ylabel("crystal count")
-    ax_naive.set_title("Naive vs depth-corrected size estimate")
+    ax_naive.set_xlabel("area-equivalent detection size (mm)")
+    ax_naive.set_ylabel("detections")
+    ax_naive.set_title("Focal-plane scale vs depth correction")
     ax_naive.legend()
     ax_naive.grid(True, alpha=0.3)
 
     fig.suptitle(
-        "Front/back disambiguation via focal-plane size prior",
+        "Watershed detector output, size-prior labels (not a crystal-size measurement)",
         y=1.02,
         fontsize=12,
     )
@@ -591,7 +607,13 @@ def main() -> None:
     fig_disambiguation(
         results, out_dir / "09_disambiguation.png", lens=lens, d_focus=d_focus
     )
-    fig_discriminability(lens, d_focus, out_dir / "10_discriminability.png")
+    marks = fig_discriminability(
+        lens,
+        d_focus,
+        out_dir / "10_discriminability.png",
+        resolution_pitch_um=lens_from_config(cfg).pixel_pitch_um,
+    )
+    print(f"  fig 10 markers (mm): {marks}")
 
     csv_path = Path("docs/optics/crystal_observations.csv")
     save_observations_csv(results, csv_path)
