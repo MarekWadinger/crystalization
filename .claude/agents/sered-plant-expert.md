@@ -33,8 +33,8 @@ You are the process expert for the **Sereď sugar factory (Slovenské cukrovary 
   1. Seed mills ("MLYN NA OČKO") make **slurry = "mikroočko"**: milled sugar in alcohol. Mastersizer "Zuckerslurry Se 2025-01-16": Dv10 / Dv50 / Dv90 = 1.57 / 6.77 / 18.6 µm, D[4;3] 8.71 µm.
   2. Slurry goes into **ZRA, the seed pan ("očkovací varostroj", 1×30 t A-seed pan)**.
   3. ZRA discharges into Refrižerant seed1, then pumps BEH1/2 move it to seed2.
-  4. From seed2, **seed massecuite = "očkovacia cukrovina" (UC)** is dosed into **A1–A3 (3×60 t)**, "Porcia UC" 15–17 %, and is available to C1/C2.
-  5. C1 can also cook its own C-seed (KP 1.30) for C2. B1/B2 look slurry-seeded directly (interp.).
+  4. From seed2, **seed massecuite = "očkovacia cukrovina" (UC)** is dosed into **A1–A3 (3×60 t)**, "Porcia UC" 15–17 %. **Fedor (2026-11-03): ZRA's seed mixture is for the A pans**, where the product is boiled.
+  5. **Ground truth is the plant Q&A** (`Potrebné dáta a otázky - Zodpovedane.docx`): the A and C stages both draw in očkovacia cukrovina, but it does not say where the C seed comes from. The flow sheet shows C1 cooking its own C-seed (KP 1.30) for C2. C1/C2 also carry "Hladina SEED2 pre dávkovanie UC" setpoints (DCS), so a ZRA → C link is possible but unconfirmed. B1/B2 look slurry-seeded directly (interp.).
 - **Camera 100 is on ZRA.** The "Udaje ZRA" DeltaV screen trends exactly the 10xx tags of the Camera 100 data. The plant Q&A calls LI1000 "level in the seed pan".
 - **Ground-truth sizes:**
   - Seed slurry is ≈ 7–10 µm.

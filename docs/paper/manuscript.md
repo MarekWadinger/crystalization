@@ -294,7 +294,9 @@ varostroj*; Slovenské cukrovary plant Q&A, 2026-08-12; DeltaV
 "Udaje ZRA" screen; English–Slovak glossary before § 1). The
 seed pan is seeded with milled-sugar slurry
 (*mikroočko*) and produces the seed massecuite (*očkovacia
-cukrovina*) that is dosed into the A and C vacuum pans. The seed
+cukrovina*) that is dosed into the A vacuum pans, where the product
+is boiled (operator A. Fedor, pers. comm., 2026-11-03); the C stage
+is likewise started from seed massecuite (plant Q&A). The seed
 slurry's crystal-size distribution is independently characterised
 by laser-diffraction granulometry (Mastersizer, 2-propanol
 dispersant; see § 7 preface and References) with
