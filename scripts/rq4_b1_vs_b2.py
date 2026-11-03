@@ -35,7 +35,11 @@ import numpy as np
 from scipy import stats
 
 from annotator.types import LayerConfig
-from optics.config import lens_from_config_and_video, load_camera
+from optics.config import (
+    detection_area_px,
+    lens_from_config_and_video,
+    load_camera,
+)
 from optics.csd import aggregate_csd, fig_csd_final
 from optics.disambiguate import (
     DisambiguationResult,
@@ -89,17 +93,18 @@ def _run_window(
     span_frames = end_frame - start_frame
     frame_stride = max(1, span_frames // max_frames)
 
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, LONG_VIDEO)
+    min_area, max_area = detection_area_px(cfg, lens)
     config = LayerConfig(
         num_layers=3,
         sharpness_weight=0.7,
         flow_weight=0.3,
         blur_kernel=15,
-        min_area=80.0,
-        max_area=8000.0,
+        min_area=min_area,
+        max_area=max_area,
         max_aspect_ratio=3.0,
     )
-    cfg = load_camera()
-    lens = lens_from_config_and_video(cfg, LONG_VIDEO)
     d_focus = cfg.focus_object_distance_mm
 
     print(

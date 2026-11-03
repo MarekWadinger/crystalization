@@ -138,7 +138,7 @@ in-line CSD monitoring; each has well-documented limitations.
 **Probe-based optical instruments.** Mettler-Toledo's *Focused Beam
 Reflectance Measurement* (FBRM) scans a laser through the slurry and
 infers a chord-length distribution from back-scattered pulses
-(Worlitschek and Mazzotti, 2004; Heath et al., 2002). FBRM has become
+(Worlitschek and Mazzotti, 2003; Heath et al., 2002). FBRM has become
 a *de facto* research standard but suffers from three issues for
 sugar use: (i) the chord-length-to-size inversion is geometrically
 ill-posed and biases the recovered CSD by 15–40 % depending on
@@ -244,7 +244,7 @@ The work is organised around four research questions:
   median apparent crystal size as a function of time-into-strike
   collapse to a single curve, and can this collapse identify the
   lens-stack parameters that would otherwise be hardware-measured?
-  (§7 outlook)
+  (§8 outlook)
 
 ### 1.5 The pipeline at a glance
 
@@ -268,7 +268,7 @@ block is implemented as a reproducible Python module under
 2. **A single-component depth-aware sizing framework** that breaks the
    front/back defocus ambiguity using the focal-plane apparent-size
    distribution as prior, under a documented homogeneous-slurry
-   assumption that admits a built-in self-consistency check (§5).
+   assumption that admits a built-in self-consistency check (§6).
 3. **A quantitative treatment of detector–depth interaction**,
    including the explicit conditions under which the disambiguation
    regime is operationally resolvable and the discriminability
@@ -436,7 +436,7 @@ measured 20 mm thickness and ``n_g = 1.47``, ``Δ = 6.39 mm``,
 independent of distance. The exact projection through a thick flat
 port is a 12th-degree polynomial (Agrawal et al., 2012); the paraxial
 form here is adequate for sub-percent pixel-pitch budgeting but not
-for sub-pixel metric reconstruction — a limitation we discuss in §8.
+for sub-pixel metric reconstruction — a limitation we discuss in §9.2.
 
 ![Figure 4 — Sight-glass refractive shift](../../docs/optics/figures/05_sight_glass_shift.png)
 *Figure 4 — **How much does the sight glass distort distances?**
@@ -606,7 +606,7 @@ inner sight-glass surface**, with the absolute number subject to a
 ~2× uncertainty inherited from the c = 5.8 µm self-calibration of the
 sharpness model (a future calibration anchored against a focused
 crystal from mid-strike would tighten this to better than ±1 µm).
-The slab is sub-millimetre *thick*: DoF at F/1.6 has FWHM ≈ 4.5 µm of
+The slab is sub-millimetre *thick*: DoF at F/1.6 has FWHM ≈ 4.9 µm of
 object depth (§ 4.3), and the usable detection range (where the
 circle of confusion exceeds one sensor pixel) extends to about
 ±0.07 mm.
@@ -615,12 +615,12 @@ Two consequences carried through the rest of the paper. First, the
 *spatial* sampling claim of the pipeline is not "this is the crystal
 population in the pan" but "this is the population in the slurry
 boundary layer pressed against the inner sight-glass surface".
-Section 6.2 leans on the strong thermosiphon circulation in TVA 30
-vessels to argue that this layer is representative of bulk; § 7.3
+Section 6.2 leans on the mechanical stirring of the seed pan (§ 2.1)
+to argue that this layer is representative of bulk; § 7.3
 records the caveat that this homogeneity is *assumed*, not directly
 measured. Second, the vessel geometry does *not* enter as a depth
-bound on the detection range — the sub-mm optical slab is many orders
-of magnitude tighter than the 900 mm annular gap, so any front/back-
+bound on the detection range — the sub-mm optical slab is far
+thinner than any vessel dimension, so any front/back-
 disambiguation discussion (§ 6) is bounded by optics, not by vessel
 walls.
 
@@ -670,8 +670,7 @@ travel moves the scale by ∓1.6 %; a caliper on the lens body length
 For a lens focused at ``d_focus`` with aperture ``A = f / N``, the
 circle of confusion (CoC) diameter at the sensor for an object at
 ``d_o`` is, by similar triangles applied to the thin-lens equation
-(Pentland, 1987; verified against Wikipedia and against Pertuz et
-al., 2013 verbatim):
+(Pentland, 1987; Pertuz et al., 2013):
 
 $$ c(d_o) = \frac{f^2}{N(d_\text{focus} - f)} \cdot
    \frac{|d_o - d_\text{focus}|}{d_o}. $$
@@ -682,7 +681,8 @@ increases) and saturates at ``c_∞ = f² / (N · (d_focus − f))`` as
 ``d_o → ∞``. In the reciprocal variable ``u = 1/d_o`` the geometry
 is **linear and symmetric** about ``u_focus``:
 
-$$ c(u) = \frac{f^2}{N} \cdot |u - u_\text{focus}|. $$
+$$ c(u) = \frac{f^2 \, d_\text{focus}}{N(d_\text{focus} - f)} \cdot
+   |u - u_\text{focus}|. $$
 
 ![Figure 6 — CoC vs object distance and vs 1/d_o](../../docs/optics/figures/02_coc_vs_distance.png)
 *Figure 6 — **How does blur grow as crystals move off the focused
@@ -719,7 +719,7 @@ the focused plane, asymmetric in ``d_o``, symmetric in ``1/d_o`` —
 ![Figure 7 — Sharpness vs distance, three views](../../docs/optics/figures/03_sharpness_vs_distance.png)
 *Figure 7 — **Is the defocus sharpness profile really a power law, not
 a Gaussian?** Sharpness vs defocus δ = d_o − d_focus, plotted in µm
-because the FWHM at F/1.6 is only 4.3 µm. Three panels make the
+because the FWHM at F/1.6 is only 4.9 µm. Three panels make the
 power-law identity testable visually. **Left (linear y, ±100 µm):**
 the Gaussian-PSF model (blue) and diffraction-+-sensor-floor model
 (orange) coincide with a FWHM-matched Gaussian (red dashed) at the
@@ -743,8 +743,8 @@ envelope for F-numbers F/1.6 through F/16 at the case-study focus.
 *Figure 8 — **How thick is the in-focus slice at each aperture?**
 Geometric CoC vs object distance for F/1.6 (current), F/2.8, F/4,
 F/8, F/16. At the verified F/1.6 the in-focus slice (CoC ≤ 1 pixel)
-spans only ±**6 µm** — narrower than a single seed crystal. Stopping
-down to F/16 widens it to ±60 µm (10×). **This is the single most
+spans only ±**4.2 µm** — narrower than a single seed crystal. Stopping
+down to F/16 widens it to ±42 µm (10×). **This is the single most
 operationally important plant-side recommendation from the optics
 analysis**: the depth-aware pipeline of §§5–6 cannot extract 3-D
 structure until the iris is closed enough to admit it.*
@@ -861,9 +861,9 @@ PSF spreads over more than a few pixels; morphological closing
 preserves a contour only if the local edge is still locally bright
 against the background. The detector therefore implicitly selects
 for a **narrow in-focus slice** around the focused plane. For the
-case-study lens at F/4 the slice is approximately ± 1 mm — exactly
-the band in which the front/back size discrimination signal is
-~1 % (Figure 12). The disambiguation framework of §6 is therefore
+case-study lens at F/1.6 the CoC reaches 5 px at δ ≈ ± 21 µm —
+a band in which the front/back size discrimination signal is
+only 0.08 % (Figure 12). The disambiguation framework of §6 is therefore
 applicable to the data we have, but its discriminating power is set
 by the detector's depth-of-field aperture, not by any optics
 limitation per se.
@@ -873,11 +873,11 @@ limitation per se.
 near/far ambiguity?** Apparent-size ratio between symmetric near/far
 depth hypotheses (left axis, blue) and the corresponding sensor CoC
 (right axis, green) as a function of near-side offset δ. The 5 %
-discrimination threshold (red dotted) is reached only at δ ≈ 4 mm —
+discrimination threshold (red dotted) is reached only at δ ≈ 1.3 mm —
 but the 5-pixel CoC threshold (green dashed) at which the edge-based
-detector loses sensitivity is reached already at δ ≈ 1 mm. **The data
-the detector admits therefore live in the leftmost ~25 % of the
-curve, where size-based discrimination is < 1.5 %.** This is the
+detector loses sensitivity is reached already at δ ≈ 21 µm. **The
+data the detector admits therefore sit at δ ≲ 21 µm, where size-based
+discrimination is < 0.1 %.** This is the
 operational ceiling that the §9.3 recommendations are designed to
 break.*
 
@@ -967,7 +967,7 @@ infinitesimal slice. The Bayes step assigns 79 % of detections to
 the near side; under the homogeneous-slurry assumption this is
 interpreted as the slurry sitting slightly closer to the lens than
 the operator-set focal plane (or as right-skew of the empirical
-size prior — see §9.1).*
+size prior — see §9.2).*
 
 ### 6.4 Real demonstrations of the depth-aware scale
 
@@ -982,21 +982,21 @@ map (Laplacian-variance, INFERNO colourisation) with the *same* grid
 overlaid — so the reader can see *which pixels are sharp enough to
 actually be at that depth*.
 
-**d_o = 62.0 mm (near, 2.169 µm/px):**
+**d_o = 54.9 mm (near, 1.659 µm/px):**
 ![near](../../docs/optics/figures/07_overlay_near.png)
 
-**d_o = 55.1 mm (at focus, 1.664 µm/px):**
+**d_o = 55.1 mm (at focus, 1.665 µm/px):**
 ![focus](../../docs/optics/figures/07_overlay_at_focus.png)
 
-**d_o = 55.6 mm (far, 1.680 µm/px):**
+**d_o = 55.3 mm (far, 1.671 µm/px):**
 ![far](../../docs/optics/figures/07_overlay_far.png)
 
 *Figure 14 — **How much does mm/px actually change across the
 in-focus slice, and which pixels does it apply to?** Real-world
 scale grid overlaid on the same frame at three different assumed
 object distances near focus. **Left-panel observation:** the mm/px
-shift across the ±0.2 mm window (which is already 33× wider than
-the actual F/1.6 DoF of ±6 µm) is **only ±0.3 %** — well below any
+shift across the ±0.2 mm window (which is already 48× wider than
+the actual F/1.6 DoF of ±4.2 µm) is **only ±0.36 %** — well below any
 other source of uncertainty in the pipeline. **Right-panel
 observation:** the sharpness maps look *visually indistinguishable*
 across the three depths, because at F/1.6 the DoF is so narrow that
@@ -1319,8 +1319,8 @@ The watershed is a major improvement but is not the final detector:
   independently; a tracker would reject the few-percent of basins
   that flicker frame-to-frame.
 
-Sections 7.6 (depth correction) and 7.7 (homogeneous-slurry self-
-consistency check) below now refer to the **watershed** results.
+Section 7.6 (depth correction) below and §7.3 (homogeneous-slurry
+self-consistency check) above now refer to the **watershed** results.
 
 ### 7.6 Why the depth correction looks vanishingly small here
 
@@ -1330,7 +1330,7 @@ the correction is a property of the geometry, not of which crystals
 were found. For the current F/1.6 aperture, a
 *single* mm/px scale (the one at
 the focused plane) is sufficient for population-level size readout.
-At the verified F/1.6 the DoF is ±6 µm — narrower than any single
+At the verified F/1.6 the DoF is ±4.2 µm — narrower than any single
 crystal — so essentially **all detections come from one depth slice**
 and the depth-aware machinery has no 3-D structure to invert. The
 machinery becomes load-bearing only when (a) the aperture is stopped
@@ -1372,7 +1372,7 @@ graining, validating the process is on the nominal curve.
 The growth-curve fit is implemented as scaffolding in
 ``src/optics/csd.py`` (single-batch path) and is ready to be promoted
 to multi-batch once batch-aligned video is supplied. The
-discriminability analysis of §6.3 also benefits: a tight physical-size
+discriminability analysis of §5.3 also benefits: a tight physical-size
 prior identified from the growth curve at the recording time replaces
 the in-frame focal-plane prior, breaking the symmetry between the
 "slurry sits in front of focus" and "right-skewed prior asymmetry"
@@ -1427,7 +1427,7 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
   segmentation; § 9.3), not a parameter sweep of the current one.
 - **Front/back disambiguation is geometrically valid but
   operationally degenerate at F/1.6.** The verified F/1.6 aperture
-  produces a ±6 µm in-focus depth window — narrower than any single
+  produces a ±4.2 µm in-focus depth window — narrower than any single
   crystal. The detector therefore sees one depth slice and the
   79 / 21 near-side split observed in §6 is not robust evidence of a
   geometric offset; it could equally reflect the right-skew of the
@@ -1538,6 +1538,10 @@ the literature verification audit lives in
   pri získavaní sacharózy z cukrovej repy* (PhD thesis). Slovak
   University of Agriculture in Nitra. Data from Slovenské
   cukrovary, Sereď, campaigns 2005–2009.
+- **Beucher, S., Meyer, F., 1993.** The morphological approach to
+  segmentation: the watershed transformation. In: Dougherty, E. R.
+  (ed.), *Mathematical Morphology in Image Processing*. Marcel
+  Dekker, New York, 433–481.
 - **Borchert, C., Temmel, E., Eisenschmidt, H., Lorenz, H., Seidel-
   Morgenstern, A., Sundmacher, K., 2014.** Image-based in situ
   identification of face-specific crystal growth rates. *Crystal
@@ -1574,9 +1578,6 @@ the literature verification audit lives in
   algorithm for analyzing noisy, in situ images of high-aspect-ratio
   crystals to monitor particle size distribution. *Chem. Eng. Sci.*
   62 (5), 1430–1441. DOI: 10.1016/j.ces.2006.11.018.
-- **Mannan, F., Langer, M. S., 2016.** Blur calibration for depth
-  from defocus. *Proc. CRV 2016*, 281–288.
-  DOI: 10.1109/CRV.2016.62.
 - **Mastersizer laser-diffraction granulometry, 2025-01-16.**
   *Zuckerslurry Se sample, dispersant 2-propanol.* Plant report,
   Slovenské cukrovary, s.r.o., Sereď. Archived as
@@ -1621,7 +1622,11 @@ the literature verification audit lives in
 - **Subbarao, M., Surya, G., 1994.** Depth from defocus: A spatial-
   domain approach. *Int. J. Comput. Vis.* 13 (3), 271–294.
   DOI: 10.1007/BF02028349.
-- **Worlitschek, J., Mazzotti, M., 2004.** Choice of focal point
+- **Vincent, L., Soille, P., 1991.** Watersheds in digital spaces:
+  an efficient algorithm based on immersion simulations. *IEEE
+  Trans. Pattern Anal. Mach. Intell.* 13 (6), 583–598.
+  DOI: 10.1109/34.87344.
+- **Worlitschek, J., Mazzotti, M., 2003.** Choice of focal point
   position using Lasentec FBRM. *Particle & Particle Systems
   Characterization* 20 (1), 12–17. DOI: 10.1002/ppsc.200390002.
 - **Wynn, E. J. W., 2003.** Relationship between particle-size and
