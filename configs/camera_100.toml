@@ -1,57 +1,72 @@
-# Camera 100 — Slovenské cukrovary Sereď, sugar crystallizer sight-glass install.
+# Camera 100 — Slovenské cukrovary Sereď, ZRA seed-pan sight glass.
 #
-# Hardware constants are versioned with the code that interprets them; do NOT
-# move these into .env — they are not secrets, they are physical facts about
-# the installation and every figure/KPI is invalidated if they change.
+# SINGLE SOURCE of every physical input. Values are versioned with the code that
+# reads them; every figure/KPI is invalidated if they change. Not secrets: no .env.
 #
-# Audit trail (FACT / DERIVED / ESTIMATE): see docs/optics/README.md.
+# Every value line ends in `# CLASS: source`; tests/test_provenance.py enforces it.
+#   MEASURED   instrument or person measured it, and a record exists (file / photo)
+#   PHOTO      read off a photograph in the repo or on Drive
+#   DATASHEET  manufacturer specification of a confirmed part
+#   PLANT      plant staff statement, usually approximate ("≈")
+#   ESTIMATE   our guess with a stated basis
+#   ASSUMED    chosen without evidence
+#   CHOICE     a design / analysis choice, not a property of the installation
+#   DERIVED    computed from other keys; inherits their weakest class
+#   UNSOURCED  value in use, but its claimed origin has no surviving record
+#
+# Sources cited by short name:
+#   Q&A    = "Potrebné dáta a otázky - Zodpovedane.docx", A. Fedor, 2026-08-12
+#            (Drive sugar_plant/sered/; English in docs/sered/notes_plant_dcs_qa_photos.md item 8–9)
+#   Quote  = Polz Instruments quote P5PI-100, 2025-10-06 (docs/Camera_100_Slovenske_cukrovary.pdf)
+#   Aug-photos = Drive sugar_plant/sered/photos/20260810_*.jpg
+#
+# History (2026-11-03 audit): earlier tags said "FACT: operator measurement 2026-09-07".
+# That date is a chat message in which Marek relayed the Q&A values as "ground truth"
+# (session 5d3dc10c); no site measurement was made on 2026-09-07.
 
 [camera]
-model = "Hanwha HCB-6000"             # FACT: datasheet + on-site label
-sensor_format = "1/2.8\""             # FACT: datasheet
-sensor_width_mm = 5.568               # FACT: 1920 × 2.9 µm — Sony IMX307/IMX327 die (1945×1097 total px matches HCB-6000 datasheet)
-sensor_height_mm = 3.132              # FACT: 1080 × 2.9 µm
-native_width_px = 1920                # FACT: sensor native resolution
-native_height_px = 1080               # FACT: sensor native resolution
-body_length_mm = 40.0                 # ESTIMATE: camera housing depth behind the lens mount — NOT measured, caliper it; used only in the layout drawing
-flange_distance_mm = 17.526           # C-mount standard; HCB-6000 is CS-mount (12.526) + 5 mm adapter ring — OPEN whether the 60 mm below includes the ring
+model = "Hanwha HCB-6000"             # UNSOURCED: only in the Quote. Every Feb and Aug photo shows an "ADEMCO VIDEO" analog body (Aug-photos 20260810_111738.jpg, rear 111636.jpg). Label attached by AI in commit 2338a39.
+sensor_format = "1/2.8\""             # UNSOURCED: HCB-6000 datasheet; inherits the unconfirmed model
+sensor_width_mm = 5.568               # UNSOURCED: 1920 × 2.9 µm, Sony IMX307/327 die inferred by AI from the HCB-6000 pixel count (commit b997e2f)
+sensor_height_mm = 3.132              # UNSOURCED: 1080 × 2.9 µm, same inference
+native_width_px = 1920                # UNSOURCED: HCB-6000 datasheet; an analog PAL CCD has ~752 or ~976 columns
+native_height_px = 1080               # UNSOURCED: HCB-6000 datasheet; PAL has 576 active lines
+body_length_mm = 40.0                 # ESTIMATE: no basis recorded; used only in the layout drawing
+flange_distance_mm = 17.526           # DATASHEET: C-mount standard (lens side). Body mount C or CS unknown; whether the 60 mm tube includes a 5 mm CS→C ring is open (±9 % in µm/px)
 
 [lens]
-model = "Fujinon HF35HA-1B"           # FACT: lens label
-focal_length_mm = 35.0                # FACT: lens engraving (optical, NOT body length)
-body_length_mm = 29.5                 # DATASHEET length at FAR (∞); grows by focus_travel_mm when focused closer
-focus_travel_mm = 1.0                 # ESTIMATE: ~3 exposed helicoid turns ≈ 1 mm (operator 2026-09-07); ±1 mm → ±1.6 % in µm/px
-f_number = 1.6                        # FACT: operator inspection 2026-06-15, wide-open
-iris_stops = [1.6, 2.0, 4.0, 8.0, 16.0]  # FACT: engraved on the iris ring (docs/lens/20260205_1225xx.jpg); drives the DoF-vs-F figure
-extension_tube_mm = 60.0              # FACT: operator measurement 2026-09-07 (was 45 mm caliper 2026-06-15)
-air_gap_mm = 20.0                     # FACT: lens front rim → outer glass face, operator 2026-09-07
+model = "Fujinon HF35HA-1B"           # PHOTO: lens label, docs/lens/20260205_122620.jpg, Aug-photos 20260810_112218.jpg
+focal_length_mm = 35.0                # PHOTO: lens engraving "1:1.6/35mm" (optical focal length, not body length)
+body_length_mm = 29.5                 # DATASHEET: docs/lens/fujinon-hf35ha-1b.pdf, length at FAR (∞); grows by focus_travel_mm when focused closer
+focus_travel_mm = 1.0                 # ESTIMATE: AI guess from "~3 exposed helicoid turns" (commit b997e2f); Marek never stated it; no distance scale on the lens (Q&A item 9). ±1 mm → ±1.6 % in µm/px
+f_number = 1.6                        # PLANT: Q&A item 9 "F = 1.6, if I read it correctly"; Aug-photos 20260810_112120 show the ring between 1.6 and 2. The "operator inspection 2026-06-15" has no surviving record
+iris_stops = [1.6, 2.0, 4.0, 8.0, 16.0]  # PHOTO: engraved on the iris ring, docs/lens/20260205_122600.jpg; drives the DoF-vs-F figure
+extension_tube_mm = 60.0              # PLANT: Q&A item 8(A) "≈ 6 cm" (not a caliper reading). The earlier 45 mm was our own estimate sent with the questions
+air_gap_mm = 20.0                     # PLANT: Q&A item 8(B) "≈ 2 cm", lens front rim → outer glass face
 
 [sight_glass]
-standard = "DIN 8902"                 # ESTIMATE: stamped "DIN 890" → most likely 8902 (lens audit: likely soda-lime)
-thickness_mm = 20.0                   # FACT: operator measurement 2026-09-07
-diameter_mm = 150.0                   # FACT: operator measurement 2026-09-07 (DN150)
-refractive_index = 1.47               # ASSUMED: borosilicate; soda-lime (DIN 8902) would be 1.52 → Δ 6.85 mm instead of 6.39. Error budget carries ±0.03
+standard = "DIN 8902"                 # ESTIMATE: worn stamp reads "DIN 890…"; 8902 is the likeliest (soda-lime)
+thickness_mm = 20.0                   # PLANT: Q&A item 8(C) "20 mm" (our own drawing had said 2 mm)
+diameter_mm = 150.0                   # PLANT: Q&A item 8(C) "diameter 150 mm" (DN150)
+refractive_index = 1.47               # ASSUMED: borosilicate. Contradicts the DIN 8902 estimate (soda-lime 1.52 → Δ 6.85 mm instead of 6.39); error budget carries ±0.03
 
 [detection]
 # Size window of the crystal detector's area filter. A detected contour of area
 # A px² passes when min_side_px² ≤ A ≤ (max_size_um / µm_per_px)², with µm_per_px
 # taken at the focused plane for the video's frame width (optics.config.detection_area_px).
 # Replaces the hardcoded 80 / 8000 px², which was tuned to a guessed ~52 µm crystal.
-min_side_px = 3        # RESOLUTION LIMIT: ~3 px across is the smallest blob a detector can call a crystal.
-                       #   ≈ 5 µm on the 1080p clips (1.66 µm/px), ≈ 13 µm on the PAL recordings (4.4 µm/px),
-                       #   so the seed slurry (Mastersizer Dv10/Dv50/Dv90 = 1.56 / 6.81 / 18.5 µm,
-                       #   docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf) is only partly resolvable on 1080p
-                       #   and mostly not on PAL.
-max_size_um = 1000.0   # GROUND TRUTH + MARGIN: largest crystal measured on the seed pan is 0.821 mm
-                       #   (13-32.jpg, ~2 h after seeding, 2026-10-30; datasets/README.md "Crystal-size ground
-                       #   truth on the seed pan"), rounded up to 1 mm.
+min_side_px = 3        # CHOICE: ~3 px across is the smallest blob a detector can call a crystal.
+                       #   Its µm equivalent (≈ 5 µm on 1080p, ≈ 13 µm on PAL) inherits the UNSOURCED pitch,
+                       #   and the 1080p clips are upscaled PAL, so 1080p pixels are not sensor pixels.
+max_size_um = 1000.0   # CHOICE: 0.821 mm rounded up. 0.821 mm = largest crystal MEASURED by microscope on the
+                       #   seed pan (13-32.jpg, ~2 h after seeding, 2026-10-30), value transcribed by AI from the
+                       #   photo's burned-in overlay; measurer not named (datasets/README.md).
 
 [figures]
 # What-if sweeps and drawing choices for docs/optics/figures — not the installation.
-extension_sweep_mm = [5.0, 10.0, 20.0, 40.0]  # standard C-mount extension-ring kit; the installed tube is appended
-slurry_depth_mm = 40.0                # width of the slurry band in 18_optical_layout; the pan is far deeper
+extension_sweep_mm = [5.0, 10.0, 20.0, 40.0]  # CHOICE: standard C-mount extension-ring kit; the installed tube is appended
+slurry_depth_mm = 40.0                # CHOICE: width of the slurry band in 18_optical_layout; the pan is far deeper
 
 [focus]
-# Derived: i_fixed = f + e + focus_travel = 96 mm
-#   ⇒ d_focus = f·i/(i−f) = 35·96/61 = 55.082 mm
-object_distance_mm = 55.1             # DERIVED from lens + extension above
+# i_fixed = f + e + focus_travel = 96 mm  ⇒  d_focus = f·i/(i−f) = 35·96/61 = 55.082 mm
+object_distance_mm = 55.1             # DERIVED: from focal_length (PHOTO), extension_tube (PLANT ≈) and focus_travel (ESTIMATE)
