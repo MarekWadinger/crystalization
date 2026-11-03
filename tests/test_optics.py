@@ -97,6 +97,36 @@ def test_sharpness_peaks_at_focus(hf35: LensSetup) -> None:
     assert d_o[idx_peak] == pytest.approx(d_focus, abs=0.5)
 
 
+def test_diffraction_uses_working_f_number_at_macro_magnification() -> None:
+    from optics.psf import sharpness_diffraction, working_f_number
+
+    # Arrange: M = 1.743 as in the installed setup; N_w = N (1 + M)
+    m = 1.743
+    assert working_f_number(16.0, m) == pytest.approx(16.0 * 2.743)
+    c = np.linspace(0.0, 0.05, 200)  # CoC in mm
+    # Act: same geometric blur, nominal vs working F-number
+    s_nom = sharpness_diffraction(c, 16.0, sensor_floor_mm=3.27e-3)
+    s_mac = sharpness_diffraction(
+        c, 16.0, sensor_floor_mm=3.27e-3, magnification=m
+    )
+    # Assert: a larger diffraction floor flattens the cusp (wider FWHM)
+    assert (s_mac >= 0.5).sum() > (s_nom >= 0.5).sum()
+
+
+def test_fit_power_law_tail_recovers_exponent_on_its_band() -> None:
+    from optics.measure import fit_band, fit_power_law_tail
+
+    # Arrange: a pure power law density ∝ x^-4
+    x = np.linspace(1.0, 10.0, 400)
+    y = x**-4.0
+    # Act
+    alpha, _ = fit_power_law_tail(x, y)
+    lo, hi = fit_band(y)
+    # Assert: exponent recovered and the band lies inside the histogram
+    assert alpha == pytest.approx(4.0, rel=1e-6)
+    assert 0 < lo < hi <= len(x)
+
+
 def test_sharpness_gaussian_is_monotone_in_coc() -> None:
     coc = np.array([0.0, 0.005, 0.01, 0.02, 0.05])
     s = sharpness_gaussian(coc, sigma_floor=1e-3)

@@ -46,7 +46,7 @@ from optics.config import (  # noqa: E402
     um_per_px_xy_at_focus,
 )
 from optics.model import LensSetup, circle_of_confusion  # noqa: E402
-from optics.psf import sharpness_diffraction  # noqa: E402
+from optics.psf import sharpness_diffraction, working_f_number  # noqa: E402
 from optics.scale_chain import nominal_scales, sample_budget  # noqa: E402
 
 VIDEO = "datasets/2026-02-05 10-36-32.mp4"
@@ -138,7 +138,10 @@ def _fwhm_um(lens: LensSetup, d: float) -> float:
     do = np.linspace(d - 5.0, d + 5.0, 20000)
     c = circle_of_confusion(lens, d, do)
     s = sharpness_diffraction(
-        c, lens.f_number, sensor_floor_mm=lens.pixel_pitch_um * 1e-3 / 2
+        c,
+        lens.f_number,
+        sensor_floor_mm=lens.pixel_pitch_um * 1e-3 / 2,
+        magnification=lens.focal_length / (d - lens.focal_length),
     )
     above = do[s >= 0.5]
     return 1e3 * float(above[-1] - above[0])
@@ -572,6 +575,50 @@ def optics_rows() -> dict[str, float]:
         "pytest --collect-only",
     )
     return {"ux": ux, "uy": uy, "d": d, "k": k}
+
+
+def diffraction_rows() -> None:
+    """Diffraction at the image-side working F-number ``N_w = N (1 + M)``.
+
+    Printed after all other rows so that the row numbers cited in the paper
+    for the earlier rows do not move.
+    """
+    f, e, x, n = (
+        CFG.focal_length_mm,
+        CFG.extension_tube_mm,
+        CFG.focus_travel_mm,
+        CFG.f_number,
+    )
+    i = f + e + x
+    d = f * i / (i - f)
+    geo = "lens.focal_length_mm lens.extension_tube_mm lens.focus_travel_mm".split()
+    pitch = "camera.cell_width_um camera.pixel_clock_mhz dvr.sampling_rate_mhz".split()
+    lens_pal = lens_from_config(CFG)
+    m = f / (d - f)
+    lam_um = 0.55
+    pal_um = lens_pal.pixel_pitch_um
+    for stop in (n, 8.0, 16.0):
+        nw = working_f_number(stop, m)
+        fwhm_d = 2.3548 * 0.42 * lam_um * nw
+        add(
+            f"diffraction FWHM at the sensor, F/{stop:g} (N_w = N(1+M) = {nw:.1f})",
+            "defocus.tex §psf, §dof, discussion",
+            "—",
+            f"{fwhm_d:.1f} µm = {fwhm_d / pal_um:.2f} PAL samples (σ {0.42 * lam_um * nw:.2f} µm)",
+            "area",
+            weakest(*geo, *pitch, "lens.f_number"),
+            "optics.psf.sharpness_diffraction (σ = 0.42 λ N_w, λ = 550 nm)",
+        )
+    n_lim = pal_um / (2.3548 * 0.42 * lam_um * (1 + m))
+    add(
+        "nominal F-number at which the diffraction FWHM reaches one PAL sample",
+        "defocus.tex §dof, discussion",
+        "—",
+        f"F/{n_lim:.1f}",
+        "free",
+        weakest(*geo, *pitch),
+        "pitch / (2.3548 · 0.42 λ (1 + M))",
+    )
 
 
 # ── video: case-study clip ────────────────────────────────────────────────
@@ -1016,6 +1063,7 @@ def main() -> None:
     out["optics"] = optics_rows()
     if not args.no_video:
         video_rows(out)
+    diffraction_rows()
     print(
         "| # | Number | Paper (where) | Old | New | Reproduced | Scale | Weakest class | Source |"
     )

@@ -36,7 +36,7 @@ from __future__ import annotations
 import numpy as np
 from numpy.typing import NDArray
 
-from optics.model import LensSetup, circle_of_confusion
+from optics.model import LensSetup, circle_of_confusion, magnification
 
 # Reference wavelength for visible-band imaging — green channel weighted.
 LAMBDA_GREEN_MM: float = 550e-6  # 550 nm in millimetres
@@ -98,23 +98,41 @@ def sharpness_gaussian(
     return _power_law_sharpness(sigma, sigma_floor)
 
 
+def working_f_number(f_number: float, magnification: float) -> float:
+    """Image-side working F-number ``N_w = N (1 + M)``.
+
+    At macro magnification the exit cone at the sensor is narrower than the
+    nominal ``f/N`` suggests; the image-side NA is ``1 / (2 N_w)``. Pupil
+    magnification is taken as 1 (not given in the lens datasheet).
+    """
+    return f_number * (1.0 + magnification)
+
+
 def sharpness_diffraction(
     coc: NDArray[np.float64] | float,
     f_number: float,
     wavelength_mm: float = LAMBDA_GREEN_MM,
     sensor_floor_mm: float = 1.4e-3,
+    *,
+    magnification: float = 0.0,
 ) -> NDArray[np.float64]:
     """Same model with a diffraction *and* sensor floor.
 
-    The Airy radius (first zero) is ``r_Airy = 1.22 · λ · N``; the Gaussian
-    that best matches the Airy intensity has σ_diff ≈ 0.42 · λ · N
+    The Airy radius (first zero) is ``r_Airy = 1.22 · λ · N_w``; the Gaussian
+    that best matches the Airy intensity has σ_diff ≈ 0.42 · λ · N_w
     (Goodman, *Introduction to Fourier Optics*, §6.2 — Gaussian fit to a
-    circular-aperture PSF). It adds in quadrature with the geometric blur
-    (c/2) and with the sensor sampling floor (≈ pixel_pitch / 2).
+    circular-aperture PSF), with ``N_w`` the working F-number of
+    :func:`working_f_number`. Pass the transverse ``magnification`` of the
+    setup; ``0`` (the default) is the infinity-focus limit ``N_w = N`` and
+    underestimates diffraction at macro distances. σ_diff adds in quadrature
+    with the geometric blur (c/2) and with the sensor sampling floor
+    (≈ pixel_pitch / 2).
     """
     c = np.asarray(coc, dtype=np.float64)
     sigma_geom = c / 2.0
-    sigma_diff = 0.42 * wavelength_mm * f_number
+    sigma_diff = (
+        0.42 * wavelength_mm * working_f_number(f_number, magnification)
+    )
     sigma_floor = float(np.hypot(sigma_diff, sensor_floor_mm))
     return _power_law_sharpness(sigma_geom, sigma_floor)
 
@@ -133,5 +151,7 @@ def sharpness_vs_object_distance(
     """
     c = circle_of_confusion(lens, d_focus, d_o)
     if diffraction:
-        return sharpness_diffraction(c, lens.f_number)
+        return sharpness_diffraction(
+            c, lens.f_number, magnification=magnification(lens, d_focus)
+        )
     return sharpness_gaussian(c)
