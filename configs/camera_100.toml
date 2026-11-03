@@ -23,16 +23,48 @@
 # History (2026-11-03 audit): earlier tags said "FACT: operator measurement 2026-09-07".
 # That date is a chat message in which Marek relayed the Q&A values as "ground truth"
 # (session 5d3dc10c); no site measurement was made on 2026-09-07.
+#
+# History (2026-11-03 scale audit): the camera section used to describe a Hanwha
+# HCB-6000 (1/2.8", 1920 × 1080, 2.9 µm, sensor 5.568 × 3.132 mm, i.e. a Sony
+# IMX307/327 die inferred by AI in commit b997e2f). That model appears only in the
+# Quote; every photo shows an analog "ADEMCO VIDEO" B/W PAL box camera with DIP
+# switches (ALC, V-PHASE, INT/L-L, AI/AES, VIDEO/DD, BLC, AGC), which a colour CMOS
+# HCB-6000 does not have. The old code took µm/px = 5.568 mm / frame width,
+# isotropic: 7.73 µm/px on PAL and 2.90 µm/px on the 1080p clips at the sensor
+# (1.66 µm/px in the slurry). Both were wrong: the picture reaches the DVR as an
+# analog line, so the scale is set by the CCD cell pitch and clock and by the DVR
+# sampling, per axis (src/optics/scale_chain.py, docs/optics/scale_chain.md).
 
 [camera]
-model = "Hanwha HCB-6000"             # UNSOURCED: only in the Quote. Every Feb and Aug photo shows an "ADEMCO VIDEO" analog body (Aug-photos 20260810_111738.jpg, rear 111636.jpg). Label attached by AI in commit 2338a39.
-sensor_format = "1/2.8\""             # UNSOURCED: HCB-6000 datasheet; inherits the unconfirmed model
-sensor_width_mm = 5.568               # UNSOURCED: 1920 × 2.9 µm, Sony IMX307/327 die inferred by AI from the HCB-6000 pixel count (commit b997e2f)
-sensor_height_mm = 3.132              # UNSOURCED: 1080 × 2.9 µm, same inference
-native_width_px = 1920                # UNSOURCED: HCB-6000 datasheet; an analog PAL CCD has ~752 or ~976 columns
-native_height_px = 1080               # UNSOURCED: HCB-6000 datasheet; PAL has 576 active lines
+# Analog B/W PAL CCD. Cells are read out along a line at the CCD clock; the DVR
+# re-samples that analog line at its own rate, so one DVR sample spans
+# cell_width × pixel_clock / dvr.sampling_rate on the sensor; one line = one cell row.
+model = "Ademco ACM570E-class"        # ESTIMATE: best match to the "ADEMCO VIDEO" body and its rear DIP panel (Aug-photos 20260810_111738.jpg, rear 111636.jpg); model sticker unread. Alternative ACM380E-class (500 × 582, 9.8 × 6.3 µm), manual manualslib.com/manual/892194
+sensor_format = "1/3\""               # ESTIMATE: candidate datasheet; both candidates are 1/3" CCDs
+cell_width_um = 6.50                  # ESTIMATE: DATASHEET of the candidate's 752-cell PAL CCD (Sony ICX409AK-type); the candidate itself is unconfirmed
+cell_height_um = 6.25                 # ESTIMATE: same datasheet; the ACM380E-class alternative is 6.3
+cells_h = 752                         # ESTIMATE: same datasheet (effective cells per row)
+cells_v = 582                         # ESTIMATE: same datasheet (effective rows; 576 reach the PAL picture)
+pixel_clock_mhz = 14.1875             # ESTIMATE: horizontal CCD clock in the same datasheet; the 500-cell alternative (9.8 µm, 9.46875 MHz) gives 6.87 instead of 6.83 µm per DVR sample
 body_length_mm = 40.0                 # ESTIMATE: no basis recorded; used only in the layout drawing
-flange_distance_mm = 17.526           # DATASHEET: C-mount standard (lens side). Body mount C or CS unknown; whether the 60 mm tube includes a 5 mm CS→C ring is open (±9 % in µm/px)
+flange_distance_mm = 17.526           # DATASHEET: C-mount standard (lens side). Body mount C or CS unknown; whether the 60 mm tube includes a 5 mm CS→C ring is open (+8.9 % in µm/px if it does)
+
+[dvr]
+# Digitising the analog line. The long PAL recordings are this raster as recorded.
+sampling_rate_mhz = 13.5              # ESTIMATE: ITU-R BT.601 luma rate, implied by 720 samples per line; DVR model unknown
+samples_per_line = 720                # MEASURED: ffprobe of 2026-02-04 11-08-51.mp4 (720 × 576)
+lines = 576                           # MEASURED: same ffprobe; the PAL active lines
+active_line_us = 52.0                 # DATASHEET: PAL nominal active line (ITU-R BT.470 / BT.601); the error budget's alternative to the CCD-clock route
+
+[display_1080p]
+# The 1080p clips (datasets/2026-02-05 *.mp4) are screen recordings of the DVR's
+# monitor output: the PAL raster scaled by stretch_x along a row and stretch_y down
+# a column, inside a black pillarbox. Measured by registering the DVR's own OSD
+# glyphs (date, "CH01"), which are burned into both the PAL recording and the clips.
+width_px = 1920                       # MEASURED: ffprobe of the three 2026-02-05 clips
+height_px = 1080                      # MEASURED: same ffprobe
+stretch_x = 2.677                     # MEASURED: clip px per PAL sample, OSD lever arm date→CH01 (115 samples), 27 fits on the three clips 2.675–2.680; python -m optics.scale_chain. Not 1920/720 = 2.667
+stretch_y = 1.875                     # MEASURED: clip rows per PAL line, OSD lever arm (503 lines), 27 fits 1.8752–1.8756, i.e. 1080/576; python -m optics.scale_chain
 
 [lens]
 model = "Fujinon HF35HA-1B"           # PHOTO: lens label, docs/lens/20260205_122620.jpg, Aug-photos 20260810_112218.jpg
@@ -52,12 +84,13 @@ refractive_index = 1.47               # ASSUMED: borosilicate. Contradicts the D
 
 [detection]
 # Size window of the crystal detector's area filter. A detected contour of area
-# A px² passes when min_side_px² ≤ A ≤ (max_size_um / µm_per_px)², with µm_per_px
-# taken at the focused plane for the video's frame width (optics.config.detection_area_px).
+# A px² passes when min_side_px² ≤ A ≤ max_size_um² / (µm_x · µm_y), with the per-axis
+# µm/px at the focused plane for the video's recording type (optics.config.detection_area_px).
 # Replaces the hardcoded 80 / 8000 px², which was tuned to a guessed ~52 µm crystal.
 min_side_px = 3        # CHOICE: ~3 px across is the smallest blob a detector can call a crystal.
-                       #   Its µm equivalent (≈ 5 µm on 1080p, ≈ 13 µm on PAL) inherits the UNSOURCED pitch,
-                       #   and the 1080p clips are upscaled PAL, so 1080p pixels are not sensor pixels.
+                       #   In the slurry that is ≈ 11–12 µm on PAL and ≈ 4.4 × 5.7 µm (x × y) on the 1080p
+                       #   clips (ESTIMATE, docs/optics/scale_chain.md); 1080p pixels are upscaled PAL samples,
+                       #   so 3 clip px are only ≈ 1.1 PAL samples across: below the analog resolution.
 max_size_um = 1000.0   # CHOICE: 0.821 mm rounded up. 0.821 mm = largest crystal MEASURED by microscope on the
                        #   seed pan (13-32.jpg, ~2 h after seeding, 2026-10-30), value transcribed by AI from the
                        #   photo's burned-in overlay; measurer not named (datasets/README.md).

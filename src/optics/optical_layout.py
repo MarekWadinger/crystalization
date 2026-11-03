@@ -66,7 +66,13 @@ def _sources() -> dict[str, str]:
         ),
         "model": c["camera.model"],
         "pitch": _weakest(
-            c, "camera.sensor_width_mm", "camera.native_width_px"
+            c,
+            "camera.cell_width_um",
+            "camera.pixel_clock_mhz",
+            "dvr.sampling_rate_mhz",
+            "lens.focal_length_mm",
+            "lens.extension_tube_mm",
+            "lens.focus_travel_mm",
         ),
     }
 
@@ -93,7 +99,9 @@ def _geometry() -> dict[str, float]:
         "t_app": t - delta,
         "body": cfg.lens_body_length_mm + cfg.focus_travel_mm,
         "air": cfg.air_gap_mm,
-        "um_px": cfg.native_pixel_pitch_um * (d_focus - f) / f,
+        # Object-plane µm per PAL sample (x) and line (y) at focus.
+        "um_px_x": cfg.sample_pitch_um[0] * (d_focus - f) / f,
+        "um_px_y": cfg.sample_pitch_um[1] * (d_focus - f) / f,
         # Front principal plane H: d_focus back from the inner glass face in
         # apparent coordinates, i.e. this far behind the lens front element.
         "h_offset": d_focus - (t - delta) - cfg.air_gap_mm,
@@ -126,14 +134,14 @@ def _draw(
     fig, ax = plt.subplots(figsize=(16, 5))
     x = 0.0
     edges: dict[str, float] = {}
+    sensor = g["camera"] - g["flange"]
     for key, w, fc, tc in segs:
         ax.add_patch(Rectangle((x, 0), w, 1, fc=fc, ec="black"))
-        ax.text(
-            x + w / 2, 0.5, labels[key], ha="center", va="center", color=tc
-        )
+        # The body label sits behind the sensor line, not across it.
+        cx = sensor / 2 if key == "body" else x + w / 2
+        ax.text(cx, 0.5, labels[key], ha="center", va="center", color=tc)
         edges[key] = x
         x += w
-    sensor = edges["ext"] - g["flange"]
     ax.plot([sensor] * 2, [0, 1], color="red", lw=3)
     ax.text(sensor, 1.05, labels["sensor"], color="red", ha="center")
     ax.plot([edges["slurry"]] * 2, [0, 1], color="green", lw=3)
@@ -187,11 +195,14 @@ def main() -> None:
     en = {
         "title": (
             "Camera 100 — how far the camera looks into the sugar slurry "
-            f"(drawn to scale; 1 px on the sensor = {g['um_px']:.2f} µm in the "
-            f"slurry, pixel pitch {tag['pitch']})"
+            "(drawn to scale; 1 PAL pixel = "
+            f"{g['um_px_x']:.2f} × {g['um_px_y']:.2f} µm (x × y) in the slurry, "
+            f"{tag['pitch']})"
         ),
         "legend": SOURCE_LEGEND["en"],
-        "body": f"camera body\n{model}?\n(model {tag['model']})",
+        "body": "camera body\n"
+        + model.replace(" ", "\n", 1)
+        + f"?\n(model {tag['model']})",
         "dim_cam": f"{g['camera']:.0f} mm\n({tag['body']})",
         "ext": "spacer ring\n(moves lens away from sensor\nso it can focus close)",
         "lens": "\n\n\nlens",
@@ -217,7 +228,7 @@ def main() -> None:
     sk = {
         "title": "Optická sústava — kamera 100 (v mierke)",
         "legend": SOURCE_LEGEND["sk"],
-        "body": f"telo kamery\n{model}?",
+        "body": "telo kamery\n" + model.replace(" ", "\n", 1) + "?",
         "dim_cam": f"{g['camera']:.0f} mm",
         "ext": "medzikrúžok",
         "lens": f"objektív Fujinon\nHF35HA-1B\n(dĺžka {g['body']:.1f} mm)",

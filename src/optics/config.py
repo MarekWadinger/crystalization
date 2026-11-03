@@ -1,15 +1,19 @@
 """Versioned camera configuration loader.
 
-Hardware constants live in ``configs/<camera>.toml`` (sensor size, lens
-focal length, F-number, extension tube, sight-glass geometry, nominal
+Hardware constants live in ``configs/<camera>.toml`` (CCD cells, DVR sampling,
+lens focal length, F-number, extension tube, sight-glass geometry, nominal
 focus distance). They are *not* secrets and do not belong in ``.env``:
 every figure and KPI snapshot is invalidated if a constant changes, so
 they must be versioned with the code.
 
-The DVR-sampled rate (``pixel_pitch_um``) is **not** in the TOML — it is
-derived from the actual video frame width because the analogue chain may
-downsample (e.g. the 13 GB Sereď batch is 720×576 PAL on a 1920×1080
-native sensor, so the *effective* µm/px is sensor_width / frame_width).
+The pixel scale is per axis and per recording type, not one number. The
+camera is an analog PAL CCD: the DVR samples each analog line at 13.5 MHz,
+so one PAL sample spans ``cell_width × pixel_clock / sampling_rate`` on the
+sensor and one line spans one cell row (:meth:`CameraConfig.sample_pitch_um`).
+The 1080p clips are the DVR's monitor output, i.e. that PAL picture stretched
+again by different factors in x and y (:func:`display_factors`). Derivation,
+uncertainty budget and empirical checks: ``python -m optics.scale_chain``
+and ``docs/optics/scale_chain.md``.
 
 Typical use::
 
@@ -17,11 +21,13 @@ Typical use::
 
     cfg = load_camera()  # configs/camera_100.toml
     lens = lens_from_config_and_video(cfg, video_path)
-    # lens.pixel_pitch_um = cfg.sensor_width_mm * 1000 / frame_width_px
+    lens.pixel_pitch_x_um, lens.pixel_pitch_y_um  # sensor-plane µm per frame px
+    lens.pixel_pitch_um  # geometric mean, for areas only
 """
 
 from __future__ import annotations
 
+import math
 import re
 import tomllib
 from dataclasses import dataclass
@@ -48,10 +54,21 @@ class CameraConfig:
     """Hardware constants for one camera+lens+sight-glass installation."""
 
     name: str
-    sensor_width_mm: float
-    sensor_height_mm: float
+    cell_width_um: float
+    cell_height_um: float
+    cells_h: int
+    cells_v: int
+    pixel_clock_mhz: float
+    sampling_rate_mhz: float
+    active_line_us: float
     native_width_px: int
+    """DVR samples per PAL line (the PAL recordings' frame width)."""
     native_height_px: int
+    """PAL active lines (the PAL recordings' frame height)."""
+    display_width_px: int
+    display_height_px: int
+    display_stretch: tuple[float, float]
+    """1080p clip pixels per PAL sample (x) and per PAL line (y), from the OSD."""
     body_length_mm: float
     flange_distance_mm: float
     focal_length_mm: float
@@ -69,9 +86,37 @@ class CameraConfig:
     source_path: Path
 
     @property
+    def sensor_width_mm(self) -> float:
+        """CCD active width, ``cells_h × cell_width``."""
+        return self.cells_h * self.cell_width_um / 1000.0
+
+    @property
+    def sensor_height_mm(self) -> float:
+        """CCD active height, ``cells_v × cell_height``."""
+        return self.cells_v * self.cell_height_um / 1000.0
+
+    @property
+    def sample_pitch_um(self) -> tuple[float, float]:
+        """Sensor-plane µm per PAL sample (x) and per PAL line (y).
+
+        x: a cell is read out every ``1 / pixel_clock``; the DVR takes a sample
+        every ``1 / sampling_rate``, so a sample spans
+        ``cell_width × pixel_clock / sampling_rate`` of the sensor.
+        y: one PAL line is one cell row.
+        """
+        return (
+            self.cell_width_um * self.pixel_clock_mhz / self.sampling_rate_mhz,
+            self.cell_height_um,
+        )
+
+    @property
     def native_pixel_pitch_um(self) -> float:
-        """µm/px at the sensor's native resolution."""
-        return self.sensor_width_mm * 1000.0 / self.native_width_px
+        """Geometric-mean sensor-plane pitch of a PAL sample, for areas only.
+
+        Per-axis lengths must use :attr:`sample_pitch_um` (x ≠ y).
+        """
+        x, y = self.sample_pitch_um
+        return math.sqrt(x * y)
 
 
 def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
@@ -79,16 +124,26 @@ def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
     path = Path(path)
     data = tomllib.loads(path.read_text())
     cam = data["camera"]
+    dvr = data["dvr"]
+    disp = data["display_1080p"]
     lens = data["lens"]
     glass = data["sight_glass"]
     focus = data["focus"]
     detection = data["detection"]
     return CameraConfig(
         name=cam.get("model", path.stem),
-        sensor_width_mm=float(cam["sensor_width_mm"]),
-        sensor_height_mm=float(cam["sensor_height_mm"]),
-        native_width_px=int(cam["native_width_px"]),
-        native_height_px=int(cam["native_height_px"]),
+        cell_width_um=float(cam["cell_width_um"]),
+        cell_height_um=float(cam["cell_height_um"]),
+        cells_h=int(cam["cells_h"]),
+        cells_v=int(cam["cells_v"]),
+        pixel_clock_mhz=float(cam["pixel_clock_mhz"]),
+        sampling_rate_mhz=float(dvr["sampling_rate_mhz"]),
+        active_line_us=float(dvr["active_line_us"]),
+        native_width_px=int(dvr["samples_per_line"]),
+        native_height_px=int(dvr["lines"]),
+        display_width_px=int(disp["width_px"]),
+        display_height_px=int(disp["height_px"]),
+        display_stretch=(float(disp["stretch_x"]), float(disp["stretch_y"])),
         body_length_mm=float(cam["body_length_mm"]),
         flange_distance_mm=float(cam["flange_distance_mm"]),
         focal_length_mm=float(lens["focal_length_mm"]),
@@ -127,25 +182,69 @@ def source_classes(path: str | Path = DEFAULT_CONFIG_PATH) -> dict[str, str]:
     return out
 
 
-def lens_from_config(
-    cfg: CameraConfig, frame_width_px: int | None = None
-) -> LensSetup:
-    """Build a :class:`LensSetup` from a config, optionally rescaling pixel pitch.
+def display_factors(
+    cfg: CameraConfig,
+    frame_width_px: int | None = None,
+    frame_height_px: int | None = None,
+) -> tuple[float, float]:
+    """Frame pixels per PAL sample (x) and per PAL line (y) for a recording.
 
-    If ``frame_width_px`` is given and differs from the camera's native width,
-    the pixel pitch is rescaled so ``µm/px = sensor_width / frame_width``.
-    Use this whenever an analogue/DVR chain downsamples below sensor native.
+    * PAL recordings (``native_width_px`` wide, or ``None``): ``(1, 1)``.
+    * 1080p clips: ``display_1080p.stretch_x/_y``, measured by registering
+      the DVR's OSD glyphs between the two recordings
+      (``python -m optics.scale_chain``).
+
+    Any other frame geometry raises: its scale is unknown.
     """
-    pitch_um = cfg.native_pixel_pitch_um
-    if frame_width_px is not None and frame_width_px > 0:
-        pitch_um = cfg.sensor_width_mm * 1000.0 / frame_width_px
+    w = cfg.native_width_px if frame_width_px is None else frame_width_px
+    if w == cfg.native_width_px and frame_height_px in (
+        None,
+        cfg.native_height_px,
+    ):
+        return 1.0, 1.0
+    if w == cfg.display_width_px and frame_height_px in (
+        None,
+        cfg.display_height_px,
+    ):
+        return cfg.display_stretch
+    raise ValueError(
+        f"no scale chain for a {w}×{frame_height_px} frame: only PAL "
+        f"{cfg.native_width_px}×{cfg.native_height_px} recordings and the "
+        f"{cfg.display_width_px}×{cfg.display_height_px} DVR clips are known"
+    )
+
+
+def sensor_pitch_xy(
+    cfg: CameraConfig,
+    frame_width_px: int | None = None,
+    frame_height_px: int | None = None,
+) -> tuple[float, float]:
+    """Sensor-plane µm per frame pixel, ``(x, y)``, for a recording type."""
+    px, py = cfg.sample_pitch_um
+    sx, sy = display_factors(cfg, frame_width_px, frame_height_px)
+    return px / sx, py / sy
+
+
+def lens_from_config(
+    cfg: CameraConfig,
+    frame_width_px: int | None = None,
+    frame_height_px: int | None = None,
+) -> LensSetup:
+    """Build a :class:`LensSetup` whose pixel is a pixel of this recording.
+
+    Without a frame size the pixel is a PAL sample. ``pixel_pitch_um`` is
+    the geometric mean of the per-axis pitch (right for areas); per-axis
+    lengths come from ``pixel_pitch_x_um`` / ``pixel_pitch_y_um``.
+    """
+    px, py = sensor_pitch_xy(cfg, frame_width_px, frame_height_px)
     return LensSetup(
         focal_length=cfg.focal_length_mm,
         f_number=cfg.f_number,
         extension_tube=cfg.extension_tube_mm,
-        pixel_pitch_um=pitch_um,
+        pixel_pitch_um=math.sqrt(px * py),
         sensor_width=cfg.sensor_width_mm,
         sensor_height=cfg.sensor_height_mm,
+        pixel_aspect=px / py,
     )
 
 
@@ -157,23 +256,40 @@ def sight_glass_from_config(cfg: CameraConfig) -> SightGlass:
     )
 
 
-def probe_frame_width(video_path: str | Path) -> int:
-    """Metadata-only frame-width probe — does NOT decode any frames."""
+def probe_frame_size(video_path: str | Path) -> tuple[int, int]:
+    """Metadata-only ``(width, height)`` probe — does NOT decode any frames."""
     cap = cv2.VideoCapture(str(video_path))
     try:
         w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     finally:
         cap.release()
-    if w <= 0:
-        raise RuntimeError(f"Could not read frame width from {video_path}")
-    return w
+    if w <= 0 or h <= 0:
+        raise RuntimeError(f"Could not read frame size from {video_path}")
+    return w, h
+
+
+def probe_frame_width(video_path: str | Path) -> int:
+    """Metadata-only frame-width probe — does NOT decode any frames."""
+    return probe_frame_size(video_path)[0]
 
 
 def lens_from_config_and_video(
     cfg: CameraConfig, video_path: str | Path
 ) -> LensSetup:
-    """Build a :class:`LensSetup` with pixel pitch derived from the video stream."""
-    return lens_from_config(cfg, frame_width_px=probe_frame_width(video_path))
+    """Build a :class:`LensSetup` for this video's recording type (frame size)."""
+    w, h = probe_frame_size(video_path)
+    return lens_from_config(cfg, w, h)
+
+
+def um_per_px_xy_at_focus(
+    cfg: CameraConfig, lens: LensSetup
+) -> tuple[float, float]:
+    """Object-plane µm per frame pixel ``(x, y)`` at the focused plane."""
+    d_focus = cfg.focus_object_distance_mm
+    gm = 1000.0 * float(mm_per_pixel_at(lens, d_focus, np.array([d_focus]))[0])
+    root = math.sqrt(lens.pixel_aspect)
+    return gm * root, gm / root
 
 
 def detection_area_px(
@@ -182,11 +298,9 @@ def detection_area_px(
     """Detector area window ``(min_area, max_area)`` in px² from ``[detection]``.
 
     The lower bound is the resolution limit (``min_side_px`` squared); the upper
-    bound converts ``max_size_um`` to pixels at the focused plane, so it follows
-    the video's frame width and any later change of pixel pitch.
+    bound is the pixel count of a ``max_size_um`` square at the focused plane,
+    ``max_size_um² / (µm_x · µm_y)``, so it follows the recording's per-axis
+    scale.
     """
-    d_focus = cfg.focus_object_distance_mm
-    um_per_px = 1000.0 * float(
-        mm_per_pixel_at(lens, d_focus, np.array([d_focus]))[0]
-    )
-    return cfg.min_side_px**2, (cfg.max_size_um / um_per_px) ** 2
+    ux, uy = um_per_px_xy_at_focus(cfg, lens)
+    return cfg.min_side_px**2, cfg.max_size_um**2 / (ux * uy)
