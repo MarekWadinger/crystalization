@@ -2,7 +2,7 @@
 
 Pages <= 20 (from ``main.log``), abstract <= 250 words (the ``abstract``
 environment in ``main.tex`` or ``sections/*.tex``), 3-5 highlights of
-<= 85 characters (``highlights.txt``, one per line). A check whose input
+<= 85 characters (``highlights.txt``, one per line, ``#`` lines are comments). A check whose input
 file is missing is skipped. Exit 1 if any check fails.
 
     python3 scripts/paper_check.py
@@ -45,7 +45,9 @@ def main() -> int:
         print("abstract: skipped (no abstract environment)")
 
     lines = _read(PAPER / "highlights.txt").splitlines()
-    items = [line.strip() for line in lines if line.strip()]
+    items = [
+        s for line in lines if (s := line.strip()) and not s.startswith("#")
+    ]
     if items:
         print(f"highlights: {len(items)} (3-5, <= {MAX_CHARS} chars each)")
         if not 3 <= len(items) <= 5:
