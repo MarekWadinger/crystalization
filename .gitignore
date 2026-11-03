@@ -23,6 +23,7 @@ wheels/
 # to git and can be silently overwritten by tooling.
 datasets/*
 !datasets/*.json
+!datasets/README.md
 
 # Transient experiment outputs
 benchmarks/

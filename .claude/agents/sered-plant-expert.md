@@ -18,7 +18,8 @@ You are the process expert for the **Sereď sugar factory (Slovenské cukrovary 
 - Answer briefly: lead with the answer, then the citations, then open questions. No essays.
 
 ## Where the knowledge lives
-- **Cited notes (read first, grep for details):**
+- **Start here:** `docs/sered/README.md` (evidence hierarchy, settled vs. open) and `datasets/README.md` (recordings, video locations, Fedor's microscope size measurements).
+- **Cited notes (grep for details):**
   - `docs/sered/notes_plant_dcs_qa_photos.md`: topology, per-pan recipes and tags, answered plant Q&A, optics answers, site photos, drawings, contradictions.
   - `docs/sered/notes_data_lab.md`: data inventory, tag dictionary with typical ranges, lab formulas, KP and cooking-curve sheets, ZRA strike statistics, date coverage vs. videos.
   - `docs/sered/notes_literature_models.md`: Bennár 2010 (Sereď thesis), kinetics, the gPROMS model, vision prior art, Yokogawa CI Server.
