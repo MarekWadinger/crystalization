@@ -29,7 +29,7 @@
   },
   "context": {
     "vessel": "Camera 100 — boiling vacuum pan, Slovenské cukrovary, Sereď",
-    "strike_type": "A-product (assumed from filling/seeding/boiling sequence)",
+    "strike_type": "Seed-pan (ZRA) strike: seed slurry (mikroočko) grown into seed massecuite for the A pans (plant Q&A 2026-08-12; DeltaV 'Udaje ZRA' screen; docs/sered/notes_plant_dcs_qa_photos.md). Earlier unsourced value 'A-product (assumed)' withdrawn 2026-11-03.",
     "campaign_end_dates_sk": "10.2 alebo 11.2 (ideal 10.2)",
     "campaign_end_dates_en": "Campaign ends Feb 10 or Feb 11; operator-preferred end Feb 10, 2026",
     "operator_raw_note": "Kampaň konči 10.2 11.2 ideal nazbierať fo 10.2"
@@ -170,7 +170,7 @@
       "subphase": "first_crystals_visible",
       "label_en": "12:30 — stabilization; bubbles again; seeding (graining) with limited steam; first crystals visible as very small inclusions",
       "qualifier": "exact",
-      "note": "GRAINING POINT — operationally critical. Pipeline KPI snapshots should mark this as t=0 of the growth phase. Crystals at this moment are seed-magma (~50 µm).",
+      "note": "GRAINING POINT — operationally critical. Pipeline KPI snapshots should mark this as t=0 of the growth phase. Seed injected here is slurry (mikroočko): Mastersizer Dv50 6.8 µm, D[4;3] 8.7 µm (docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf).",
       "wallclock": "2026-02-04T12:30:00",
       "t": 4880.5,
       "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť pb2-rve kryštaliky (velmi male inkluzie)",
@@ -181,7 +181,7 @@
       "phase": "boiling",
       "label_en": "12:39 — boiling (controlled growth)",
       "qualifier": "exact",
-      "note": "Steady-state growth phase begins (9 min after seeding). Expected crystal size growth from ~50 µm seeds toward end-of-strike target (~500–800 µm for A-product).",
+      "note": "Steady-state growth phase begins (9 min after seeding). Crystals grow from the ~7–10 µm slurry; on this pan, microscope samples reached ~0.3–0.8 mm by end of strike (ZRA run 2026-10-30, datasets/2026-10-30 08-45-33.json; different day, hand-picked crystals, so a rough range).",
       "wallclock": "2026-02-04T12:39:00",
       "t": 5420.5,
       "label": "12:39 navaranie"
@@ -311,7 +311,7 @@
     },
     {
       "phase": "boiling",
-      "note": "Main growth phase, ~3 hours. Median crystal size grows from ~50 µm to ~500–800 µm if A-product.",
+      "note": "Main growth phase, ~3 hours. Crystals grow from ~7–10 µm slurry to roughly 0.3–0.8 mm (ZRA microscope run 2026-10-30; rough range).",
       "t_start": 5420.5,
       "t_end": 16340.5
     },
