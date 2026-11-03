@@ -1,126 +1,145 @@
-% Section 4 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+% Section 4. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft). Numbers: scripts/rerun_paper_numbers.py
+% (rows 15-18, 21-23, 48-51; docs/optics/rerun_results.md); figures: python -m optics.plots, python -m optics.measure.
+% Claim changes: papers/cep/CLAIM_CHANGES.md.
 \section{Defocus structure and sharpness profile \emph{(RQ2)}}\label{sec:defocus}
 
 \subsection{Circle of confusion}\label{sec:coc}
 
-For a lens focused at $d_\mathrm{focus}$ with aperture $A = f / N$, the circle of confusion (CoC) diameter at the
-sensor for an object at $d_o$ is, by similar triangles applied to the thin-lens equation \citep{Pentland1987,Pertuz2013}:
+For a lens focused at $d_\mathrm{focus}$ with aperture diameter $f / N$, the geometric circle-of-confusion (CoC)
+diameter at the sensor for an object at $d_o$ follows from similar triangles and Eq.~\eqref{eq:thinlens}
+\citep{Pentland1987}:
 \begin{equation}\label{eq:coc}
-c(d_o) = \frac{f^2}{N (d_\mathrm{focus} - f)} \cdot \frac{|d_o - d_\mathrm{focus}|}{d_o}.
+c(d_o) = K \, \frac{|d_o - d_\mathrm{focus}|}{d_o}, \qquad K = \frac{f^2}{N (d_\mathrm{focus} - f)}.
 \end{equation}
-The behaviour is \textbf{asymmetric in $\boldsymbol{d_o}$}: blur grows fast on the near side (both
-$|d_o - d_\mathrm{focus}|$ increases and the $1/d_o$ factor increases) and saturates at
-$c_\infty = f^2 / (N \cdot (d_\mathrm{focus} - f))$ as $d_o \to \infty$. In the reciprocal variable $u = 1/d_o$ the
-geometry is \textbf{linear and symmetric} about $u_\mathrm{focus}$:
+The blur is asymmetric in $d_o$: it grows faster on the near side and saturates at $c_\infty = K = 38.12$~mm (F/1.6)
+as $d_o \to \infty$. In the reciprocal variable $u = 1/d_o$ it is linear and symmetric about $u_\mathrm{focus}$,
 \begin{equation}\label{eq:cocu}
-c(u) = \frac{f^2\, d_\mathrm{focus}}{N (d_\mathrm{focus} - f)} \cdot |u - u_\mathrm{focus}|.
+c(u) = K \, d_\mathrm{focus} \, |u - u_\mathrm{focus}|,
 \end{equation}
+so a blur diameter alone does not tell whether an object lies in front of or behind the focused plane
+\citep{SellentFavaro2014}; \secref{sec:sizing} addresses this ambiguity. Close to focus,
+$c \approx K |\delta| / d_\mathrm{focus}$ with $\delta = d_o - d_\mathrm{focus}$.
 
 \begin{figure*}
 \centering
 \includegraphics[width=0.85\textwidth]{02_coc_vs_distance}
-\caption{\textbf{How does blur grow as crystals move off the focused plane?} \textbf{Left:} geometric CoC vs $d_o$,
-in \emph{object-space coordinates} --- the curve is asymmetric (blur grows fast on the near side, saturates at the
-hyperfocal limit on the far side). \textbf{Right:} same data plotted against reciprocal distance $u = 1/d_o$ ---
-\textbf{exactly symmetric and linear} about the focus point $u_\mathrm{focus} = 1/55.1$~mm$^{-1}$. This
-reciprocal-space symmetry is the algebraic origin of the front/back ambiguity that \secref{sec:sizing} addresses with
-a Bayesian prior.}\label{fig:coc}
+\caption{\textbf{How does blur grow away from the focused plane?} Geometric CoC at F/1.6 against object distance
+(left), asymmetric in $d_o$, and against reciprocal distance $u = 1/d_o$ (right), symmetric and linear about
+$u_\mathrm{focus}$. The 1-pixel line is one geometric-mean PAL sample, 6.5~\um{} on the sensor.}\label{fig:coc}
 \end{figure*}
 
-\subsection{Sharpness profile under Gaussian PSF}\label{sec:psf}
+\subsection{Sharpness profile under a Gaussian PSF}\label{sec:psf}
 
-Approximating the defocus PSF as a Gaussian with $\sigma \approx c / 2$
-\citep{Pentland1987,SubbaraoSurya1994,Pertuz2013} gives the OTF
-\begin{equation}\label{eq:otf}
-|H(u)|^2 = \exp(-4 \pi^2 \sigma^2 u^2).
-\end{equation}
-A Laplacian-variance sharpness measure (and Tenengrad, Brenner --- all high-pass kernels) integrates the OTF weighted
-by $u^4$:
+We approximate the defocus point-spread function by a Gaussian whose width is proportional to the blur diameter,
+$\sigma = k c$, where the constant $k$ depends on the camera \citep{Pentland1987,SubbaraoSurya1994}. We take
+$k = 1/2$; a uniform disk of diameter $c$ would give $c/4$ per axis. The constant sets the width of the sharpness
+peak, not its asymptotic exponent. The optical transfer function is then $|H(\nu)|^2 = \exp(-4 \pi^2 \sigma^2 \nu^2)$
+at spatial frequency $\nu$. A Laplacian-type focus measure \citep{Pertuz2013} weights the image spectrum by $\nu^4$;
+for a one-dimensional integral over a texture with a flat spectrum,
 \begin{equation}\label{eq:sharpness}
-S(\sigma) \propto \int_0^{u_N} |H(u)|^2 \, u^4 \, \mathrm{d}u \approx (\sigma^2 + \sigma_0^2)^{-5/2},
+S(\sigma) \propto \int_0^{\infty} e^{-4 \pi^2 (\sigma^2 + \sigma_0^2) \nu^2} \, \nu^4 \, \mathrm{d}\nu
+\propto (\sigma^2 + \sigma_0^2)^{-5/2},
 \end{equation}
-with the finite floor $\sigma_0$ coming from the sensor Nyquist limit and the diffraction term
-$\sigma_\mathrm{diff} \approx 0.42 \, \lambda \, N$ (\citealp[\S\,6.4]{Goodman2017} --- Gaussian fit to the Airy
-PSF; \citealp[\S\,11]{Smith2008}). Composed with $c(d_o)$ from \secref{sec:coc} the result is a \textbf{power-law cusp
-in object distance}: extremely tall and narrow at the focused plane, asymmetric in $d_o$, symmetric in $1/d_o$ ---
-\textbf{not a Gaussian and not a gamma}.
+where the floor $\sigma_0$ combines, in quadrature, half a geometric-mean PAL sample and the diffraction width
+$\sigma_\mathrm{diff} \approx 0.42 \lambda N$, the Gaussian approximation of the paraxial Airy pattern
+$\sigma \approx 0.21 \lambda / \mathrm{NA}$ with $\mathrm{NA} \approx 1/(2N)$ \citep{ZhangZerubia2007}. The exponent
+$5$ is a property of these assumptions, not of the optics alone. The same integral taken in two dimensions over a
+texture whose power spectrum falls as $|\nu|^{-\beta}$ gives $(\sigma^2 + \sigma_0^2)^{-(6 - \beta)/2}$. Composed with
+Eq.~\eqref{eq:coc}, $S$ is a cusp in object distance: tall and narrow at the focused plane, with tails falling as
+$|\delta|^{-5}$ once $\sigma \gg \sigma_0$, and not a Gaussian (\figref{fig:sharpness}).
 
 \begin{figure*}
 \centering
 \includegraphics[width=\textwidth]{03_sharpness_vs_distance}
-\caption{\textbf{Is the defocus sharpness profile really a power law, not a Gaussian?} Sharpness vs defocus
-$\delta = d_o - d_\mathrm{focus}$, plotted in \textmu m because the FWHM at F/1.6 is only 4.9~\um. Three panels make
-the power-law identity testable visually. \textbf{Left (linear $y$, $\pm 100$~\textmu m):} the Gaussian-PSF model
-(blue) and diffraction-+-sensor-floor model (orange) coincide with a FWHM-matched Gaussian (red dashed) at the very
-peak but the actual cusp is \emph{taller and narrower}. \textbf{Middle (log $y$, $\pm 100$~\textmu m):} the Gaussian
-reference falls off as an inverted parabola, while the actual sharpness has obviously heavier tails. \textbf{Right
-(log--log of $|\delta|$):} the model curves align with the dashed \textbf{slope-$-5$ reference line} --- visual proof
-that the asymptote is $S \propto \delta^{-5}$ (equivalently $S \propto c^{-5}$ since $c \propto |\delta|$ for
-$\delta \ll d_\mathrm{focus}$), the analytical prediction. The diffraction-plus-sensor-floor term (orange) only
-departs from the pure power law at the smallest $\delta$, where the floor terms dominate.}\label{fig:sharpness}
+\caption{\textbf{What shape does the model give the sharpness profile?} Modelled sharpness (Eq.~\ref{eq:sharpness})
+against defocus $\delta = d_o - d_\mathrm{focus}$ at F/1.6, with the floor set by one PAL sample.
+\textbf{Left} (linear): the peak has a full width at half maximum of 10.5~\um{} of object depth; a Gaussian of the
+same FWHM is shown dashed. \textbf{Middle} (log $y$): the Gaussian falls off as a parabola, the model has heavy
+tails. \textbf{Right} (log--log in $|\delta|$): the model tends to the slope of the $-5$ reference line as $|\delta|$
+grows, which restates the model's asymptote and is not a measurement. The diffraction term changes the curve
+only near $\delta = 0$.}\label{fig:sharpness}
 \end{figure*}
 
 \subsection{Depth of field}\label{sec:dof}
 
-Stopping the lens down increases the depth window over which CoC stays under any chosen pixel threshold.
-\figref{fig:dof} shows the DoF envelope for F-numbers F/1.6 through F/16 at the case-study focus.
-
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{04_dof_envelope}
-\caption{\textbf{How thick is the in-focus slice at each aperture?} Geometric CoC vs object distance for F/1.6
-(current), F/2.8, F/4, F/8, F/16. At the verified F/1.6 the in-focus slice (CoC $\le 1$ pixel) spans only
-$\pm$\textbf{4.2~\textmu m} (8.4~\um{} in total), about the size of a median seed-slurry crystal
-($\mathrm{Dv}(50) = 6.81$~\um, \citealp{Mastersizer2025}). Stopping down to F/16 widens it to $\pm 42$~\um{}
-($10\times$). \textbf{This is the single most operationally important plant-side recommendation from the optics
-analysis}: the depth-aware pipeline of \S\S\,\ref{sec:detection}--\ref{sec:sizing} cannot extract 3-D structure
-until the iris is closed enough to admit it.}\label{fig:dof}
-\end{figure}
-
-\subsection{Empirical sharpness distribution --- and a contamination cautionary tale}\label{sec:empirical}
-
-Code in \code{src/optics/measure.py} aggregates the per-pixel \texttt{log1p(Laplacian\textsuperscript{2})} histogram
-across 120 sampled frames and fits a power law to the 50--95\,\% quantile band. The measurement is \emph{highly
-sensitive} to any sharp-edged contamination in the frame; two successive iterations of the crop revealed this
-(\tabref{tab:crop}).
+The in-focus slice is the depth range in which the CoC stays below one resolution element. For both recording types
+that element is the PAL sample (\secref{sec:chain}), 6.53~\um{} on the sensor as a geometric mean; a 1080p clip
+pixel (2.92~\um) is an upscaled fraction of a sample and does not resolve finer detail. \tabref{tab:dof} gives the
+slice for both definitions, so that the effect of the choice is visible. With the PAL sample, the in-focus slice at
+F/1.6 is $\pm 9.4$~\um, and stopping down to F/16 widens it tenfold to $\pm 94$~\um, since the slice grows in
+proportion to $N$ (Eq.~\ref{eq:coc}; \figref{fig:dof}). The iris is the only lever of the installed hardware on the
+slice thickness; it trades the slice against light and diffraction. Depths here are in air-equivalent thin-lens
+coordinates; beyond the inner glass face, a paraxial depth in a medium of index $n_s$ is $n_s$ times longer.
 
 \begin{table}
 \centering\tabfont
-\caption{Fitted sharpness tail exponent $\alpha$ for the three crop iterations.}\label{tab:crop}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.42\columnwidth}rr@{}}
+\caption{In-focus half-slice (CoC $\le$ one resolution element) and sharpness FWHM, in \textmu m of object depth
+(\texttt{scripts/rerun\_paper\_numbers.py}, rows 16--18 and 21--23). The PAL sample is the physical resolution element;
+the clip-pixel column shows what an upscaled pixel would give.}\label{tab:dof}
+\begin{tabular}{@{}lrr@{}}
 \toprule
-Iteration & Crop & $\alpha$ fit & $\Delta$ vs theory ($\alpha = 5$) \\
+Quantity & PAL sample (6.53~\um) & clip pixel (2.92~\um) \\
 \midrule
-v0.1 & none & 5.36 & $+7.2$\,\% \\
-v0.2 & top 55 + bottom 120 (DVR overlay only) & 4.57 & $-8.6$\,\% \\
-\textbf{v0.3} & \textbf{add left 50 + right 70 (analogue-aspect black bars)} & \textbf{4.88} & $\boldsymbol{-2.4}$\,\%
-\\
+half-slice, F/1.6 & $\pm 9.4$ & $\pm 4.2$ \\
+half-slice, F/16 & $\pm 94$ & $\pm 42$ \\
+sharpness FWHM, F/1.6 & 10.5 & 4.5 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The first iteration's apparent agreement (within 7\,\%) was a \emph{false positive}: the DVR datetime glyphs are
-infinitely sharp digital edges and steepened the tail. The second iteration removed those but left the
-\textbf{analogue-aspect black bars on the left and right of the frame}, whose hard transition at the right edge
-produced a Laplacian$^2$ spike of ${\sim}110$ (vs ${\sim}10$ for typical crystal-edge pixels). This pushed $\alpha$
-below theory in the wrong direction. The third iteration crops those bars as well, and the agreement is now
-\textbf{within 2.4\,\%} of the theoretical $\alpha = 5.0$ --- close enough that the residual discrepancy is plausibly
-explained by the diffraction + sensor floor flattening the very-peak of the cusp. The honest qualitative reading is
-unchanged: \emph{the sharpness distribution is a heavy-tailed power-law, not a Gaussian or gamma}.
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{04_dof_envelope}
+\caption{\textbf{How thick is the in-focus slice at each aperture?} Geometric CoC against object distance for the
+engraved iris stops F/1.6, F/2, F/4, F/8 and F/16. Dotted and dashed lines: one and two PAL samples (6.5 and
+13.1~\um{} on the sensor). At F/1.6 the CoC stays within one sample over $\pm 9.4$~\um; at F/16 over
+$\pm 94$~\um.}\label{fig:dof}
+\end{figure}
+
+\subsection{Empirical sharpness distribution and frame contamination}\label{sec:empirical}
+
+\code{optics.measure} computes a per-pixel sharpness, $\log(1 + G * (\nabla^2 I)^2)$ with $G$ a $15 \times 15$ Gaussian
+kernel, on 120 frames of the case-study clip (every fifth frame), histograms it, and fits a straight line in log--log
+coordinates to the density over the band between the 50th and 95th percentiles of its cumulative histogram. The
+negative slope $\alpha$ is an empirical descriptor of how fast the density falls past the mode. It is highly
+sensitive to the sharp digital and pillarbox edges of \secref{sec:recording} (\tabref{tab:crop}): with no crop
+$\alpha = 5.36$, removing the DVR display alone gives 4.57, and removing the pillarbox as well gives 4.88 (fixed
+crop) or 4.90 (automatic crop). The two crops that remove both sources agree within 0.4\,\%, whereas the incomplete crops
+spread $\alpha$ over 4.57--5.36. Sharp-edged frame contamination must therefore be removed before any sharpness
+statistic is interpreted.
+
+\begin{table}
+\centering\tabfont
+\caption{Fitted slope $\alpha$ of the per-pixel sharpness density for four crops of the case-study clip
+(\texttt{scripts/rerun\_paper\_numbers.py}, rows 48--51).}\label{tab:crop}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Crop & $\alpha$ \\
+\midrule
+none & 5.36 \\
+DVR display only (top 55, bottom 120 rows) & 4.57 \\
+fixed crop, display and pillarbox ($1800 \times 905$~px) & 4.88 \\
+automatic crop, display and pillarbox ($1826 \times 906$~px) & 4.90 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We do not read $\alpha$ as a test of the exponent in Eq.~\eqref{eq:sharpness}. That equation describes the sharpness of
+an image region as a function of its blur, whereas $\alpha$ describes the distribution over pixels of a smoothed,
+log-compressed statistic at unknown and mixed depths. No relation between the two exponents has been derived. Under
+the model, a population spread uniformly in depth with $S \propto |\delta|^{-5}$ would give a density of $S$ falling
+as $S^{-6/5}$, and a density of $\log S$ falling exponentially rather than as a power law. The closeness of the
+cropped $\alpha$ to 5 is therefore not evidence for the model. Directly supported are the crop sensitivity above and
+the shape in \figref{fig:measured}: a single mode followed by a shoulder of sharp pixels at a density far below
+the peak.
 
 \begin{figure*}
 \centering
 \includegraphics[width=0.85\textwidth]{08_measured_vs_theory}
-\caption{\textbf{Does the empirical sharpness distribution match the theoretical power-law tail?} \textbf{Left:}
-empirical pixel-sharpness distribution from the case-study video after full crop (DVR overlay + analogue-aspect black
-bars), with the power-law fit $\alpha = 4.88$ superimposed (red dashed) on the upper-half tail. \textbf{Right:}
-theoretical density under a uniform-depth distribution, showing the expected cusp shape. The cropped exponent matches
-theory ($\alpha = 5.0$) to within ${\sim}2.4$\,\% --- quantitatively confirming the Gaussian-PSF + diffraction-floor
-model on real data, after the two crop iterations.}\label{fig:measured}
+\caption{\textbf{What does the measured sharpness distribution look like?} \textbf{Left:} per-pixel sharpness
+density of the case-study clip after the automatic crop, with the fitted slope $\alpha = 4.90$. The fit band (50th
+to 95th percentile) lies on the decay just right of the mode; the dashed line extends the fit over the higher bins
+for display and does not describe them. \textbf{Right:} the model's density for depths uniform over $\pm 5$~mm
+about focus. Because the in-focus slice is far thinner than that range, the predicted density collapses at zero
+sharpness and cannot be compared with the measurement.}\label{fig:measured}
 \end{figure*}
-
-This episode illustrates a \emph{failure mode of pipeline design}: any sharp-edged contamination in the frame (DVR
-text overlays, analogue-aspect black bars, occasional dust on the sensor) can falsify apparent agreement with theory
-in either direction. The audit-trail discipline (\secref{sec:discussion}) is what surfaces these --- both the
-pre-DVR-crop $\alpha = 5.36$ and the pre-side-crop $\alpha = 4.57$ were ``agreements'' that turned out to be
-contamination artefacts on closer inspection.

@@ -1,91 +1,147 @@
-% Section 2 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+% Section 2. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft). Every number is a value of
+% configs/camera_100.toml or an output of optics.scale_chain, scripts/rerun_paper_numbers.py,
+% scripts/check_clip_overlap.py or scripts/microscope_summary.py. Claim changes: papers/cep/CLAIM_CHANGES.md.
 \section{Hardware and recording setup}\label{sec:hardware}
 
 \subsection{Plant and vessel}\label{sec:plant}
 
 Camera 100 is installed at the Slovensk\'e cukrovary sugar plant in Sere\v{d}, Slovakia, on the \textbf{seed pan}:
-the graining vacuum pan, designated ZRA in the plant control system (Slovak \emph{o\v{c}kovac\'i varostroj};
-Slovensk\'e cukrovary plant Q\&A, 2026-08-12; DeltaV ``Udaje ZRA'' screen; \citealp{SlovenskeCukrovary2026};
-English--Slovak glossary in Appendix~\ref{app:glossary}). The seed pan is seeded with milled-sugar slurry
-(\emph{mikroo\v{c}ko}) and produces the seed massecuite (\emph{o\v{c}kovacia cukrovina}) that is dosed into the A
-vacuum pans, where the product is boiled (operator A.~Fedor, pers.\ comm., 2026-11-03); the C stage is likewise
-started from seed massecuite (plant Q\&A). The seed slurry's crystal-size distribution is independently characterised
-by laser-diffraction granulometry (Mastersizer, 2-propanol dispersant; see \secref{sec:csd} preface and
-\citealp{Mastersizer2025}) with $D[3;2] = 3.95$~\um, $D[4;3] = 8.71$~\um{} and
-$\mathrm{Dv}(10) / \mathrm{Dv}(50) / \mathrm{Dv}(90) = 1.56 / 6.81 / 18.5$~\um. Vessel-level dimensions, agitation
-regime, and operating temperature of the seed pan have not yet been independently audited and are deferred to a
-follow-up revision; the camera-side hardware (\secref{sec:camera}) is operator-verified.
+the graining vacuum pan designated ZRA in the plant control system (Slovak \emph{o\v{c}kovac\'i varostroj};
+plant Q\&A, 2026-08-12, and DeltaV ``Udaje ZRA'' screen, \citealp{SlovenskeCukrovary2026}; English--Slovak
+glossary in Appendix~\ref{app:glossary}). The seed pan is seeded with milled-sugar slurry (\emph{mikroo\v{c}ko})
+and produces the seed massecuite (\emph{o\v{c}kovacia cukrovina}) that is dosed into the A vacuum pans (operator
+A.~Fedor, pers.\ comm., 2026-11-03). The pan is mechanically stirred in normal operation (stirrer current tag
+EI1004), which is the physical basis of the homogeneous-slurry assumption of \secref{sec:homog}.
 
-The seed pan is mechanically stirred (stirrer current tag EI1004) in normal operation, which is the physical basis on
-which we invoke the homogeneous-slurry assumption of \secref{sec:homog}: the stirred massecuite continually refreshes
-the slab actually imaged through the sight glass (\secref{sec:slab}), so the millimetre-thin slice is a
-near-representative sample of the bulk population. A stage-specific audit of the recirculation rate vs.\ residence
-time is on the follow-up list.
+Two independent size references exist for this stage. A laser-diffraction analysis of a seed-slurry sample
+(Mastersizer, 2-propanol dispersant; sampled 2025-01-16, measured 2025-03-04 by the AGRANA central laboratory,
+\citealp{Mastersizer2025}) gives $D[3;2] = 3.95$~\um, $D[4;3] = 8.71$~\um{} and
+$\mathrm{Dv}(10) / \mathrm{Dv}(50) / \mathrm{Dv}(90) = 1.56 / 6.81 / 18.5$~\um. Operator microscope photographs of
+the ZRA run of 2026-10-30, transcribed from their burned-in measurement overlays into
+\code{datasets/microscope_annotations.csv} (54 photographs; \code{scripts/microscope_summary.py}), give 10--19~\um{}
+for the slurry, and in the first strike a median measured chord that grows from 29~\um{} two minutes after seeding
+to 483~\um{} after 122~min. These are operator-picked crystals, not a size distribution, read once from the
+overlays; they bound the sizes the camera has to resolve over a strike, from a few micrometres to almost a
+millimetre.
 
-The camera observes the slurry through a circular borosilicate sight glass marked \code{DIN 8902}, mounted on an
-8-bolt PN10 flange (\O150~mm / DN150, 20~mm thick, both measured on site 2026-09-07). The lens stack is horizontal,
-with transmitted illumination from an LED inside the vessel on the opposite side of the slurry. Full hardware audit
-and photographs are in the project's lens documentation (\code{docs/lens/README.md}).
+The camera views the slurry through a circular sight glass on an 8-bolt flange (photograph,
+\code{docs/lens/README.md}), with a diameter of ${\approx}\,150$~mm and a thickness of 20~mm (plant statements).
+The worn stamp reads ``DIN 890\ldots''. DIN~8902 \citep{DIN8902} would make it soda-lime glass, whereas the optical
+model assumes the borosilicate index $n_g = 1.47$ (\citealp{SchottBorofloat33}; \secref{sec:shift}). The lens axis
+is horizontal, and a lamp inside the vessel, facing the glass, backlights the slurry (operator and photographs), so
+crystals appear as dark outlines on a bright field.
 
 \subsection{Camera and lens}\label{sec:camera}
 
-The camera is a \textbf{Hanwha Vision HCB-6000}, an analogue HD box camera with a 1/2.8\,in progressive-scan CMOS
-sensor (Sony IMX307/IMX327 die, identified from the datasheet total-pixel count $1945 \times 1097$;
-$5.57 \times 3.13$~mm active area, $1920 \times 1080$~px, 2.9~\um{} pitch, 30~fps, AHD/TVI/CVI/CVBS-PAL output). The
-lens is a \textbf{Fujinon HF35HA-1B}, a C-mount machine-vision lens with $f = 35$~mm, F-number range F/1.6 -- F/22,
-image-format 2/3\,in (\O~11~mm circle), minimum object distance 0.25~m, back focal distance 15.03~mm in air, manual
-iris with lock screws. Operator measurement on site (2026-06-15, corrected 2026-09-07) yielded an extension tube of
-$\boldsymbol{e = 60}$~\textbf{mm} between the lens C-mount thread and the camera body, an F-number setting of
-\textbf{F/1.6} (wide open), and a lens-front-to-glass air gap of $\boldsymbol{a = 20}$~\textbf{mm}. These numbers
-together fix the working distance $d_\mathrm{focus} = 55.1$~mm and the scale 1.66~\umpx{} (\secref{sec:thinlens});
-they are used throughout this paper.
+The installed camera body is labelled ``ADEMCO VIDEO''. It is an analogue monochrome PAL box camera: its rear panel
+carries the switches ALC, V-PHASE, INT/L-L, AI/AES, VIDEO/DD, BLC and AGC, a BNC video output and a 12~VDC/24~VAC
+supply (plant photographs, 2026-08-10). The model sticker has not been read. The best-matching model, to be
+confirmed, is an Ademco ACM570E-class camera with a 1/3\,in CCD of $752 \times 582$ cells of $6.50 \times 6.25$~\um;
+the alternative is the ACM380E class with $500 \times 582$ cells of $9.8 \times 6.3$~\um. Both belong to one Ademco
+camera family \citep{AdemcoACM380E}, but the available manual gives only the NTSC-type cell counts, so the PAL cell
+sizes above are our estimates. The Hanwha HCB-6000 named in an earlier supplier quotation \citep{PolzQuote2025} is a
+colour CMOS camera without these switches and is ruled out. Reading the model sticker, or obtaining the PAL
+datasheet of the confirmed model, would fix the cell size and the CCD clock (\secref{sec:budget}).
 
-\begin{quote}
-\textbf{Revision note (2026-09-07).} Geometry and all detector outputs (CSD, KPI tables) in this manuscript were
-rerun at the measured $e = 60$~mm / $t = 20$~mm / $a = 20$~mm. The dent-sharpness figure (\figref{fig:dents}) and
-its $c = 5.8$~\um{} calibration predate the correction; its generating script is not in the repository.
-\end{quote}
+The lens is a Fujinon HF35HA-1B (lens label, photographed), a C-mount machine-vision lens with $f = 35$~mm, an
+F-number range of F/1.6--F/22, a minimum object distance of 0.25~m, a back focal distance of 15.03~mm and a body
+length of 29.5~mm at infinity focus \citep{FujinonHF35HA1B}. An extension tube between lens and camera body brings
+the working distance into the macro range. \tabref{tab:inputs} lists the geometry with its source class as recorded
+in \code{configs/camera_100.toml}. The tube length, the air gap, the glass thickness and the F-number are approximate
+plant statements, not caliper readings; the focus-helicoid travel is our estimate. Whether the stated tube length
+includes a 5~mm CS-to-C adapter ring is open: the Ademco manual lists a CS or C mount with a C-mount adapter
+supplied \citep{AdemcoACM380E}.
 
-\subsection{Recording protocol and frame conditioning}\label{sec:recording}
+\begin{table}
+\centering\tabfont
+\caption{Inputs of the optical and sampling model with their source class (\texttt{configs/camera\_100.toml}).
+\emph{Plant}: approximate statement of plant staff; \emph{estimate}: our estimate with a stated basis;
+\emph{assumed}: chosen without evidence.}\label{tab:inputs}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Input & Value & Class and basis \\
+\midrule
+focal length $f$ & 35~mm & photo (lens engraving) \\
+F-number $N$ & 1.6 & plant (``if I read it correctly'') \\
+iris stops & 1.6, 2, 4, 8, 16 & photo (iris ring) \\
+extension tube $e$ & ${\approx}\,60$~mm & plant (``$\approx 6$~cm'') \\
+focus-helicoid travel $x$ & 1~mm & estimate (no distance scale) \\
+air gap, lens to glass, $a$ & ${\approx}\,20$~mm & plant (``$\approx 2$~cm'') \\
+glass thickness $t$ & 20~mm & plant \\
+glass index $n_g$ & 1.47 & assumed (borosilicate) \\
+CCD cell, x $\times$ y & $6.50 \times 6.25$~\um & estimate (candidate model) \\
+CCD clock & 14.1875~MHz & estimate (candidate model) \\
+DVR sampling & 13.5~MHz & estimate (BT.601 rate) \\
+PAL raster & $720 \times 576$ & measured (recording) \\
+1080p stretch, x $\times$ y & $2.677 \times 1.875$ & measured (\secref{sec:chain}) \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-The case-study video is \code{2026-02-05 10-36-32.mp4} (1568 frames, 30~fps, $1920 \times 1080$~px). The recording
-carries \textbf{two distinct sources of frame contamination}, both of which inject artificially sharp edges that
-overwhelm any per-pixel sharpness statistic computed on the raw frame (\secref{sec:empirical}):
+\subsection{Signal chain: PAL camera, DVR and screen recordings}\label{sec:chain}
+
+The picture reaches the recorder as an analogue PAL line, so the pixel grid of a recording is set by the recorder
+and not by the sensor. The digital video recorder (DVR) samples each line at the ITU-R BT.601 luma rate of 13.5~MHz
+into 720 samples and keeps 576 lines \citep{ITUBT601}. One recorded sample thus spans a CCD cell width times the
+ratio of the CCD clock to the DVR rate, $6.50~\text{\textmu m} \times 14.1875 / 13.5 = 6.831$~\um{} on the sensor,
+and one line spans one cell row, 6.250~\um{} (\code{python -m optics.scale_chain}). The resulting sample aspect,
+1.093, is close to the PAL pixel aspect ratio $59/54$. Where the digitised window starts within the analogue line
+is known only to about $\pm 2$\,\%, which enters the budget of \secref{sec:budget}.
+
+Two kinds of recording exist. The long recording \code{2026-02-04 11-08-51.mp4} is this $720 \times 576$ raster as
+stored by the DVR. The three $1920 \times 1080$ clips dated \code{2026-02-05} are screen recordings of the DVR
+monitor output: the PAL picture is rescaled and pillarboxed, so the clips add no resolution. We measured the
+rescaling without a datasheet from the DVR's on-screen display. The date and \code{CH01} glyphs are drawn into both
+kinds of recording; locating them in each clip over their PAL separation (115 samples, 503 lines) gives a stretch
+of 2.6773 clip pixels per PAL sample along a row (27 fits on three clips, range 2.6752--2.6795) and 1.8755 per line
+down a column, which equals $1080/576$ within 0.03\,\%. The row stretch is not $1920/720 = 2.667$. On the sensor, a
+clip pixel therefore spans $2.552 \times 3.333$~\um. It covers 1.306 times more slurry vertically than horizontally,
+and three clip pixels along a row are about one PAL sample.
+
+An image-content check is weaker. The ratio of the widths of the slurry-texture power spectrum along the two axes
+of the PAL recording gives a sample aspect of 1.002, 1.065 and 1.132 in three spatial-frequency bands, against the
+predicted 1.093. It brackets the prediction but cannot pin the aspect better than about $\pm 10$\,\%, so we use it
+only as a consistency check. A direct registration of PAL and clip frames is not possible: feature matching finds no
+frame of the long PAL recording in the clip \code{10-37-26} (\code{scripts/check_clip_overlap.py}).
+
+\subsection{Recording and frame conditioning}\label{sec:recording}
+
+The case-study recording is the clip \code{2026-02-05 10-36-32.mp4} (1568 frames, 30~fps, $1920 \times 1080$~px).
+Its date is uncertain. An operator statement places the clips on 2026-02-04, whereas the file creation times and the
+absence of shared frames with the 2026-02-04 PAL recording point to 2026-02-05. The strike phase and the time since
+seeding of the clip are therefore unknown, and we attach no growth stage to it.
+
+The clip carries two sources of artificially sharp edges, which dominate any per-pixel sharpness statistic of the
+raw frame (\secref{sec:empirical}):
 \begin{enumerate}
-\item \textbf{A burnt-in DVR overlay} --- a digital \code{YYYY-MM-DD HH:MM:SS} timestamp band in the top
-${\sim}45$ rows and a \code{CH01} channel label in the bottom ${\sim}100$ rows. These are \emph{infinitely sharp
-digital glyphs}.
-\item \textbf{Analogue-aspect black bars} --- the leftmost ${\sim}40$ columns and the rightmost ${\sim}55$ columns
-are pitch black (the analogue capture chain pads 4:3 source into a 16:9 frame). The transition between the black
-bar and the live image produces a Laplacian$^2$ value of ${\sim}110$ (vs ${\sim}10$ for typical crystal-edge pixels)
---- an order of magnitude above any real signal.
+\item the DVR on-screen display: a date and time band at the top and a \code{CH01} label at the bottom, both drawn
+as digital glyphs;
+\item the pillarbox: the picture spans columns 42.4 to 1869.5--1878.0 (half-level edges), with black columns on
+either side. The left edge is the DVR's hard mask. The right edge is the analogue end of the line; it moves by about
+8 clip pixels (3 PAL samples) between clips and within this clip (\code{python -m optics.scale_chain}).
 \end{enumerate}
-
-Both are removed by a single conservative frame crop: \code{CropBox(top=55, bottom=120, left=50, right=70)} from
-\code{optics.video_io}. The cropped frame retains $1800 \times 905$~px $\approx 78$\,\% of the original frame area.
-The crop box is one parameter; tune per recording if the DVR layout or analogue-aspect padding differs.
-
-\figref{fig:frames} shows the raw and cropped first frame side by side. Every figure below uses the cropped variant.
+A rectangular crop removes both. The pipeline uses an automatic crop (\code{resolve_crop} in
+\code{optics.video_io}; $1826 \times 906$~px, 80\,\% of the frame); the fixed crop
+\code{CropBox(top=55, bottom=120, left=50, right=70)} keeps $1800 \times 905$~px (79\,\%). Both are analysis
+choices, and because the right picture edge moves, either must leave a margin of several clip pixels.
+\figref{fig:frames} shows the raw and the cropped first frame.
 
 \begin{figure}
 \centering
 \begin{subfigure}{\columnwidth}
 \centering
 \includegraphics[width=\linewidth]{00_first_frame}
-\caption{Raw first frame, $1920 \times 1080$. Top: DVR timestamp band. Bottom: \texttt{CH01} label. Left \& right:
-analogue-aspect black bars.}\label{fig:frames-raw}
+\caption{Raw first frame, $1920 \times 1080$~px: DVR date band (top), \texttt{CH01} label (bottom), pillarbox
+(left and right).}\label{fig:frames-raw}
 \end{subfigure}
 
 \medskip
 \begin{subfigure}{\columnwidth}
 \centering
 \includegraphics[width=\linewidth]{00_first_frame_cropped}
-\caption{\textbf{What does the pipeline's input look like after frame conditioning?} Same frame after the two-step
-crop removes both the DVR overlay and the analogue-aspect black bars ($1800 \times 905$~px $\approx 78$\,\% of the
-raw frame area). The field is filled with sucrose crystals at varying defocus, with one crystal in focus near the
-centre and progressively defocused crystals toward the periphery --- \emph{and no contamination sources left}.
-Compare \secref{sec:empirical} for the quantitative impact of the crop on the measured Laplacian-variance $\alpha$
-exponent.}\label{fig:frames-cropped}
+\caption{The same frame after the fixed crop ($1800 \times 905$~px): backlit slurry with dark crystal outlines at
+varying defocus.}\label{fig:frames-cropped}
 \end{subfigure}
-\caption{Raw and cropped first frame of the case-study video.}\label{fig:frames}
+\caption{\textbf{What reaches the pipeline?} First frame of the case-study clip before and after removing the DVR
+display and the pillarbox.}\label{fig:frames}
 \end{figure}
