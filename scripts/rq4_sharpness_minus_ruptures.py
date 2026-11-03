@@ -38,6 +38,11 @@ import numpy as np
 from scipy import stats
 
 from annotator.types import LayerConfig
+from optics.config import (
+    detection_area_px,
+    lens_from_config_and_video,
+    load_camera,
+)
 from optics.disambiguate import detect_observations
 from optics.video_io import DEFAULT_CROP
 
@@ -169,13 +174,16 @@ def _run_window(
     span = end_frame - start_frame
     stride = max(1, span // max_frames)
 
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, LONG_VIDEO)
+    min_area, max_area = detection_area_px(cfg, lens)
     config = LayerConfig(
         num_layers=3,
         sharpness_weight=0.7,
         flow_weight=0.3,
         blur_kernel=15,
-        min_area=80.0,
-        max_area=8000.0,
+        min_area=min_area,
+        max_area=max_area,
         max_aspect_ratio=3.0,
     )
 

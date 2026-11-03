@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.10.0 (2026-11-03)
+
+### Feat
+
+- **optics**: detector size window in camera config
+
 ## v0.9.0 (2026-11-03)
 
 ### Feat

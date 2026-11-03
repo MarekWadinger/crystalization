@@ -31,7 +31,11 @@ from typing import Any
 import numpy as np
 
 from annotator.types import LayerConfig
-from optics.config import lens_from_config_and_video, load_camera
+from optics.config import (
+    detection_area_px,
+    lens_from_config_and_video,
+    load_camera,
+)
 from optics.csd import aggregate_csd
 from optics.disambiguate import detect_observations, disambiguate
 from optics.measure import collect_sharpness_histogram, fit_power_law_tail
@@ -116,17 +120,18 @@ def run_pipeline(
     max_frames: int = 60,
 ) -> KpiReport:
     """Run the full pipeline once and capture KPIs."""
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, video)
+    min_area, max_area = detection_area_px(cfg, lens)
     config = LayerConfig(
         num_layers=3,
         sharpness_weight=0.7,
         flow_weight=0.3,
         blur_kernel=15,
-        min_area=80.0,
-        max_area=8000.0,
+        min_area=min_area,
+        max_area=max_area,
         max_aspect_ratio=3.0,
     )
-    cfg = load_camera()
-    lens = lens_from_config_and_video(cfg, video)
     d_focus = cfg.focus_object_distance_mm
 
     print("[kpi] detecting crystals…", file=sys.stderr)

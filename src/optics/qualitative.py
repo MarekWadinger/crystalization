@@ -28,6 +28,11 @@ from annotator.viz import (
     draw_crystals,
     draw_legend,
 )
+from optics.config import (
+    detection_area_px,
+    lens_from_config_and_video,
+    load_camera,
+)
 from optics.video_io import DEFAULT_CROP, CropBox
 
 VIDEO_PATH = "datasets/2026-02-05 10-36-32.mp4"
@@ -150,13 +155,16 @@ def fig_sharpness_layers(
 
 def main() -> None:
     """Generate both qualitative figures from frame 750."""
+    cfg = load_camera()
+    lens = lens_from_config_and_video(cfg, VIDEO_PATH)
+    min_area, max_area = detection_area_px(cfg, lens)
     config = LayerConfig(
         num_layers=3,
         sharpness_weight=0.7,
         flow_weight=0.3,
         blur_kernel=15,
-        min_area=80.0,
-        max_area=8000.0,
+        min_area=min_area,
+        max_area=max_area,
         max_aspect_ratio=3.0,
     )
     out_dir = Path("docs/optics/figures")
