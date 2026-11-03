@@ -2,6 +2,39 @@
 
 <!-- kpi:unreleased -->
 
+## v0.9.0 (2026-11-03)
+
+### Feat
+
+- **agents**: add sered-plant-expert with cited Sereď plant notes
+- **sidecar**: annotate 2026-10-30 08-45-33 ZRA lab run
+- **crystal_detector**: add repo preprocessors as Cellpose GUI filters
+- **crystal-detector**: finetune command with held-out evaluation
+- **crystal-detector**: three frames per crystal-bearing stage, no negatives
+- **crystal-detector**: --review reopens labelled frames for checking
+- **crystal-detector**: stage labels automatically, leave only commit and push
+- **crystal-detector**: coloured annotate output with a team leaderboard
+- **crystal-detector**: readable annotate console output
+- **crystal-detector**: annotate loops over frames with the fine-tuned model registered
+- **crystal-detector**: per-person annotation frames (LFS) and annotate command
+- **optics**: to-scale optical layout figure and measurement error budget
+- **optics**: site-measured geometry and IMX327 pixel pitch in camera config
+
+### Fix
+
+- **sidecar**: replace unsourced sizes and strike type in 2026-02-04 notes
+- **optics**: near/far overlay demo offsets follow the configured focus
+- **optics**: ship camera_100.toml inside the wheel
+- **optics**: high-pass kernel for σ < 1 px and auto-detected crop for video
+- **crystal-detector**: spell out both outcomes of the no-label prompt
+- **crystal-detector**: handle Cellpose autosave and the zero-mask save rule
+- **crystal-detector**: confirm each Ctrl+S live while the GUI is open
+- **optics**: shorten pipeline diagram label so it fits its box
+
+### Refactor
+
+- **optics**: make camera_100.toml the single source of optical parameters
+
 ## v0.8.0 (2026-06-22)
 
 ### Feat
