@@ -32,6 +32,20 @@ thickness_mm = 20.0                   # FACT: operator measurement 2026-09-07
 diameter_mm = 150.0                   # FACT: operator measurement 2026-09-07 (DN150)
 refractive_index = 1.47               # ASSUMED: borosilicate; soda-lime (DIN 8902) would be 1.52 → Δ 6.85 mm instead of 6.39. Error budget carries ±0.03
 
+[detection]
+# Size window of the crystal detector's area filter. A detected contour of area
+# A px² passes when min_side_px² ≤ A ≤ (max_size_um / µm_per_px)², with µm_per_px
+# taken at the focused plane for the video's frame width (optics.config.detection_area_px).
+# Replaces the hardcoded 80 / 8000 px², which was tuned to a guessed ~52 µm crystal.
+min_side_px = 3        # RESOLUTION LIMIT: ~3 px across is the smallest blob a detector can call a crystal.
+                       #   ≈ 5 µm on the 1080p clips (1.66 µm/px), ≈ 13 µm on the PAL recordings (4.4 µm/px),
+                       #   so the seed slurry (Mastersizer Dv10/Dv50/Dv90 = 1.56 / 6.81 / 18.5 µm,
+                       #   docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf) is only partly resolvable on 1080p
+                       #   and mostly not on PAL.
+max_size_um = 1000.0   # GROUND TRUTH + MARGIN: largest crystal measured on the seed pan is 0.821 mm
+                       #   (13-32.jpg, ~2 h after seeding, 2026-10-30; datasets/README.md "Crystal-size ground
+                       #   truth on the seed pan"), rounded up to 1 mm.
+
 [figures]
 # What-if sweeps and drawing choices for docs/optics/figures — not the installation.
 extension_sweep_mm = [5.0, 10.0, 20.0, 40.0]  # standard C-mount extension-ring kit; the installed tube is appended

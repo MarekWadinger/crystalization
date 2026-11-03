@@ -27,8 +27,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import cv2
+import numpy as np
 
-from optics.model import LensSetup, SightGlass
+from optics.model import LensSetup, SightGlass, mm_per_pixel_at
 
 _REPO_CONFIG = (
     Path(__file__).resolve().parents[2] / "configs" / "camera_100.toml"
@@ -62,6 +63,8 @@ class CameraConfig:
     sight_glass_thickness_mm: float
     sight_glass_index: float
     focus_object_distance_mm: float
+    min_side_px: float
+    max_size_um: float
     source_path: Path
 
     @property
@@ -78,6 +81,7 @@ def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
     lens = data["lens"]
     glass = data["sight_glass"]
     focus = data["focus"]
+    detection = data["detection"]
     return CameraConfig(
         name=cam.get("model", path.stem),
         sensor_width_mm=float(cam["sensor_width_mm"]),
@@ -96,6 +100,8 @@ def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
         sight_glass_thickness_mm=float(glass["thickness_mm"]),
         sight_glass_index=float(glass["refractive_index"]),
         focus_object_distance_mm=float(focus["object_distance_mm"]),
+        min_side_px=float(detection["min_side_px"]),
+        max_size_um=float(detection["max_size_um"]),
         source_path=path,
     )
 
@@ -147,3 +153,19 @@ def lens_from_config_and_video(
 ) -> LensSetup:
     """Build a :class:`LensSetup` with pixel pitch derived from the video stream."""
     return lens_from_config(cfg, frame_width_px=probe_frame_width(video_path))
+
+
+def detection_area_px(
+    cfg: CameraConfig, lens: LensSetup
+) -> tuple[float, float]:
+    """Detector area window ``(min_area, max_area)`` in px² from ``[detection]``.
+
+    The lower bound is the resolution limit (``min_side_px`` squared); the upper
+    bound converts ``max_size_um`` to pixels at the focused plane, so it follows
+    the video's frame width and any later change of pixel pitch.
+    """
+    d_focus = cfg.focus_object_distance_mm
+    um_per_px = 1000.0 * float(
+        mm_per_pixel_at(lens, d_focus, np.array([d_focus]))[0]
+    )
+    return cfg.min_side_px**2, (cfg.max_size_um / um_per_px) ** 2

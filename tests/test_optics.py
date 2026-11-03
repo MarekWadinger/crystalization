@@ -213,3 +213,24 @@ def test_observations_schema_fix_recomputes_t(tmp_path) -> None:
     assert len(changes) == 1
     obs = load_validated(path)
     assert obs.events[0].t == 2239
+
+
+@pytest.mark.parametrize("frame_width_px", [1920, 720])
+def test_detection_area_px_window_matches_config_in_um(
+    frame_width_px: int,
+) -> None:
+    # Arrange — the 1080p clips and the PAL recordings share one config
+    from optics.config import detection_area_px, lens_from_config, load_camera
+    from optics.model import mm_per_pixel_at
+
+    cfg = load_camera()
+    lens = lens_from_config(cfg, frame_width_px=frame_width_px)
+    d = cfg.focus_object_distance_mm
+    um_per_px = 1000.0 * float(mm_per_pixel_at(lens, d, np.array([d]))[0])
+
+    # Act
+    min_area, max_area = detection_area_px(cfg, lens)
+
+    # Assert — lower bound is the pixel resolution limit, upper bound is max_size_um
+    assert min_area == pytest.approx(cfg.min_side_px**2)
+    assert max_area**0.5 * um_per_px == pytest.approx(cfg.max_size_um)
