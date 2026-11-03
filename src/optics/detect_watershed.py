@@ -6,7 +6,7 @@ and ``annotator.detection.process_frame``. The edge-based detector
 dense in-focus clusters where neighbouring crystals share dark edges:
 the closing step welds their boundaries together and a single
 ``cv2.findContours`` blob spans the whole agglomerate. Manuscript
-Figure 11 (``docs/paper/manuscript.md`` §7.4) shows that failure mode.
+Figure 11 (``papers/cep/manuscript.md`` §7.4) shows that failure mode.
 
 The watershed pipeline implemented here is the textbook
 "marker-controlled watershed" recipe used in cell-biology
