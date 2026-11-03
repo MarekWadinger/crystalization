@@ -39,3 +39,18 @@ src/crystal_detector/training_data/
 *_crystals.csv
 *_crystals.txt
 *_mask.npy
+
+# LaTeX build artefacts of the papers (built with `make -C papers/<name> pdf`)
+papers/**/*.aux
+papers/**/*.log
+papers/**/*.fls
+papers/**/*.fdb_latexmk
+papers/**/*.bbl
+papers/**/*.blg
+papers/**/*.out
+papers/**/*.spl
+papers/**/*.synctex.gz
+papers/*/main.pdf
+# Derived copies of docs/optics/figures/ (`make -C papers/cep figures`);
+# committing them would duplicate ~22 MB of tracked PNGs.
+papers/cep/figures/
