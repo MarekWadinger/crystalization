@@ -119,7 +119,7 @@ This recomputes `t` from your `wallclock` value automatically.
 
 **Step 3 — Mark the seeding event.**
 
-When you add the event where seed magma was injected, set `"is_seeding": true`.
+When you add the event where the seed was injected (slurry/mikroočko in the seed pan, seed massecuite in A/C pans), set `"is_seeding": true`.
 This is required for the growth-curve analysis. Without it `next` will
 remind you every time.
 
@@ -180,7 +180,7 @@ below is for quick reference.
 | `bubbles_appear` | Prvé bubliny | First bubbles appear | Syrup heats up past boiling |
 | `bubbles_intensify` | Bubliny zosilnejú | Bubble flux peaks | Pre-graining heat-up |
 | `concentration` | Zahusteenie | Concentration | Evaporation past saturation |
-| `stabilization_and_seeding` | Zaočkovanie | Seeding | Seed magma injected; steam cut back |
+| `stabilization_and_seeding` | Zaočkovanie | Seeding | Seed injected (slurry in seed pan, seed massecuite in A/C); steam cut back |
 | `first_crystals_visible` | Prvé kryštály | First crystals visible | Seeds appear in camera view |
 | `boiling` | Navaranie | Boiling / growth phase | Controlled supersaturation growth |
 | `drying` | Sušenie | Drying | Final concentration before discharge |

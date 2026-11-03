@@ -79,7 +79,8 @@ PHASE_GLOSSES: dict[Phase, str] = {
     Phase.bubbles_intensify: "Bubble flux peaks during pre-graining heat-up.",
     Phase.concentration: "Evaporation past saturation toward seeding point.",
     Phase.stabilization_and_seeding: (
-        "Supersaturation stabilised; seed magma injected; steam restricted."
+        "Supersaturation stabilised; seed injected (slurry/mikroočko in "
+        "the seed pan, seed massecuite in A/C pans); steam restricted."
     ),
     Phase.first_crystals_visible: (
         "Seed crystals visible as small inclusions in the field of view."
