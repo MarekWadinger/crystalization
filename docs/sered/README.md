@@ -34,7 +34,7 @@ answers from these files.
 - The 1080p clips `2026-02-05 *` are most likely from 2026-02-05, not 02-04: no shared frames with the PAL recording, and file birth times on 02-05 (`scripts/check_clip_overlap.py`). The operator statement of June 2026 says 02-04; the author decides. Details: `datasets/README.md`.
 
 ## Open
-- **Camera body.** The installed body is **"ADEMCO VIDEO"** (Honeywell analog PAL CCD; rear panel matches the HCC334/484 family). Photos: Drive `sugar_plant/sered/photos/20260810_111738.jpg`, `20260810_111636.jpg` (rear), the same setup as `docs/lens/` (Feb 2026). "Hanwha HCB-6000" came only from the Polz price quote. **The 2.9 µm pixel pitch and the 1.66 µm/px built on it are unverified** until the model label is known (Marek is on it).
+- **Camera body.** The installed body is **"ADEMCO VIDEO"**, an analog B/W PAL CCD box camera. Photos: Drive `sugar_plant/sered/photos/20260810_111738.jpg`, `20260810_111636.jpg` (rear), the same setup as `docs/lens/` (Feb 2026). The config candidate is the **Ademco ACM570E class** (1/3" CCD, 752 × 582 cells of 6.50 × 6.25 µm), alternative ACM380E class (500 × 582, 9.8 × 6.3 µm); an earlier note here matched the rear panel to the Honeywell HCC334/484 family. None is confirmed until the model sticker is read. "Hanwha HCB-6000" came only from the Polz price quote and is ruled out (colour CMOS, no DIP switches). The scale in use is per axis from the analog chain (1.464 × 1.913 µm per clip px, 3.92 × 3.59 µm per PAL sample; `docs/optics/scale_chain.md`); the old 2.9 µm pitch and 1.66 µm/px are retired.
 - C-pan seed source (C1 C-seed vs. seed-pan output).
 - LI1000 level data for 2026 (promised by the plant); DVR / signal chain; focus distance.
 - What `S_ZRAVZORCE/VISKOZITA` computes.
