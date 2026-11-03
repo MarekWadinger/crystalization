@@ -5,7 +5,7 @@ Crystal-size measurement from a sight-glass camera on the Sereď seed pan (ZRA),
 ## Where things are
 
 - **Paper:** [`papers/cep/ROADMAP.md`](papers/cep/ROADMAP.md): target, status, next steps. Read it before touching
-  the paper, its figures or any number it reports.
+  the paper, its figures or any number it reports. Build with `make -C papers/cep pdf`, then `make -C papers/cep check`.
 - **AI use:** [`papers/cep/AI_USE.md`](papers/cep/AI_USE.md): rules, log and declaration.
 - **Plant facts:** [`docs/sered/README.md`](docs/sered/README.md), [`datasets/README.md`](datasets/README.md); ask
   the `sered-plant-expert` agent.
