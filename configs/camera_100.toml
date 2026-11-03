@@ -46,7 +46,7 @@ cell_height_um = 6.25                 # ESTIMATE: same datasheet; the ACM380E-cl
 cells_h = 752                         # ESTIMATE: same datasheet (effective cells per row)
 cells_v = 582                         # ESTIMATE: same datasheet (effective rows; 576 reach the PAL picture)
 pixel_clock_mhz = 14.1875             # ESTIMATE: horizontal CCD clock in the same datasheet; the 500-cell alternative (9.8 µm, 9.46875 MHz) gives 6.87 instead of 6.83 µm per DVR sample
-body_length_mm = 40.0                 # ESTIMATE: no basis recorded; used only in the layout drawing
+body_length_mm = 40.0                 # ASSUMED: drawing-only placeholder, no basis recorded; enters no number
 flange_distance_mm = 17.526           # DATASHEET: C-mount standard (lens side). Body mount C or CS unknown; whether the 60 mm tube includes a 5 mm CS→C ring is open (+8.9 % in µm/px if it does)
 
 [dvr]
