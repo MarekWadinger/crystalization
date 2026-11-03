@@ -52,4 +52,4 @@ Every fact in the notes cites its source file. "(interp.)" marks an interpretati
 ## Raw sources
 - **Rado's shared Drive** "sugar_plant": https://drive.google.com/drive/u/0/folders/1nBOJFR5G2MS7YSo6OiXwsnwO2_CxY8OT. Locally via a My Drive shortcut: `~/Library/CloudStorage/GoogleDrive-<user>/My Drive/sugar_plant/`. Folders: `sered/` (Q&A, schemes, photos, data), `Data2026/`, `video/`, `papers/`, `gproms/`, `translated/`, `yokogawa/`.
 - **Department NAS:** `smb://147.175.79.43/Public` → `Fedor/CrystalisationData/` (log in with a personal account).
-- **Glossary of terms (English / Slovak):** the front matter of `papers/cep/manuscript.md`.
+- **Glossary of terms (English / Slovak):** `papers/cep/sections/appendix_glossary.tex`.

@@ -5,8 +5,8 @@ and ``annotator.detection.process_frame``. The edge-based detector
 (adaptive threshold + morphological closing + ``findContours``) fails on
 dense in-focus clusters where neighbouring crystals share dark edges:
 the closing step welds their boundaries together and a single
-``cv2.findContours`` blob spans the whole agglomerate. Manuscript
-Figure 11 (``papers/cep/manuscript.md`` §7.4) shows that failure mode.
+``cv2.findContours`` blob spans the whole agglomerate. Paper
+Figure 11 (``papers/cep/sections/csd.tex`` §7.4) shows that failure mode.
 
 The watershed pipeline implemented here is the textbook
 "marker-controlled watershed" recipe used in cell-biology

@@ -18,5 +18,5 @@ Declaration: unnumbered section before the references.
 | Date | Tool | Task | Output | Human check |
 | --- | --- | --- | --- | --- |
 | 2026-03-30 – 2026-11-03 | Claude Code | Analysis code and docs (97 of 133 commits have a Claude trailer) | `src/`, `scripts/`, `docs/` | Pending: which manuscript parts were AI-drafted |
-| 2026-11-03 | Claude Code | Venue choice, CEP fit reviews, submission plan | target in [`manuscript.md`](manuscript.md) | Author chose CEP |
+| 2026-11-03 | Claude Code | Venue choice, CEP fit reviews, submission plan | target in [`main.tex`](main.tex) | Author chose CEP |
 | 2026-11-03 | Claude Code | Roadmap, agent instructions, MIT licence file; CRediT draft and ORCID lookup | [`ROADMAP.md`](ROADMAP.md), [`CLAUDE.md`](../../CLAUDE.md), [`LICENSE`](../../LICENSE), [`CREDIT.md`](CREDIT.md) | Author reviewed; each co-author confirms their CRediT row |

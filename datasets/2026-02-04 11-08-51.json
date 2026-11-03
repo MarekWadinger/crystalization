@@ -346,6 +346,6 @@
   "kpi_pairing_hint": {
     "seeding_event_id": "e06",
     "time_since_seeding_s_at": "video_offset_s - 4869",
-    "use_case": "When src/optics/kpi.py samples a frame during boiling phase, the time_since_seeding can be paired with median crystal size to produce one point on the per-batch growth curve G(t) discussed in papers/cep/manuscript.md §8."
+    "use_case": "When src/optics/kpi.py samples a frame during boiling phase, the time_since_seeding can be paired with median crystal size to produce one point on the per-batch growth curve G(t) discussed in papers/cep/sections/growth.tex."
   }
 }

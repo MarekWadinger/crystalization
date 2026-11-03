@@ -18,8 +18,8 @@ dependency in the hot path). Strict validation lives in
 Used by:
 
 * ``optics.kpi`` to tag each KPI snapshot with the active phase.
-* The (planned) growth-curve self-calibration in ``papers/cep/
-  manuscript.md`` §8 — needs ``time_since_seeding_s`` per frame.
+* The (planned) growth-curve self-calibration in
+  ``papers/cep/sections/growth.tex`` — needs ``time_since_seeding_s`` per frame.
 
 Example::
 
