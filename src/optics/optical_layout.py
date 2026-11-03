@@ -17,9 +17,58 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
-from optics.config import load_camera
+from optics.config import SOURCE_RANK, load_camera, source_classes
 
 FIG_DIR = Path(__file__).resolve().parents[2] / "docs" / "optics" / "figures"
+# Arrow colour = how well the length is sourced (tags in configs/camera_100.toml).
+SOURCE_COLOR = {
+    **dict.fromkeys(("MEASURED", "PHOTO", "DATASHEET", "CHOICE"), "black"),
+    **dict.fromkeys(("DERIVED", "PLANT", "ESTIMATE"), "#c05800"),
+    **dict.fromkeys(("ASSUMED", "UNSOURCED"), "red"),
+}
+SOURCE_LEGEND = {
+    "en": "black = photo / datasheet   ·   orange = plant statement (≈) "
+    "or estimate   ·   red = assumed or unsourced   (configs/camera_100.toml)",
+    "sk": "čierna = foto / katalóg   ·   oranžová = údaj z cukrovaru (≈) "
+    "alebo odhad   ·   červená = predpoklad alebo bez zdroja",
+}
+
+
+def _weakest(cls: dict[str, str], *keys: str) -> str:
+    """Weakest provenance class among the config keys a quantity uses."""
+    return max((cls[k] for k in keys), key=lambda c: SOURCE_RANK.index(c))
+
+
+def _sources() -> dict[str, str]:
+    """Provenance class of each drawn length, from the config tags."""
+    c = source_classes()
+    return {
+        "body": c["camera.body_length_mm"],
+        "sensor": c["camera.flange_distance_mm"],
+        "e": c["lens.extension_tube_mm"],
+        "lens": _weakest(c, "lens.body_length_mm", "lens.focus_travel_mm"),
+        "a": c["lens.air_gap_mm"],
+        "t": c["sight_glass.thickness_mm"],
+        "i": _weakest(
+            c,
+            "lens.focal_length_mm",
+            "lens.extension_tube_mm",
+            "lens.focus_travel_mm",
+        ),
+        "real": _weakest(
+            c,
+            "lens.focal_length_mm",
+            "lens.extension_tube_mm",
+            "lens.focus_travel_mm",
+            "lens.air_gap_mm",
+            "sight_glass.thickness_mm",
+            "sight_glass.refractive_index",
+        ),
+        "model": c["camera.model"],
+        "pitch": _weakest(
+            c, "camera.sensor_width_mm", "camera.native_width_px"
+        ),
+    }
 
 
 def _geometry() -> dict[str, float]:
@@ -63,7 +112,9 @@ def _geometry() -> dict[str, float]:
     }
 
 
-def _draw(labels: dict[str, str], out: Path, g: dict[str, float]) -> None:
+def _draw(
+    labels: dict[str, str], out: Path, g: dict[str, float], src: dict[str, str]
+) -> None:
     segs = [
         ("body", g["camera"], "#333333", "white"),
         ("ext", g["e"], "#7f7f7f", "black"),
@@ -97,24 +148,32 @@ def _draw(labels: dict[str, str], out: Path, g: dict[str, float]) -> None:
             (x1, y),
             arrowprops={"arrowstyle": "<->", "color": color},
         )
-        ax.text((x0 + x1) / 2, y - 0.12, text, ha="center", color=color)
+        ax.text(
+            (x0 + x1) / 2, y - 0.04, text, ha="center", va="top", color=color
+        )
 
-    dim(edges["ext"], edges["lens"], -0.15, labels["dim_e"])
-    dim(edges["lens"], edges["air"], -0.15, labels["dim_body"])
-    dim(edges["air"], edges["glass"], -0.15, labels["dim_a"])
-    dim(edges["glass"], edges["slurry"], -0.15, labels["dim_t"])
+    col = {k: SOURCE_COLOR[v] for k, v in src.items()}
+    dim(edges["body"], edges["ext"], -0.15, labels["dim_cam"], col["body"])
+    dim(edges["ext"], edges["lens"], -0.15, labels["dim_e"], col["e"])
+    dim(edges["lens"], edges["air"], -0.15, labels["dim_body"], col["lens"])
+    dim(edges["air"], edges["glass"], -0.15, labels["dim_a"], col["a"])
+    dim(edges["glass"], edges["slurry"], -0.15, labels["dim_t"], col["t"])
     if "dim_real" in labels:
         h = edges["air"] - g["h_offset"]
         h2 = sensor + g["i"]
         for xx, name in ((h, labels["H"]), (h2, labels["H2"])):
             ax.plot([xx] * 2, [0, 1], color="navy", ls="--")
             ax.text(xx, 1.05, name, color="navy", ha="center")
-        dim(sensor, h2, -0.6, labels["dim_i"], "navy")
-        dim(h, edges["slurry"], -1.05, labels["dim_real"], "green")
+        dim(sensor, h2, -0.6, labels["dim_i"], col["i"])
+        dim(h, edges["slurry"], -1.05, labels["dim_real"], col["real"])
     ax.set_xlim(-2, x + 2)
-    ax.set_ylim(-1.4, 1.4)
+    ax.set_ylim(-1.55, 1.4)
     ax.axis("off")
-    ax.set_title(labels["title"])
+    ax.set_title(
+        labels["title"],
+        color=col["pitch"] if "dim_real" in labels else "black",
+    )
+    ax.text((x - 2) / 2, -1.5, labels["legend"], ha="center", fontsize=9)
     fig.tight_layout()
     fig.savefig(out, dpi=150)
     plt.close(fig)
@@ -122,12 +181,18 @@ def _draw(labels: dict[str, str], out: Path, g: dict[str, float]) -> None:
 
 def main() -> None:
     g = _geometry()
+    src = _sources()
+    tag = {k: v.lower() for k, v in src.items()}
+    model = load_camera().name
     en = {
         "title": (
             "Camera 100 — how far the camera looks into the sugar slurry "
-            f"(drawn to scale, 1 px on the sensor = {g['um_px']:.2f} µm in the slurry)"
+            f"(drawn to scale; 1 px on the sensor = {g['um_px']:.2f} µm in the "
+            f"slurry, pixel pitch {tag['pitch']})"
         ),
-        "body": "camera body",
+        "legend": SOURCE_LEGEND["en"],
+        "body": f"camera body\n{model}?\n(model {tag['model']})",
+        "dim_cam": f"{g['camera']:.0f} mm\n({tag['body']})",
         "ext": "spacer ring\n(moves lens away from sensor\nso it can focus close)",
         "lens": "\n\n\nlens",
         "air": "air",
@@ -137,18 +202,23 @@ def main() -> None:
         "inner": "SHARP-FOCUS PLANE\n= inner face of the glass",
         "H": "H",
         "H2": "H'",
-        "dim_e": f"spacer e = {g['e']:.0f} mm",
-        "dim_body": f"lens body {g['body']:.1f} mm",
-        "dim_a": f"air gap a = {g['air']:.0f} mm",
-        "dim_t": f"glass t = {g['t']:.0f} mm",
-        "dim_i": f"sensor → H' = f + e + focus travel = {g['i']:.0f} mm",
+        "dim_e": f"spacer e = {g['e']:.0f} mm\n({tag['e']})",
+        "dim_body": f"lens body {g['body']:.1f} mm\n({tag['lens']})",
+        "dim_a": f"air gap a = {g['air']:.0f} mm\n({tag['a']})",
+        "dim_t": f"glass t = {g['t']:.0f} mm\n({tag['t']})",
+        "dim_i": (
+            f"sensor → H' = f + e + focus travel = {g['i']:.0f} mm ({tag['i']})"
+        ),
         "dim_real": (
-            f"H → sharp-focus plane = {g['d_focus'] + g['delta']:.1f} mm"
+            f"H → sharp-focus plane = {g['d_focus'] + g['delta']:.1f} mm "
+            f"({tag['real']})"
         ),
     }
     sk = {
         "title": "Optická sústava — kamera 100 (v mierke)",
-        "body": "telo kamery\nHanwha HCB-6000",
+        "legend": SOURCE_LEGEND["sk"],
+        "body": f"telo kamery\n{model}?",
+        "dim_cam": f"{g['camera']:.0f} mm",
         "ext": "medzikrúžok",
         "lens": f"objektív Fujinon\nHF35HA-1B\n(dĺžka {g['body']:.1f} mm)",
         "air": "vzduchová\nmedzera",
@@ -158,13 +228,13 @@ def main() -> None:
         "H": "H",
         "H2": "H'",
         "inner": "vnútorná strana skla\n(rovina, kde kamera ostrí)",
-        "dim_e": f"(A) hrúbka medzikrúžku = {g['e']:.0f} mm",
-        "dim_a": f"(B) objektív → priezor = {g['air']:.0f} mm",
-        "dim_t": f"(C) hrúbka skla priezoru = {g['t']:.0f} mm",
-        "dim_body": f"objektív = {g['body']:.1f} mm",
+        "dim_e": f"(A) medzikrúžok\n{g['e']:.0f} mm",
+        "dim_a": f"(B) objektív → sklo\n{g['air']:.0f} mm",
+        "dim_t": f"(C) hrúbka skla\n{g['t']:.0f} mm",
+        "dim_body": f"objektív\n{g['body']:.1f} mm",
     }
-    _draw(en, FIG_DIR / "18_optical_layout.png", g)
-    _draw(sk, FIG_DIR / "18_optical_layout_sk_variables.png", g)
+    _draw(en, FIG_DIR / "18_optical_layout.png", g, src)
+    _draw(sk, FIG_DIR / "18_optical_layout_sk_variables.png", g, src)
     for k, v in g.items():
         print(f"{k:>8} = {v:.3f}")
 

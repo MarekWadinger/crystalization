@@ -22,6 +22,7 @@ Typical use::
 
 from __future__ import annotations
 
+import re
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
@@ -104,6 +105,26 @@ def load_camera(path: str | Path = DEFAULT_CONFIG_PATH) -> CameraConfig:
         max_size_um=float(detection["max_size_um"]),
         source_path=path,
     )
+
+
+_SECTION = re.compile(r"^\[(\w+)\]")
+_TAGGED = re.compile(r"^\s*(\w+)\s*=.*?#\s*([A-Z]+):")
+# Strongest first; a derived quantity inherits the weakest class of its inputs.
+SOURCE_RANK = (
+    "MEASURED PHOTO DATASHEET CHOICE DERIVED PLANT ESTIMATE ASSUMED UNSOURCED"
+).split()
+
+
+def source_classes(path: str | Path = DEFAULT_CONFIG_PATH) -> dict[str, str]:
+    """Map ``section.key`` to the ``# CLASS: source`` tag on its config line."""
+    out: dict[str, str] = {}
+    section = ""
+    for line in Path(path).read_text().splitlines():
+        if m := _SECTION.match(line):
+            section = m[1]
+        elif m := _TAGGED.match(line):
+            out[f"{section}.{m[1]}"] = m[2]
+    return out
 
 
 def lens_from_config(
