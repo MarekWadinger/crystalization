@@ -1,0 +1,72 @@
+% Section 9 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+\section{Discussion and limitations}\label{sec:discussion}
+
+\subsection{Where the pipeline performs}\label{sec:performs}
+
+\begin{itemize}
+\item \textbf{Geometric optics chain is closed end-to-end.} The thin-lens model with documented Fujinon datasheet plus
+in-scene anchoring gives a self-consistent mm/px to within ${\sim}10$\,\%.
+\item \textbf{Defocus structure matches theory to ${\sim}9$\,\%.} The Laplacian-variance tail exponent post-full-crop
+($\alpha = 4.88$) is consistent with the Gaussian-PSF + diffraction-floor model (theoretical 5.0) to within 2.4\,\%.
+\item \textbf{The within-detector homogeneous-slurry self-consistency check passes.} The focal-plane, near-side, and
+far-side density curves overlap closely (\figref{fig:csd} right). Per \secref{sec:selfcheck} this confirms that the
+detector behaves consistently across depth, not that the underlying CSD is depth-independent; a genuine validation
+requires an external reference (the Mastersizer granulometry now cited in \secref{sec:csd} is one such reference but
+lies below the detector's bandpass).
+\item \textbf{The pipeline produces an internally self-consistent CSD of detector-bandpassed features: median
+0.074~mm, CV 0.40, log-normal $\boldsymbol{s = 0.39}$} (watershed detector + full crop) --- derived from raw video
+with a complete numerical audit trail at the verified Camera 100 hardware configuration. These numbers describe the
+$\approx 20$--200~\um{} feature population the detector resolves; they are \textbf{not} a measurement of the crystal
+CSD (see \secref{sec:csd} preface and \secref{sec:notperform} for the size-ground-truth retraction).
+\end{itemize}
+
+\subsection{Where the pipeline does not perform}\label{sec:notperform}
+
+\begin{itemize}
+\item \textbf{The detector cannot resolve the true crystal population on the case-study recording.} Independent
+Mastersizer granulometry of the same product gives $\mathrm{Dv}(50) = 6.81$~\um, $D[4;3] = 8.71$~\um{}
+(\code{docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf}; \citealp{Mastersizer2025}). The recording captures the
+seed pan rather than the A-strike, and at the documented 1.66~\umpx{} scale the area filter $[80, 8000]$~px$^2$
+bandpasses $\approx 20$--200~\um{} features, entirely above the $\approx 9$~\um{} crystal population. The numbers
+reported in \secref{sec:csd} therefore describe agglomerate / cluster / bandpassed structure, not the underlying CSD.
+The fix is a detector retuned to the correct length scale (or a CNN-based segmentation; \secref{sec:recs}), not a
+parameter sweep of the current one.
+\item \textbf{Front/back disambiguation is geometrically valid but operationally degenerate at F/1.6.} The verified
+F/1.6 aperture produces a $\pm 6$~\um{} in-focus depth window --- narrower than any single crystal. The detector
+therefore sees one depth slice and the 79 / 21 near-side split observed in \secref{sec:sizing} is not robust evidence
+of a geometric offset; it could equally reflect the right-skew of the empirical prior.
+\item \textbf{Paraxial sight-glass model breaks at sub-pixel scales.} Exact flat-port projection requires
+\citet{Agrawal2012}'s 12th-degree polynomial; for the 0.05~mm crystals at 1.66~\umpx{} the residual refractive
+distortion is $<1$\,\% and below detector noise, but metric reconstruction to sub-pixel precision would require the
+refractive correction.
+\item \textbf{DVR overlay contamination is a real engineering hazard.} Without cropping, the apparent agreement with
+theory ($\alpha = 5.36$, $+7$\,\%) was spurious. Future deployments must verify overlay positions at ingestion and
+crop accordingly.
+\item \textbf{Soft-anchoring against expected crystal size is unreliable.} The v0.1 manuscript anchored
+$e \approx 10$~mm by matching the in-frame autocorrelation period to ``typical massecuite'' --- and was $4.5\times$
+off the true $e = 60$~mm without any data-internal inconsistency flagging the error. Caliper measurement (or
+\secref{sec:growth}'s growth-curve self-calibration) remains the only robust route.
+\end{itemize}
+
+\subsection{Operational recommendations}\label{sec:recs}
+
+\begin{enumerate}
+\item \textbf{Stop the lens down by at least 4 stops} (from current F/1.6 to F/8 or further, ideally F/16). At F/16
+the in-focus depth widens $10\times$ to $\pm 60$~\um{} --- finally letting the disambiguation pipeline see real 3-D
+crystal distribution and pushing the apparent-size ratio for symmetric depth hypotheses past the discriminability
+threshold.
+\item \textbf{Replace the edge-based detector with a blur-tolerant scheme} (CNN fine-tuned on partially-defocused
+crystals, or a Hough-like approach). This populates the discriminability regime (\figref{fig:discrim}) regardless of
+aperture choice.
+\item \textbf{Apply time-dependent detector parameters scheduled against the growth curve} (\secref{sec:growth}).
+Replaces the fixed $\mathit{min\_area}/\mathit{max\_area}$ cuts with a time-varying window matched to the expected
+current crystal size --- eliminates both the small-feature noise floor and the max-area truncation bias
+simultaneously.
+\end{enumerate}
+
+\subsection{Generalisation}\label{sec:general}
+
+The same pipeline applies to any through-sight-glass monitoring problem with multi-batch process kinetics:
+pharmaceutical crystallisation, mineral flotation, polymer particulation. The homogeneous-slurry assumption is the
+only application-specific constraint, and \secref{sec:homog}'s self-consistency check (focal-plane vs near/far
+density overlap) reports its validity directly.

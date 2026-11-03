@@ -1,0 +1,35 @@
+% Appendix A of manuscript v0.2 (docs/paper/manuscript.md). The figure numbers of the manuscript's code comments are
+% replaced by references, because the LaTeX figures are numbered differently (2a/2b, 5b, 5c, 14 merged or renumbered).
+\section{Reproduction}\label{app:repro}
+
+All numerical results and figures regenerate from the open-source repository via:
+{\footnotesize
+\begin{verbatim}
+uv sync --group dev --group annotator \
+        --group sharpness-layers \
+        --group optics --group scale-overlay
+uv run pytest tests/test_optics.py -q   # 10 tests
+\end{verbatim}}
+\noindent followed by the figure generators in \tabref{tab:repro}.
+
+\begin{table*}
+\centering\tabfont
+\caption{Figure generators.}\label{tab:repro}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.4\textwidth}@{}}
+\toprule
+Command & Figures \\
+\midrule
+\code{uv run python -m optics.plots} & \ref{fig:mmpx}, \ref{fig:shift}, \ref{fig:coc}, \ref{fig:sharpness},
+\ref{fig:dof} \\
+\code{uv run python -m optics.measure} & \ref{fig:measured} \\
+\code{uv run python -m optics.qualitative} & \ref{fig:layers}, \ref{fig:detection} \\
+\code{uv run python -m optics.disambiguate} & \ref{fig:discrim}, \ref{fig:disamb} \\
+\code{uv run python -m optics.csd} & \ref{fig:csd} \\
+\code{uv run python -m optics.pipeline_diagram} & \ref{fig:pipeline} \\
+\code{uv run scale-overlay-app} & \ref{fig:overlays} (interactive) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The complete numerical audit trail --- every claim mapped to its source (datasheet, derived formula, in-frame
+measurement, or literature verification) --- lives in \code{docs/optics/README.md} \S\S\,11--13.

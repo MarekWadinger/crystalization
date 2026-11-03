@@ -1,0 +1,32 @@
+% Section 8 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+\section{Cross-batch growth-curve self-validation \emph{(RQ4 --- outlook)}}\label{sec:growth}
+
+\subsection{The mechanism}\label{sec:mechanism}
+
+McCabe's $\Delta L$ law \citep{McCabe1929,RandolphLarson1988} predicts linear-in-time crystal growth at fixed
+supersaturation, modified across batches by per-batch supersaturation profile and seeding-magma size. The expected
+growth model is
+\begin{equation}\label{eq:growth}
+s_\mathrm{median}(t; b) \cdot \Delta x(d_\mathrm{focus}) = G(t \cdot \tau_b) + \mathrm{offset}_b
++ \varepsilon_b(t),
+\end{equation}
+with $G$ a shared physical growth curve, $\tau_b$ a per-batch time scale, $\mathrm{offset}_b$ a per-batch seed
+offset, and $\varepsilon$ a noise term. Given multiple batches recorded with \textbf{known start-of-strike timestamps}
+(graining), the curve $G$ is identifiable; conversely, the \emph{single number $\Delta x(d_\mathrm{focus})$} that
+closes the calibration is identifiable simultaneously as the value that makes all batches collapse onto a single $G$.
+
+This converts the optics calibration into a \textbf{soft-sensor identification} problem solvable from data alone ---
+no caliper, no scale target, no plant intervention. It also provides a \textbf{continuously-running} soft sensor: at
+any point during a new strike, comparing the measured median crystal size against $G$ returns the
+time-since-graining, validating the process is on the nominal curve.
+
+\subsection{Status}\label{sec:status}
+
+The growth-curve fit is implemented as scaffolding in \code{src/optics/csd.py} (single-batch path) and is ready to be
+promoted to multi-batch once batch-aligned video is supplied. The discriminability analysis of \secref{sec:impl}
+also benefits: a tight physical-size prior identified from the growth curve at the recording time replaces the
+in-frame focal-plane prior, breaking the symmetry between the ``slurry sits in front of focus'' and ``right-skewed
+prior asymmetry'' explanations of the 79 / 21 near-side split observed in \secref{sec:sizing}.
+
+A full multi-batch validation experiment is reserved for the v0.3 revision of this manuscript when batch-aligned
+video is available; this paper closes RQ1--RQ3 fully and frames RQ4 as the open extension.
