@@ -152,10 +152,14 @@ of **~42.5 px (median over 18 rows)** in `frame 0`. This corresponds to
 roughly half the spacing between adjacent crystal edges, so the
 dominant texture period is **~85 px**. At 1.66 µm/px this is a texture
 period of **~0.14 mm**, corresponding to crystals of order
-**0.05–0.1 mm** — consistent with **seed magma / very early A-strike**
-(Bubník et al., *Sugar Technologists Manual*). The operator confirmed
-the recording captures the first hour of a 4-hour boiling-pan strike,
-so this very small size is correct.
+**0.05–0.1 mm**. Strike stage is not inferred from this size: the
+camera sits on the **ZRA seed pan** (seeded with slurry, "mikroočko";
+plant Q&A *Potrebné dáta a otázky – Zodpovedané*, 2026-08-12, and the
+DeltaV "Udaje ZRA" screen; see `docs/sered/notes_plant_dcs_qa_photos.md`),
+and frame 0 (11:08:39) lies ~37 min before the 11:46 discharge of the
+previous ZRA strike (`datasets/2026-02-04 11-08-51.json`, event b1-e00).
+An earlier version of this section cited an unsourced "operator
+confirmation" of an A-strike first hour; that claim is withdrawn.
 
 ### 3.2 Extension-tube sweep (historical sensitivity)
 

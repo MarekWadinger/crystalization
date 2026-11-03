@@ -65,6 +65,41 @@ homogeneous-slurry; soft sensor; open-source pipeline.
 
 ---
 
+## Glossary of sugar-process terms (English / Slovak)
+
+Terms as used in this paper, with the Slovak names used at the
+Sereď plant (DCS screens, lab sheets, operator notes) so that
+plant staff and authors read the same thing. Czech terms are marked
+(cz). Sources: [GH] Gebler & Hotový (2021); [P] Slovenské
+cukrovary plant Q&A and DeltaV screens (2026); [Be] Bennár (2010).
+
+| English (this paper) | Slovak (plant) | Meaning | Source |
+|---|---|---|---|
+| Boiling house | varňa | Plant section with the vacuum pans | [GH] |
+| Vacuum pan | varostroj; (cz) zrnič | Vessel that turns sugar syrup into massecuite by evaporating water under reduced pressure | [GH] |
+| Seed pan (graining pan) | očkovací varostroj; DCS tag **ZRA** | The vacuum pan that grains a strike with seed slurry and produces seed massecuite for the A pans | [P], [Be] |
+| Seed slurry (micro-seed) | mikroočko | Suspension of finely milled sucrose (≈ 5–10 µm) in a non-solvent liquid, dosed to start crystallisation | [GH], [Be] |
+| Seeding (graining) | očkovanie; (cz) zrnění varu očkováním | Introducing seed into supersaturated syrup to set the number of crystals | [GH] |
+| Massecuite | cukrovina | Mixture of sugar crystals and mother syrup produced in a pan | [GH] |
+| Seed massecuite (seed magma, footing) | očkovacia cukrovina (DCS "UC"); (cz) záděl | Massecuite whose crystals seed another pan's strike | [GH], [P] |
+| A / B / C massecuite | kryštálová / medziproduktová / zadinová cukrovina | Massecuites of the three-product scheme (white sugar / intermediate / last product) | [P], [Be] |
+| Strike | var | Massecuite produced in one batch cycle of a pan | [GH] |
+| Standard syrup | štandardný sirup (SS) | Feed syrup of the A-side pans | [P] |
+| Concentration | zahusťovanie | Evaporating the charge to supersaturation before seeding | [P] |
+| Formation / stabilisation | formovanie / stabilizácia | Recipe steps around seeding (DCS) | [P] |
+| Boiling-up (growth) | navarovanie | Feeding syrup while crystals grow, up to the full pan | [P] |
+| Tightening ("drying") | sušenie | Final concentration of the massecuite before discharge | [P] |
+| Vacuum break | zavzdušnenie | Letting air into the pan before discharge | [P] |
+| Discharge | vypúšťanie | Emptying the pan into the receiver | [P] |
+| Receiver | refrižerant | Stirred tank below a pan (seed1, seed2 for the seed pan) | [P] |
+| Vapour (heating) | bryda | Evaporator vapour used to heat the pans (e.g. 3rd, 4A) | [P] |
+| Supersaturation coefficient | koeficient presýtenia (KP) | Seeding/boiling target in the DCS recipes | [P] |
+| Purity | kvocient čistoty | Polarisation / dry substance × 100 | [P] |
+| Pan operator | varič | Operator who runs the strike and decides when to seed | [P] |
+| Sight glass | priezor | Window in the pan wall through which Camera 100 looks | [P] |
+
+---
+
 ## 1 Introduction
 
 ### 1.1 What the operator needs to see
@@ -253,22 +288,26 @@ block is implemented as a reproducible Python module under
 ### 2.1 Plant and vessel
 
 Camera 100 is installed at the Slovenské cukrovary sugar plant in
-Sereď, Slovakia, on the **brine / seed-magma preparation
-apparatus** — the unit operation that produces the seed slurry
-subsequently dosed into the A-strike vacuum pan. The product
-imaged by the camera is the Zuckerslurry Se intermediate, whose
-crystal-size distribution is independently characterised by
-laser-diffraction granulometry (Mastersizer, 2-propanol dispersant;
-see § 7 preface and References) with ``D[3;2] = 3.95 µm``,
-``D[4;3] = 8.71 µm`` and ``Dv(10) / Dv(50) / Dv(90) = 1.56 / 6.81 /
-18.5 µm``. Vessel-level dimensions, agitation regime, and
-operating temperature of the seed-prep apparatus have not yet been
+Sereď, Slovakia, on the **seed pan**: the graining vacuum pan,
+designated ZRA in the plant control system (Slovak *očkovací
+varostroj*; Slovenské cukrovary plant Q&A, 2026-08-12; DeltaV
+"Udaje ZRA" screen; English–Slovak glossary before § 1). The
+seed pan is seeded with milled-sugar slurry
+(*mikroočko*) and produces the seed massecuite (*očkovacia
+cukrovina*) that is dosed into the A and C vacuum pans. The seed
+slurry's crystal-size distribution is independently characterised
+by laser-diffraction granulometry (Mastersizer, 2-propanol
+dispersant; see § 7 preface and References) with
+``D[3;2] = 3.95 µm``, ``D[4;3] = 8.71 µm`` and
+``Dv(10) / Dv(50) / Dv(90) = 1.56 / 6.81 / 18.5 µm``. Vessel-level
+dimensions, agitation regime, and operating temperature of the
+seed pan have not yet been
 independently audited and are deferred to a follow-up revision;
 the camera-side hardware (§ 2.2) is operator-verified.
 
-The seed-prep apparatus is a stirred / recirculated bath in normal
-operation, which is the physical basis on which we invoke the
-homogeneous-slurry assumption of § 6.2: the circulating bath
+The seed pan is mechanically stirred (stirrer current tag
+EI1004) in normal operation, which is the physical basis on which we invoke the
+homogeneous-slurry assumption of § 6.2: the stirred massecuite
 continually refreshes the slab actually imaged through the sight
 glass (§ 3.5), so the millimetre-thin slice is a near-
 representative sample of the bulk population. A stage-specific
@@ -989,7 +1028,7 @@ only after stopping the lens down (§9.3).*
 > dispersant; ``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf``)
 > gives ``D[3;2] = 3.95 µm``, ``D[4;3] = 8.71 µm``, and
 > ``Dv(10) / Dv(50) / Dv(90) = 1.56 / 6.81 / 18.5 µm``. The recording
-> captures the brine / seed-magma preparation step — *not* the A-
+> captures the seed pan (§ 2.1) — *not* the A-
 > strike — so the population in front of the lens is the ≈ 9 µm
 > Mastersizer distribution. The detector's area filter
 > ``[min_area = 80, max_area = 8000] px²`` at the documented
@@ -1058,8 +1097,7 @@ crystal population.
 "squarely in the seed-magma range (0.05–0.15 mm)" and as
 "consistent with just-past-seeding A-strike crystals … confirmed by
 the plant operator". Both readings are retracted.* The recording
-captures the **brine / seed-magma preparation step** upstream of the
-A-strike pan, and the size ground truth for this product is the
+captures the **seed pan** upstream of the A-strike pan (§ 2.1), and the size ground truth for this product is the
 Mastersizer granulometry cited in the § 7 preface
 (``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``) — roughly an order of
 magnitude **below** the 0.037 mm median this detector returns. The
@@ -1248,7 +1286,7 @@ The watershed numbers for this section are:
 >
 > These numbers, like the pre-watershed numbers of § 7.1, are
 > **not a crystal-size measurement** of the imaged product. The
-> recording captures the brine / seed-magma preparation step, whose
+> recording captures the seed pan, whose
 > true CSD is the ≈ 9 µm Mastersizer distribution cited in the § 7
 > preface. The watershed median at 74 µm sits well above the
 > Mastersizer's ``Dv(90) = 18.5 µm``, so the watershed has not
@@ -1378,8 +1416,7 @@ this paper closes RQ1–RQ3 fully and frames RQ4 as the open extension.
   case-study recording.** Independent Mastersizer granulometry of
   the same product gives ``Dv(50) = 6.81 µm``, ``D[4;3] = 8.71 µm``
   (``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf``). The
-  recording captures the brine / seed-magma preparation step rather
-  than the A-strike, and at the documented 1.66 µm/px scale the
+  recording captures the seed pan rather than the A-strike, and at the documented 1.66 µm/px scale the
   area filter ``[80, 8000] px²`` bandpasses ≈ 20–200 µm features,
   entirely above the ≈ 9 µm crystal population. The numbers
   reported in § 7 therefore describe agglomerate / cluster /
@@ -1494,6 +1531,10 @@ the literature verification audit lives in
   theory of multi-layer flat refractive geometry. *Proc. IEEE CVPR*,
   3346–3353. DOI: 10.1109/CVPR.2012.6248073.
 - **Asadi, M., 2006.** *Beet-Sugar Handbook*. Wiley.
+- **Bennár, M., 2010.** *Optimalizácia zvyšovania výťažnosti cukru
+  pri získavaní sacharózy z cukrovej repy* (PhD thesis). Slovak
+  University of Agriculture in Nitra. Data from Slovenské
+  cukrovary, Sereď, campaigns 2005–2009.
 - **Borchert, C., Temmel, E., Eisenschmidt, H., Lorenz, H., Seidel-
   Morgenstern, A., Sundmacher, K., 2014.** Image-based in situ
   identification of face-specific crystal growth rates. *Crystal
@@ -1517,6 +1558,9 @@ the literature verification audit lives in
 - **Eggers, J., Kempkes, M., Mazzotti, M., 2008.** Measurement of
   size and shape distributions of particles. *Chem. Eng. Sci.* 63
   (24), 5513–5521. DOI: 10.1016/j.ces.2008.07.034.
+- **Gebler, J., Hotový, Z., 2021.** Výkladový slovník
+  cukrovarnických pojmů, parts 14–16. *Listy cukrovarnické a
+  řepařské* 137, 229–231, 292–294, 353–354.
 - **Goodman, J. W., 2017.** *Introduction to Fourier Optics*, 4th ed.
   W. H. Freeman & Co. ISBN 978-1-319-11916-4.
 - **Heath, A. R., Fawell, P. D., Bahri, P. A., Swift, J. D., 2002.**
@@ -1534,8 +1578,8 @@ the literature verification audit lives in
   *Zuckerslurry Se sample, dispersant 2-propanol.* Plant report,
   Slovenské cukrovary, s.r.o., Sereď. Archived as
   ``docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf`` in this
-  project's repository. Used as the size ground truth for the
-  brine / seed-magma stage imaged in the case-study video
+  project's repository. Size of the seed slurry (*mikroočko*) dosed
+  into the seed pan imaged in the case-study video
   (``D[3;2] = 3.95 µm``, ``D[4;3] = 8.71 µm``,
   ``Dv(10)/Dv(50)/Dv(90) = 1.56 / 6.81 / 18.5 µm``).
 - **McCabe, W. L., 1929.** Crystal-growth rates. *Ind. Eng. Chem.*
@@ -1564,6 +1608,11 @@ the literature verification audit lives in
 - **Simon, L. L., Pataki, H., Marosi, G., et al., 2015.** Assessment
   of recent process analytical technology (PAT) trends. *Org. Process
   Res. Dev.* 19 (1), 3–62. DOI: 10.1021/op500261y.
+- **Slovenské cukrovary, s.r.o., Sereď, 2026.** *Potrebné dáta a
+  otázky – Zodpovedané* (answered plant questionnaire, 2026-08-12)
+  and DeltaV operator screen "Udaje ZRA" (2025-11-15). Internal
+  communication; summarised with citations in
+  ``docs/sered/notes_plant_dcs_qa_photos.md``.
 - **Smith, W. J., 2008.** *Modern Optical Engineering*, 4th ed.
   McGraw-Hill. ISBN 978-0071476874.
 - **Subbarao, M., Surya, G., 1994.** Depth from defocus: A spatial-
