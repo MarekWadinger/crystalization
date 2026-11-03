@@ -1,6 +1,6 @@
 # Camera 100 — Optics, Scale, and Defocus
 
-**Author:** Marek Wadinger. **Last updated:** 2026-06-13.
+**Author:** Marek Wadinger. **Last updated:** 2026-11-03 (analog-PAL scale, plant-sourced geometry, rerun of every number).
 **Companion code:** `src/optics/`, `src/scale_overlay/`, tests in
 `tests/test_optics.py`. **Companion hardware doc:** [`../lens/README.md`](../lens/README.md).
 
@@ -18,6 +18,16 @@ datasheet), **DERIVED** (computed from facts via the equations below),
 or **MEASURED** (extracted from the actual video frames). No other
 category appears.
 
+> **2026-11-03.** The single source of every physical input is
+> [`configs/camera_100.toml`](../../configs/camera_100.toml), whose lines carry the finer classes
+> MEASURED, PHOTO, DATASHEET, PLANT, ESTIMATE, ASSUMED, CHOICE, DERIVED, UNSOURCED
+> (`tests/test_provenance.py`). Where this chapter and the config disagree, the config wins. The
+> pixel scale is derived in [`scale_chain.md`](./scale_chain.md). Every number of the paper, old vs
+> new, is in [`rerun_results.md`](./rerun_results.md) (`scripts/rerun_paper_numbers.py`). The camera
+> is an analog B/W PAL CCD ("ADEMCO VIDEO"), not the Hanwha HCB-6000 of earlier versions. The
+> geometry once tagged "FACT, operator measurement 2026-09-07" is the plant's approximate answer of
+> 2026-08-12 (PLANT).
+
 ---
 
 ## 0. The video this chapter is calibrated against
@@ -25,11 +35,10 @@ category appears.
 | Item | Value |
 |---|---|
 | File | `datasets/2026-02-05 10-36-32.mp4` |
-| Resolution | 1920 × 1080, 30 fps, 1568 frames |
-| In-frame DVR timestamp | `2018-11-09 10:33:38` (clock on the recorder) |
+| Resolution | 1920 × 1080, 30 fps, 1568 frames: a **screen recording of the DVR monitor output**. It is the 720 × 576 PAL picture stretched 2.677 × (x) and 1.875 × (y) in a pillarbox ([`scale_chain.md`](./scale_chain.md)) |
+| In-frame DVR timestamp | `2018-11-09 10:33:38` (the DVR clock is not set; the overlay date is not the recording date) |
+| Recording date | **disputed**: the file birth time and name say 2026-02-05; the clip sidecar says 2026-02-04 (operator statement, June 2026). Time since seeding unknown ([`../../datasets/README.md`](../../datasets/README.md)) |
 | First frame | [`figures/00_first_frame.png`](./figures/00_first_frame.png) |
-
-The 2026 filename is the export date; the recording itself is from 2018.
 
 ![first frame](./figures/00_first_frame.png)
 
@@ -46,14 +55,20 @@ here so this chapter stands alone numerically.
 | N_max | Max aperture | **F/1.6** (full open) | Fujinon datasheet |
 | N_min | Min aperture | **F/22** | Fujinon datasheet |
 | MOD | Minimum object distance | **0.25 m** (≈ MOD relative to front element) | Fujinon datasheet |
-| pitch | Sensor pixel pitch | **2.9 µm/px** | Sony IMX307/IMX327 datasheet (HCB-6000 total 1945×1097 px matches this die) |
-| W_sensor | Sensor active width | **5.57 mm** | 1920 × 2.9 µm |
-| H_sensor | Sensor active height | **3.13 mm** | 1080 × 2.9 µm |
-| t_glass | Sight-glass thickness | **20 mm** (FACT, operator measurement 2026-09-07) | DIN 8902 disc, Ø150 mm (DN150), 8-bolt flange |
-| a | Lens front → outer glass face (air gap) | **20 mm** (FACT, operator measurement 2026-09-07) | tape/caliper on site |
-| n_g | Sight-glass refractive index | **1.47** (ESTIMATE — borosilicate; sapphire would be 1.77, fused silica 1.46) | typical glass for pressure-vessel sight glasses |
-| e | Extension tube length | **60 mm** (FACT, operator measurement 2026-09-07; supersedes the 45 mm caliper of 2026-06-15) | silver collar between lens flange and camera body |
-| N_op | F-number in service | **F/1.6** (FACT — wide open) | operator inspection 2026-06-15 |
+| camera | Camera body | analog B/W PAL CCD, label **"ADEMCO VIDEO"** (PHOTO); model ESTIMATE: Ademco ACM570E-class | Aug-photos 20260810_111738, rear 111636; config `[camera]` |
+| p_x × p_y | Sensor-plane size of one PAL sample × line | **6.831 × 6.250 µm** (ESTIMATE) | CCD cell 6.50 × 6.25 µm × 14.1875 MHz / 13.5 MHz (candidate datasheet); `optics.scale_chain` |
+| W × H | CCD active area | **4.89 × 3.64 mm** (ESTIMATE) | 752 × 6.50 µm, 582 × 6.25 µm |
+| stretch | 1080p clip px per PAL sample (x) / line (y) | **2.677 / 1.875** (MEASURED) | DVR OSD glyphs registered between the recordings |
+| t_glass | Sight-glass thickness | **20 mm** (PLANT) | Q&A item 8(C), A. Fedor 2026-08-12; DIN 8902 disc, Ø150 mm (DN150), 8-bolt flange |
+| a | Lens front → outer glass face (air gap) | **≈ 20 mm** (PLANT, "≈ 2 cm") | Q&A item 8(B) |
+| n_g | Sight-glass refractive index | **1.47** (ASSUMED — borosilicate; the DIN 8902 stamp suggests soda-lime 1.52) | does not enter the scale at focus |
+| e | Extension tube length | **≈ 60 mm** (PLANT, "≈ 6 cm"; the 45 mm was our own estimate sent with the questions). Whether a 5 mm CS→C ring is inside it is open (+8.9 % in µm/px) | Q&A item 8(A) |
+| x | Focus-helicoid travel | **1 mm** (ESTIMATE, AI guess, no record) | ±1 mm → ∓1.6 % in µm/px |
+| N_op | F-number in service | **F/1.6** (PLANT, "if I read it correctly"; ring between 1.6 and 2 on the photos) | Q&A item 9, Aug-photos 20260810_112120 |
+
+The old rows (Hanwha HCB-6000, 2.9 µm IMX307 pitch, 5.57 × 3.13 mm; "FACT, operator measurement
+2026-09-07") are superseded: the Hanwha appears only in a price quote, and no site measurement was
+made on 2026-09-07.
 
 ---
 
@@ -93,14 +108,16 @@ below we use the central value ``d_focus = 55.1 mm``.
 
 > **Historical note.** Earlier drafts of this document used
 > ``e = 10 mm`` (an estimate from snapshot FOV) and inferred
-> ``d_focus = 165 mm``. The operator caliper measurement on
-> 2026-06-15 revised both numbers to ``e = 45 mm``, ``d_focus = 62.2 mm``;
-> the 2026-09-07 site measurement corrected them again to ``e = 60 mm``,
-> ``d_focus = 55.1 mm`` (1.66 µm/px) and fixed ``t = 20 mm``, ``a = 20 mm``.
-> Every µm/px and CSD number below reflects the corrected setup; the
-> revision moved the median crystal estimate from 0.25 mm
-> (≈ mid-strike, scale-wrong) to 0.037 mm (≈ seed magma / very
-> early strike, scale-correct).
+> ``d_focus = 165 mm``. A 2026-06-15 revision (recorded then as an
+> operator caliper reading; per the config it was our own estimate sent with
+> the plant questions) gave ``e = 45 mm``, ``d_focus = 62.2 mm``;
+> the plant's Q&A answer (2026-08-12, relayed 2026-09-07) gave ``e ≈ 60 mm``,
+> ``d_focus = 55.1 mm`` and ``t = 20 mm``, ``a ≈ 20 mm``. With the
+> superseded isotropic 2.9 µm pitch this was 1.66 µm/px; with the analog
+> chain it is 1.464 × 1.913 µm/px on the 1080p clips (§3). The detector
+> medians that moved with these revisions (0.25 → 0.037 mm) are detector
+> artefacts, not crystal sizes, and no strike stage can be read from them
+> ([`rerun_results.md`](./rerun_results.md)).
 
 > **Compound-lens caveat.** The Fujinon HF35HA-1B is a multi-element
 > design, not a thin lens. The thin-lens identity ``M = i/d_o`` holds
@@ -133,31 +150,40 @@ polynomial result of [Agrawal et al., CVPR 2012](https://www.umiacs.umd.edu/~aag
 
 ## 3. Pixel → millimetre at the focused plane (DERIVED + MEASURED)
 
-The object-plane pixel size at the focused plane is
+The object-plane pixel size at the focused plane is, per axis,
 
-$$ \Delta x = \frac{\text{pitch}}{M} = \text{pitch}\,\frac{d_{\text{focus}} - f}{f}. $$
+$$ \Delta x = \frac{p_x}{M} = p_x\,\frac{d_{\text{focus}} - f}{f}, \qquad \Delta y = \frac{p_y}{M}, $$
 
-| Quantity | Value (d_focus = 55.1 mm, e = 60 mm) |
+with p_x, p_y the sensor-plane size of one frame pixel (§1). The pixel is **not square**.
+
+| Quantity | Value (d_focus = 55.1 mm, e ≈ 60 mm); class ESTIMATE |
 |---|---|
-| M = f / (d_focus − f) | **1.743 ×** (DERIVED) |
-| Δx at focus | **1.66 µm/px** (DERIVED) |
-| Horizontal FOV at focus = W_sensor / M | **4.18 mm** (DERIVED) |
-| Vertical FOV at focus = H_sensor / M | **2.35 mm** (DERIVED) |
-| px/mm at focus | **459 px/mm** (DERIVED) |
+| M = f / (d_focus − f) | **1.743 ×** |
+| PAL sample at focus, x × y | **3.919 × 3.586 µm** (95 %: ±9.8 / ±9.5 %) |
+| 1080p clip pixel at focus, x × y | **1.464 × 1.913 µm** (95 %: 1.336–1.624 / 1.752–2.116); geometric mean 1.673 µm, for areas only |
+| … if the 5 mm CS→C ring is inside the ≈ 6 cm | +8.9 %: clip 1.600 × 2.092 µm |
+| FOV at focus = CCD area / M | **2.80 × 2.09 mm** |
+| px/mm at focus, 1080p | **683 (x), 523 (y)** |
+
+Budget, Monte Carlo and the empirical checks: [`scale_chain.md`](./scale_chain.md). The tube
+length dominates; glass index, thickness and air gap do not change the scale at focus.
 
 ### 3.1 In-scene anchoring (MEASURED)
 
-Autocorrelation of mid-frame rows gives a first-decorrelation length
-of **~42.5 px (median over 18 rows)** in `frame 0`. This corresponds to
-roughly half the spacing between adjacent crystal edges, so the
-dominant texture period is **~85 px**. At 1.66 µm/px this is a texture
-period of **~0.14 mm**, corresponding to crystals of order
-**0.05–0.1 mm**. Strike stage is not inferred from this size: the
+Autocorrelation of mid-frame rows gave a first-decorrelation length
+of **~42.5 px (median over 18 rows)** in `frame 0` (UNSOURCED: the
+script is not in the repo). This corresponds to roughly half the spacing
+between adjacent crystal edges, so the dominant texture period is
+**~85 px**. Along a row of the 1080p clip (1.464 µm/px) this is
+**~0.125 mm** (0.14 mm at the superseded 1.66 µm/px). It is not used as
+a scale anchor or a crystal size. Strike stage is not inferred from this size: the
 camera sits on the **ZRA seed pan** (seeded with slurry, "mikroočko";
 plant Q&A *Potrebné dáta a otázky – Zodpovedané*, 2026-08-12, and the
 DeltaV "Udaje ZRA" screen; see `docs/sered/notes_plant_dcs_qa_photos.md`),
 and frame 0 (11:08:39) lies ~37 min before the 11:46 discharge of the
-previous ZRA strike (`datasets/2026-02-04 11-08-51.json`, event b1-e00).
+previous ZRA strike (`datasets/2026-02-04 11-08-51.json`, event b1-e00). That timing holds only
+for the PAL recording; for the `10-36-32` clip of §0 the date is disputed and the time since
+seeding is unknown.
 An earlier version of this section cited an unsourced "operator
 confirmation" of an A-strike first hour; that claim is withdrawn.
 
@@ -166,14 +192,14 @@ confirmation" of an A-strike first hour; that claim is withdrawn.
 This figure was decisive in the 2026-06-15 revision: at the (then-
 estimated) e = 10 mm the predicted µm/px ≈ 10 µm/px landed in the
 mid-strike crystal-size range and looked "self-consistent"; only the
-caliper measurement of e = 45 mm (later corrected to 60 mm) revealed that we were a
-factor of ~5 off in the scale and looking at seed crystals rather
-than mid-strike ones.
+estimate of e = 45 mm (then the plant's ≈ 60 mm) revealed that we were a
+factor of ≈ 5.5 off in the scale ((60 + 1)/(10 + 1)). The figure now uses the PAL-sample geometric
+mean (6.53 µm), so its curves are per PAL sample, not per clip pixel.
 
 ![extension tube sweep](./figures/06_extension_tube_sweep.png)
 
-A 1 mm error in e gives roughly a 1.0 µm/px error at the focused plane
-and a 10–15 mm error in d_focus.
+A 1 mm error in e gives a 1.6 % error in µm/px at the focused plane
+(1/(e + x)) and a 0.33 mm error in d_focus (f²/(e + x)²).
 
 ---
 
@@ -198,13 +224,15 @@ mapping — defocus spreads each point across many pixels but the
 
 ### Numerical answers around the focused plane
 
-| d_o (mm) | µm/px | px/mm | FOV horizontal (mm) |
-|---:|---:|---:|---:|
-| 50 | 1.51 | 662 | 2.90 |
-| **55.1 (focus)** | **1.66** | **601** | **3.19** |
-| 60 | 1.81 | 552 | 3.48 |
-| 65 | 1.96 | 509 | 3.77 |
-| 80 | 2.42 | 413 | 4.64 |
+| d_o (mm) | 1080p µm/px x × y | PAL µm/px x × y |
+|---:|---:|---:|
+| 50 | 1.330 × 1.737 | 3.56 × 3.26 |
+| **55.1 (focus)** | **1.465 × 1.914** | **3.92 × 3.59** |
+| 60 | 1.596 × 2.085 | 4.27 × 3.91 |
+| 65 | 1.729 × 2.258 | 4.63 × 4.23 |
+| 80 | 2.128 × 2.779 | 5.70 × 5.21 |
+
+(`optics.config.um_per_px_xy_at_focus` × d_o/d_focus; ESTIMATE.)
 
 ---
 
@@ -244,17 +272,22 @@ focus at d_focus = 55.1 mm:
 
 ![depth of field envelope](./figures/04_dof_envelope.png)
 
-| F-number | DoF at 1-pixel blur (2.9 µm) | DoF at 2-pixel blur (5.8 µm) |
+The blur threshold is one **PAL sample** (CCD cell, 6.53 µm geometric mean at the
+sensor): the 1080p clip pixels are upscaled PAL samples and carry no extra
+resolution. Total DoF (near + far):
+
+| F-number | DoF at 1-sample blur (6.5 µm) | DoF at 2-sample blur (13.1 µm) |
 |---|---:|---:|
-| **F/1.6 (CURRENT)** | **≈ 0.008 mm** | **≈ 0.017 mm** |
-| F/2.0 | ≈ 0.010 mm | ≈ 0.021 mm |
-| F/4.0 | ≈ 0.021 mm | ≈ 0.041 mm |
-| F/8.0 | ≈ 0.041 mm | ≈ 0.083 mm |
-| F/16 | ≈ 0.083 mm | ≈ 0.165 mm |
+| **F/1.6 (CURRENT)** | **≈ 0.019 mm** | **≈ 0.038 mm** |
+| F/2.0 | ≈ 0.024 mm | ≈ 0.047 mm |
+| F/4.0 | ≈ 0.047 mm | ≈ 0.094 mm |
+| F/8.0 | ≈ 0.094 mm | ≈ 0.189 mm |
+| F/16 | ≈ 0.189 mm | ≈ 0.378 mm |
 
 **The current operating point is extreme.** At F/1.6 the in-focus
-slice is only **±4 µm** at 1-pixel blur — barely two seed crystals
-thick. Detected crystals are essentially **all at one depth**, which
+slice is only **±9.4 µm** at 1-sample blur (±4.2 µm if one counts the 2.9 µm
+clip pixel, as the paper did). That is thinner than the crystals minutes after
+seeding (22–35 µm, microscope 2026-10-30). Detected crystals are essentially **all at one depth**, which
 makes the depth-aware machinery of §§5–6 of the manuscript
 *demonstrated but not load-bearing* at this aperture. The principal
 plant-side recommendation remains: **stop the lens down**. Going from
@@ -306,11 +339,15 @@ aggregates a Laplacian-variance histogram across 120 sampled frames of
 frame, **overlay-cropped**) and fits a power law to the upper tail
 (50–95 % quantile band):
 
-| Quantity | Value (overlay-cropped) | Value (pre-crop, contaminated) |
+| Crop | α (MEASURED) | vs 5.00 |
 |---|---:|---:|
-| **Measured tail exponent α** | **4.57** (MEASURED) | 5.36 |
-| Theoretical exponent (Gaussian-PSF + Laplacian) | **5.00** (DERIVED) | 5.00 |
-| Discrepancy | **−8.6 %** | +7.2 % |
+| none (contaminated) | 5.36 | +7.2 % |
+| top 55 + bottom 120 (DVR overlay only) | 4.57 | −8.6 % |
+| `DEFAULT_CROP` (+ left 50, right 70) | 4.88 | −2.5 % |
+| **auto crop, `resolve_crop` (what `optics.measure` runs; fig 08)** | **4.90** | **−2.0 %** |
+
+(`scripts/rerun_paper_numbers.py`, rows 48–51; scale-free.) The paragraph below
+discusses the overlay-only crop, before the side bars were removed.
 
 ![measured vs theory](./figures/08_measured_vs_theory.png)
 
@@ -341,7 +378,8 @@ contribute, producing a tail that looked artificially fat.
 > symmetric in *reciprocal* object distance. This is consistent with
 > the depth-from-defocus literature (Pentland 1987; Subbarao & Surya
 > 1994; Pertuz, Puig & García 2013; Favaro & Soatto tutorial) and
-> matches the present video to within 7 % on the tail exponent.
+> matches the present video to within 2 % on the tail exponent (α = 4.90,
+> fully cropped).
 
 ### 6.3 Caveats verified by the literature
 
@@ -349,8 +387,8 @@ contribute, producing a tail that looked artificially fat.
    the *true* geometric pillbox PSF the MTF is a `jinc²` function
    (Nayar & Nakagawa, IEEE TPAMI 16(8) 824–831, 1994) and oscillates
    past its first zero — the qualitative monotonic decrease holds, the
-   exact exponent shifts. The 5.36 measured value confirms the
-   Gaussian approximation is appropriate in this regime; if the
+   exact exponent shifts. The 4.90 measured value (fully cropped; 5.36
+   was overlay contamination) is consistent with the Gaussian approximation; if the
    operator stops the lens down to F/16 the diffraction floor takes
    over and the exponent will flatten further. See Mannan & Langer
    (IEEE CRV 2016) for the model-error growth with defocus magnitude.
@@ -371,11 +409,11 @@ contribute, producing a tail that looked artificially fat.
    polynomial (Agrawal et al., *A Theory of Multi-Layer Flat
    Refractive Geometry*, CVPR 2012; Chadebecq et al., IJCV 2020). The
    paraxial form here is adequate for FOV and pixel-pitch budgeting
-   (Δ ≈ 4.8 mm), but a refractive-aware calibration would be needed
+   (Δ = 6.39 mm), but a refractive-aware calibration would be needed
    for sub-pixel metric reconstruction — e.g. PMC10781309 reports
    pinhole-model RMSE of 2.28–2.42 mm vs 0.26–0.39 mm with explicit
-   refraction. Not a concern at our 10 µm/px scale and ~0.5 mm
-   crystal target, but flag it before publishing.
+   refraction. Not a concern at our 1.5–1.9 µm/px (1080p) scale, where
+   the ±10 % scale budget dominates, but flag it before publishing.
 
 4. **The 1/3 in-front, 2/3 behind DoF heuristic is wrong** and was
    refuted in the research verification round. The DoF formula in
@@ -404,16 +442,17 @@ Launch with `uv run scale-overlay-app`.
 
 Demo snapshots (same frame, grid centred at three different depths):
 
-| d_o = 163 mm (near) | d_o = 165 mm (focus) | d_o = 167 mm (far) |
+| d_o = 54.9 mm (near) | d_o = 55.1 mm (focus) | d_o = 55.3 mm (far) |
 |---|---|---|
 | ![near](./figures/07_overlay_near.png) | ![focus](./figures/07_overlay_at_focus.png) | ![far](./figures/07_overlay_far.png) |
-| 10.27 µm/px | 10.40 µm/px | 10.53 µm/px |
+| 1.460 × 1.907 µm/px | 1.465 × 1.914 µm/px | 1.471 × 1.921 µm/px |
 
-The mm/px shift across the ±2 mm DoF range is **±1.3 %**, within sieve
-classification noise — so for *crystal counting at a fixed depth* a
-single mm/px number is good enough. For *size estimation across a
-larger depth band* the grid must be re-rendered per layer; the app
-does this automatically.
+The demos are drawn by `scripts/rerun_paper_numbers.py --fig07`: the frame rows are resampled
+×1.306 so that a displayed pixel is 1.465 µm on both axes, and the square grid is then true. The
+module `scale_overlay.render_demos` and the app still draw an isotropic grid, and the demo module
+uses the PAL-sample scale on the 1080p frame (2.3× too coarse; [`rerun_results.md`](./rerun_results.md),
+code issue 1). The scale shift across the ±0.2 mm window is **±0.36 %**, far below the ±10 % scale
+budget. For crystal counting at a fixed depth a single scale per axis is good enough.
 
 ---
 
@@ -421,9 +460,9 @@ does this automatically.
 
 | Question | Answer |
 |---|---|
-| 1. mm/px at the focused plane | **~10.4 µm/px** for the best-estimate setup; in-scene anchoring brackets the true value at 6–12 µm/px. |
-| 2. How does mm/px change with depth? | **Strictly linear in d_o**: Δx(d_o) = pitch · d_o / i_fixed. Within the in-focus slice (DoF ≈ 0.5 mm at F/4) the variation is sub-percent. |
-| 3. Sharpness distribution vs depth? | **Power-law cusp** ``S ∝ c^{-5}``, asymmetric in d_o, symmetric in 1/d_o. NOT Gaussian, NOT gamma. The 4.57 measured tail exponent on the overlay-cropped plant video matches the 5.0 theoretical value to ~9 %. |
+| 1. mm/px at the focused plane | **1.464 × 1.913 µm/px** on the 1080p clips, **3.92 × 3.59 µm/px** per PAL sample (ESTIMATE, ±≈ 10 % at 95 %, +8.9 % if the CS→C ring is in the tube). The pixel is anisotropic. |
+| 2. How does mm/px change with depth? | **Strictly linear in d_o**: Δx(d_o) = p_x · d_o / i_fixed, same for y. Within the in-focus slice (±9.4 µm at F/1.6) the variation is ≈ 0.02 %. |
+| 3. Sharpness distribution vs depth? | **Power-law cusp** ``S ∝ c^{-5}``, asymmetric in d_o, symmetric in 1/d_o. NOT Gaussian, NOT gamma. The measured tail exponent on the fully cropped clip is 4.90, within 2 % of 5.0. |
 | 4. Can sharpness be paired with mm/px? | **Yes** — the scale-overlay app does exactly this. The sharpness map identifies which pixels are at the focused plane; the geometric model maps those pixels to mm at that depth. |
 
 ---
@@ -432,12 +471,14 @@ does this automatically.
 
 | Item | How to close | Impact |
 |---|---|---|
-| Real extension-tube length | Calliper between the lens C-mount and the camera body | ±2 mm in d_focus → ±10 % in mm/px |
-| F-number set on the lens | Read the iris ring against the body index dot in person | DoF can vary 4× across F/4–F/16 |
-| Real sight-glass thickness | Vendor sheet or callipers at maintenance | ±5 mm in d_focus, no effect on mm/px scaling rate |
-| Lens-front to outside-glass distance | Tape measure ±5 mm | Sets the *absolute* d_focus in plant coordinates |
+| Real extension-tube length (plant "≈ 6 cm") and whether a 5 mm CS→C ring is inside it | Caliper and a photo of the body mount | dominant term: ±5 mm → ±8 % in µm/px; ring +8.9 %. Would cut the 95 % budget from ±10 % to ±3 % |
+| Camera model (sticker unread) | Photo of the sticker | 752- vs 500-cell CCD: 0.6–0.8 % in µm/px |
+| Focus-helicoid travel (1 mm, AI guess) | Caliper the lens body length | ±1 mm → ∓1.6 % in µm/px |
+| F-number set on the lens (plant: F/1.6 "if I read it correctly") | Read the iris ring in person | DoF ∝ N |
+| Real sight-glass thickness (plant: 20 mm) | Vendor sheet or callipers at maintenance | moves the plane, not the scale |
+| Lens-front to outside-glass distance (plant: ≈ 2 cm) | Caliper | Sets the *absolute* d_focus in plant coordinates |
 | Inside-of-glass to typical crystal plane | Process diagram or tape measure | Sets which crystals are in focus |
-| DVR codec / chroma subsampling / rescaling | Check the recorder rack | Could affect Laplacian-variance amplitude (not the shape) |
+| DVR make, sampling rate (13.5 MHz assumed), codec | Plant: "will be supplied" (Q&A item 10) | ±2 % line-mapping term in x; the 1080p stretch is measured |
 
 ---
 
@@ -502,6 +543,13 @@ Source: `src/optics/highpass.py` (`highpass`, `highpass_image`, `highpass_video`
 ```bash
 # Type-check + tests
 uv run pytest tests/test_optics.py
+
+# Every paper number, old vs new (writes nothing); fig 07 at the per-axis scale
+uv run --frozen python scripts/rerun_paper_numbers.py
+uv run --frozen python scripts/rerun_paper_numbers.py --fig07
+
+# Pixel scale and its budget
+uv run python -m optics.scale_chain
 
 # Render all theoretical plots
 uv run python -m optics.plots
@@ -591,31 +639,31 @@ Walking the document claim-by-claim. ``D-R`` = deep-research vote
 
 | § | Claim | Source(s) | Verification |
 |---|---|---|---|
-| 1 | Hanwha HCB-6000 1/2.8" sensor, 1920×1080, 2.9 µm pitch (IMX307/327 die) | datasheet + Sony flyer | FACT |
+| 1 | ~~Hanwha HCB-6000 1/2.8" sensor, 2.9 µm pitch~~ → analog B/W PAL CCD "ADEMCO VIDEO", PAL sample 6.831 × 6.250 µm | photos (PHOTO) + candidate datasheet (ESTIMATE) | `optics.scale_chain` |
 | 1 | Fujinon HF35HA-1B, f=35 mm, F/1.6–22, MOD 0.25 m | Fujinon datasheet | FACT |
 | 1 | DIN 8902 sight-glass, 8-bolt flange | operator photo `lens/20260205_122524.jpg` | FACT |
-| 1 | Sight-glass thickness 20 mm (FACT 2026-09-07), n_g ≈ 1.47 (ESTIMATE) | site measurement + borosilicate | FACT / ESTIMATE |
+| 1 | Sight-glass thickness 20 mm, n_g ≈ 1.47 | plant Q&A 2026-08-12 + borosilicate | PLANT / ASSUMED |
 | 2 | ``M = f / (d_o − f)`` | Hecht §5.2; thin-lens identity | code (`test_thin_lens_round_trip_finite_distance`), D-R 3-0 |
 | 2 | ``m = e/f`` at infinity focus; ``m_x = m + x/f`` | Photons-to-Photos, derived from Hecht §5.2 | D-R 3-0; verbatim quote retrieved 2026-06-13 |
 | 2.1 | ``Δ = t(1 − 1/n_g) = 6.39 mm`` | Hecht §5.6 paraxial | code (`test_sight_glass_shift_independent_of_distance`), D-R 3-0 |
 | 2.1 | Exact flat-port projection is 12th-degree polynomial | Agrawal CVPR 2012 | D-R 3-0 |
-| 3 | µm/px at focus = 10.40 µm with e=10 mm, d_focus=165 mm | derived from §2 | code (`test_magnification_matches_textbook_form`) |
-| 3.1 | First-decorrelation pixel offset = 42.5 px (median) | autocorrelation, this video | video MEASURED |
+| 3 | µm/px at focus = 1.464 × 1.913 (1080p), 3.919 × 3.586 (PAL) at e ≈ 60 mm, d_focus = 55.1 mm | derived from §1–2 | `optics.scale_chain`; ESTIMATE |
+| 3.1 | First-decorrelation pixel offset = 42.5 px (median) | autocorrelation, this video | UNSOURCED (no script in the repo) |
 | 3.1 | Massecuite crystal size 0.5–1.0 mm | Bubník et al. *Sugar Technologists Manual* | FACT (textbook) |
 | 4 | mm/px linear in d_o: ``Δx(d_o) = pitch · d_o / i_fixed`` | Hecht §5.2 + Pertuz 2013 | code (`test_mm_per_pixel_is_linear_in_d_o`), D-R 3-0 |
 | 5 | ``c(d_o) = f²/(N(d_focus−f)) · |d_o − d_focus| / d_o`` | Wikipedia CoC verbatim, derived from Hecht §5.2 | code (`test_coc_far_limit_matches_hyperfocal`, `_zero_at_focus`); D-R 3-0; verbatim quote retrieved 2026-06-13 |
 | 5 | CoC asymmetric in d_o, symmetric in 1/d_o | Pertuz 2013 (eq. 5); Mannan & Langer 2016 | code (`test_coc_is_asymmetric_in_object_space`, `test_coc_is_symmetric_in_reciprocal_distance`), D-R 3-0 |
 | 5 | ``c_∞ = f A / (d_focus − f) = f² / (N (d_focus − f))`` | Wikipedia + Hecht | code (`test_coc_far_limit_matches_hyperfocal`), D-R 3-0 |
-| 5.1 | DoF at F/4, focus 165 mm: ≈ 0.26 mm (1-px), ≈ 0.53 mm (2-px) | numerical, from §5 | code values; reproducible |
+| 5.1 | DoF at F/1.6, focus 55.1 mm: ≈ 0.019 mm (1 PAL sample), ≈ 0.038 mm (2 samples) | numerical, from §5 | `scripts/rerun_paper_numbers.py` |
 | 5.1 | 1/3 front, 2/3 behind heuristic | none — NOT cited | **D-R refuted 0-3** (claim killed) |
 | 6.1 | ``S ∝ (σ² + σ_floor²)^(−5/2) ∝ c^{−5}`` (Gaussian-PSF, Laplacian-variance) | Pertuz 2013 + analytic integral | code (`test_sharpness_gaussian_is_monotone_in_coc`), D-R 3-0 (medium confidence — depends on Gaussian-PSF assumption) |
 | 6.1 | σ ≈ c/2 (Gaussian-fit defocus) | Pentland 1987; Subbarao & Surya 1994; Pertuz 2013 | D-R 3-0 |
 | 6.1 | σ_diff ≈ 0.42–0.45 · λ · N | Goodman §6.4 + Smith *Modern Optical Engineering* §11 | numeric in `psf.py`; uncertainty bracketed in code docstring |
-| 6.2 | Measured tail exponent α = 4.57 on overlay-cropped plant video (5.36 on contaminated) | Laplacian-variance histogram fit | video MEASURED, code reproducible (`python -m optics.measure`) |
+| 6.2 | Measured tail exponent α = 4.90 fully cropped (4.57 overlay-only, 5.36 contaminated) | Laplacian-variance histogram fit | video MEASURED, code reproducible (`python -m optics.measure`) |
 | 6.3.1 | Pillbox MTF = jinc²; geometric MTF oscillates | Nayar & Nakagawa 1994 | D-R 3-0 |
 | 6.3.2 | Front/back ambiguity for circular apertures | Zhou, Lin & Nayar 2011 | D-R 3-0 |
 | 6.3.3 | Pinhole-model refraction RMSE 2.28–2.42 mm vs 0.26–0.39 mm with explicit model | PMC10781309 | D-R 3-0 |
-| 7 | mm/px shifts by ±1.3 % across ±2 mm DoF range | direct numerical | reproducible: `optics.mm_per_pixel_at(lens, 165, [163,167])` |
+| 7 | mm/px shifts by ±0.36 % across ±0.2 mm | direct numerical | reproducible: 0.2 / 55.1 |
 
 **Refuted in verification (NOT used in this document):**
 
@@ -637,13 +685,14 @@ only as the audit trail of that revision; current values are in §1 and §12.
 
 | Number | Where | Trace |
 |---:|---|---|
-| **2.9 µm/px** sensor pitch | §1 | Sony IMX307/IMX327 unit cell; HCB-6000 datasheet total-pixel count 1945×1097 identifies the die |
-| **5.57 × 3.13 mm** sensor active | §1 | 1920 × 1080 × 2.9 µm |
+| *superseded* — **2.9 µm/px** sensor pitch | §1 | an AI inference (Sony IMX307/IMX327) from the Hanwha price quote; the installed camera is an analog PAL CCD (2026-11-03) |
+| *superseded* — **5.57 × 3.13 mm** sensor active | §1 | 1920 × 1080 × 2.9 µm |
+| **6.831 × 6.250 µm** per PAL sample | §1 | CCD cell × 14.1875 / 13.5 MHz; `optics.scale_chain` (ESTIMATE) |
 | **6.39 mm** glass shift | §2.1 | 20 · (1 − 1/1.47) = 6.395 mm — Hecht §5.6 formula, verified in `test_sight_glass_shift_independent_of_distance` |
 | *superseded* — **157.5 mm** d_focus at infinity ring | §2 | 35 · 45 / (45 − 35) = 157.5 — thin-lens equation |
 | *superseded* — **165 mm** chosen d_focus | §2 | ESTIMATE within 157.5–200 mm bracket from infinity ring + 4 m ring |
 | *superseded* — **10.40 µm/px** at focus | §3 | 2.8 · 165 / 44.42 ≈ 10.40 — direct from `mm_per_pixel_at` |
-| *superseded* — **42.5 px** first-decorrelation | §3.1 | measured in this session, see Bash block above |
+| *superseded* — **42.5 px** first-decorrelation | §3.1 | UNSOURCED: the Bash block it cites is not in this document or the repo |
 | *superseded* — **96.2 px/mm** at focus | §3 | 1000 / 10.40 = 96.15 — reciprocal of µm/px |
 | *superseded* — **2355.8 µm** ``c_∞`` at F/4 | §5 | (35/4) · 35 / (165 − 35) = 2.356 mm — `circle_of_confusion(lens, 165, 1e9)` |
 | *superseded* — **0.26 mm** DoF at F/4, 1-px | §5.1 | numerical from `circle_of_confusion`; reproducible |
@@ -662,8 +711,8 @@ Every other number in the document is either:
 *Status as of 2026-06-13 (Friday evening): all theoretical claims
 cross-checked against verified primary literature; 22 of 25 atomic
 deep-research claims confirmed (3 refuted and excluded); 10 unit
-tests pass; measured power-law exponent on the plant video matches
-theory within 7 %; all references have clickable URLs / DOIs; every
+tests pass (17 as of 2026-11-03); measured power-law exponent on the plant video matches
+theory within 7 % (2 % after the full crop, 2026-11-03); all references have clickable URLs / DOIs; every
 numerical claim in §§ 1–8 has a verification trace in §13. Open items
 in §9 (extension-tube length, F-number, glass thickness) need on-site
 measurement before publishing — they are uncertainty bounds on the
@@ -671,33 +720,35 @@ absolute scale, not on the structural results.*
 
 ---
 
-## 12. Measurement-error budget (DERIVED)
+## 15. Measurement-error budget (DERIVED)
 
-Generated by ``uv run python -m optics.error_budget`` from ``configs/camera_100.toml``.
-Key result: the object-plane scale is ``µm/px = p·f/(e + x)`` — the glass and the
-air gap do not enter it at all; focal-length tolerance and the focus-ring travel
-dominate.
+Generated by ``uv run python -m optics.error_budget`` from ``configs/camera_100.toml``
+(2026-11-03, analog-PAL chain). The object-plane scale is ``µm/px = p·f/(e + x)`` per axis:
+the glass and the air gap do not enter it. The plant's "≈ 6 cm" tube dominates. The
+per-recording 95 % intervals (PAL and 1080p, x and y) are in [`scale_chain.md`](./scale_chain.md).
 
-### Inputs (1 σ)
+## Inputs (1 σ)
 
 | Symbol | Value | σ | Source |
 |---|---:|---:|---|
-| f | 35 | ±0.7 | datasheet 35 mm; ±2 % typical CCTV tolerance (ASSUMED) |
-| e | 60 | ±0.5 | operator tape/caliper 2026-09-07 |
-| x | 1 | ±1 | ~3 exposed helicoid turns ≈ 1 mm (operator estimate) |
-| p | 2.9 | ±0.02 | Sony IMX307/IMX327 unit cell 2.9 µm (datasheet) |
-| t | 20 | ±0.5 | operator 2026-09-07 |
-| a | 20 | ±1 | operator 2026-09-07 |
-| n | 1.47 | ±0.03 | borosilicate 1.47 assumed; soda-lime would be 1.52 |
+| f | 35 | ±0.7 | lens engraving 35 mm (PHOTO); ±2 % CCTV tolerance (ASSUMED) |
+| e | 60 | ±2.88675 | Q&A 8(A) "≈ 6 cm" (PLANT), uniform ±5 mm |
+| x | 1 | ±0.57735 | focus travel 1 mm, AI guess (ESTIMATE), uniform 0–2 mm |
+| px | 6.83102 | ±0.0788778 | µm per PAL sample, CCD cell × clock / 13.5 MHz (ESTIMATE), line mapping uniform ±2 % (optics.scale_chain) |
+| py | 6.25 | ±0.0288675 | µm per PAL line = CCD row (ESTIMATE), candidates 6.25–6.30 |
+| t | 20 | ±0.5 | Q&A 8(C) "20 mm" (PLANT) |
+| a | 20 | ±2.88675 | Q&A 8(B) "≈ 2 cm" (PLANT), uniform ±5 mm |
+| n | 1.47 | ±0.03 | borosilicate 1.47 (ASSUMED); soda-lime would be 1.52 |
 
-### Propagated 1 σ per derived quantity (linear; MC check in last column)
+## Propagated 1 σ per derived quantity (linear; MC check in last column)
 
-| Quantity | Value | σ from f | σ from e | σ from x | σ from p | σ from t | σ from a | σ from n | total σ (lin) | total σ (MC) | rel. |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| um_per_px | 1.664 | 0.033 | 0.014 | 0.027 | 0.011 | 0.000 | 0.000 | 0.000 | **0.047** | 0.047 | 2.8 % |
-| d_focus_mm | 55.082 | 1.503 | 0.165 | 0.329 | 0.000 | 0.000 | 0.000 | 0.000 | **1.548** | 1.544 | 2.8 % |
-| H_to_inner_face_mm | 61.477 | 1.503 | 0.165 | 0.329 | 0.000 | 0.160 | 0.000 | 0.278 | **1.580** | 1.576 | 2.6 % |
-| H_behind_front_mm | 21.477 | 1.503 | 0.165 | 0.329 | 0.000 | 0.340 | 1.000 | 0.278 | **1.894** | 1.888 | 8.8 % |
-| H2_behind_front_mm | 12.026 | 0.700 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **0.700** | 0.698 | 5.8 % |
+| Quantity | Value | σ from f | σ from e | σ from x | σ from px | σ from py | σ from t | σ from a | σ from n | total σ (lin) | total σ (MC) | rel. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| um_per_px_x_PAL | 3.919 | 0.078 | 0.185 | 0.037 | 0.045 | 0.000 | 0.000 | 0.000 | 0.000 | **0.210** | 0.211 | 5.4 % |
+| um_per_px_y_PAL | 3.586 | 0.072 | 0.170 | 0.034 | 0.000 | 0.017 | 0.000 | 0.000 | 0.000 | **0.188** | 0.190 | 5.2 % |
+| d_focus_mm | 55.082 | 1.503 | 0.950 | 0.190 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **1.789** | 1.800 | 3.2 % |
+| H_to_inner_face_mm | 61.477 | 1.503 | 0.950 | 0.190 | 0.000 | 0.000 | 0.160 | 0.000 | 0.278 | **1.817** | 1.830 | 3.0 % |
+| H_behind_front_mm | 21.477 | 1.503 | 0.950 | 0.190 | 0.000 | 0.000 | 0.340 | 2.887 | 0.278 | **3.424** | 3.435 | 15.9 % |
+| H2_behind_front_mm | 12.026 | 0.700 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **0.700** | 0.702 | 5.8 % |
 
-Not in the table (discrete, not Gaussian): the C-mount flange depth. If the measured 60 mm already includes the 5 mm C-mount adapter ring, e is 55 mm: µm/px +9 %, d_focus +2.0 mm, H′ shifts −5 mm.
+Not in the table (discrete, not Gaussian): the C-mount flange depth. If the plant's ≈ 60 mm already includes the 5 mm CS→C adapter ring, e is 55 mm: µm/px +9 %, d_focus +2.0 mm, H′ shifts −5 mm. Per-recording µm/px with 95 % intervals (PAL and 1080p, x and y): uv run python -m optics.scale_chain.
