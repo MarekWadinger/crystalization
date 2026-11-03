@@ -1,72 +1,68 @@
-% Section 9 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+% Section 9. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft). Only numbers stated in sections 2-8, with
+% their scripts there. Claim changes: papers/cep/CLAIM_CHANGES.md.
 \section{Discussion and limitations}\label{sec:discussion}
 
-\subsection{Where the pipeline performs}\label{sec:performs}
+\subsection{What the installed camera delivers now}\label{sec:performs}
 
-\begin{itemize}
-\item \textbf{Geometric optics chain is closed end-to-end.} The thin-lens model with documented Fujinon datasheet plus
-in-scene anchoring gives a self-consistent mm/px to within ${\sim}10$\,\%.
-\item \textbf{Defocus structure matches theory to ${\sim}9$\,\%.} The Laplacian-variance tail exponent post-full-crop
-($\alpha = 4.88$) is consistent with the Gaussian-PSF + diffraction-floor model (theoretical 5.0) to within 2.4\,\%.
-\item \textbf{The within-detector homogeneous-slurry self-consistency check passes.} The focal-plane, near-side, and
-far-side density curves overlap closely (\figref{fig:csd} right). Per \secref{sec:selfcheck} this confirms that the
-detector behaves consistently across depth, not that the underlying CSD is depth-independent; a genuine validation
-requires an external reference (the Mastersizer granulometry now cited in \secref{sec:csd} is one such reference but
-lies below the detector's bandpass).
-\item \textbf{The pipeline produces an internally self-consistent CSD of detector-bandpassed features: median
-0.074~mm, CV 0.40, log-normal $\boldsymbol{s = 0.39}$} (watershed detector + full crop) --- derived from raw video
-with a complete numerical audit trail at the verified Camera 100 hardware configuration. These numbers describe the
-$\approx 20$--200~\um{} feature population the detector resolves; they are \textbf{not} a measurement of the crystal
-CSD (see \secref{sec:csd} preface and \secref{sec:notperform} for the size-ground-truth retraction).
-\end{itemize}
+The optical side is settled up to its stated inputs. The scale at the focused plane is known per axis to about
+$\pm 10$\,\% at 95\,\% (\tabref{tab:scale}), with a discrete $+8.9$\,\% open if the stated tube length includes a
+CS-to-C ring. The plant's ``$\approx 6$~cm'' for the tube dominates the budget; every other term is about 2\,\% or
+less. Any detector on the clips must use the anisotropic clip pixel, and its resolution element is the PAL sample in
+both recordings (\secref{sec:budget}).
 
-\subsection{Where the pipeline does not perform}\label{sec:notperform}
+At F/1.6 the camera samples a slice of $\pm 9.4$~\um{} about the focused plane (\tabref{tab:dof}). Within it the
+magnification is constant well below the scale uncertainty (mean depth correction 0.005--0.013\,\%;
+\secref{sec:depthsmall}), so a single focal-plane scale suffices. The same thinness makes the size prior
+uninformative (\secref{sec:disamb-result}). Because the size ratio depends only on $\delta / d_\mathrm{focus}$
+(Eq.~\ref{eq:ratio}) while the admitted depth range grows in proportion to $N$ (Eq.~\ref{eq:coc}), stopping down to
+F/16 widens the slice tenfold to $\pm 94$~\um{} and still leaves the admitted range below the
+$\delta \approx 1.3$~mm at which the ratio reaches 5\,\%.
 
-\begin{itemize}
-\item \textbf{The detector cannot resolve the true crystal population on the case-study recording.} Independent
-Mastersizer granulometry of the same product gives $\mathrm{Dv}(50) = 6.81$~\um, $D[4;3] = 8.71$~\um{}
-(\code{docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf}; \citealp{Mastersizer2025}). The recording captures the
-seed pan rather than the A-strike, and at the documented 1.66~\umpx{} scale the area filter $[80, 8000]$~px$^2$
-bandpasses $\approx 20$--200~\um{} features, entirely above the $\approx 9$~\um{} crystal population. The numbers
-reported in \secref{sec:csd} therefore describe agglomerate / cluster / bandpassed structure, not the underlying CSD.
-The fix is a detector retuned to the correct length scale (or a CNN-based segmentation; \secref{sec:recs}), not a
-parameter sweep of the current one.
-\item \textbf{Front/back disambiguation is geometrically valid but operationally degenerate at F/1.6.} The verified
-F/1.6 aperture produces a $\pm 4.2$~\um{} in-focus depth window --- about the size of a median seed-slurry crystal. The detector
-therefore sees one depth slice and the 79 / 21 near-side split observed in \secref{sec:sizing} is not robust evidence
-of a geometric offset; it could equally reflect the right-skew of the empirical prior.
-\item \textbf{Paraxial sight-glass model breaks at sub-pixel scales.} Exact flat-port projection requires
-\citet{Agrawal2012}'s 12th-degree polynomial; for the 0.05~mm crystals at 1.66~\umpx{} the residual refractive
-distortion is $<1$\,\% and below detector noise, but metric reconstruction to sub-pixel precision would require the
-refractive correction.
-\item \textbf{DVR overlay contamination is a real engineering hazard.} Without cropping, the apparent agreement with
-theory ($\alpha = 5.36$, $+7$\,\%) was spurious. Future deployments must verify overlay positions at ingestion and
-crop accordingly.
-\item \textbf{Soft-anchoring against expected crystal size is unreliable.} The v0.1 manuscript anchored
-$e \approx 10$~mm by matching the in-frame autocorrelation period to ``typical massecuite'' --- and was $4.5\times$
-off the true $e = 60$~mm without any data-internal inconsistency flagging the error. Caliper measurement (or
-\secref{sec:growth}'s growth-curve self-calibration) remains the only robust route.
-\end{itemize}
+Neither classical detector measures crystal size on the case-study clip
+(\S\S\,\ref{sec:csd-edge}--\ref{sec:watershed}). Resolution is not the obstacle for most of a strike: from about half
+an hour after seeding the microscope medians exceed 0.1~mm (\tabref{tab:microscope}), tens of PAL samples, and only
+the slurry crystals of 10--19~\um{} sit at the resolution limit (\secref{sec:expected}). The missing piece is a
+detector validated against hand-labelled crystals (\secref{sec:validation}).
+
+\subsection{Limitations}\label{sec:notperform}
+
+The scale is modelled, not measured in the image: no object of known size has been imaged through the glass. The
+tube length, air gap, glass thickness and F-number are approximate plant statements, the camera model with its cell
+size and CCD clock is the best-matching candidate, to be confirmed, and the 13.5~MHz sampling is the BT.601 rate, not
+a datasheet value of the installed recorder (\tabref{tab:inputs}). The case-study clip has no size reference: its
+recording date is contradicted by the image data, so its strike phase is unknown (\secref{sec:recording}), and the
+microscope series is from another day. That series consists of chords of operator-picked crystals, read once by an AI
+transcription from the photographs' overlays, not a measured distribution (\secref{sec:expected}). The depth of field
+rests on two choices, the resolution element (\tabref{tab:dof}) and the PSF constant $k = 1/2$, which has no
+page-checked source and sets the slice but not the asymptotic exponent (\secref{sec:psf}). The sight glass is treated
+paraxially, its residual distortion over the field has not been computed, and its index is assumed
+(\secref{sec:shift}). Slurry homogeneity is untested (\secref{sec:selfcheck}). Frame content matters: the recorder
+overlays and the pillarbox move the sharpness slope from 5.36 to 4.88--4.90 (\tabref{tab:crop}), and the right picture
+edge moves by about 8 clip pixels between and within clips, so crops must keep a margin (\secref{sec:recording}).
 
 \subsection{Operational recommendations}\label{sec:recs}
 
 \begin{enumerate}
-\item \textbf{Stop the lens down by at least 4 stops} (from current F/1.6 to F/8 or further, ideally F/16). At F/16
-the in-focus depth widens $10\times$ to $\pm 42$~\um{} --- finally letting the disambiguation pipeline see real 3-D
-crystal distribution and pushing the apparent-size ratio for symmetric depth hypotheses past the discriminability
-threshold.
-\item \textbf{Replace the edge-based detector with a blur-tolerant scheme} (CNN fine-tuned on partially-defocused
-crystals, or a Hough-like approach). This populates the discriminability regime (\figref{fig:discrim}) regardless of
-aperture choice.
-\item \textbf{Apply time-dependent detector parameters scheduled against the growth curve} (\secref{sec:growth}).
-Replaces the fixed $\mathit{min\_area}/\mathit{max\_area}$ cuts with a time-varying window matched to the expected
-current crystal size --- eliminates both the small-feature noise floor and the max-area truncation bias
-simultaneously.
+\item \textbf{Measure the geometry at the next shutdown}: read the camera's model sticker (cell size, CCD clock),
+caliper the extension tube or spacer and photograph the mount (CS-to-C ring), and read the recorder model (sampling)
+and the glass stamp (index). A ruler or graticule imaged at the inner glass face of the empty pan would measure the
+scale in the image and locate the focal plane.
+\item \textbf{Record the PAL stream, not the monitor.} Screen recordings add no resolution but an anisotropic
+stretch and a moving picture edge. Logging the recorder clock against the control system keeps the time since
+seeding traceable; on the 2026-02-04 recording the two agree to about $\pm 30$~s (\code{scripts/check_anchors.py}).
+\item \textbf{Replace the classical detectors by a validated segmentation}, such as a fine-tuned Cellpose model
+scored as in \secref{sec:validation}, with a size window that admits the largest microscope chords, which exceed the
+current 1~mm bound (\secref{sec:expected}).
+\item \textbf{Treat the camera as a thin-slice sensor at F/1.6.} A single focal-plane scale suffices; depth
+disambiguation would need detections far outside the in-focus slice, which neither the engraved stops nor the current
+detectors provide, and stopping down trades the slice against light and diffraction (\secref{sec:dof}).
 \end{enumerate}
 
-\subsection{Generalisation}\label{sec:general}
+\subsection{Towards a soft sensor}\label{sec:softsensor}
 
-The same pipeline applies to any through-sight-glass monitoring problem with multi-batch process kinetics:
-pharmaceutical crystallisation, mineral flotation, polymer particulation. The homogeneous-slurry assumption is the
-only application-specific constraint, and \secref{sec:homog}'s self-consistency check (focal-plane vs near/far
-density overlap) reports its validity directly.
+The control use of the camera is a soft sensor of the growth state of each strike, with the growth model of
+\secref{sec:growth} as measurement equation, anchored in physical units by the microscope series. Driven by a
+validated camera median against time since seeding, a state estimator could return the time since seeding or flag a
+strike that leaves the nominal curve, and be compared with an estimator using the plant's process signals alone. This
+paper provides the scale, the depth model and the validation protocol; the camera size signal is
+\pending{validated camera size against time, 2026-10-30}.

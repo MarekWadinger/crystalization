@@ -1,25 +1,19 @@
-% Section 10 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+% Section 10. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft). Claim changes: papers/cep/CLAIM_CHANGES.md.
 \section{Conclusions}\label{sec:conclusions}
 
-We have presented a complete pipeline that delivers a calibrated, depth-aware crystal-size distribution from raw
-through-sight-glass video without any in-line calibration target. The pipeline composes six well-grounded stages ---
-DVR-overlay conditioning, sharpness-layer decomposition, edge-based detection, Bayesian front/back disambiguation
-under a single-component homogeneous-slurry prior, per-detection thin-lens depth correction, and single-component
-aggregation. On the Slovensk\'e cukrovary case-study video the pipeline recovers an internally self-consistent
-distribution of detector-bandpassed features (\textbf{median 0.074~mm, CV 0.40, log-normal shape parameter
-$\boldsymbol{s = 0.39}$}, watershed detector + full crop). The independent Mastersizer granulometry of the same
-product ($\mathrm{Dv}(50) = 6.81$~\um, $D[4;3] = 8.71$~\um) demonstrates that this distribution is \emph{not} a
-measurement of the underlying crystal population --- at the documented 1.66~\umpx{} scale, the area filter
-$[80, 8000]$~px$^2$ bandpasses $\approx 20$--200~\um{} equivalent features and categorically excludes the 9~\um{}
-crystal population. The optical model nevertheless matches measured per-pixel sharpness statistics to ${\sim}9$\,\%,
-the geometric and disambiguation chains are validated, and the within-detector self-consistency check of
-\secref{sec:homog} holds; what is retracted is the size-interpretation of
-\S\S\,\ref{sec:csd-edge}--\ref{sec:watershed}.
+We examined what the camera installed at the sight glass of the Sere\v{d} seed pan can measure before any detector
+is trusted. The picture is an analogue PAL signal digitised by the recorder; the 1080p clips are screen recordings
+of it and add no resolution. A source-classed model of this chain gives a pixel scale of $1.464 \times 1.913$~\um{}
+per clip pixel and $3.92 \times 3.59$~\um{} per PAL sample at the focused plane, within about $\pm 10$\,\% at 95\,\%
+and dominated by the plant's approximate tube length (RQ1). At F/1.6 the in-focus slice is $\pm 9.4$~\um, and
+per-pixel sharpness statistics are sensitive to the recorder overlays and the pillarbox, which must be cropped
+(RQ2). In so thin a slice a single focal-plane scale suffices, and a single-component size prior cannot tell front from back: the near/far
+labels are tie-breaks (RQ3). The size distributions returned by the edge and watershed detectors follow their area
+window and seed constants, so they are not crystal sizes (RQ4).
 
-The principal remaining limitations are (i) the edge-based detector's narrow depth selectivity, which collapses the
-disambiguation power below the size-ratio discrimination threshold, and (ii) the dependence of absolute scale on the
-extension-tube estimate. Both are addressable by the operational recommendations of \secref{sec:recs} and by the
-cross-batch growth-curve self-validation outlined in \secref{sec:growth}, which converts absolute calibration into a
-soft-sensor identification problem solvable from process data alone.
-
-The full pipeline, dataset processing scripts, and per-figure generators are released open-source.
+The seed-pan microscope series of 2026-10-30, with median chords from 29~\um{} to 483~\um{} within two hours of
+seeding, defines the range a camera size measurement must cover and the independent reference that a growth-curve
+calibration needs. The next steps are a segmentation validated against hand-labelled crystals
+(\secref{sec:validation}) and site measurements of the camera model, the tube and the scale at the inner glass face
+(\secref{sec:recs}); with both, a camera size signal can enter the growth-state soft sensor of \secref{sec:softsensor}. The
+code, configuration and number-generating scripts are released open source (Appendix~\ref{app:repro}).

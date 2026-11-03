@@ -1,6 +1,6 @@
-# DRAFT highlights (CEP: 3-5 bullets, <= 85 characters each), drawn only from claims in manuscript v0.2; replace after the Phase 4 reframing.
-Thin-lens model fixes the scale at 1.66 µm/px at a 55.1 mm working distance
-Measured sharpness tail exponent 4.88 matches the predicted 5.0 within 2.4 %
-A focal-plane size prior can break the front/back defocus ambiguity
-At F/1.6 the in-focus slice is ±4.2 µm; stopping down to F/16 widens it to ±42 µm
-Mastersizer data show the detector sees 20–200 µm features, not the 9 µm crystals
+# CEP highlights: 3-5 bullets, <= 85 characters each. Submitted as a separate file; not typeset in main.tex.
+Analogue PAL chain gives 1.46 × 1.91 µm per clip pixel, about ±10 % at 95 %
+1080p screen recordings of the PAL camera add no resolution
+At F/1.6 the in-focus slice is ±9.4 µm; a size prior cannot tell front from back
+Classical detector size distributions follow detector settings, not crystals
+Microscope medians: seed-pan crystals grow from 29 to 483 µm in two hours

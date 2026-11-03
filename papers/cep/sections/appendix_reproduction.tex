@@ -1,35 +1,51 @@
-% Appendix A of manuscript v0.2 (docs/paper/manuscript.md). The figure numbers of the manuscript's code comments are
-% replaced by references, because the LaTeX figures are numbered differently (2a/2b, 5b, 5c, 14 merged or renumbered).
+% Appendix A. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft): lists the scripts that actually generate the
+% paper's numbers and figures. Test counts from `uv run pytest --collect-only`.
 \section{Reproduction}\label{app:repro}
 
-All numerical results and figures regenerate from the open-source repository via:
+Every input value lives in \code{configs/camera_100.toml}, tagged with its source class; \code{tests/test_provenance.py}
+fails if a value lacks a class. The environment and the optics tests are set up with
 {\footnotesize
 \begin{verbatim}
-uv sync --group dev --group annotator \
-        --group sharpness-layers \
-        --group optics --group scale-overlay
-uv run pytest tests/test_optics.py -q   # 10 tests
+uv sync --group dev --group optics \
+  --group annotator
+uv run pytest -q tests/test_optics.py \
+  tests/test_scale_chain.py \
+  tests/test_provenance.py   # 28 tests
 \end{verbatim}}
-\noindent followed by the figure generators in \tabref{tab:repro}.
+\noindent The full suite collects 140 tests (\code{uv run pytest -q}). \tabref{tab:repro} lists the generators.
+\code{scripts/rerun_paper_numbers.py} writes each computed number of \S\S\,\ref{sec:optics}--\ref{sec:csd} with its
+previous value, source class and generating function to \code{docs/optics/rerun_results.md};
+\code{optics.scale_chain} writes the scale budget to \code{docs/optics/scale_chain.md}; \code{make -C papers/cep
+figures} collects the figures. The recordings are read from \code{datasets/}.
 
-\begin{table*}
-\centering\tabfont
-\caption{Figure generators.}\label{tab:repro}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.4\textwidth}@{}}
+\begin{table}[!ht]
+\centering\scriptsize\setlength{\tabcolsep}{3pt}
+\caption{Generators of the paper's numbers and figures. Each command follows \texttt{uv run python}
+(\texttt{uv run --frozen python} for the rerun script, \texttt{uv run --with openpyxl python} for the anchors);
+$^\ast$: runs without the videos.}\label{tab:repro}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.5\columnwidth}>{\raggedright\arraybackslash}p{0.46\columnwidth}@{}}
 \toprule
-Command & Figures \\
+Command & Output \\
 \midrule
-\code{uv run python -m optics.plots} & \ref{fig:mmpx}, \ref{fig:shift}, \ref{fig:coc}, \ref{fig:sharpness},
-\ref{fig:dof} \\
-\code{uv run python -m optics.measure} & \ref{fig:measured} \\
-\code{uv run python -m optics.qualitative} & \ref{fig:layers}, \ref{fig:detection} \\
-\code{uv run python -m optics.disambiguate} & \ref{fig:discrim}, \ref{fig:disamb} \\
-\code{uv run python -m optics.csd} & \ref{fig:csd} \\
-\code{uv run python -m optics.pipeline_diagram} & \ref{fig:pipeline} \\
-\code{uv run scale-overlay-app} & \ref{fig:overlays} (interactive) \\
+\code{-m optics.scale_chain} (\code{--no-video}$^\ast$: budget) & \secref{sec:chain}, \tabref{tab:scale} \\
+\code{-m optics.error_budget}$^\ast$ & 1$\sigma$ budget, \secref{sec:slab} \\
+\code{scripts/rerun_paper_numbers.py} & other numbers of \S\S\,\ref{sec:optics}--\ref{sec:csd};
+Tables~\ref{tab:dof}, \ref{tab:crop}, \ref{tab:ws-compare} \\
+\quad\code{--no-video}$^\ast$ / \code{--fig07} & optics rows / \figref{fig:overlays} \\
+\code{scripts/check_clip_overlap.py} & clip date, \S\S\,\ref{sec:chain}--\ref{sec:recording} \\
+\code{scripts/check_anchors.py} & anchors, clock, \secref{sec:expected} \\
+\code{scripts/microscope_summary.py}$^\ast$ & \tabref{tab:microscope} \\
+\code{-m optics.plots}$^\ast$ & Figs.~\ref{fig:mmpx}, \ref{fig:shift}, \ref{fig:tube}, \ref{fig:coc},
+\ref{fig:sharpness}, \ref{fig:dof} \\
+\code{-m optics.optical_layout}$^\ast$ & \figref{fig:layout} \\
+\code{-m optics.measure} & \figref{fig:measured} \\
+\code{-m optics.qualitative} & Figs.~\ref{fig:layers}, \ref{fig:detection} \\
+\code{-m optics.disambiguate} & Figs.~\ref{fig:discrim}, \ref{fig:disamb} \\
+\code{-m optics.csd} & \figref{fig:csd} \\
+\code{-m optics.detect_watershed} & \figref{fig:watershed} \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
-The complete numerical audit trail --- every claim mapped to its source (datasheet, derived formula, in-frame
-measurement, or literature verification) --- lives in \code{docs/optics/README.md} \S\S\,11--13.
+\figref{fig:frames} is the first frame of the case-study clip as stored in the repository; it has no generator
+script yet.
