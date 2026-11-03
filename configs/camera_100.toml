@@ -41,7 +41,7 @@
 # cell_width × pixel_clock / dvr.sampling_rate on the sensor; one line = one cell row.
 model = "Ademco ACM570E-class"        # ESTIMATE: best match to the "ADEMCO VIDEO" body and its rear DIP panel (Aug-photos 20260810_111738.jpg, rear 111636.jpg); model sticker unread. Alternative ACM380E-class (500 × 582, 9.8 × 6.3 µm), manual manualslib.com/manual/892194
 sensor_format = "1/3\""               # ESTIMATE: candidate datasheet; both candidates are 1/3" CCDs
-cell_width_um = 6.50                  # ESTIMATE: DATASHEET of the candidate's 752-cell PAL CCD (Sony ICX409AK-type); the candidate itself is unconfirmed
+cell_width_um = 6.50                  # ESTIMATE: DATASHEET of the candidate's 752-cell PAL CCD (Sony ICX409AL-type, the B/W part; ICX409AK is the colour twin of the same geometry); the candidate itself is unconfirmed
 cell_height_um = 6.25                 # ESTIMATE: same datasheet; the ACM380E-class alternative is 6.3
 cells_h = 752                         # ESTIMATE: same datasheet (effective cells per row)
 cells_v = 582                         # ESTIMATE: same datasheet (effective rows; 576 reach the PAL picture)
@@ -70,11 +70,11 @@ stretch_y = 1.875                     # MEASURED: clip rows per PAL line, OSD le
 model = "Fujinon HF35HA-1B"           # PHOTO: lens label, docs/lens/20260205_122620.jpg, Aug-photos 20260810_112218.jpg
 focal_length_mm = 35.0                # PHOTO: lens engraving "1:1.6/35mm" (optical focal length, not body length)
 body_length_mm = 29.5                 # DATASHEET: docs/lens/fujinon-hf35ha-1b.pdf, length at FAR (∞); grows by focus_travel_mm when focused closer
-focus_travel_mm = 1.0                 # ESTIMATE: AI guess from "~3 exposed helicoid turns" (commit b997e2f); Marek never stated it; no distance scale on the lens (Q&A item 9). ±1 mm → ±1.6 % in µm/px
+focus_travel_mm = 1.0                 # ESTIMATE: AI guess from "~3 exposed helicoid turns" (commit b997e2f); Marek never stated it; no distance scale on the lens (Q&A item 9). ±1 mm → ±1.6 % in µm/px. The DATASHEET minimum object distance 0.25 m allows up to ≈ 5.5 mm (the error budget samples 0–2 mm)
 f_number = 1.6                        # PLANT: Q&A item 9 "F = 1.6, if I read it correctly"; Aug-photos 20260810_112120 show the ring between 1.6 and 2. The "operator inspection 2026-06-15" has no surviving record
 iris_stops = [1.6, 2.0, 4.0, 8.0, 16.0]  # PHOTO: engraved on the iris ring, docs/lens/20260205_122600.jpg; drives the DoF-vs-F figure
-extension_tube_mm = 60.0              # PLANT: Q&A item 8(A) "≈ 6 cm" (not a caliper reading). The earlier 45 mm was our own estimate sent with the questions
-air_gap_mm = 20.0                     # PLANT: Q&A item 8(B) "≈ 2 cm", lens front rim → outer glass face
+extension_tube_mm = 60.0              # PLANT: Q&A item 8(A) "≈ 6 cm" (not a caliper reading). The earlier 45 mm was our own estimate sent with the questions. Aug-photos 20260810_111738/111741 and sered/photos/1786375479369/391 read ≈ 37–42 mm (tape measure + lens body as ruler), contradicting "≈ 6 cm"; ≈ 40 mm would make µm/px ×1.49
+air_gap_mm = 20.0                     # PLANT: Q&A item 8(B) "≈ 2 cm", lens front rim → outer glass face. The same photos read ≈ 35–46 mm; no effect on µm/px at focus
 
 [sight_glass]
 standard = "DIN 8902"                 # ESTIMATE: worn stamp reads "DIN 890…"; 8902 is the likeliest (soda-lime)

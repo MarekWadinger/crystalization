@@ -282,16 +282,16 @@ Live values 15.11.2025 23:32: Podtlak −80.6 kPa, Viskozita 81.5, Hladina 50.5 
 
 ## 4. Camera / optics facts
 - [FIG] optical chain: camera body labelled **"Hanwha HCB-6000"** (sensor plane "snímač") -> spacer ring (A) -> **Fujinon HF35HA-1B, length 29.5 mm** -> air gap (B) -> sight glass (*priezor*, C) -> massecuite -> lamp -> massecuite.
-- Focus plane = inner glass surface ("rovina, kde kamera ostrí").
+- Focus plane = inner glass surface ("rovina, kde kamera ostrí"). **Our assumption**: it is drawn on our own [FIG], which we sent with the questions; the plant did not state it. With the lamp 1–2 mm from the inner face (8(D)), the image is a backlit projection through a ~1–2 mm slurry slab, sharp at the glass if this assumption holds.
 - Photos confirm the lens: **FUJINON 1:1.6/35 mm HF35HA-1B**, FUJIFILM Corporation, made in China [P:20260810_112218], [P:20260810_112208].
   - Aperture ring reads 1.6–2 near the index [P:20260810_112120/112128].
   - Focus ring markings NEAR…FAR, with a locking screw [P:20260810_112149–112202]. No distance scale value is legible in mm (matches [ZOD]).
 - **Camera body in photos is labelled "ADEMCO VIDEO"** (white analog box camera) [P:1786375479369/379/391], [P:20260810_111738/111741].
   - Rear panel [P:20260810_111636]: DIP switches L/L–INT, AI–AES, VIDEO, D.D., AGC OFF, BLC OFF, NC; V-PHASE pot, ALC pot, BNC "VIDEO" out, 2-pin power terminal, POWER LED.
   - Interp.: this is a classic analog CVBS camera with auto-iris (video-drive) support, which is consistent with PAL output.
-- Mounting [P:20260810_111738]: camera on a **Fotomate quick-release plate on an angle bracket bolted to the sight-glass flange**. The lens sits almost against the glass. A tape measure was laid from the flange outward (~29 cm span to the rear of the body).
+- Mounting [P:20260810_111738]: camera on a **Fotomate quick-release plate on an angle bracket bolted to the sight-glass flange**. The lens appears to sit almost against the glass, but the photos (tape measure + lens body as ruler; also [P:20260810_111741], [P:1786375479369/391]) read the lens front ≈ 35–46 mm from the glass, not the "≈ 2 cm" of 8(B), and the spacer tube ≈ 37–42 mm, not "≈ 6 cm" (2026-11-03 analysis). A tape measure was laid from the flange outward (~29 cm span to the rear of the body).
   - A blue armoured cable with a steel ferrule enters the flange at the top. Interp.: this is the **fibre-optic light guide** (lamp) passing through the window flange, which matches [ZOD] "optical fibre".
-- Sight glass: round, bolted flange (~12 bolts), heavy deposit/fouling around it.
+- Sight glass: round, bolted flange, heavy deposit/fouling around it. Bolt count not determinable: no photo (Aug or [`docs/lens/`](../lens/) Feb) shows the full bolt circle, and heads of two sizes are visible on the part that is shown. (An earlier reading here said ~12; `docs/lens/README.md` records 8 from the operator.)
 - Plant has no recording: only a signal-processing device [ZOD]. The PAL recordings must come from elsewhere (interp.).
 
 ---

@@ -60,7 +60,7 @@ PAL_CANDIDATES = (
     / _PAL_NAME,
 )
 
-# The 500-cell alternative camera (ACM380E-class, Sony ICX405AK-type CCD):
+# The 500-cell alternative camera (ACM380E-class, Sony ICX405AL-type B/W CCD):
 # 9.8 × 6.3 µm cells at a 9.46875 MHz CCD clock. ESTIMATE, same basis as the
 # 752-cell candidate in the config.
 ALT_CELL_X_UM, ALT_CELL_Y_UM, ALT_CLOCK_MHZ = 9.8, 6.3, 9.46875
