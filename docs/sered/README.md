@@ -22,9 +22,16 @@ answers from these files.
   - The Q&A says the C stage also starts from seed massecuite, without naming its source. The flow sheet shows C1 cooking its own C-seed.
 - **10 µm is the seed, not the product.**
   - Mastersizer slurry: Dv50 6.8 µm.
-  - On the seed pan, crystals grow to ~0.3–0.8 mm within one ~3–3.5 h strike (Fedor's microscope run; see `datasets/README.md`).
+  - On the seed pan, the median of the operator-measured crystals is 29 µm 2 min after seeding, 114 µm at 37 min, 483 µm at 122 min and 452–486 µm at 160–170 min (Fedor's run 2026-10-30, all 54 photos: `datasets/microscope_annotations.csv`, `scripts/microscope_summary.py`; operator-picked crystals, AI-read).
   - Sereď white sugar is MA 0.76–0.95 mm (Bennár 2010).
 - **ZRA expansion:** no document spells it out. "ZR" matches *zrnič* (Czech for vacuum pan) and *zrnenie* (graining). In the paper it is defined once as the seed pan's control-system tag; "seed pan" is used everywhere else.
+
+## Timing of the 2026-02-04 recording (checked 2026-11-03)
+- The DVR overlay clock agrees with the SCADA clock to about ±30 s (agitator stop and venting seen in both; `scripts/check_anchors.py`).
+- The discharge anchors 11:46:10 and 16:00:10 are video-observed (level passes the glass). The operator note's "okolo 11:48" and "15:59" are coarser times of the same discharges.
+- SCADA puts the b2 seeding steam cut at 12:31:30 (note: 12:30).
+- The DeltaV trend photo (Krystal PDF p. 3) puts the previous strike's seeding at ~08:49:30 ± 3 min (interp.: the same steam-cut signature as b2).
+- The 1080p clips `2026-02-05 *` are most likely from 2026-02-05, not 02-04: no shared frames with the PAL recording, and file birth times on 02-05 (`scripts/check_clip_overlap.py`). The operator statement of June 2026 says 02-04; the author decides. Details: `datasets/README.md`.
 
 ## Open
 - **Camera body.** The installed body is **"ADEMCO VIDEO"** (Honeywell analog PAL CCD; rear panel matches the HCC334/484 family). Photos: Drive `sugar_plant/sered/photos/20260810_111738.jpg`, `20260810_111636.jpg` (rear), the same setup as `docs/lens/` (Feb 2026). "Hanwha HCB-6000" came only from the Polz price quote. **The 2.9 µm pixel pitch and the 1.66 µm/px built on it are unverified** until the model label is known (Marek is on it).
