@@ -63,7 +63,14 @@ def _split(pairs):
             test_idx.add(boiling[len(boiling) // 2])
         else:
             test_idx.add(max(mine, key=lambda i: int(pairs[i][2].max())))
-    train = [x for i, x in enumerate(pairs) if i not in test_idx]
+    # a frame given to several people (same stage + name) must not reach
+    # training through another person's copy
+    held = {(pairs[i][0].parent.name, pairs[i][0].name) for i in test_idx}
+    train = [
+        x
+        for i, x in enumerate(pairs)
+        if i not in test_idx and (x[0].parent.name, x[0].name) not in held
+    ]
     test = [x for i, x in enumerate(pairs) if i in test_idx]
     return train, test
 

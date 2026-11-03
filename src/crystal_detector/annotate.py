@@ -5,9 +5,10 @@ Annotator (after ``git clone`` + ``uv sync --group crystal-detector-gui``)::
     uv run crystal-detector-annotate patrik
 
 opens the Cellpose GUI on your first unlabelled frame
-(``annotations/patrik/<stage>/HHMMSS.png``) with the project's fine-tuned
-checkpoint pre-registered under *custom models*. In the GUI: pick it and
-press **run**, fix the outlines (Shift+click or right-click starts an
+(``annotations/patrik/<stage>/<video>_HHMMSS.png``; the first video's frames
+are plain ``HHMMSS.png``) with the project's fine-tuned
+checkpoint preselected under *user-trained models*. In the GUI: press
+**run**, fix the outlines (Shift+click or right-click starts an
 outline, move the cursor, click again to close; Ctrl+click on a crystal
 deletes it; Cmd on macOS), **Ctrl+S** writes ``HHMMSS_seg.npy`` next to
 the image, then **close the window** — the next frame opens by itself.
@@ -18,13 +19,15 @@ files and push.
 frames one by one (Cellpose loads the label next to the image) so you can
 check and fix them; edits autosave.
 
-Maintainer, once::
+Maintainer, once per video::
 
     uv run crystal-detector-annotate export VIDEO --who patrik,erika,marek,marian
 
-samples three frames per crystal-bearing stage per person (seeding →
-discharge; distinct timestamps, evenly spread inside each stage) from the
-video's ``.json`` sidecar segments.
+samples ``--per-stage`` (default three) frames per crystal-bearing stage
+segment per person (seeding → discharge; distinct timestamps, evenly spread
+inside each segment) from the video's sidecar segments (``VIDEO.json`` next
+to the video, else ``datasets/<stem>.json``). Frames of several videos share
+the stage folders, told apart by the video prefix.
 """
 
 from __future__ import annotations
@@ -54,6 +57,7 @@ CRYSTAL_STAGES = (
     "discharge_release",
 )
 PER_PERSON = 3
+FIRST_VIDEO = "2026-02-04 11-08-51"  # its frames predate the video prefix
 
 
 def hhmmss(t: float) -> str:
@@ -61,12 +65,33 @@ def hhmmss(t: float) -> str:
     return f"{t // 3600:02d}{t % 3600 // 60:02d}{t % 60:02d}"
 
 
-def export(video: Path, who: list[str]) -> None:
-    events = json.loads(video.with_suffix(".json").read_text())
+def frame_label(png: Path) -> str:
+    """'boiling · 2026-10-30 08-45-33 @ 02:54:21' for an annotation frame."""
+    t = png.stem[-6:]
+    video = png.stem[:-7].replace("_", " ") or FIRST_VIDEO
+    return f"{png.parent.name} · {video} @ {t[:2]}:{t[2:4]}:{t[4:]}"
+
+
+def _sidecar(video: Path) -> Path:
+    """``VIDEO.json`` next to the video, else ``datasets/<stem>.json``."""
+    for p in (
+        video.with_suffix(".json"),
+        ROOT / "datasets" / f"{video.stem}.json",
+    ):
+        if p.exists():
+            return p
+    raise SystemExit(
+        f"no sidecar for {video.name} (next to it or in datasets/)"
+    )
+
+
+def export(video: Path, who: list[str], per_stage: int = PER_PERSON) -> None:
+    events = json.loads(_sidecar(video).read_text())
     cap = cv2.VideoCapture(str(video))
     if not cap.isOpened():
         raise SystemExit(f"cannot open {video}")
     duration = cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS)
+    tag = video.stem.replace(" ", "_")  # tells videos apart in one folder
     for seg in events["segments"]:
         if seg["phase"] not in CRYSTAL_STAGES:
             continue
@@ -75,11 +100,12 @@ def export(video: Path, who: list[str]) -> None:
         for k, name in enumerate(who):
             folder = ANNOTATIONS / name / seg["phase"]
             folder.mkdir(parents=True, exist_ok=True)
-            for j in range(PER_PERSON):
+            for j in range(per_stage):
                 # sub-bin midpoints; j=1 equals the old one-frame sample
-                t = round(t0 + (k + (j + 0.5) / PER_PERSON) * width)
-                png = folder / f"{hhmmss(t)}.png"
-                if png.exists():
+                t = round(t0 + (k + (j + 0.5) / per_stage) * width)
+                png = folder / f"{tag}_{hhmmss(t)}.png"
+                # first video's frames predate the tag: HHMMSS.png
+                if png.exists() or (folder / f"{hhmmss(t)}.png").exists():
                     continue
                 cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
                 ok, frame = cap.read()
@@ -88,7 +114,7 @@ def export(video: Path, who: list[str]) -> None:
                     continue
                 cv2.imwrite(str(png), flat_field_correction(crop(frame)))
         print(
-            f"{seg['phase']:<28} {hhmmss(t0)}–{hhmmss(t1)}  {PER_PERSON} frames each"
+            f"{seg['phase']:<28} {hhmmss(t0)}–{hhmmss(t1)}  {per_stage} frames each"
         )
     cap.release()
 
@@ -127,8 +153,12 @@ def _bad(t: str) -> str:
     return _c("31", f"✘ {t}") if _TTY else f"!!  {t}"
 
 
-def _leaderboard(current: str) -> None:
-    scores = sorted(
+MEDALS = ["🥇", "🥈", "🥉", "  "]
+
+
+def scores() -> list[tuple[int, int, str]]:
+    """(labelled, frames, name) per annotator, most labelled first."""
+    return sorted(
         (
             (
                 len(list(d.glob("*/*_seg.npy"))),
@@ -140,9 +170,12 @@ def _leaderboard(current: str) -> None:
         ),
         reverse=True,
     )
-    medals = ["🥇", "🥈", "🥉", "  "]
+
+
+def _leaderboard(current: str) -> None:
+    medals = MEDALS
     print(_c("1;35", " leaderboard"))
-    for rank, (done, total, who) in enumerate(scores):
+    for rank, (done, total, who) in enumerate(scores()):
         bar = _c("32", "█" * done) + _c("90", "░" * (total - done))
         name = _c("1;33", f"{who:<8}") if who == current else f"{who:<8}"
         medal = medals[min(rank, 3)] if done else medals[3]
@@ -150,20 +183,17 @@ def _leaderboard(current: str) -> None:
 
 
 def _banner(name: str, png: Path, n_done: int, n_all: int, model: str) -> None:
-    stage = png.parent.name
-    t = png.stem
     rule = _c("36", "═" * 64)
     print("\n" + rule)
     print(
         _c("1;36", f" {name} · frame {n_done + 1} of {n_all} · ")
-        + _c("1;35", stage)
-        + _c("1;36", f" · {t[:2]}:{t[2:4]}:{t[4:]}")
+        + _c("1;35", frame_label(png))
     )
     print(rule)
     k = _key  # every click / key / menu item in one style
     step = [_c("33", f"{i}.") for i in (1, 2, 3)]
     print(
-        f" {step[0]} {k('user-trained models')} → choose {k(model)} → {k('run')}"
+        f" {step[0]} {k('user-trained models')} → {k('run')} ({k(model)} is preselected)"
     )
     print("    optional: pre-draws the crystal outlines for you to correct;")
     print("    skip it to draw everything yourself")
@@ -265,9 +295,13 @@ def _prepare_model() -> Path:
     return model_path
 
 
-def _open_gui(png: Path) -> float | None:
+def _open_gui(png: Path, progress: str = "") -> float | None:
     """Run the GUI on one frame; report autosaves live; return last save mtime."""
-    env = {**os.environ, "QT_API": os.environ.get("QT_API", "pyqt6")}
+    env = {
+        **os.environ,
+        "QT_API": os.environ.get("QT_API", "pyqt6"),
+        "CRYSTAL_PROGRESS": progress,  # shown in the window title
+    }
     child = (
         "import sys; from crystal_detector import gui_filters; "
         "gui_filters.install(); from cellpose.gui import gui; "
@@ -303,7 +337,8 @@ def annotate(name: str) -> None:
     while todo := [p for p in frames if not _label(p).exists()]:
         png = todo[0]
         _banner(name, png, len(frames) - len(todo), len(frames), model)
-        if _open_gui(png) is None:
+        progress = f"{len(frames) - len(todo) + 1}/{len(frames)}"
+        if _open_gui(png, progress) is None:
             # Cellpose greys out Ctrl+S at zero masks, so an empty frame can
             # only be labelled from here.
             print(_bad("no label saved for this frame"))
@@ -354,8 +389,7 @@ def review(name: str) -> None:
         print("\n" + rule)
         print(
             _c("1;36", f" review {name} · {i + 1} of {len(labelled)} · ")
-            + _c("1;35", png.parent.name)
-            + _c("1;36", f" · {png.stem[:2]}:{png.stem[2:4]}:{png.stem[4:]}")
+            + _c("1;35", frame_label(png))
         )
         print(rule)
         n = int(np.load(_label(png), allow_pickle=True).item()["masks"].max())
@@ -363,7 +397,7 @@ def review(name: str) -> None:
             f" {n} crystals labelled — fix if needed (edits autosave), then close"
         )
         before = _label(png).stat().st_mtime
-        _open_gui(png)
+        _open_gui(png, f"review {i + 1}/{len(labelled)}")
         changed = _label(png).stat().st_mtime != before
         print(_ok("label updated") if changed else _c("90", " unchanged"))
         if i + 1 < len(labelled):
@@ -392,6 +426,12 @@ def main() -> None:
     ap.add_argument("video", nargs="?", type=Path, help="export only")
     ap.add_argument("--who", help="export only: comma-separated names")
     ap.add_argument(
+        "--per-stage",
+        type=int,
+        default=PER_PERSON,
+        help="export only: frames per person in each crystal stage",
+    )
+    ap.add_argument(
         "--review",
         action="store_true",
         help="reopen your labelled frames to check them",
@@ -400,7 +440,7 @@ def main() -> None:
     if a.name == "export":
         if not (a.video and a.who):
             ap.error("export needs VIDEO and --who a,b,c")
-        export(a.video, a.who.split(","))
+        export(a.video, a.who.split(","), a.per_stage)
     elif a.review:
         review(a.name)
     else:

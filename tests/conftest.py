@@ -27,6 +27,25 @@ def sample_frame() -> np.ndarray:
 
 
 @pytest.fixture
+def crystal_frame():
+    """Annotation-sized grey frame (461×648, a PAL crop) and a crystal painter.
+
+    The liquor ramps 60→200 left to right so the notebook's percentile
+    thresholds split it; a crystal is a 250 body inside a 6 px dark rim.
+    """
+    img = np.tile(np.linspace(60, 200, 648), (461, 1)).astype(np.uint8)
+
+    def paint(x: int, y: int, w: int, h: int, rim: int = 6) -> None:
+        if rim:
+            cv2.rectangle(
+                img, (x - rim, y - rim), (x + w + rim, y + h + rim), 10, -1
+            )
+        cv2.rectangle(img, (x, y), (x + w, y + h), 250, -1)
+
+    return img, paint
+
+
+@pytest.fixture
 def sample_annotation() -> FrameAnnotation:
     """Create a FrameAnnotation with 3 crystals."""
     return FrameAnnotation(
