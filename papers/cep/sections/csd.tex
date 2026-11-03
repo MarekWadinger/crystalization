@@ -4,38 +4,44 @@
 \section{Detector output is not yet a size measurement}\label{sec:csd}
 
 The pipeline of \secref{sec:detection}--\secref{sec:sizing} runs end to end and returns a size distribution. This
-section shows that, for both classical detectors, that distribution is set by detector parameters rather than by the
-crystals, compares it with what the camera should see according to the plant's microscope data, and defines the
-validation against hand-labelled crystals that will replace it. All runs use 60 frames (every 15th) of the
-case-study clip with the automatic crop; sizes are area-equivalent at the geometric-mean scale of 1.673~\umpx{}
-(ESTIMATE, $\pm\,{\approx}10$\,\% at 95\,\%).
+section compares it with what the camera should see according to the plant's microscope data, shows without labels
+that for both classical detectors it does not track crystal size, and defines the validation against hand-labelled
+crystals that will replace it. Unless stated otherwise, runs use 60 frames (every 15th) of the case-study clip with
+the automatic crop; sizes are area-equivalent at the geometric-mean scale of 1.673~\umpx{} (ESTIMATE, conditional
+$\pm\,{\approx}10$\,\% at 95\,\%).
 
 \subsection{What the camera should see}\label{sec:expected}
 
-The seed slurry dosed into the seed pan has $\mathrm{Dv}(10)/\mathrm{Dv}(50)/\mathrm{Dv}(90) = 1.56/6.81/18.5$~\um{}
-(Mastersizer, 2025 sample;~\citealp{Mastersizer2025}). In the seed pan the crystals grow. During the laboratory run
+The seed slurry dosed into the seed pan has $\mathrm{Dv}(10)/\mathrm{Dv}(50)/\mathrm{Dv}(90) = 1.57/6.77/18.6$~\um{}
+(Mastersizer, mean of three runs;~\citealp{Mastersizer2025}). In the seed pan the crystals grow. During the laboratory run
 of 2026-10-30, crystals in samples drawn from the same pan were measured under a microscope: one chord per
 operator-picked crystal, burned into 54 photos and transcribed into \code{datasets/microscope_annotations.csv}
-(1052 readable values, one AI reading; \tabref{tab:microscope}). The slurry reference photo shows 10--19~\um. About
-2~min after seeding the median chord is 29~\um; from about 30--40~min it exceeds 0.1~mm, and about 2~h after seeding
-it is 0.48~mm (b1, 122~min, range 0.22--1.14~mm). These are ranges and medians of chosen crystals, not
-distributions; the largest single values may be agglomerates.
+(1052 readable values, one AI reading; a human second reading is \pending{second reading of the quoted samples};
+\tabref{tab:microscope}). The slurry reference photo shows 10--19~\um. The photo taken just before seeding in b1
+already shows 18--42~\um{} crystals (median 33~\um), larger than the 29~\um{} median 2~min after seeding; whether
+they are residual footing or spontaneous nucleation is open. From about 30--40~min the median exceeds 0.1~mm, and
+122~min after seeding it is 0.48~mm (b1, range 0.22--1.14~mm). These are chords of operator-picked crystals, not
+distributions; the largest single values may be agglomerates, and the 2--3~\um{} chords at the b2 seeding are a few
+microscope pixels long, below the optical resolution.
 
 \begin{table}
 \centering\tabfont
-\caption{Microscope chords against time since seeding, seed pan, 2026-10-30 (PHOTO, AI transcription;
-\texttt{scripts/\allowbreak microscope\_summary.py}); $t$ is the time since seeding. Selected samples; all 20 are in \texttt{datasets/\allowbreak README.md}.}\label{tab:microscope}
+\caption{Microscope chords of operator-picked crystals against time since seeding $t$, seed pan, 2026-10-30
+(PHOTO, single AI transcription; \texttt{scripts/\allowbreak microscope\_summary.py}). Selected samples; all 20 are in
+\texttt{datasets/\allowbreak README.md}. $^\dagger$Taken 27~s before seeding. $^\ddagger$Includes 2--3~\um{} chords
+below the optical resolution.}\label{tab:microscope}
 \begin{tabular}{@{}llrrr@{}}
 \toprule
 Batch & Sample & $t$ (min) & $n$ & min / median / max (\textmu m) \\
 \midrule
 -- & slurry reference & -- & 4 & 10 / 13 / 19 \\
+b1 & 11:30$^\dagger$ & 0 & 6 & 18 / 33 / 42 \\
 b1 & 11:32 & 2 & 13 & 22 / 29 / 35 \\
 b1 & 12:07 & 37 & 50 & 38 / 114 / 271 \\
 b1 & 12:30 & 60 & 37 & 62 / 199 / 317 \\
 b1 & 13:32 & 122 & 26 & 220 / 483 / 1137 \\
 b1 & 14:20 & 170 & 51 & 189 / 452 / 995 \\
-b2 & 15:22 & 0 & 20 & 2 / 10 / 23 \\
+b2 & 15:22$^\ddagger$ & 0 & 20 & 2 / 10 / 23 \\
 b2 & 15:52 & 30 & 50 & 22 / 103 / 218 \\
 b2 & 16:31 & 69 & 121 & 40 / 209 / 628 \\
 b2 & 17:48 & 146 & 103 & 117 / 299 / 695 \\
@@ -44,14 +50,14 @@ b2 & 18:04 & 162 & 65 & 101 / 399 / 961 \\
 \end{tabular}
 \end{table}
 
-At the PAL scale of $3.92 \times 3.59$~\umpx{} (\secref{sec:camera}) the slurry crystals span about 2.5--5 samples
+At the PAL scale of $3.92 \times 3.59$~\umpx{} (\secref{sec:budget}) the slurry crystals span about 2.5--5 samples
 and sit at the resolution limit, whereas crystals of the 0.1--0.5~mm medians found from about half an hour after
 seeding span tens to over a hundred samples and should be well resolved. The 1~mm upper bound of the size window
-(\secref{sec:window}) excludes the 1.14~mm chord at 122~min; that value was not in the first reading on which the
-bound was based. For the case-study clip itself no matched reference exists: its recording date is contradicted
-by the image data, so its time since seeding is unknown, and even under the operator's date it would be 1~h~41~min
-to 1~h~48~min after seeding (\secref{sec:recording}). The detector output below can therefore be checked only for
-internal behaviour, not against a size at a known process time.
+(\secref{sec:window}) is an area-equivalent bound, whereas a microscope value is a single chord; it may exclude
+crystals like the 1.14~mm chord at 122~min, a value that was not in the first reading on which the bound was based.
+For the case-study clip itself no matched reference exists: its time since seeding is unknown
+(\secref{sec:recording}). Its detector output can therefore be checked only for internal behaviour; the behaviour over
+a strike is examined on the PAL recording in \secref{sec:csd-time}.
 
 \subsection{The edge detector follows the size window}\label{sec:csd-edge}
 
@@ -59,8 +65,10 @@ internal behaviour, not against a size at a known process time.
 the earlier $[80,\ 8000]$~px$^2$ window. Widening the window from 15--150~\um{} to 5--1000~\um{} (area-equivalent)
 raises the edge detections from 18\,823 to 47\,414, halves the median from 0.037 to 0.018~mm and raises the CV
 from 0.83 to 2.16. Under the configured window the distribution reaches towards the new lower bound (5th
-percentile 0.007~mm) from outline fragments and gains a long upper tail from rectangles around blurred regions
-(\figref{fig:detection}). The edge-detector distribution is thus a property of the area filter.
+percentile 0.007~mm) and gains a long upper tail; by visual reading, not yet checked against labels, the small
+detections are outline fragments and the large ones rectangles around blurred regions (\figref{fig:detection}). The
+edge-detector distribution thus depends on the area window; whether the detections inside either window are crystals
+can only be settled with labels (\secref{sec:validation}).
 
 \begin{table*}
 \centering\tabfont
@@ -88,35 +96,70 @@ Mean depth correction / median & 0.005\,\% & 0.005\,\% & 0.013\,\% & 0.007\,\% \
 \end{tabular}
 \end{table*}
 
-\subsection{The watershed detector follows its seed constants}\label{sec:watershed}
+\subsection{The watershed detector tiles the frame and follows its seed clearance}\label{sec:watershed}
 
 The watershed output hardly changes with the window: 52\,302 against 52\,784 detections and a median of 0.075~mm
-under both. Its sizes are instead bounded by its own seed constants (\tabref{tab:ws-constants}). A seed must lie at
-least 6~px from any outline, so every basin contains a disc 12~px across, about 0.02~mm, and the distribution in
-\figref{fig:csd} indeed starts near 0.02--0.025~mm although the window admits 5~\um. Seeds at least 12~px apart
-tile the frame; on frame 750 the watershed returns 966 basins against 840 edge detections under the configured
-window (\figref{fig:watershed} uses the code's default window and shows 981 against 441). The basins cover the frame
-whether or not a crystal outline separates them, so the count and the median largely reflect the tiling. A narrower CV
-than the edge detector's is therefore not evidence of a narrower crystal distribution.
+under both. Window insensitivity alone would also fit real objects lying inside both windows, so we varied the seed
+constants directly (\tabref{tab:ws-sweep}; \code{scripts/detector_checks.py sweep}, six single frames, so the
+configured median is 88 rather than 75~\um). The kept basins cover 86\,\% of the cropped frame: the detector tiles
+the picture whether or not a crystal outline separates the basins. The median hardly moves with the seed spacing
+between 6 and 16~px, but it follows the seed clearance \code{_PEAK_THRESHOLD_ABS}, from 63 to 108~\um{} for 3 to
+9~px, and from 60 to 148~\um{} when both constants are scaled together. A seed must lie at least 6~px from any
+outline, so every basin contains a disc 12~px across, about 0.02~mm, and the distribution in \figref{fig:csd} starts
+near 0.02--0.025~mm although the window admits 5~\um. On frame 750 the watershed returns 966 basins against 840 edge
+detections under the configured window. A narrower CV than the edge detector's is therefore not evidence of a narrower crystal distribution.
+
+\begin{table}
+\centering\tabfont
+\caption{Watershed output on six frames of the case-study clip against its seed constants (configured window;
+\texttt{scripts/detector\_checks.py sweep}; configured constants 12/6~px). Coverage: share of the cropped frame
+inside kept basins.}\label{tab:ws-sweep}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Spacing (px) & Clearance (px) & Per frame & Median (\textmu m) & Coverage \\
+\midrule
+6 & 6 & 693 & 87 & 86\,\% \\
+12 & 6 & 680 & 88 & 86\,\% \\
+24 & 6 & 565 & 99 & 85\,\% \\
+12 & 3 & 1304 & 63 & 91\,\% \\
+12 & 9 & 335 & 108 & 73\,\% \\
+6 & 3 & 1363 & 60 & 91\,\% \\
+24 & 12 & 166 & 148 & 59\,\% \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure*}
 \centering
-\includegraphics[width=\textwidth]{17_watershed_vs_edge}
-\caption{Edge (left, 441 detections) and watershed (right, 981 basins) detectors on frame 750
-(\texttt{optics.detect\_watershed}). This figure uses the code's default area window of 50--50\,000~px$^2$ and aspect
-ratio 4, not the configured window; under the configured window the counts are 840 and 966. Colours are sharpness
-layers.}\label{fig:watershed}
-\end{figure*}
-
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{14_csd_final}
+\includegraphics[width=0.82\textwidth]{14_csd_final}
 \caption{Aggregated watershed output, configured window (\texttt{optics.csd}; 52\,784 detections). Left: sizes at
 $\Delta x(d_\mathrm{focus})$; median 0.075~mm. Middle: after depth correction, with log-normal ($s = 0.41$) and
 Gaussian fits; mean 0.082~mm, CV 0.43. Right: focal, near and far subsets. The distribution is a detector
 artefact (\secref{sec:watershed}), and the subsets differ because of the near/far tie-break
 (\secref{sec:disamb-result}).}\label{fig:csd}
 \end{figure*}
+
+\subsection{Neither detector tracks growth over a strike}\label{sec:csd-time}
+
+The strongest label-free test is the time course. Strike b2 of the 2026-02-04 PAL recording is covered from
+concentration to discharge (\secref{sec:recording}). We ran both detectors on 10 frames, 1~s apart, at 13 times from
+40~min before seeding to 200~min after it, with the configured PAL window $[9,\ 71\,020]$~px$^2$ and sizes at the
+PAL scale (\code{scripts/detector_checks.py time}; \figref{fig:time}). The edge median stays at 31--36~\um{} and the
+watershed median at 180--216~\um{} over the whole strike, and both return before seeding, when the pan holds
+concentrating syrup, the same values as at its end. In the 2026-10-30 run of the same pan the microscope medians
+grow 17-fold, from 29 to 483~\um{} within 122~min. That run is from another day, but a growth of this order is what
+seeding and boiling imply; a detector whose median does not move over 240~min, and does not distinguish syrup
+before seeding from massecuite before discharge, does not measure crystal size.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{19_detector_vs_time}
+\caption{\textbf{Do the detectors see the crystals grow?} Median and interquartile range of the edge and watershed
+detections against time since seeding, strike b2 of the 2026-02-04 PAL recording (10 frames per time; configured
+window; area-equivalent size at the PAL scale; \texttt{scripts/detector\_checks.py time}). Open triangles: microscope
+median chords of the 2026-10-30 run of the same pan, another day, for reference
+(\tabref{tab:microscope}).}\label{fig:time}
+\end{figure}
 
 \subsection{What the depth subsets do and do not show}\label{sec:selfcheck}
 
@@ -130,9 +173,11 @@ a detector admitting a depth range over which the size signal is measurable (\se
 \subsection{Why the depth correction is negligible}\label{sec:depthsmall}
 
 The mean per-detection depth correction is 0.005--0.013\,\% of the median size in all four runs
-(\tabref{tab:ws-compare}). This follows from the geometry, not from the detector: at F/1.6 the in-focus half-slice is
-$\pm 9.4$~\um{} (one PAL sample, \secref{sec:dof}), and the detections lie within a few micrometres of focus
-(\secref{sec:disamb-result}). At this aperture a single scale at the focused plane suffices; the depth-aware
+(\tabref{tab:ws-compare}). This follows from the geometry, not from the detector: for objects thinner than the slice, the depth range the
+detectors admit, at most $\pm 47$~\um{} under the assumed cutoff (\secref{sec:selectivity}), changes the
+magnification by at most 0.17\,\%. For crystals much thicker than the slice the per-detection depth is not defined
+(\secref{sec:homog}), and the correction is not meaningful. At this aperture a single scale at the focused plane
+suffices; the depth-aware
 correction carries weight only if detections are admitted much further from focus (\secref{sec:recs}).
 
 \subsection{Validation against hand-labelled crystals}\label{sec:validation}
@@ -152,8 +197,15 @@ held-out frames; the same metrics between annotators as the attainable ceiling; 
 relative error and bias of the area-equivalent size.
 \item \emph{Size against the microscope.} For the 2026-10-30 run, the camera's median chord, converted per axis,
 is compared with the microscope medians of \tabref{tab:microscope} at matched times since seeding (photo clock
-$\pm 47$~s). The acceptance criterion is that the camera distribution lies inside the microscope range at each
-matched time.
+$\pm 47$~s). Acceptance (an analysis choice) requires both (a) a ratio of camera to microscope median within a
+factor of 1.25 at each matched time from 30~min after seeding, which covers the $\pm 10$\,\% scale band and a
+margin for selection, and (b) a slope of the log median against time over 30--120~min within $\pm 25$\,\% of the
+microscope slope. The two methods select differently: the camera sees silhouettes of every crystal in a thin slice at
+the glass, with chords in random orientation, whereas the operator picks separated, well-formed crystals on a slide
+and draws one chord each; agreement within the tolerance is therefore necessary, not sufficient. The 2026-10-30
+video is a lossless $720 \times 576$, 25~fps file whose capture path (recorder export or capture card) is not
+recorded, so the scale of \secref{sec:budget} applies to it only once its digitisation is confirmed
+\pending{capture chain of the 2026-10-30 recording}.
 \end{enumerate}
 Results: precision / recall / $F_1$ of the three detectors \pending{hand-labelled frames}; inter-annotator
 agreement \pending{duplicate-labelled frames}; Cellpose held-out AP@0.5 \pending{fine-tuning on the labels}; size

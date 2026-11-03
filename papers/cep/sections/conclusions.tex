@@ -5,14 +5,16 @@ We examined what the camera installed at the sight glass of the Sere\v{d} seed p
 is trusted. The picture is an analogue PAL signal digitised by the recorder; the 1080p clips are screen recordings
 of it and add no resolution. A source-classed model of this chain gives a pixel scale of $1.464 \times 1.913$~\um{}
 per clip pixel and $3.92 \times 3.59$~\um{} per PAL sample at the focused plane, within about $\pm 10$\,\% at 95\,\%
-and dominated by the plant's approximate tube length (RQ1). At F/1.6 the in-focus slice is $\pm 9.4$~\um, and
+if the sensor is 1/3\,in and the recorder samples at 13.5~MHz, dominated by the plant's approximate tube length (RQ1). At F/1.6 the in-focus slice is $\pm 9.4$~\um, and
 per-pixel sharpness statistics are sensitive to the recorder overlays and the pillarbox, which must be cropped
-(RQ2). In so thin a slice a single focal-plane scale suffices, and a single-component size prior cannot tell front from back: the near/far
-labels are tie-breaks (RQ3). The size distributions returned by the edge and watershed detectors follow their area
-window and seed constants, so they are not crystal sizes (RQ4).
+(RQ2). In so thin a slice a single focal-plane scale suffices, and for objects thinner than the slice a single-component
+size prior cannot tell front from back: within the admitted depth range the two hypotheses differ by at most
+0.17\,\%, and the near/far labels are tie-breaks (RQ3). The edge-detector distribution depends on its area window,
+the watershed tiles the frame and follows its seed clearance, and over a full PAL strike both medians stay flat from
+before seeding to discharge, so neither measures crystal size (RQ4).
 
-The seed-pan microscope series of 2026-10-30, with median chords from 29~\um{} to 483~\um{} within two hours of
-seeding, defines the range a camera size measurement must cover and the independent reference that a growth-curve
+The seed-pan microscope series of 2026-10-30, with median chords of operator-picked crystals from 29~\um{} to 483~\um{}
+122~min after seeding, defines the range a camera size measurement must cover and the independent reference that a growth-curve
 calibration needs. The next steps are a segmentation validated against hand-labelled crystals
 (\secref{sec:validation}) and site measurements of the camera model, the tube and the scale at the inner glass face
 (\secref{sec:recs}); with both, a camera size signal can enter the growth-state soft sensor of \secref{sec:softsensor}. The

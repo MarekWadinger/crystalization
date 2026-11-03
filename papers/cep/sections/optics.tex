@@ -20,19 +20,9 @@ $k \in \{x, y\}$ is therefore
 \begin{equation}\label{eq:pixelsize}
 \Delta_k(d_o) = \frac{p_k}{M(d_o)} = p_k \, \frac{d_o}{i},
 \end{equation}
-linear in $d_o$ (\figref{fig:mmpx}), with the pitches $p_x \neq p_y$ of the signal chain (\secref{sec:chain}). At
+linear in $d_o$, with the pitches $p_x \neq p_y$ of the signal chain (\secref{sec:chain}). At
 the focused plane $\Delta_k = p_k f / (e + x)$, so the scale there depends only on $f$, $e$ and
 $x$.
-
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{01_mm_per_pixel}
-\caption{\textbf{How does the metric scale change with depth?} Object-plane extent of one PAL sample, taken as the
-geometric mean of its two axes (6.53~\um{} on the sensor), against object distance for $f = 35$~mm, $e = 60$~mm and
-$x = 1$~mm. The curve is linear in $d_o$ (Eq.~\ref{eq:pixelsize}); at the focused plane it is 3.75~\umpx. The
-per-axis values are given in \tabref{tab:scale}.}\label{fig:mmpx}
-\end{figure}
-
 \subsection{Pixel scale at the focused plane and its uncertainty}\label{sec:budget}
 
 \tabref{tab:scale} gives the per-axis scale of both recording types at the focused plane
@@ -41,12 +31,17 @@ propagation over 200\,000 draws of the inputs of \tabref{tab:inputs}: $e$ unifor
 ``$\approx 6$~cm'' read as rounded to the centimetre), $x$ uniform over 0--2~mm, $f$ normal with $\sigma = 2$\,\%
 (assumed lens tolerance), the line-to-sample mapping uniform within $\pm 2$\,\% (x only), the camera candidate
 (x up to $+0.6$\,\%, y up to $+0.8$\,\%) and the measured 1080p stretch ($\pm 0.1$\,\%). Every entry is an estimate:
-it inherits the approximate tube length and the unconfirmed camera model.
+it inherits the approximate tube length and the unconfirmed camera model. The interval is conditional on the
+modelling choices: the camera term spans only the two 1/3\,in candidates, and the recorder is assumed to sample at
+13.5~MHz. The scale is proportional to the cell width and to $13.5~\text{MHz}/r$ for a recorder rate $r$, so a
+1/2\,in CCD with the same cell count (6.4 instead of 4.8~mm wide) would make it about 33\,\% coarser. No image of an
+object of known size checks the absolute scale.
 
 \begin{table}
 \centering\tabfont
 \caption{Object-plane pixel scale at the focused plane, \umpx{} (median and 95\,\% interval of the Monte Carlo
-budget; nominal in brackets). Last column: the same if the stated tube length includes a 5~mm CS-to-C ring.
+budget, conditional on a 1/3\,in sensor and 13.5~MHz sampling; nominal in brackets). Last column: the same if the
+stated tube length includes a 5~mm CS-to-C ring.
 Source: \texttt{python -m optics.scale\_chain}.}\label{tab:scale}
 \begin{tabular}{@{}llrrr@{}}
 \toprule
@@ -64,12 +59,12 @@ The 95\,\% interval is about $\pm 10$\,\% on either axis ($\pm 9.8$\,\% along x,
 tube length dominates it: $e \pm 5$~mm alone moves the scale by $-7.6$ to $+8.9$\,\%, against $\pm 2.0$\,\% for the
 focal-length tolerance, $\pm 2.0$\,\% for the line mapping, $-1.6$ to $+1.7$\,\% for the focus travel and less than
 1\,\% for the camera candidate. Whether a 5~mm CS-to-C ring is counted in the 60~mm is a discrete alternative,
-$+8.9$\,\%, kept outside the interval. The glass index, the glass thickness and the air gap do not enter: a
+$+8.9$\,\%, given next to the interval in \tabref{tab:scale} rather than inside it. The glass index, the glass thickness and the air gap do not enter: a
 parallel plate moves the focused plane but leaves the magnification at a fixed $i$ unchanged. A caliper reading of
 $e$ and a photograph of the mount would remove the two largest terms.
 
 For sizes, the per-axis scale matters. A clip pixel is 1.464~\um{} wide and 1.913~\um{} tall in the slurry, so a
-length measured along a row is 12\,\% shorter and one measured down a column 15\,\% longer than with the
+length measured along a row is 12\,\% shorter and one measured down a column 14\,\% longer than with the
 geometric-mean pixel of 1.673~\um, which is appropriate only for areas. The geometric mean of the PAL sample is
 3.749~\um; a PAL sample, not a clip pixel, is the resolution element of both recordings (\secref{sec:chain}).
 
@@ -77,42 +72,25 @@ geometric-mean pixel of 1.673~\um, which is appropriate only for areas. The geom
 
 A parallel plate of thickness $t$ and index $n_g$ shifts the apparent object distance toward the lens by
 $\Delta = t (1 - 1/n_g)$ in the paraxial limit \citep{Hecht2017}. For $t = 20$~mm and the assumed $n_g = 1.47$,
-$\Delta = 6.39$~mm, independent of distance; $n_g = 1.52$ would give 6.84~mm (\figref{fig:shift};
-\code{scripts/rerun_paper_numbers.py}). The shift moves the focused plane relative to the glass but, as stated
+$\Delta = 6.39$~mm, independent of distance; $n_g = 1.52$ would give 6.84~mm
+(\code{scripts/rerun_paper_numbers.py}; plotted by \code{optics.plots}). The shift moves the focused plane relative to the glass but, as stated
 above, not the scale. The exact projection through a flat port is of high polynomial degree (12th degree for two
 refractions with distinct indices, \citealp{Agrawal2012}); we use the paraxial form and have not computed the
 residual distortion over the field.
 
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{05_sight_glass_shift}
-\caption{\textbf{How much does the sight glass move the object?} Apparent against real object distance through a
-20~mm plate of assumed index $n_g = 1.47$. The paraxial shift is a constant $\Delta = 6.39$~mm; it offsets every
-$d_o$ but does not change the slope of \figref{fig:mmpx}.}\label{fig:shift}
-\end{figure}
 
 \subsection{Extension-tube sensitivity}\label{sec:tube}
 
 At the focused plane the scale is proportional to $1/(e + x)$ (\secref{sec:thinlens}), so the tube length acts as a
 multiplicative factor on every reported size: each $\pm 1$~mm of $e$ or of focus travel moves the scale by
-$\mp 1.64$\,\%. \figref{fig:tube} shows the consequence over a standard extension-ring set. A 10~mm tube instead of
+$\mp 1.64$\,\%. A 10~mm tube instead of
 60~mm would make the scale 5.55 times coarser, $8.12 \times 10.61$~\umpx{} on a clip pixel.
 
 The tube length cannot be recovered reliably from the image by anchoring a typical crystal size, because that size
 changes by more than an order of magnitude within a strike (the microscope medians of \secref{sec:plant} grow from
-29 to 483~\um{} in two hours). A wrong tube length would rescale the whole distribution without making it
+29 to 483~\um{} in 122~min). A wrong tube length would rescale the whole distribution without making it
 internally inconsistent. The tube must therefore be measured; in the absence of a caliper reading the plant's
-``$\approx 6$~cm'' leaves the $\pm 10$\,\% interval of \tabref{tab:scale}.
-
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{06_extension_tube_sweep}
-\caption{\textbf{How does the extension tube set the macro range?} Object-plane extent of the geometric-mean PAL
-sample against object distance for tube lengths of 5, 10, 20 and 40~mm (an analysis choice) and the installed
-${\approx}\,60$~mm. The legend gives the focused distance of each tube; the curves are drawn without the focus
-travel, $i = f + e$.}\label{fig:tube}
-\end{figure}
-
+``$\approx 6$~cm'' leaves the conditional $\pm 10$\,\% interval of \tabref{tab:scale}.
 \subsection{Where the focal plane sits relative to the glass}\label{sec:slab}
 
 \figref{fig:layout} draws the optical stack to scale. The lens datasheet gives the back focal distance but not the
@@ -132,7 +110,8 @@ the plane directly.
 \includegraphics[width=0.85\textwidth]{18_optical_layout}
 \caption{\textbf{What does the optical chain from sensor to slurry look like?} Layout drawn to scale from
 \texttt{configs/camera\_100.toml} (\texttt{python -m optics.optical\_layout}); the colour of each dimension gives its
-source class. Camera body length (40~mm) and lens body (30.5~mm, including the 1~mm focus travel) are estimates;
+source class. The camera body length (40~mm) is assumed and enters no number; the lens body (30.5~mm, including the
+1~mm focus travel) is an estimate;
 tube $e$, air gap $a$ and glass $t$ are plant statements; the sensor-to-$H'$ distance $i = f + e + x = 96$~mm is
 derived. The placement of the sharp-focus plane at the inner glass face, and hence $H \to$ focus $= 61.5$~mm, is an
 assumption (\secref{sec:slab}).}\label{fig:layout}

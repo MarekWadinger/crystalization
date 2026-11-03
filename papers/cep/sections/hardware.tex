@@ -14,14 +14,15 @@ A.~Fedor, pers.\ comm., 2026-11-03). The pan is mechanically stirred in normal o
 EI1004), which is the physical basis of the homogeneous-slurry assumption of \secref{sec:homog}.
 
 Two independent size references exist for this stage. A laser-diffraction analysis of a seed-slurry sample
-(Mastersizer, 2-propanol dispersant; sampled 2025-01-16, measured 2025-03-04 by the AGRANA central laboratory,
-\citealp{Mastersizer2025}) gives $D[3;2] = 3.95$~\um, $D[4;3] = 8.71$~\um{} and
-$\mathrm{Dv}(10) / \mathrm{Dv}(50) / \mathrm{Dv}(90) = 1.56 / 6.81 / 18.5$~\um. Operator microscope photographs of
+(Mastersizer, 2-propanol dispersant; sample labelled 2025-01-16, measured 2025-03-04 by the AGRANA central
+laboratory, \citealp{Mastersizer2025}) gives a mean over three repeat runs of
+$\mathrm{Dv}(10) / \mathrm{Dv}(50) / \mathrm{Dv}(90) = 1.57 / 6.77 / 18.6$~\um{} (first run: $D[3;2] = 3.95$~\um,
+$D[4;3] = 8.71$~\um). Operator microscope photographs of
 the ZRA run of 2026-10-30, transcribed from their burned-in measurement overlays into
 \code{datasets/microscope_annotations.csv} (54 photographs; \code{scripts/microscope_summary.py}), give 10--19~\um{}
 for the slurry, and in the first strike a median measured chord that grows from 29~\um{} two minutes after seeding
-to 483~\um{} after 122~min. These are operator-picked crystals, not a size distribution, read once from the
-overlays; they bound the sizes the camera has to resolve over a strike, from a few micrometres to almost a
+to 483~\um{} after 122~min. These are chords of operator-picked crystals, not a size distribution, read once by
+an AI transcription of the overlays (a second, independent reading is \pending{human second reading}); they bound the sizes the camera has to resolve over a strike, from a few micrometres to almost a
 millimetre.
 
 The camera views the slurry through a circular sight glass on an 8-bolt flange (photograph,
@@ -39,7 +40,9 @@ supply (plant photographs, 2026-08-10). The model sticker has not been read. The
 confirmed, is an Ademco ACM570E-class camera with a 1/3\,in CCD of $752 \times 582$ cells of $6.50 \times 6.25$~\um;
 the alternative is the ACM380E class with $500 \times 582$ cells of $9.8 \times 6.3$~\um. Both belong to one Ademco
 camera family \citep{AdemcoACM380E}, but the available manual gives only the NTSC-type cell counts, so the PAL cell
-sizes above are our estimates. The Hanwha HCB-6000 named in an earlier supplier quotation \citep{PolzQuote2025} is a
+sizes above are our estimates. An earlier plant note matched the rear panel to the Honeywell HCC334/484 family
+instead; no candidate is confirmed, and neither is the 1/3\,in format on which both Ademco candidates agree. The
+Hanwha HCB-6000 named in an earlier supplier quotation \citep{PolzQuote2025} is a
 colour CMOS camera without these switches and is ruled out. Reading the model sticker, or obtaining the PAL
 datasheet of the confirmed model, would fix the cell size and the CCD clock (\secref{sec:budget}).
 
@@ -57,7 +60,7 @@ supplied \citep{AdemcoACM380E}.
 \caption{Inputs of the optical and sampling model with their source class (\texttt{configs/camera\_100.toml}).
 \emph{Plant}: approximate statement of plant staff; \emph{estimate}: our estimate with a stated basis;
 \emph{assumed}: chosen without evidence.}\label{tab:inputs}
-\begin{tabular}{@{}lrl@{}}
+\begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.36\columnwidth}@{}}
 \toprule
 Input & Value & Class and basis \\
 \midrule
@@ -94,7 +97,10 @@ monitor output: the PAL picture is rescaled and pillarboxed, so the clips add no
 rescaling without a datasheet from the DVR's on-screen display. The date and \code{CH01} glyphs are drawn into both
 kinds of recording; locating them in each clip over their PAL separation (115 samples, 503 lines) gives a stretch
 of 2.6773 clip pixels per PAL sample along a row (27 fits on three clips, range 2.6752--2.6795) and 1.8755 per line
-down a column, which equals $1080/576$ within 0.03\,\%. The row stretch is not $1920/720 = 2.667$. On the sensor, a
+down a column, which equals $1080/576$ within 0.03\,\%. The row stretch is not $1920/720 = 2.667$. This method
+assumes that the recorder draws its display into the PAL raster before rescaling it. The picture edges give an
+independent check: the camera picture spans 684.8 PAL samples and 1827--1836 clip pixels, a ratio of 2.668--2.681,
+consistent with 2.677 although the moving right edge (\secref{sec:recording}) makes it a check, not a measurement. On the sensor, a
 clip pixel therefore spans $2.552 \times 3.333$~\um. It covers 1.306 times more slurry vertically than horizontally,
 and three clip pixels along a row are about one PAL sample.
 
@@ -109,7 +115,13 @@ frame of the long PAL recording in the clip \code{10-37-26} (\code{scripts/check
 The case-study recording is the clip \code{2026-02-05 10-36-32.mp4} (1568 frames, 30~fps, $1920 \times 1080$~px).
 Its date is uncertain. An operator statement places the clips on 2026-02-04, whereas the file creation times and the
 absence of shared frames with the 2026-02-04 PAL recording point to 2026-02-05. The strike phase and the time since
-seeding of the clip are therefore unknown, and we attach no growth stage to it.
+seeding of the clip are therefore unknown, and we attach no growth stage to it. Even under the operator's date, the
+DeltaV trend photograph of that day (operator note, p.~3) puts the previous seeding at about 08:49:30, within
+3~min, which would place the clip 1~h~41~min to 1~h~48~min after seeding (\code{scripts/check_anchors.py};
+\code{datasets/README.md}). We use the clip for the frame-level analyses of \S\S\,\ref{sec:defocus}--\ref{sec:sizing}
+because it is the recording on which the pipeline was developed. For the behaviour of the detectors over a strike we
+use the PAL recording, whose second strike (b2) is covered from before seeding (12:30, operator note; steam cut at
+12:31:30 in SCADA) to discharge (16:00:10) (\secref{sec:csd-time}).
 
 The clip carries two sources of artificially sharp edges, which dominate any per-pixel sharpness statistic of the
 raw frame (\secref{sec:empirical}):

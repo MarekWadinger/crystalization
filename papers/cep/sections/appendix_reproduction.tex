@@ -10,11 +10,12 @@ uv sync --group dev --group optics \
   --group annotator
 uv run pytest -q tests/test_optics.py \
   tests/test_scale_chain.py \
-  tests/test_provenance.py   # 28 tests
+  tests/test_provenance.py   # 30 tests
 \end{verbatim}}
-\noindent The full suite collects 140 tests (\code{uv run pytest -q}). \tabref{tab:repro} lists the generators.
+\noindent The full suite collects 142 tests (\code{uv run pytest -q}). \tabref{tab:repro} lists the generators.
 \code{scripts/rerun_paper_numbers.py} writes each computed number of \S\S\,\ref{sec:optics}--\ref{sec:csd} with its
 previous value, source class and generating function to \code{docs/optics/rerun_results.md};
+\code{scripts/detector_checks.py} writes the label-free detector checks to \code{docs/optics/detector_checks.md};
 \code{optics.scale_chain} writes the scale budget to \code{docs/optics/scale_chain.md}; \code{make -C papers/cep
 figures} collects the figures. The recordings are read from \code{datasets/}.
 
@@ -35,14 +36,14 @@ Tables~\ref{tab:dof}, \ref{tab:crop}, \ref{tab:ws-compare} \\
 \code{scripts/check_clip_overlap.py} & clip date, \S\S\,\ref{sec:chain}--\ref{sec:recording} \\
 \code{scripts/check_anchors.py} & anchors, clock, \secref{sec:expected} \\
 \code{scripts/microscope_summary.py}$^\ast$ & \tabref{tab:microscope} \\
-\code{-m optics.plots}$^\ast$ & Figs.~\ref{fig:mmpx}, \ref{fig:shift}, \ref{fig:tube}, \ref{fig:coc},
+\code{scripts/detector_checks.py} & \tabref{tab:ws-sweep}, \figref{fig:time} \\
+\code{-m optics.plots}$^\ast$ & Figs.~\ref{fig:coc},
 \ref{fig:sharpness}, \ref{fig:dof} \\
 \code{-m optics.optical_layout}$^\ast$ & \figref{fig:layout} \\
 \code{-m optics.measure} & \figref{fig:measured} \\
-\code{-m optics.qualitative} & Figs.~\ref{fig:layers}, \ref{fig:detection} \\
+\code{-m optics.qualitative} & \figref{fig:detection} \\
 \code{-m optics.disambiguate} & Figs.~\ref{fig:discrim}, \ref{fig:disamb} \\
 \code{-m optics.csd} & \figref{fig:csd} \\
-\code{-m optics.detect_watershed} & \figref{fig:watershed} \\
 \bottomrule
 \end{tabular}
 \end{table}

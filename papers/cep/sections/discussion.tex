@@ -5,38 +5,45 @@
 \subsection{What the installed camera delivers now}\label{sec:performs}
 
 The optical side is settled up to its stated inputs. The scale at the focused plane is known per axis to about
-$\pm 10$\,\% at 95\,\% (\tabref{tab:scale}), with a discrete $+8.9$\,\% open if the stated tube length includes a
-CS-to-C ring. The plant's ``$\approx 6$~cm'' for the tube dominates the budget; every other term is about 2\,\% or
+$\pm 10$\,\% at 95\,\% (\tabref{tab:scale}), conditional on a 1/3\,in sensor and 13.5~MHz sampling, with a discrete
+$+8.9$\,\% open if the stated tube length includes a CS-to-C ring. The plant's ``$\approx 6$~cm'' for the tube dominates the budget; every other term is about 2\,\% or
 less. Any detector on the clips must use the anisotropic clip pixel, and its resolution element is the PAL sample in
 both recordings (\secref{sec:budget}).
 
 At F/1.6 the camera samples a slice of $\pm 9.4$~\um{} about the focused plane (\tabref{tab:dof}). Within it the
 magnification is constant well below the scale uncertainty (mean depth correction 0.005--0.013\,\%;
 \secref{sec:depthsmall}), so a single focal-plane scale suffices. The same thinness makes the size prior
-uninformative (\secref{sec:disamb-result}). Because the size ratio depends only on $\delta / d_\mathrm{focus}$
-(Eq.~\ref{eq:ratio}) while the admitted depth range grows in proportion to $N$ (Eq.~\ref{eq:coc}), stopping down to
-F/16 widens the slice tenfold to $\pm 94$~\um{} and still leaves the admitted range below the
-$\delta \approx 1.3$~mm at which the ratio reaches 5\,\%.
+uninformative (\secref{sec:disamb-result}). Stopping down does not rescue it. The size ratio depends only on
+$\delta / d_\mathrm{focus}$ (Eq.~\ref{eq:ratio}), and the geometric admitted range grows only in proportion to $N$
+(Eq.~\ref{eq:coc}): even at F/16 the assumed five-sample cutoff lies near $\pm 0.47$~mm, below the
+$\delta \approx 1.3$~mm at which the ratio reaches 5\,\%. Diffraction at the working F-number $N(1 + M)$ adds
+3.7 PAL samples of blur at F/16, so the outlines on which the detectors rely would degrade first
+(\secref{sec:dof}).
 
-Neither classical detector measures crystal size on the case-study clip
-(\S\S\,\ref{sec:csd-edge}--\ref{sec:watershed}). Resolution is not the obstacle for most of a strike: from about half
+Neither classical detector measures crystal size: on the case-study clip their output depends on the area window
+or tiles the frame (\S\S\,\ref{sec:csd-edge}--\ref{sec:watershed}), and over a full PAL strike their medians stay
+flat from before seeding to discharge (\secref{sec:csd-time}). Resolution is not the obstacle for most of a strike: from about half
 an hour after seeding the microscope medians exceed 0.1~mm (\tabref{tab:microscope}), tens of PAL samples, and only
 the slurry crystals of 10--19~\um{} sit at the resolution limit (\secref{sec:expected}). The missing piece is a
 detector validated against hand-labelled crystals (\secref{sec:validation}).
 
 \subsection{Limitations}\label{sec:notperform}
 
-The scale is modelled, not measured in the image: no object of known size has been imaged through the glass. The
+The scale is modelled, not measured in the image: no object of known size has been imaged through the glass, and
+its interval is conditional on the sensor format and recorder rate (\secref{sec:budget}). The
 tube length, air gap, glass thickness and F-number are approximate plant statements, the camera model with its cell
 size and CCD clock is the best-matching candidate, to be confirmed, and the 13.5~MHz sampling is the BT.601 rate, not
 a datasheet value of the installed recorder (\tabref{tab:inputs}). The case-study clip has no size reference: its
 recording date is contradicted by the image data, so its strike phase is unknown (\secref{sec:recording}), and the
 microscope series is from another day. That series consists of chords of operator-picked crystals, read once by an AI
 transcription from the photographs' overlays, not a measured distribution (\secref{sec:expected}). The depth of field
-rests on two choices, the resolution element (\tabref{tab:dof}) and the PSF constant $k = 1/2$, which has no
-page-checked source and sets the slice but not the asymptotic exponent (\secref{sec:psf}). The sight glass is treated
+rests on the resolution element, assumed to be the PAL sample although bandwidth, interlace and compression may
+coarsen it (\secref{sec:dof}). The PSF constant $k = 1/2$ has no page-checked source; it sets the sharpness FWHM and
+the CoC inverted in \secref{sec:impl}, not the in-focus slice or the asymptotic exponent (\secref{sec:psf}). The
+point-object depth model does not describe crystals much thicker than the slice (\secref{sec:homog}). The sight glass is treated
 paraxially, its residual distortion over the field has not been computed, and its index is assumed
-(\secref{sec:shift}). Slurry homogeneity is untested (\secref{sec:selfcheck}). Frame content matters: the recorder
+(\secref{sec:shift}). Slurry homogeneity is untested, and static marks or crystals adhering to the glass may enter the focal subset
+(\S\S\,\ref{sec:homog}, \ref{sec:selfcheck}). Frame content matters: the recorder
 overlays and the pillarbox move the sharpness slope from 5.36 to 4.88--4.90 (\tabref{tab:crop}), and the right picture
 edge moves by about 8 clip pixels between and within clips, so crops must keep a margin (\secref{sec:recording}).
 
@@ -51,11 +58,12 @@ scale in the image and locate the focal plane.
 stretch and a moving picture edge. Logging the recorder clock against the control system keeps the time since
 seeding traceable; on the 2026-02-04 recording the two agree to about $\pm 30$~s (\code{scripts/check_anchors.py}).
 \item \textbf{Replace the classical detectors by a validated segmentation}, such as a fine-tuned Cellpose model
-scored as in \secref{sec:validation}, with a size window that admits the largest microscope chords, which exceed the
-current 1~mm bound (\secref{sec:expected}).
+scored as in \secref{sec:validation}, with a size window that admits the largest microscope crystals, whose chords reach
+1.14~mm and may exceed the current 1~mm area-equivalent bound (\secref{sec:expected}).
 \item \textbf{Treat the camera as a thin-slice sensor at F/1.6.} A single focal-plane scale suffices; depth
 disambiguation would need detections far outside the in-focus slice, which neither the engraved stops nor the current
-detectors provide, and stopping down trades the slice against light and diffraction (\secref{sec:dof}).
+detectors provide, and beyond about F/4.4 diffraction at the working F-number exceeds one PAL sample
+(\secref{sec:dof}).
 \end{enumerate}
 
 \subsection{Towards a soft sensor}\label{sec:softsensor}

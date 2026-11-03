@@ -25,7 +25,8 @@ $c \approx K |\delta| / d_\mathrm{focus}$ with $\delta = d_o - d_\mathrm{focus}$
 \includegraphics[width=0.85\textwidth]{02_coc_vs_distance}
 \caption{\textbf{How does blur grow away from the focused plane?} Geometric CoC at F/1.6 against object distance
 (left), asymmetric in $d_o$, and against reciprocal distance $u = 1/d_o$ (right), symmetric and linear about
-$u_\mathrm{focus}$. The 1-pixel line is one geometric-mean PAL sample, 6.5~\um{} on the sensor.}\label{fig:coc}
+$u_\mathrm{focus}$. The left CoC axis is logarithmic so that the dotted line of one geometric-mean PAL sample
+(6.5~\um{} on the sensor) is visible; the legend gives the limit $c \to K$ for $d_o \to \infty$.}\label{fig:coc}
 \end{figure*}
 
 \subsection{Sharpness profile under a Gaussian PSF}\label{sec:psf}
@@ -41,8 +42,11 @@ S(\sigma) \propto \int_0^{\infty} e^{-4 \pi^2 (\sigma^2 + \sigma_0^2) \nu^2} \, 
 \propto (\sigma^2 + \sigma_0^2)^{-5/2},
 \end{equation}
 where the floor $\sigma_0$ combines, in quadrature, half a geometric-mean PAL sample and the diffraction width
-$\sigma_\mathrm{diff} \approx 0.42 \lambda N$, the Gaussian approximation of the paraxial Airy pattern
-$\sigma \approx 0.21 \lambda / \mathrm{NA}$ with $\mathrm{NA} \approx 1/(2N)$ \citep{ZhangZerubia2007}. The exponent
+$\sigma_\mathrm{diff} \approx 0.42 \lambda N_w$, the Gaussian approximation of the paraxial Airy pattern
+$\sigma \approx 0.21 \lambda / \mathrm{NA}$ with the image-side $\mathrm{NA} \approx 1/(2N_w)$
+\citep{ZhangZerubia2007}. At macro magnification the working F-number is $N_w = N(1 + M)$, with the pupil
+magnification taken as one; at $M = 1.743$ it is $2.74\,N$, and $\lambda = 550$~nm gives a diffraction FWHM at the
+sensor of 2.4~\um{} (0.37 PAL samples) at F/1.6 (\code{scripts/rerun_paper_numbers.py}, rows 106--109). The exponent
 $5$ is a property of these assumptions, not of the optics alone. The same integral taken in two dimensions over a
 texture whose power spectrum falls as $|\nu|^{-\beta}$ gives $(\sigma^2 + \sigma_0^2)^{-(6 - \beta)/2}$. Composed with
 Eq.~\eqref{eq:coc}, $S$ is a cusp in object distance: tall and narrow at the focused plane, with tails falling as
@@ -50,7 +54,7 @@ $|\delta|^{-5}$ once $\sigma \gg \sigma_0$, and not a Gaussian (\figref{fig:shar
 
 \begin{figure*}
 \centering
-\includegraphics[width=\textwidth]{03_sharpness_vs_distance}
+\includegraphics[width=0.82\textwidth]{03_sharpness_vs_distance}
 \caption{\textbf{What shape does the model give the sharpness profile?} Modelled sharpness (Eq.~\ref{eq:sharpness})
 against defocus $\delta = d_o - d_\mathrm{focus}$ at F/1.6, with the floor set by one PAL sample.
 \textbf{Left} (linear): the peak has a full width at half maximum of 10.5~\um{} of object depth; a Gaussian of the
@@ -66,23 +70,33 @@ The in-focus slice is the depth range in which the CoC stays below one resolutio
 that element is the PAL sample (\secref{sec:chain}), 6.53~\um{} on the sensor as a geometric mean; a 1080p clip
 pixel (2.92~\um) is an upscaled fraction of a sample and does not resolve finer detail. \tabref{tab:dof} gives the
 slice for both definitions, so that the effect of the choice is visible. With the PAL sample, the in-focus slice at
-F/1.6 is $\pm 9.4$~\um, and stopping down to F/16 widens it tenfold to $\pm 94$~\um, since the slice grows in
-proportion to $N$ (Eq.~\ref{eq:coc}; \figref{fig:dof}). The iris is the only lever of the installed hardware on the
-slice thickness; it trades the slice against light and diffraction. Depths here are in air-equivalent thin-lens
-coordinates; beyond the inner glass face, a paraxial depth in a medium of index $n_s$ is $n_s$ times longer.
+F/1.6 is $\pm 9.4$~\um. The geometric slice grows in proportion to $N$ (Eq.~\ref{eq:coc}; \figref{fig:dof}), but
+diffraction grows with $N_w$: its FWHM reaches one PAL sample at about F/4.4 and is 1.8 samples at F/8 and 3.7
+samples (23.9~\um) at F/16. Beyond about F/4 no depth meets the one-sample criterion, so the geometric $\pm 94$~\um{}
+at F/16 bounds only the geometric blur and is not an in-focus slice. The iris is the only lever of the installed
+hardware on the slice thickness, and diffraction caps it. Depths here are in air-equivalent thin-lens coordinates;
+beyond the inner glass face, a paraxial depth in a medium of index $n_s$ is $n_s$ times longer.
+
+The PAL sample as resolution element is an assumption, not a measurement, and it is optimistic. The analogue
+bandwidth of camera and recorder is undocumented; even the BT.601 luma passband of 5.75~MHz \citep{ITUBT601}
+resolves only about 600 points in the 52~\textmu s active line, against 720 samples; the two
+interlaced fields of a moving slurry can halve the vertical resolution; and the H.264 compression of the recordings
+removes fine texture. Each would coarsen the element and widen the slice in proportion. A measured edge-spread
+function of the analogue chain would settle it \pending{effective resolution of the recorded PAL chain}.
 
 \begin{table}
 \centering\tabfont
-\caption{In-focus half-slice (CoC $\le$ one resolution element) and sharpness FWHM, in \textmu m of object depth
-(\texttt{scripts/rerun\_paper\_numbers.py}, rows 16--18 and 21--23). The PAL sample is the physical resolution element;
-the clip-pixel column shows what an upscaled pixel would give.}\label{tab:dof}
+\caption{In-focus half-slice (geometric CoC $\le$ one resolution element) and sharpness FWHM, in \textmu m of
+air-equivalent object depth (\texttt{scripts/rerun\_paper\_numbers.py}, rows 16--18 and 21--23). Element: PAL sample
+(6.53~\um) or upscaled clip pixel (2.92~\um). At F/16 the diffraction FWHM alone is 3.7 PAL samples, so that row
+bounds the geometric blur only.}\label{tab:dof}
 \begin{tabular}{@{}lrr@{}}
 \toprule
-Quantity & PAL sample (6.53~\um) & clip pixel (2.92~\um) \\
+Quantity & PAL sample & clip pixel \\
 \midrule
 half-slice, F/1.6 & $\pm 9.4$ & $\pm 4.2$ \\
-half-slice, F/16 & $\pm 94$ & $\pm 42$ \\
-sharpness FWHM, F/1.6 & 10.5 & 4.5 \\
+geometric half-slice, F/16 & $\pm 94$ & $\pm 42$ \\
+sharpness FWHM, F/1.6 & 10.5 & 5.5 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -93,7 +107,8 @@ sharpness FWHM, F/1.6 & 10.5 & 4.5 \\
 \caption{\textbf{How thick is the in-focus slice at each aperture?} Geometric CoC against object distance for the
 engraved iris stops F/1.6, F/2, F/4, F/8 and F/16. Dotted and dashed lines: one and two PAL samples (6.5 and
 13.1~\um{} on the sensor). At F/1.6 the CoC stays within one sample over $\pm 9.4$~\um; at F/16 over
-$\pm 94$~\um.}\label{fig:dof}
+$\pm 94$~\um. The curves are geometric; diffraction, not drawn, exceeds one sample beyond about F/4.4
+(\secref{sec:dof}).}\label{fig:dof}
 \end{figure}
 
 \subsection{Empirical sharpness distribution and frame contamination}\label{sec:empirical}
@@ -133,13 +148,11 @@ cropped $\alpha$ to 5 is therefore not evidence for the model. Directly supporte
 the shape in \figref{fig:measured}: a single mode followed by a shoulder of sharp pixels at a density far below
 the peak.
 
-\begin{figure*}
+\begin{figure}
 \centering
-\includegraphics[width=0.85\textwidth]{08_measured_vs_theory}
-\caption{\textbf{What does the measured sharpness distribution look like?} \textbf{Left:} per-pixel sharpness
-density of the case-study clip after the automatic crop, with the fitted slope $\alpha = 4.90$. The fit band (50th
-to 95th percentile) lies on the decay just right of the mode; the dashed line extends the fit over the higher bins
-for display and does not describe them. \textbf{Right:} the model's density for depths uniform over $\pm 5$~mm
-about focus. Because the in-focus slice is far thinner than that range, the predicted density collapses at zero
-sharpness and cannot be compared with the measurement.}\label{fig:measured}
-\end{figure*}
+\includegraphics[width=\columnwidth]{08_measured_vs_theory}
+\caption{\textbf{What does the measured sharpness distribution look like?} Per-pixel sharpness density of the
+case-study clip after the automatic crop (\texttt{optics.measure}). The shaded fit band (50th to 95th percentile of
+the cumulative histogram) lies on the decay just right of the mode; the dashed line is the log--log fit over that band,
+$\alpha = 4.90$, drawn only where it was fitted. No model density is shown (see text).}\label{fig:measured}
+\end{figure}

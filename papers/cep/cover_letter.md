@@ -20,8 +20,10 @@ measurement.]
 
 **Contribution.** [Two or three sentences: what the paper adds, stated for control readers, with its main result.]
 
-**Fit with the journal.** [One or two sentences: why the work belongs in *Control Engineering Practice*, e.g., the soft
-sensor and its validation on plant data.]
+**Fit with the journal.** [One or two sentences: why the work belongs in *Control Engineering Practice*. The current
+draft has no soft sensor or estimator and no validated size signal; it reports a measurement-feasibility study with a
+label-free plant-data result (detector medians flat over a full strike). Decide the venue (CEP vs a sensors or
+measurement journal) before filling this in; see `CLAIM_CHANGES.md`.]
 
 **Data and code.** [Zenodo DOI to be added.]
 

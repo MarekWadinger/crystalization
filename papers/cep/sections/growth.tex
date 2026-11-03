@@ -19,7 +19,7 @@ $(\lambda \Delta x, \lambda G, \lambda o_b)$ fits the same data, and likewise on
 time argument of $G$. The scale is identified only if $G$ is anchored in physical units by an independent size
 reference at known times. The microscope series of 2026-10-30 (\tabref{tab:microscope}) provides such an anchor for
 two strikes of the seed pan: the median chord grows from 29~\um{} at 2~min to 483~\um{} at 122~min after seeding in
-b1, and from 10~\um{} at seeding to 399~\um{} at 162~min in b2. The strikes differ at equal times (at 96~min, 355
+b1, and from 10~\um{} at seeding (a sample that includes sub-resolution chords) to 399~\um{} at 162~min in b2. The strikes differ at equal times (at 96~min, 355
 against 225~\um), consistent with a per-batch $\tau_b$; these are medians of operator-picked crystals, not
 distributions.
 
@@ -28,6 +28,7 @@ distributions.
 No fit of \eqref{eq:growth} is implemented: \code{optics.csd} aggregates one recording and contains no growth-curve
 code. The exploratory scripts \code{scripts/rq4_*.py} compare detector statistics between the end-of-strike windows of
 the two strikes in the 2026-02-04 PAL recording and test the removal of static sight-glass marks; they rely on the
-detectors of \secref{sec:csd} and inherit their failure, so we report no result from them. Fitting
+detectors of \secref{sec:csd}, whose medians do not follow the strike (\secref{sec:csd-time}), so we report no result
+from them. Fitting
 \eqref{eq:growth} requires camera medians against time since seeding from a validated detector on the 2026-10-30
 recording, paired with the microscope series \pending{validated camera size against time, 2026-10-30, both strikes}.
