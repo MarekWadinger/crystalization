@@ -28,11 +28,8 @@ CSV = ROOT / "datasets" / "microscope_annotations.csv"
 SIDECAR = ROOT / "datasets" / "2026-10-30 08-45-33.json"
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
-    ap.add_argument("--csv", action="store_true", help="CSV output")
-    a = ap.parse_args()
-
+def summary_rows() -> list[list[object]]:
+    """One row per sample: batch, HH:MM, min since seeding, id, n, min/median/max µm."""
     side = json.loads(SIDECAR.read_text())
     seed = {
         e["id"].split("-")[0]: datetime.fromisoformat(e["wallclock"])
@@ -48,7 +45,7 @@ def main() -> None:
         vals[key].append(float(r["value_mm"]) * 1000.0)
         when[key] = r["sample_wallclock"]
 
-    rows = []
+    rows: list[list[object]] = []
     for key, v in vals.items():
         wc = when[key]
         batch = key.split("-")[0] if wc else ""
@@ -63,7 +60,22 @@ def main() -> None:
             [batch or "-", wc[11:16] if wc else "-", dt_min, key, len(v),
              round(min(v)), round(statistics.median(v)), round(max(v))]
         )  # fmt: skip
-    rows.sort(key=lambda r: (r[0], r[1]))
+    rows.sort(key=lambda r: (str(r[0]), str(r[1])))
+    return rows
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
+    ap.add_argument("--csv", action="store_true", help="CSV output")
+    a = ap.parse_args()
+
+    side = json.loads(SIDECAR.read_text())
+    seed = {
+        e["id"].split("-")[0]: datetime.fromisoformat(e["wallclock"])
+        for e in side["events"]
+        if e.get("is_seeding")
+    }
+    rows = summary_rows()
     head = ["batch", "sample", "min_since_seeding", "id", "n",
             "min_um", "median_um", "max_um"]  # fmt: skip
     if a.csv:
