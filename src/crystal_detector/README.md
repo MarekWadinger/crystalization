@@ -79,10 +79,17 @@ video's sidecar in `datasets/`:
 | Video | Frame names | Stages | Per person | Annotators |
 | --- | --- | --- | --- | --- |
 | `2026-02-04 11-08-51` (plant strike, PAL) | `HHMMSS.png` | seeding, boiling, drying, aeration, discharge × 3 | 15 | patrik, erika, marian, marek |
-| `2026-10-30 08-45-33` (ZRA lab run on the NAS, two batches) | `2026-10-30_08-45-33_HHMMSS.png` | seeding, boiling, drying of each batch × 2 | 12 | patrik, erika, marian, marek, ananya |
+| `2026-10-30 08-45-33` (ZRA lab run on the NAS, two batches) | `2026-10-30_08-45-33_HHMMSS.png` | boiling, drying ≥ 5 min from a lab sample; `lab_samples` (below) | 13–16 | patrik, erika, marian, marek, ananya |
 
 `HHMMSS` is the offset into that video (not the clock time), so a frame can
-be found again in the source video. Ananya also has 15 frames of the first
+be found again in the source video.
+
+`<name>/lab_samples/` holds 57 frames (of the 60 stage frames of commit 7510bdf, only the 18 at least 5 min from any lab sample were kept) of `2026-10-30 08-45-33` at the 19 lab
+samples with microscope photos: in each third of ±60 s around a sample, the
+whole-second frame with the highest Laplacian variance, round-robin over the
+five annotators. `lab_samples.csv` maps each frame to its sample; these labels
+are compared with the microscope sizes. Exported with
+`uv run python scripts/export_lab_frames.py VIDEO` from the FFV1 `.mkv` on the NAS. Ananya also has 15 frames of the first
 video: copies of the middle frame of patrik's, erika's and marian's triplet
 in each stage, so her labels double as an inter-annotator check. The
 fine-tune keeps every copy of a held-out frame out of training.
