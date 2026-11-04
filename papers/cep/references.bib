@@ -1,37 +1,50 @@
-% References of manuscript v0.2 (docs/paper/manuscript.md), converted from the hand-typed list.
-% Rule: a DOI is given only where the manuscript gives one; no DOI was looked up or added. Citation verification
-% (every DOI resolves, metadata matches) is a later step (ROADMAP Phase 5).
-% Titles, volumes and pages are as typed in the manuscript, including possibly shortened titles.
+% References of the CEP manuscript.
+% Verified 2026-11-03 against Crossref (api.crossref.org/works/<doi>), OpenAlex abstracts, Open Library (ISBN), the
+% local PDFs named in the notes, and vendor/standard pages. Claim-by-claim verdicts: papers/cep/SOURCES.md.
+% Rules: every journal/proceedings entry carries a DOI that resolves to the record given here; books without a DOI
+% carry an ISBN; standards, datasheets and plant documents carry a URL or a repository path instead of a DOI.
+
+% ---------------------------------------------------------------------------------------------------------------
+% Entries cited in the current draft (keys kept so the draft builds)
+% ---------------------------------------------------------------------------------------------------------------
 
 @inproceedings{Agrawal2012,
-  author    = {Agrawal, A. and Ramalingam, S. and Taguchi, Y. and Chari, V.},
+  author    = {Agrawal, Amit and Ramalingam, Srikumar and Taguchi, Yuichi and Chari, Visesh},
   title     = {A theory of multi-layer flat refractive geometry},
-  booktitle = {Proceedings of the {IEEE} Conference on Computer Vision and Pattern Recognition ({CVPR})},
+  booktitle = {2012 {IEEE} Conference on Computer Vision and Pattern Recognition ({CVPR})},
   pages     = {3346--3353},
   year      = {2012},
   doi       = {10.1109/CVPR.2012.6248073}
 }
 
 @book{Asadi2006,
-  author    = {Asadi, M.},
+  author    = {Asadi, Mosen},
   title     = {Beet-Sugar Handbook},
   publisher = {Wiley},
-  year      = {2006}
+  address   = {Hoboken, NJ},
+  year      = {2006},
+  isbn      = {978-0-471-76347-5},
+  doi       = {10.1002/0471790990}
 }
 
+% Local copy: Drive sugar_plant/papers/"Optimalizácia zvyšovania výťažnosti cukru pri získavaní sacharózy z cukrovej
+% repy.pdf" (title page checked 2026-11-03). Dissertation, supervisor T. Bojňanská.
 @phdthesis{Bennar2010,
-  author = {Benn{\'a}r, M.},
+  author = {Benn{\'a}r, Marek},
   title  = {Optimaliz{\'a}cia zvy{\v{s}}ovania v{\'y}{\v{t}}a{\v{z}}nosti cukru pri z{\'i}skavan{\'i} sachar{\'o}zy
             z cukrovej repy},
-  school = {Slovak University of Agriculture in Nitra},
+  school = {Slovensk{\'a} po{\v{l}}nohospod{\'a}rska univerzita v Nitre, Fakulta biotechnol{\'o}gie a
+            potravin{\'a}rstva},
+  address = {Nitra},
+  type   = {Dissertation},
   year   = {2010},
   note   = {Data from Slovensk{\'e} cukrovary, Sere{\v{d}}, campaigns 2005--2009}
 }
 
 @article{Borchert2014,
-  author  = {Borchert, C. and Temmel, E. and Eisenschmidt, H. and Lorenz, H. and Seidel-Morgenstern, A. and
-             Sundmacher, K.},
-  title   = {Image-based in situ identification of face-specific crystal growth rates},
+  author  = {Borchert, Christian and Temmel, Erik and Eisenschmidt, Holger and Lorenz, Heike and
+             Seidel-Morgenstern, Andreas and Sundmacher, Kai},
+  title   = {Image-based in situ identification of face specific crystal growth rates from crystal populations},
   journal = {Crystal Growth \& Design},
   volume  = {14},
   number  = {3},
@@ -54,21 +67,23 @@
 }
 
 @book{BornWolf1999,
-  author    = {Born, M. and Wolf, E.},
+  author    = {Born, Max and Wolf, Emil},
   title     = {Principles of Optics},
   edition   = {7th expanded},
   publisher = {Cambridge University Press},
+  address   = {Cambridge},
   year      = {1999},
   doi       = {10.1017/CBO9781139644181}
 }
 
+% Authors, title, publisher and year confirmed (VŠCHT Praha author profile); edition and ISBN not confirmed, so the
+% previously typed "9th" edition and ISBN 978-3870403324 were dropped.
 @book{Bubnik1995,
-  author    = {Bubn{\'i}k, Z. and Kadlec, P. and Urban, D. and Bruhns, M.},
-  title     = {Sugar Technologists Manual},
-  edition   = {9th},
-  publisher = {Verlag Dr. A. Bartens},
-  year      = {1995},
-  isbn      = {978-3870403324}
+  author    = {Bubn{\'i}k, Zden{\v{e}}k and Kadlec, Pavel and Urban, Dalibor and Bruhns, Michael},
+  title     = {Sugar Technologists Manual: Chemical and Physical Data for Sugar Manufacturers and Users},
+  publisher = {Verlag Dr.\ Albert Bartens},
+  address   = {Berlin},
+  year      = {1995}
 }
 
 @article{Czapla2010,
@@ -84,57 +99,80 @@
   doi     = {10.1016/j.cherd.2010.03.004}
 }
 
+% Corrected 2026-11-03: issue 22 (not 24); old DOI 10.1016/j.ces.2008.07.034 belongs to another paper.
 @article{Eggers2008,
-  author  = {Eggers, J. and Kempkes, M. and Mazzotti, M.},
-  title   = {Measurement of size and shape distributions of particles},
+  author  = {Eggers, Jan and Kempkes, Michel and Mazzotti, Marco},
+  title   = {Measurement of size and shape distributions of particles through image analysis},
   journal = {Chemical Engineering Science},
   volume  = {63},
-  number  = {24},
+  number  = {22},
   pages   = {5513--5521},
   year    = {2008},
-  doi     = {10.1016/j.ces.2008.07.034}
+  doi     = {10.1016/j.ces.2008.08.007}
+}
+
+% Checked 2026-11-03 on the journal's open PDFs (cukr-listy.cz, contents 2020 and 2021): part 2 covers C
+% (Cukrovina = massecuite); parts 14-16 cover U-Z (Var, Varna, Varostroj, Zadel, Zrneni varu ockovanim incl.
+% mikroocko 5-10 um, Zrnic). No DOI is registered for the journal's articles.
+@article{GeblerHotovy2020,
+  author  = {Gebler, Jaroslav and Hotov{\'y}, Zden{\v{e}}k},
+  title   = {V{\'y}kladov{\'y} slovn{\'i}k cukrovarnick{\'y}ch pojm{\r{u}} -- {\v{c}}{\'a}st 2},
+  journal = {Listy cukrovarnick{\'e} a {\v{r}}epa{\v{r}}sk{\'e}},
+  volume  = {136},
+  number  = {2},
+  pages   = {89--91},
+  year    = {2020},
+  url     = {https://www.cukr-listy.cz/on_line/2020/PDF/89-91.pdf}
 }
 
 @article{GeblerHotovy2021,
-  author  = {Gebler, J. and Hotov{\'y}, Z.},
-  title   = {V{\'y}kladov{\'y} slovn{\'i}k cukrovarnick{\'y}ch pojm{\r{u}}, parts 14--16},
+  author  = {Gebler, Jaroslav and Hotov{\'y}, Zden{\v{e}}k},
+  title   = {V{\'y}kladov{\'y} slovn{\'i}k cukrovarnick{\'y}ch pojm{\r{u}} -- {\v{c}}{\'a}st 14--16},
   journal = {Listy cukrovarnick{\'e} a {\v{r}}epa{\v{r}}sk{\'e}},
   volume  = {137},
+  number  = {5--6, 7--8, 9--10},
   pages   = {229--231, 292--294, 353--354},
-  year    = {2021}
+  year    = {2021},
+  url     = {https://www.cukr-listy.cz/lc-obsah2021.html}
 }
 
 @book{Goodman2017,
-  author    = {Goodman, J. W.},
+  author    = {Goodman, Joseph W.},
   title     = {Introduction to Fourier Optics},
   edition   = {4th},
-  publisher = {W. H. Freeman \& Co.},
+  publisher = {W. H. Freeman},
+  address   = {New York},
   year      = {2017},
   isbn      = {978-1-319-11916-4}
 }
 
 @article{Heath2002,
-  author  = {Heath, A. R. and Fawell, P. D. and Bahri, P. A. and Swift, J. D.},
-  title   = {Estimating average particle size by {FBRM}},
+  author  = {Heath, Alex R. and Fawell, Phillip D. and Bahri, Parisa A. and Swift, Jean D.},
+  title   = {Estimating average particle size by focused beam reflectance measurement ({FBRM})},
   journal = {Particle \& Particle Systems Characterization},
   volume  = {19},
   number  = {2},
   pages   = {84--95},
-  year    = {2002}
+  year    = {2002},
+  doi     = {10.1002/1521-4117(200205)19:2<84::AID-PPSC84>3.0.CO;2-1}
 }
 
 @book{Hecht2017,
-  author    = {Hecht, E.},
+  author    = {Hecht, Eugene},
   title     = {Optics},
   edition   = {5th},
   publisher = {Pearson},
-  year      = {2017}
+  address   = {Boston},
+  year      = {2017},
+  isbn      = {978-0-13-397722-6}
 }
 
+% Corrected 2026-11-03: the DOI resolves to this 2007 paper; the old title ("An algorithm for analyzing noisy, in
+% situ images of high-aspect-ratio crystals ...") is a different Larsen paper (CES 61, 2006).
 @article{Larsen2007,
   author  = {Larsen, P. A. and Rawlings, J. B. and Ferrier, N. J.},
-  title   = {An algorithm for analyzing noisy, in situ images of high-aspect-ratio crystals to monitor particle size
-             distribution},
+  title   = {Model-based object recognition to measure crystal size and shape distributions from in situ video
+             images},
   journal = {Chemical Engineering Science},
   volume  = {62},
   number  = {5},
@@ -143,31 +181,33 @@
   doi     = {10.1016/j.ces.2006.11.018}
 }
 
-% Listed in the manuscript's references but not cited in its text (kept with \nocite in main.tex).
+% Measurement report, not a publication. Values checked against the PDF 2026-11-03.
 @misc{Mastersizer2025,
-  author       = {{Mastersizer laser-diffraction granulometry}},
-  title        = {Zuckerslurry {Se} sample, dispersant 2-propanol},
-  howpublished = {Plant report, Slovensk{\'e} cukrovary, s.r.o., Sere{\v{d}}},
+  author       = {{AGRANA Sugar Technology}},
+  title        = {Laser-diffraction granulometry of sample ``{Zuckerslurry Se 2025-01-16}'' ({Malvern Mastersizer
+                  Xplorer} v5.20, {Mie} model, 2-propanol dispersant)},
+  howpublished = {Measurement report, measured 2025-03-04; provided by Slovensk{\'e} cukrovary, s.r.o., Sere{\v{d}}},
   year         = {2025},
-  note         = {2025-01-16. Archived as \texttt{docs/Granulometry\_Zuckerslurry Se 2025-01-16 A.pdf} in this
-                  project's repository. Size of the seed slurry (mikroo{\v{c}}ko) dosed into the seed pan imaged in
-                  the case-study video ($D[3;2] = 3.95$~\textmu m, $D[4;3] = 8.71$~\textmu m,
-                  $\mathrm{Dv}(10)/\mathrm{Dv}(50)/\mathrm{Dv}(90) = 1.56 / 6.81 / 18.5$~\textmu m)}
+  note         = {Archived as \texttt{docs/Granulometry\_Zuckerslurry Se 2025-01-16 A.pdf} in this project's
+                  repository. Seed slurry (mikroo{\v{c}}ko) dosed into the seed pan: $D[3;2] = 3.95$~\textmu m,
+                  $D[4;3] = 8.71$~\textmu m and $\mathrm{Dv}(10)/\mathrm{Dv}(50)/\mathrm{Dv}(90) = 1.56 / 6.81 /
+                  18.5$~\textmu m (run 1 of 3); mean of the three runs $1.57 / 6.77 / 18.6$~\textmu m}
 }
 
+% Corrected 2026-11-03: title and DOI (old DOI ie50229a009 is Forrest et al. on corrosion).
 @article{McCabe1929,
-  author  = {McCabe, W. L.},
-  title   = {Crystal-growth rates},
+  author  = {McCabe, Warren L.},
+  title   = {Crystal growth in aqueous solutions. {I}---{Theory}},
   journal = {Industrial \& Engineering Chemistry},
   volume  = {21},
   number  = {1},
   pages   = {30--33},
   year    = {1929},
-  doi     = {10.1021/ie50229a009}
+  doi     = {10.1021/ie50229a008}
 }
 
 @article{Nagy2013,
-  author  = {Nagy, Z. K. and Fevotte, G. and Kramer, H. and Simon, L. L.},
+  author  = {Nagy, Zoltan K. and Fevotte, Gilles and Kramer, Herman and Simon, Levente L.},
   title   = {Recent advances in the monitoring, modelling and control of crystallization systems},
   journal = {Chemical Engineering Research and Design},
   volume  = {91},
@@ -189,10 +229,10 @@
 }
 
 @article{Pentland1987,
-  author  = {Pentland, A. P.},
+  author  = {Pentland, Alex Paul},
   title   = {A new sense for depth of field},
   journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  volume  = {9},
+  volume  = {PAMI-9},
   number  = {4},
   pages   = {523--531},
   year    = {1987},
@@ -200,7 +240,7 @@
 }
 
 @article{Pertuz2013,
-  author  = {Pertuz, S. and Puig, D. and Garc{\'i}a, M. A.},
+  author  = {Pertuz, Said and Puig, Domenec and Garcia, Miguel Angel},
   title   = {Analysis of focus measure operators for shape-from-focus},
   journal = {Pattern Recognition},
   volume  = {46},
@@ -210,25 +250,30 @@
   doi     = {10.1016/j.patcog.2012.11.011}
 }
 
+% Key kept for the draft; the page is by Bill Claff, prepared 2007-02-02 (checked 2026-11-03).
 @misc{PhotonsToPhotos2024,
-  author       = {{Photons-to-Photos}},
+  author       = {Claff, William J.},
   title        = {How Extension Tubes Affect Magnification},
-  howpublished = {\url{https://photonstophotos.net/GeneralTopics/Close-up/How_Extension_Tubes_Affect_Magnification.htm}},
-  year         = {2024}
+  howpublished = {Photons to Photos, \url{https://photonstophotos.net/GeneralTopics/Close-up/How_Extension_Tubes_Affect_Magnification.htm}},
+  year         = {2007},
+  note         = {Accessed 2026-11-03}
 }
 
 @book{RandolphLarson1988,
-  author    = {Randolph, A. D. and Larson, M. A.},
-  title     = {Theory of Particulate Processes},
+  author    = {Randolph, Alan D. and Larson, Maurice A.},
+  title     = {Theory of Particulate Processes: Analysis and Techniques of Continuous Crystallization},
   edition   = {2nd},
   publisher = {Academic Press},
+  address   = {San Diego},
   year      = {1988},
-  isbn      = {978-0125796521}
+  isbn      = {978-0-12-579652-1}
 }
 
 @article{Salami2021,
-  author  = {Salami, H. and McDonald, M. A. and Bommarius, A. S. and Rousseau, R. W. and Grover, M. A.},
-  title   = {In-situ imaging combined with deep learning for crystallization process monitoring},
+  author  = {Salami, Hossein and McDonald, Matthew A. and Bommarius, Andreas S. and Rousseau, Ronald W. and
+             Grover, Martha A.},
+  title   = {In situ imaging combined with deep learning for crystallization process monitoring: application to
+             cephalexin production},
   journal = {Organic Process Research \& Development},
   volume  = {25},
   number  = {7},
@@ -237,10 +282,20 @@
   doi     = {10.1021/acs.oprd.1c00136}
 }
 
-% The manuscript lists "Simon, L. L., Pataki, H., Marosi, G., et al."; the full author list is to be added.
+% Full author list from Crossref, 2026-11-03.
 @article{Simon2015,
-  author  = {Simon, L. L. and Pataki, H. and Marosi, G. and others},
-  title   = {Assessment of recent process analytical technology ({PAT}) trends},
+  author  = {Simon, Levente L. and Pataki, Hajnalka and Marosi, Gy{\"o}rgy and Meemken, Fabian and
+             Hungerb{\"u}hler, Konrad and Baiker, Alfons and Tummala, Srinivas and Glennon, Brian and
+             Kuentz, Martin and Steele, Gerry and Kramer, Herman J. M. and Rydzak, James W. and Chen, Zengping and
+             Morris, Julian and Kjell, Francois and Singh, Ravendra and Gani, Rafiqul and Gernaey, Krist V. and
+             Louhi-Kultanen, Marjatta and O'Reilly, John and Sandler, Niklas and Antikainen, Osmo and
+             Yliruusi, Jouko and Frohberg, Patrick and Ulrich, Joachim and Braatz, Richard D. and
+             Leyssens, Tom and von Stosch, Moritz and Oliveira, Rui and Tan, Reginald B. H. and Wu, Huiquan and
+             Khan, Mansoor and O'Grady, Des and Pandey, Anjan and Westra, Remko and Delle-Case, Emmanuel and
+             Pape, Detlef and Angelosante, Daniele and Maret, Yannick and Steiger, Olivier and Lenner, Mikl{\'o}s and
+             Abbou-Oucherif, Kaoutar and Nagy, Zoltan K. and Litster, James D. and Kamaraju, Vamsi Krishna and
+             Chiu, Min-Sen},
+  title   = {Assessment of recent process analytical technology ({PAT}) trends: a multiauthor review},
   journal = {Organic Process Research \& Development},
   volume  = {19},
   number  = {1},
@@ -252,24 +307,26 @@
 @misc{SlovenskeCukrovary2026,
   author       = {{Slovensk{\'e} cukrovary, s.r.o., Sere{\v{d}}}},
   title        = {Potrebn{\'e} d{\'a}ta a ot{\'a}zky -- Zodpovedan{\'e}},
-  howpublished = {Answered plant questionnaire, 2026-08-12, and DeltaV operator screen ``Udaje ZRA'' (2025-11-15)},
+  howpublished = {Answered plant questionnaire (A.~Fedor), 2026-08-12, and DeltaV operator screen ``Udaje ZRA''
+                  (2025-11-15)},
   year         = {2026},
   note         = {Internal communication; summarised with citations in
                   \texttt{docs/sered/notes\_plant\_dcs\_qa\_photos.md}}
 }
 
 @book{Smith2008,
-  author    = {Smith, W. J.},
-  title     = {Modern Optical Engineering},
+  author    = {Smith, Warren J.},
+  title     = {Modern Optical Engineering: The Design of Optical Systems},
   edition   = {4th},
   publisher = {McGraw-Hill},
+  address   = {New York},
   year      = {2008},
-  isbn      = {978-0071476874}
+  isbn      = {978-0-07-147687-4}
 }
 
 @article{SubbaraoSurya1994,
-  author  = {Subbarao, M. and Surya, G.},
-  title   = {Depth from defocus: A spatial-domain approach},
+  author  = {Subbarao, Murali and Surya, Gopal},
+  title   = {Depth from defocus: a spatial domain approach},
   journal = {International Journal of Computer Vision},
   volume  = {13},
   number  = {3},
@@ -278,60 +335,506 @@
   doi     = {10.1007/BF02028349}
 }
 
+% Corrected 2026-11-03: old DOI 10.1007/s11263-010-0418-7 is Arias et al. on inpainting.
+@article{Zhou2011,
+  author  = {Zhou, Changyin and Lin, Stephen and Nayar, Shree K.},
+  title   = {Coded aperture pairs for depth from defocus and defocus deblurring},
+  journal = {International Journal of Computer Vision},
+  volume  = {93},
+  number  = {1},
+  pages   = {53--72},
+  year    = {2011},
+  doi     = {10.1007/s11263-010-0409-8}
+}
+
+% Corrected 2026-11-03: old DOI 10.1002/ppsc.200390002 is Hentschel & Page on shape descriptors.
 @article{Worlitschek2003,
-  author  = {Worlitschek, J. and Mazzotti, M.},
-  title   = {Choice of focal point position using {Lasentec} {FBRM}},
+  author  = {Worlitschek, J{\"o}rg and Mazzotti, Marco},
+  title   = {Choice of the focal point position using {Lasentec} {FBRM}},
   journal = {Particle \& Particle Systems Characterization},
   volume  = {20},
   number  = {1},
   pages   = {12--17},
   year    = {2003},
-  doi     = {10.1002/ppsc.200390002}
+  doi     = {10.1002/ppsc.200390000}
 }
 
+% Corrected 2026-11-03: DOI check digit (-6, not -9) and full title.
 @article{Wynn2003,
   author  = {Wynn, E. J. W.},
   title   = {Relationship between particle-size and chord-length distributions in focused beam reflectance
-             measurement},
+             measurement: stability of direct inversion and weighting},
   journal = {Powder Technology},
   volume  = {133},
   number  = {1--3},
   pages   = {125--133},
   year    = {2003},
-  doi     = {10.1016/S0032-5910(03)00084-9}
+  doi     = {10.1016/S0032-5910(03)00084-6}
 }
 
-@article{Zhou2011,
-  author  = {Zhou, C. and Lin, S. and Nayar, S. K.},
-  title   = {Coded aperture pairs for depth from defocus and defocus deblurring},
-  journal = {International Journal of Computer Vision},
-  volume  = {93},
-  pages   = {53--72},
-  year    = {2011},
-  doi     = {10.1007/s11263-010-0418-7}
-}
-
-% Cited in the manuscript text (Section 7.4) but missing from its reference list. Title, volume and pages are not in
-% the manuscript; added from the standard bibliographic record without a DOI. To verify.
 @article{Vincent1991,
-  author  = {Vincent, L. and Soille, P.},
+  author  = {Vincent, Luc and Soille, Pierre},
   title   = {Watersheds in digital spaces: an efficient algorithm based on immersion simulations},
   journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
   volume  = {13},
   number  = {6},
   pages   = {583--598},
-  year    = {1991}
+  year    = {1991},
+  doi     = {10.1109/34.87344}
 }
 
-% Cited in the manuscript text (Section 7.4) but missing from its reference list. Title and venue are not in the
-% manuscript; added from the standard bibliographic record without a DOI. To verify.
+% Original 1993 Marcel Dekker volume (Optical Engineering 34); the DOI is the CRC Press reissue of the same chapter.
 @incollection{BeucherMeyer1993,
-  author    = {Beucher, S. and Meyer, F.},
+  author    = {Beucher, Serge and Meyer, Fernand},
   title     = {The morphological approach to segmentation: the watershed transformation},
   booktitle = {Mathematical Morphology in Image Processing},
-  editor    = {Dougherty, E. R.},
+  editor    = {Dougherty, Edward R.},
   publisher = {Marcel Dekker},
   address   = {New York},
   pages     = {433--481},
-  year      = {1993}
+  year      = {1993},
+  doi       = {10.1201/9781482277234-12}
+}
+
+% ---------------------------------------------------------------------------------------------------------------
+% Further entries (see SOURCES.md for the claim each one supports)
+% ---------------------------------------------------------------------------------------------------------------
+
+@inproceedings{SellentFavaro2014,
+  author    = {Sellent, Anita and Favaro, Paolo},
+  title     = {Which side of the focal plane are you on?},
+  booktitle = {2014 {IEEE} International Conference on Computational Photography ({ICCP})},
+  pages     = {1--8},
+  year      = {2014},
+  doi       = {10.1109/ICCPHOT.2014.6831818}
+}
+
+@article{ZhangZerubia2007,
+  author  = {Zhang, Bo and Zerubia, Josiane and Olivo-Marin, Jean-Christophe},
+  title   = {Gaussian approximations of fluorescence microscope point-spread function models},
+  journal = {Applied Optics},
+  volume  = {46},
+  number  = {10},
+  pages   = {1819--1829},
+  year    = {2007},
+  doi     = {10.1364/AO.46.001819}
+}
+
+@article{SimonNagy2009,
+  author  = {Simon, Levente L. and Nagy, Zoltan K. and Hungerbuhler, Konrad},
+  title   = {Comparison of external bulk video imaging with focused beam reflectance measurement and ultra-violet
+             visible spectroscopy for metastable zone identification in food and pharmaceutical crystallization
+             processes},
+  journal = {Chemical Engineering Science},
+  volume  = {64},
+  number  = {14},
+  pages   = {3344--3351},
+  year    = {2009},
+  doi     = {10.1016/j.ces.2009.04.016}
+}
+
+@article{Huo2020,
+  author  = {Huo, Yan and Liu, Tao and Yang, Yixuan and Ma, Cai Y. and Wang, Xue Z. and Ni, Xiongwei},
+  title   = {In situ measurement of {3D} crystal size distribution by double-view image analysis with case study on
+             {l}-glutamic acid crystallization},
+  journal = {Industrial \& Engineering Chemistry Research},
+  volume  = {59},
+  number  = {10},
+  pages   = {4646--4658},
+  year    = {2020},
+  doi     = {10.1021/acs.iecr.9b05828}
+}
+
+@article{Manee2019,
+  author  = {Manee, V. and Zhu, W. and Romagnoli, J. A.},
+  title   = {A deep learning image-based sensor for real-time crystal size distribution characterization},
+  journal = {Industrial \& Engineering Chemistry Research},
+  volume  = {58},
+  number  = {51},
+  pages   = {23175--23186},
+  year    = {2019},
+  doi     = {10.1021/acs.iecr.9b02450}
+}
+
+@article{Kempkes2008,
+  author  = {Kempkes, Michel and Eggers, Jan and Mazzotti, Marco},
+  title   = {Measurement of particle size and shape by {FBRM} and in situ microscopy},
+  journal = {Chemical Engineering Science},
+  volume  = {63},
+  number  = {19},
+  pages   = {4656--4675},
+  year    = {2008},
+  doi     = {10.1016/j.ces.2007.10.030}
+}
+
+@article{Kail2009,
+  author  = {Kail, Norbert and Marquardt, Wolfgang and Briesen, Heiko},
+  title   = {Estimation of particle size distributions from focused beam reflectance measurements based on an
+             optical model},
+  journal = {Chemical Engineering Science},
+  volume  = {64},
+  number  = {5},
+  pages   = {984--1000},
+  year    = {2009},
+  doi     = {10.1016/j.ces.2008.10.039}
+}
+
+@article{Ferreira2011,
+  author  = {Ferreira, A. and Faria, N. and Rocha, F. and Teixeira, J. A.},
+  title   = {Using an online image analysis technique to characterize sucrose crystal morphology during a
+             crystallization run},
+  journal = {Industrial \& Engineering Chemistry Research},
+  volume  = {50},
+  number  = {11},
+  pages   = {6990--7002},
+  year    = {2011},
+  doi     = {10.1021/ie2001499}
+}
+
+% Volume and issue from the publisher page (sugarindustry.info/paper/18737); Crossref gives no volume.
+@article{Daniels2017,
+  author  = {Dani{\"e}ls, Ren{\'e} and Nouws, Daniel and Wittenberg, Arend},
+  title   = {Improved image analysis system for technical sugar crystal suspensions},
+  journal = {Sugar Industry},
+  volume  = {142},
+  number  = {9},
+  pages   = {538--543},
+  year    = {2017},
+  doi     = {10.36961/si18737}
+}
+
+@article{Gao2018,
+  author  = {Gao, Zhenguo and Wu, Yuanyi and Bao, Ying and Gong, Junbo and Wang, Jingkang and Rohani, Sohrab},
+  title   = {Image analysis for in-line measurement of multidimensional size, shape, and polymorphic transformation
+             of {l}-glutamic acid using deep learning-based image segmentation and classification},
+  journal = {Crystal Growth \& Design},
+  volume  = {18},
+  number  = {8},
+  pages   = {4275--4281},
+  year    = {2018},
+  doi     = {10.1021/acs.cgd.8b00883}
+}
+
+@misc{DIN8902,
+  author       = {{DIN Deutsches Institut f{\"u}r Normung}},
+  title        = {{DIN} 8902:2020-08 Pressure resistant circular sight glasses of soda-lime-glass},
+  howpublished = {Standard, \url{https://www.sis.se/produkter/kemiteknik-3b58b2e7/utrustning-for-kemisk-industri/reaktortankar-och-tillhorande-komponenter/din-8902}},
+  year         = {2020},
+  note         = {Title and scope checked 2026-11-03 (soda-lime glass, up to 150~$^\circ$C)}
+}
+
+@misc{SchottBorofloat33,
+  author       = {{SCHOTT AG}},
+  title        = {{BOROFLOAT} 33 technical details: optical properties},
+  howpublished = {\url{https://www.schott.com/en-gb/products/borofloat/technical-details}},
+  year         = {2026},
+  note         = {Reference value $n_d = 1.47140$ at 587.6~nm; accessed 2026-11-03}
+}
+
+@misc{FujinonHF35HA1B,
+  author       = {{Fujifilm}},
+  title        = {{FUJINON} {HF35HA-1B} fixed focal length lens for machine vision, datasheet},
+  howpublished = {Datasheet, archived as \texttt{docs/lens/fujinon-hf35ha-1b.pdf}},
+  note         = {$f = 35$~mm, F1.6--F22, focusing range $\infty$--0.25~m from the lens front, back focal distance
+                  15.03~mm in air, length 29.5~mm at $\infty$, C mount, 2/3-inch format}
+}
+
+@misc{ITUBT601,
+  author       = {{ITU-R}},
+  title        = {Recommendation {ITU-R} {BT}.601-7: Studio encoding parameters of digital television for standard
+                  4:3 and wide-screen 16:9 aspect ratios},
+  howpublished = {International Telecommunication Union, \url{https://www.itu.int/rec/R-REC-BT.601}},
+  year         = {2011}
+}
+
+% Table 1 (625-line): digital field blanking ends at lines 23 and 336 and starts at 311 and 624, so 2 x 288 = 576
+% active lines. BT.601-7 itself gives 13.5 MHz, 720 active samples and the 5.75 MHz luma passband (Fig. 3).
+@misc{ITUBT656,
+  author       = {{ITU-R}},
+  title        = {Recommendation {ITU-R} {BT}.656-5: Interface for digital component video signals in 525-line and
+                  625-line television systems operating at the 4:2:2 level of {Recommendation ITU-R BT}.601},
+  howpublished = {International Telecommunication Union, \url{https://www.itu.int/rec/R-REC-BT.656}},
+  year         = {2007}
+}
+
+@misc{AdemcoACM380E,
+  author       = {{Ademco}},
+  title        = {{ACM380E} instruction manual: 1/3-inch monochrome {CCD} cameras ({ACM380E}, {ACM570E})},
+  howpublished = {\url{https://www.manualslib.com/manual/892194/Ademco-Acm380e.html}},
+  note         = {Accessed 2026-11-03. Lists 510\,$\times$\,492 (ACM380E) and 768\,$\times$\,494 (ACM570E)
+                  effective pixels and ``CS or C (C mount adapter supplied)''. Candidate for the installed ``ADEMCO
+                  VIDEO'' body; model not yet confirmed on site}
+}
+
+@misc{PolzQuote2025,
+  author       = {{Polz Instruments}},
+  title        = {Price quote {P5PI-100} to Slovensk{\'e} cukrovary, s.r.o., Sere{\v{d}}: Hanwha Vision {HCB-6000}
+                  box camera},
+  howpublished = {Quote dated 2025-10-06, summarised in \texttt{docs/sered/notes\_data\_lab.md} \S\,4},
+  year         = {2025},
+  note         = {125~EUR without lens. Not the camera installed on the seed pan}
+}
+
+% Soft-sensor reframe 2026-11-04: citation-finder list (scratchpad softsensor_refs.md), DOI-verified via Crossref.
+@article{Kadlec2009,
+  author  = {Kadlec, Petr and Gabrys, Bogdan and Strandt, Sibylle},
+  title   = {Data-driven Soft Sensors in the process industry},
+  journal = {Computers \& Chemical Engineering},
+  year    = {2009},
+  volume  = {33},
+  number  = {4},
+  pages   = {795--814},
+  doi     = {10.1016/j.compchemeng.2008.12.012},
+}
+
+@article{Damour2010,
+  author  = {Damour, C{\'e}dric and Benne, Michel and Grondin-Perez, Brigitte and Chabriat, Jean-Pierre},
+  title   = {Soft-sensor for industrial sugar crystallization: On-line mass of crystals, concentration and purity measurement},
+  journal = {Control Engineering Practice},
+  year    = {2010},
+  volume  = {18},
+  number  = {8},
+  pages   = {839--844},
+  doi     = {10.1016/j.conengprac.2010.03.005},
+}
+
+@article{Morales2023,
+  author  = {Morales, Humberto and di Sciascio, Fernando and Aguirre-Zapata, Estefan{\'i}a and Amicarelli, Adriana N.},
+  title   = {A model-based supersaturation estimator (inferential or soft-sensor) for industrial sugar crystallization process},
+  journal = {Journal of Process Control},
+  year    = {2023},
+  volume  = {129},
+  pages   = {103065},
+  doi     = {10.1016/j.jprocont.2023.103065},
+}
+
+@article{Lohani2026,
+  author  = {Lohani, Ananya and Fedor, Adam and Kurucz, J{\'u}lius and Paulen, Radoslav},
+  title   = {Real-Time Estimation and Optimal Control of Supersaturation in Sugar Crystallization using Model-based Soft Sensor},
+  journal = {Systems and Control Transactions},
+  note    = {Proceedings of the 36th European Symposium on Computer Aided Process Engineering (ESCAPE 36), Sheffield},
+  year    = {2026},
+  volume  = {6},
+  pages   = {2497--2504},
+  doi     = {10.69997/sct.103983},
+}
+
+@article{Mesbah2011,
+  author  = {Mesbah, Ali and Huesman, Adrie E. M. and Kramer, Herman J. M. and Van den Hof, Paul M. J.},
+  title   = {A comparison of nonlinear observers for output feedback model-based control of seeded batch crystallization processes},
+  journal = {Journal of Process Control},
+  year    = {2011},
+  volume  = {21},
+  number  = {4},
+  pages   = {652--666},
+  doi     = {10.1016/j.jprocont.2010.11.013},
+}
+
+@article{HaseltineRawlings2005,
+  author  = {Haseltine, Eric L. and Rawlings, James B.},
+  title   = {Critical Evaluation of Extended {Kalman} Filtering and Moving-Horizon Estimation},
+  journal = {Industrial \& Engineering Chemistry Research},
+  year    = {2005},
+  volume  = {44},
+  number  = {8},
+  pages   = {2451--2460},
+  doi     = {10.1021/ie034308l},
+}
+
+@article{Borsos2017,
+  author  = {Borsos, {\'A}kos and Szil{\'a}gyi, Botond and Agachi, Paul {\c{S}}erban and Nagy, Zolt{\'a}n K.},
+  title   = {Real-Time Image Processing Based Online Feedback Control System for Cooling Batch Crystallization},
+  journal = {Organic Process Research \& Development},
+  year    = {2017},
+  volume  = {21},
+  number  = {4},
+  pages   = {511--519},
+  doi     = {10.1021/acs.oprd.6b00242},
+}
+
+@article{Ochsenbein2014,
+  author  = {Ochsenbein, David R. and Schorsch, Stefan and Vetter, Thomas and Mazzotti, Marco and Morari, Manfred},
+  title   = {Growth Rate Estimation of $\beta$ {L}-Glutamic Acid from Online Measurements of Multidimensional Particle Size Distributions and Concentration},
+  journal = {Industrial \& Engineering Chemistry Research},
+  year    = {2014},
+  volume  = {53},
+  number  = {22},
+  pages   = {9136--9148},
+  doi     = {10.1021/ie4031852},
+}
+
+@article{Martins2007,
+  author  = {Martins, P. M. and Rocha, F.},
+  title   = {New developments on size-dependent growth applied to the crystallization of sucrose},
+  journal = {Surface Science},
+  year    = {2007},
+  volume  = {601},
+  number  = {23},
+  pages   = {5466--5472},
+  doi     = {10.1016/j.susc.2007.09.008},
+}
+
+@article{QuintanaHernandez2004,
+  author  = {Quintana-Hern{\'a}ndez, P. and Bola{\~n}os-Reynoso, E. and Miranda-Castro, B. and Salcedo-Estrada, L.},
+  title   = {Mathematical modeling and kinetic parameter estimation in batch crystallization},
+  journal = {AIChE Journal},
+  year    = {2004},
+  volume  = {50},
+  number  = {7},
+  pages   = {1407--1417},
+  doi     = {10.1002/aic.10133},
+}
+
+@article{HermannKrener1977,
+  author  = {Hermann, Robert and Krener, Arthur J.},
+  title   = {Nonlinear controllability and observability},
+  journal = {IEEE Transactions on Automatic Control},
+  year    = {1977},
+  volume  = {22},
+  number  = {5},
+  pages   = {728--740},
+  doi     = {10.1109/TAC.1977.1101601},
+}
+
+@article{Friedland1969,
+  author  = {Friedland, Bernard},
+  title   = {Treatment of bias in recursive filtering},
+  journal = {IEEE Transactions on Automatic Control},
+  year    = {1969},
+  volume  = {14},
+  number  = {4},
+  pages   = {359--367},
+  doi     = {10.1109/TAC.1969.1099223},
+}
+
+@article{Gudi1995,
+  author  = {Gudi, Ravindra D. and Shah, Sirish L. and Gray, Murray R.},
+  title   = {Adaptive multirate state and parameter estimation strategies with application to a bioreactor},
+  journal = {AIChE Journal},
+  year    = {1995},
+  volume  = {41},
+  number  = {11},
+  pages   = {2451--2464},
+  doi     = {10.1002/aic.690411111},
+}
+
+@article{FatehiHuang2017,
+  author  = {Fatehi, Alireza and Huang, Biao},
+  title   = {Kalman filtering approach to multi-rate information fusion in the presence of irregular sampling rate and variable measurement delay},
+  journal = {Journal of Process Control},
+  year    = {2017},
+  volume  = {53},
+  pages   = {15--25},
+  doi     = {10.1016/j.jprocont.2017.02.010},
+}
+
+% Review round 4, 2026-11-04: citation-finder round 2 (scratchpad refs_round2.md), Crossref-checked where a DOI exists.
+@article{Stringer2021,
+  author  = {Stringer, Carsen and Wang, Tim and Michaelos, Michalis and Pachitariu, Marius},
+  title   = {Cellpose: a generalist algorithm for cellular segmentation},
+  journal = {Nature Methods},
+  year    = {2021},
+  volume  = {18},
+  number  = {1},
+  pages   = {100--106},
+  doi     = {10.1038/s41592-020-01018-x},
+}
+
+@article{PachitariuStringer2022,
+  author  = {Pachitariu, Marius and Stringer, Carsen},
+  title   = {Cellpose 2.0: how to train your own model},
+  journal = {Nature Methods},
+  year    = {2022},
+  volume  = {19},
+  number  = {12},
+  pages   = {1634--1641},
+  doi     = {10.1038/s41592-022-01663-4},
+}
+
+@misc{Pachitariu2025,
+  author       = {Pachitariu, Marius and Rariden, Michael and Stringer, Carsen},
+  title        = {Cellpose-{SAM}: superhuman generalization for cellular segmentation},
+  howpublished = {bioRxiv preprint 2025.04.28.651001},
+  year         = {2025},
+  doi          = {10.1101/2025.04.28.651001},
+}
+
+@article{CastroDeBoer2020,
+  author  = {Castro, Mario and de Boer, Rob J.},
+  title   = {Testing structural identifiability by a simple scaling method},
+  journal = {PLOS Computational Biology},
+  year    = {2020},
+  volume  = {16},
+  number  = {11},
+  pages   = {e1008248},
+  doi     = {10.1371/journal.pcbi.1008248},
+}
+
+@article{MassonisVillaverde2020,
+  author  = {Massonis, Gemma and Villaverde, Alejandro F.},
+  title   = {Finding and Breaking {Lie} Symmetries: Implications for Structural Identifiability and Observability in
+             Biological Modelling},
+  journal = {Symmetry},
+  year    = {2020},
+  volume  = {12},
+  number  = {3},
+  pages   = {469},
+  doi     = {10.3390/sym12030469},
+}
+
+@article{Villaverde2019,
+  author  = {Villaverde, Alejandro F.},
+  title   = {Observability and Structural Identifiability of Nonlinear Biological Systems},
+  journal = {Complexity},
+  year    = {2019},
+  volume  = {2019},
+  pages   = {8497093},
+  doi     = {10.1155/2019/8497093},
+}
+
+@article{BoucheGaillac2015,
+  author  = {Bouch{\'e}, C. and Gaillac, B.},
+  title   = {Further progress on crystal growth on-line monitoring},
+  journal = {International Sugar Journal},
+  year    = {2015},
+  month   = apr,
+  volume  = {117},
+  pages   = {60--66},
+  url     = {https://www.iteca.fr/wp-content/uploads/2022/01/ISJ_Further-progress-on-crystal-growth-on-line-monitoring.pdf},
+  note    = {No DOI},
+}
+
+% Selby2024 pages: publisher page 46--54 (used), Crossref 42--50; check against the print copy.
+@article{Selby2024,
+  author  = {Selby, Kent and Fraga, Gabriel and Broadfoot, Ross and Curran, Ashley},
+  title   = {On-line monitoring of {C} seed magma using the {ITECA} {Crystobserver} to improve performance},
+  journal = {Sugar Industry},
+  year    = {2024},
+  volume  = {149},
+  number  = {1},
+  pages   = {46--54},
+  doi     = {10.36961/si30823},
+}
+
+@inproceedings{Honkanen2023,
+  author    = {Honkanen, Markus and Eloranta, Hannu and Singh Bola, Harjeet and Morgenroth, Boris and Saini, Naresh},
+  title     = {Automatic pan microscope measurement of sugar crystals and its utilization in real-time
+               crystallization control},
+  booktitle = {Proceedings of the International Society of Sugar Cane Technologists},
+  volume    = {31},
+  pages     = {1116--1122},
+  year      = {2023},
+  url       = {https://dochub.sasri.org.za/handle/123456789/24538},
+  note      = {Peer-reviewed paper; no DOI},
+}
+
+@article{Honkanen2024,
+  author  = {Honkanen, Markus and Eloranta, Hannu and Singh Bola, Harjeet and Morgenroth, Boris and Saini, Naresh},
+  title   = {Real-time control of microcrystal formation with inline process microscopy},
+  journal = {Sugar Industry},
+  year    = {2024},
+  volume  = {149},
+  number  = {6},
+  pages   = {449--454},
+  doi     = {10.36961/si31551},
 }

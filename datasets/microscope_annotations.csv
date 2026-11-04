@@ -1,0 +1,1066 @@
+photo,sample_id,sample_wallclock,camera_time,photo_wallclock_mid,kind,value_mm,raw_text,reader,confidence,photo_note
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.037,0.037mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.020,0.020mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.038,0.038mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.222,0.222mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.026,0.026mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.025,0.025mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.049,0.049mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.047,0.047mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.025,0.025mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.037,0.037mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.047,0.047mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.036,0.036mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.052,0.052mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.015,0.015mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.045,0.045mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.022,0.022mm,AI,high,0.038 label overlaps the 0.222 line
+11-46.jpg,b1-s04,2026-10-30T11:46:00,01:35:28,2026-10-30T11:51:12,crystal,0.052,0.052mm,AI,high,0.038 label overlaps the 0.222 line
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.141,0.141mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.127,0.127mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.076,0.076mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.124,0.124mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.066,0.066mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.173,0.173mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.082,0.082mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.080,0.080mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.083,0.083mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.043,0.043mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.144,0.144mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.102,0.102mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.098,0.098mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.109,0.109mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.070,0.070mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.099,0.099mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.142,0.142mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.048,0.048mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.271,0.271mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.139,0.139mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.089,0.089mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.148,0.148mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.080,0.080mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.197,0.197mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.114,0.114mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.180,0.180mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.106,0.106mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.160,0.160mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.137,0.137mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.090,0.090mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,,0.07?mm,AI,low,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.087,0.087mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.123,0.123mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.128,0.128mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.107,0.107mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.140,0.140mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.143,0.143mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.084,0.084mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.169,0.169mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.133,0.133mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.141,0.141mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.082,0.082mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.144,0.144mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.038,0.038mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.113,0.113mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.098,0.098mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.114,0.114mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.049,0.049mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.061,0.061mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.134,0.134mm,AI,high,one label 0.07? overprinted by 0.087
+12-07.jpg,b1-s05,2026-10-30T12:07:00,01:57:28,2026-10-30T12:13:12,crystal,0.128,0.128mm,AI,high,one label 0.07? overprinted by 0.087
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.145,0.145mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.168,0.168mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.208,0.208mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.176,0.176mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.223,0.223mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.242,0.242mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.150,0.150mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.191,0.191mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.146,0.146mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.125,0.125mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.349,0.349mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.204,0.204mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.273,0.273mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.096,0.096mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.288,0.288mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.251,0.251mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.131,0.131mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.160,0.160mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.178,0.178mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.155,0.155mm,AI,high,
+12-19 V2.jpg,b1-s06,2026-10-30T12:19:00,02:13:29,2026-10-30T12:29:13,crystal,0.176,0.176mm,AI,high,
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.154,0.154mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.117,0.117mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.244,0.244mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.126,0.126mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.124,0.124mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.101,0.101mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.149,0.149mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.132,0.132mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.199,0.199mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.194,0.194mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.140,0.140mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.150,0.150mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.184,0.184mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.141,0.141mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.145,0.145mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.174,0.174mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.219,0.219mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.146,0.146mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.145,0.145mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.128,0.128mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.140,0.140mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.113,0.113mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.219,0.219mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.170,0.170mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.137,0.137mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.141,0.141mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,,0.09?mm,AI,low,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.235,0.235mm,AI,high,one label cut at right image edge (0.09?)
+12-19.jpg,b1-s06,2026-10-30T12:19:00,02:09:08,2026-10-30T12:24:52,crystal,0.222,0.222mm,AI,high,one label cut at right image edge (0.09?)
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.200,0.200mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.103,0.103mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.217,0.217mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.262,0.262mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.127,0.127mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.159,0.159mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.149,0.149mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.171,0.171mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.256,0.256mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.262,0.262mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.275,0.275mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.178,0.178mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.187,0.187mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.197,0.197mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.151,0.151mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.257,0.257mm,AI,high,
+12-30-2.jpg,b1-s07,2026-10-30T12:30:00,02:22:45,2026-10-30T12:38:29,crystal,0.175,0.175mm,AI,high,
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.155,0.155mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.317,0.317mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.217,0.217mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.261,0.261mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.229,0.229mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.151,0.151mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.184,0.184mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.175,0.175mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.298,0.298mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.120,0.120mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.199,0.199mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.312,0.312mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.220,0.220mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.226,0.226mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,,0.18?mm,AI,low,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.175,0.175mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.242,0.242mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.201,0.201mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.205,0.205mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.148,0.148mm,AI,high,one label cut at right image edge (0.18?)
+12-30.jpg,b1-s07,2026-10-30T12:30:00,02:19:18,2026-10-30T12:35:02,crystal,0.062,0.062mm,AI,high,one label cut at right image edge (0.18?)
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.145,0.145mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.378,0.378mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.333,0.333mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.249,0.249mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.254,0.254mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.321,0.321mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.145,0.145mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.377,0.377mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.318,0.318mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.330,0.330mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.258,0.258mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.586,0.586mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.056,0.056mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.070,0.070mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.075,0.075mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.438,0.438mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.307,0.307mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.170,0.170mm,AI,high,
+12-49-2.jpg,b1-s08,2026-10-30T12:49:00,02:40:50,2026-10-30T12:56:34,crystal,0.314,0.314mm,AI,high,
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.187,0.187mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.299,0.299mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.491,0.491mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.318,0.318mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.474,0.474mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.425,0.425mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.239,0.239mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.183,0.183mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.251,0.251mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,,0.3??mm,AI,low,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.611,0.611mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.400,0.400mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.346,0.346mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.192,0.192mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.350,0.350mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.277,0.277mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.274,0.274mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.189,0.189mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.308,0.308mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.325,0.325mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.090,0.090mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.270,0.270mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.309,0.309mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.214,0.214mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.175,0.175mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49-3.jpg,b1-s08,2026-10-30T12:49:00,02:47:29,2026-10-30T13:03:13,crystal,0.261,0.261mm,AI,high,0.474/0.425 labels overprint each other; one label cut at right image edge (0.3??)
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.279,0.279mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.527,0.527mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.266,0.266mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.193,0.193mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.574,0.574mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.321,0.321mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.106,0.106mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.191,0.191mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.212,0.212mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.260,0.260mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.401,0.401mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.439,0.439mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.172,0.172mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.282,0.282mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.079,0.079mm,AI,high,
+12-49.jpg,b1-s08,2026-10-30T12:49:00,02:40:03,2026-10-30T12:55:47,crystal,0.160,0.160mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.182,0.182mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.293,0.293mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.408,0.408mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.281,0.281mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.341,0.341mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.253,0.253mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.485,0.485mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.529,0.529mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.222,0.222mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.154,0.154mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.596,0.596mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.358,0.358mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.355,0.355mm,AI,high,
+13-06-2.jpg,b1-s09,2026-10-30T13:06:00,02:59:57,2026-10-30T13:15:41,crystal,0.211,0.211mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.299,0.299mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.272,0.272mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.427,0.427mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.410,0.410mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.283,0.283mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.479,0.479mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.337,0.337mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.388,0.388mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.413,0.413mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.189,0.189mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,crystal,0.160,0.160mm,AI,high,
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,scale,2.867,2.867mm,AI,high,field width (full-width line at top)
+13-06-3.jpg,b1-s09,2026-10-30T13:06:00,03:01:48,2026-10-30T13:17:32,scale,2.137,2.137mm,AI,high,field height (line along left edge)
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.504,0.504mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.528,0.528mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.440,0.440mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.519,0.519mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.287,0.287mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.336,0.336mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.404,0.404mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.557,0.557mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.370,0.370mm,AI,high,
+13-06.jpg,b1-s09,2026-10-30T13:06:00,02:57:48,2026-10-30T13:13:32,crystal,0.303,0.303mm,AI,high,
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.283,0.283mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.311,0.311mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.758,0.758mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.463,0.463mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.724,0.724mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.253,0.253mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.408,0.408?mm,AI,low,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.220,0.220mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.413,0.413mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.503,0.503mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,1.137,1.137mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-2.jpg,b1-s10,2026-10-30T13:32:00,03:19:42,2026-10-30T13:35:26,crystal,0.320,0.320mm,AI,high,0.408 label overprinted by 0.253 line; 0.220 cut at edge but legible
+13-32-3.jpg,b1-s10,2026-10-30T13:32:00,03:19:15,2026-10-30T13:34:59,crystal,0.548,0.548mm,AI,high,
+13-32-3.jpg,b1-s10,2026-10-30T13:32:00,03:19:15,2026-10-30T13:34:59,crystal,0.711,0.711mm,AI,high,
+13-32-3.jpg,b1-s10,2026-10-30T13:32:00,03:19:15,2026-10-30T13:34:59,crystal,0.593,0.593mm,AI,high,
+13-32-3.jpg,b1-s10,2026-10-30T13:32:00,03:19:15,2026-10-30T13:34:59,crystal,0.521,0.521mm,AI,high,
+13-32-3.jpg,b1-s10,2026-10-30T13:32:00,03:19:15,2026-10-30T13:34:59,crystal,0.755,0.755mm,AI,high,
+13-32-3.jpg,b1-s10,2026-10-30T13:32:00,03:19:15,2026-10-30T13:34:59,crystal,0.423,0.423mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.259,0.259mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.690,0.690mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.737,0.737mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.821,0.821mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.228,0.228mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.431,0.431mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.658,0.658mm,AI,high,
+13-32.jpg,b1-s10,2026-10-30T13:32:00,03:20:14,2026-10-30T13:35:58,crystal,0.432,0.432mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.650,0.650mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.893,0.893mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.835,0.835mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.700,0.700mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.242,0.242mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.373,0.373mm,AI,high,
+14-10-2.jpg,b1-s11,2026-10-30T14:10:00,03:59:47,2026-10-30T14:15:31,crystal,0.512,0.512mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.485,0.485mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.305,0.305mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.274,0.274mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.414,0.414mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.257,0.257mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.644,0.644mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.486,0.486mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.677,0.677mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.723,0.723mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.450,0.450mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.193,0.193mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.276,0.276mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.472,0.472mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.418,0.418mm,AI,high,
+14-10-3.jpg,b1-s11,2026-10-30T14:10:00,03:58:37,2026-10-30T14:14:21,crystal,0.221,0.221mm,AI,high,
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.929,0.929mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.481,0.481mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.785,0.785mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.781,0.781mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.690,0.690mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.368,0.368?mm,AI,low,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.392,0.392mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.638,0.638mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.420,0.420mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.717,0.717mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.800,0.800?mm,AI,low,0.368 and 0.800 labels overprinted by their own lines
+14-10-4.jpg,b1-s11,2026-10-30T14:10:00,03:58:10,2026-10-30T14:13:54,crystal,0.434,0.434mm,AI,high,0.368 and 0.800 labels overprinted by their own lines
+14-10.jpg,b1-s11,2026-10-30T14:10:00,03:57:06,2026-10-30T14:12:50,crystal,0.571,0.571mm,AI,high,
+14-10.jpg,b1-s11,2026-10-30T14:10:00,03:57:06,2026-10-30T14:12:50,crystal,0.445,0.445mm,AI,high,
+14-10.jpg,b1-s11,2026-10-30T14:10:00,03:57:06,2026-10-30T14:12:50,crystal,0.670,0.670mm,AI,high,
+14-10.jpg,b1-s11,2026-10-30T14:10:00,03:57:06,2026-10-30T14:12:50,crystal,0.532,0.532mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.189,0.189mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.653,0.653mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.216,0.216mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.266,0.266mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.332,0.332mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.587,0.587mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.576,0.576mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.452,0.452mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.521,0.521mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.461,0.461mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.454,0.454mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.335,0.335mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.261,0.261mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.406,0.406mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.411,0.411mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.253,0.253mm,AI,high,
+14-20-2.jpg,b1-s12,2026-10-30T14:20:00,04:13:49,2026-10-30T14:29:33,crystal,0.409,0.409mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.429,0.429mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.543,0.543mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.782,0.782mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.442,0.442mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.485,0.485mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.397,0.397mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.650,0.650mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.606,0.606mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.405,0.405mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.392,0.392mm,AI,high,
+14-20-3.jpg,b1-s12,2026-10-30T14:20:00,04:14:06,2026-10-30T14:29:50,crystal,0.703,0.703mm,AI,high,
+14-20-4.jpg,b1-s12,2026-10-30T14:20:00,04:14:38,2026-10-30T14:30:22,crystal,0.566,0.566mm,AI,high,
+14-20-4.jpg,b1-s12,2026-10-30T14:20:00,04:14:38,2026-10-30T14:30:22,crystal,0.276,0.276mm,AI,high,
+14-20-4.jpg,b1-s12,2026-10-30T14:20:00,04:14:38,2026-10-30T14:30:22,crystal,0.995,0.995mm,AI,high,
+14-20-4.jpg,b1-s12,2026-10-30T14:20:00,04:14:38,2026-10-30T14:30:22,crystal,0.411,0.411mm,AI,high,
+14-20-4.jpg,b1-s12,2026-10-30T14:20:00,04:14:38,2026-10-30T14:30:22,crystal,0.814,0.814mm,AI,high,
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.438,0.438?mm,AI,low,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.433,0.433mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.718,0.718?mm,AI,low,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.436,0.436mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.311,0.311mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.540,0.540mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.541,0.541mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.719,0.719mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.226,0.226mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.528,0.528mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20-5.jpg,b1-s12,2026-10-30T14:20:00,04:15:22,2026-10-30T14:31:06,crystal,0.405,0.405mm,AI,high,0.438 and 0.718 labels overprinted by their lines
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.662,0.662mm,AI,high,
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.633,0.633mm,AI,high,
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.812,0.812mm,AI,high,
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.936,0.936mm,AI,high,
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.400,0.400mm,AI,high,
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.735,0.735mm,AI,high,
+14-20.jpg,b1-s12,2026-10-30T14:20:00,04:13:16,2026-10-30T14:29:00,crystal,0.449,0.449mm,AI,high,
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.010,0.010mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.005,0.005mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.007,0.007mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.009,0.009mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.014,0.014mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.010,0.010mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.010,0.010mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.008,0.008mm,AI,high,40x objective per filename
+15-23-2-40X.jpg,b2-s02,2026-10-30T15:22:00,05:14:36,2026-10-30T15:30:20,crystal,0.023,0.023mm,AI,high,40x objective per filename
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.013,0.013mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.014,0.014mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.019,0.019mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.018,0.018mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.008,0.008mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.017,0.017mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.023,0.023mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.010,0.010mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.003,0.003mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.002,0.002mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-23.jpg,b2-s02,2026-10-30T15:22:00,05:10:19,2026-10-30T15:26:03,crystal,0.009,0.009mm,AI,high,0.002 and 0.003 lines are a few pixels long (below optical resolution)
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.045,0.045mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.037,0.037mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.031,0.031mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.062,0.062?mm,AI,low,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.055,0.055mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.044,0.044mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.064,0.064mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.023,0.023mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.030,0.030mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.031,0.031mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.032,0.032mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.049,0.049mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.048,0.048mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.029,0.029mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.032,0.032mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.062,0.062mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.044,0.044mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.030,0.030mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.022,0.022mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.052,0.052mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.019,0.019mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.015,0.015mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.019,0.019mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.017,0.017mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.015,0.015mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.052,0.052mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.032,0.032mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.037,0.037mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.034,0.034mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.048,0.048mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.044,0.044mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.033,0.033mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.025,0.025mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.050,0.050mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.045,0.045mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.022,0.022mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.041,0.041mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.030,0.030mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.041,0.041mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.048,0.048mm,AI,high,0.062 label (top) overprinted
+15-33-2.jpg,b2-s03,2026-10-30T15:33:00,05:25:31,2026-10-30T15:41:15,crystal,0.054,0.054mm,AI,high,0.062 label (top) overprinted
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.030,0.030mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.045,0.045mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.030,0.030mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.027,0.027mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.037,0.037mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.048,0.048mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.038,0.038mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.047,0.047mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.024,0.024mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.050,0.050mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.039,0.039mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.050,0.050mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.032,0.032mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.020,0.020mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.069,0.069mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.035,0.035mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.037,0.037mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.046,0.046mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.036,0.036mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.028,0.028mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.038,0.038mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.032,0.032mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.041,0.041mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.024,0.024mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.046,0.046mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.033,0.033mm,AI,high,one 0.032 label cut at right edge but legible
+15-33.jpg,b2-s03,2026-10-30T15:33:00,05:21:56,2026-10-30T15:37:40,crystal,0.021,0.021mm,AI,high,one 0.032 label cut at right edge but legible
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.065,0.065mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.104,0.104mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.127,0.127mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.081,0.081mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.152,0.152mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.063,0.063mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.042,0.042mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.130,0.130mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.156,0.156mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.140,0.140mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.129,0.129mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.106,0.106mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.218,0.218mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.086,0.086mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.215,0.215mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.118,0.118mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.087,0.087mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.089,0.089mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.124,0.124mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.121,0.121mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.096,0.096mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.177,0.177mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.056,0.056mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.089,0.089mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.088,0.088mm,AI,high,
+15-54-2.jpg,b2-s04,2026-10-30T15:52:00,05:44:50,2026-10-30T16:00:34,crystal,0.063,0.063mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.079,0.079mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.087,0.087mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.131,0.131mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.126,0.126mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.089,0.089mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.119,0.119mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.022,0.022mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.099,0.099mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.170,0.170mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.153,0.153mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.102,0.102mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.085,0.085mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.112,0.112mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.082,0.082mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.200,0.200mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.067,0.067mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.053,0.053mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.150,0.150mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.087,0.087mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.114,0.114mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.125,0.125mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.063,0.063mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.101,0.101mm,AI,high,
+15-54.jpg,b2-s04,2026-10-30T15:52:00,05:45:22,2026-10-30T16:01:06,crystal,0.106,0.106mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.290,0.290mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.380,0.380mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.138,0.138mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.268,0.268mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.159,0.159mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.116,0.116mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.154,0.154mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.133,0.133mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.165,0.165mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.180,0.180mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.145,0.145mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.193,0.193mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.247,0.247mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.089,0.089mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.217,0.217mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.112,0.112mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.253,0.253mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.218,0.218mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.294,0.294mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.106,0.106mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.134,0.134mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.044,0.044mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.101,0.101mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.301,0.301mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.139,0.139mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.155,0.155mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.295,0.295mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.075,0.075mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.131,0.131mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.186,0.186mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.150,0.150mm,AI,high,
+16-14-2.jpg,b2-s05,2026-10-30T16:14:00,06:03:21,2026-10-30T16:19:05,crystal,0.141,0.141mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.172,0.172mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.206,0.206mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.157,0.157mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.160,0.160mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.152,0.152mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.068,0.068mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.335,0.335mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.111,0.111mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.126,0.126mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.292,0.292mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.238,0.238mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.149,0.149mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.141,0.141mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.127,0.127mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.257,0.257mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.262,0.262mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.160,0.160mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.270,0.270mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.219,0.219mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.177,0.177mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.172,0.172mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.078,0.078mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.392,0.392mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.149,0.149mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.357,0.357mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.226,0.226mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.141,0.141mm,AI,high,
+16-14-3.jpg,b2-s05,2026-10-30T16:14:00,06:03:47,2026-10-30T16:19:31,crystal,0.132,0.132mm,AI,high,
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.120,0.120mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.315,0.315mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.359,0.359mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.212,0.212mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.336,0.336mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.182,0.182mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.257,0.257mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.145,0.145mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.264,0.264mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.136,0.136mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.347,0.347mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.115,0.115mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.170,0.170mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.317,0.317mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.115,0.115mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.184,0.184mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.160,0.160mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.141,0.141mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.120,0.120mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.162,0.162mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.223,0.223mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.224,0.224mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.294,0.294mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.120,0.120mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.237,0.237mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.131,0.131mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.317,0.317mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.118,0.118mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.131,0.131mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.112,0.112mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.196,0.196mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.169,0.169mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.058,0.058mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.192,0.192mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.368,0.368mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.471,0.471mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.321,0.321mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.175,0.175mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.111,0.111mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,,0.1?4mm,AI,low,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14-4.jpg,b2-s05,2026-10-30T16:14:00,06:05:08,2026-10-30T16:20:52,crystal,0.226,0.226mm,AI,high,0.111/0.1?4 labels overprint each other (second reads 0.134 or 0.154)
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.401,0.401mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.236,0.236mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.133,0.133mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.368,0.368mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.132,0.132mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.225,0.225mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.293,0.293mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.134,0.134mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.242,0.242mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.223,0.223mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.101,0.101mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.066,0.066mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.154,0.154mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.155,0.155mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.103,0.103mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.314,0.314mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.300,0.300mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.405,0.405mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.152,0.152mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.136,0.136mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.278,0.278mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.099,0.099mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.157,0.157mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.178,0.178mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.092,0.092mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.266,0.266mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.147,0.147mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.312,0.312mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.259,0.259mm,AI,high,
+16-14.jpg,b2-s05,2026-10-30T16:14:00,06:03:00,2026-10-30T16:18:44,crystal,0.149,0.149mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.314,0.314mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.245,0.245mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.318,0.318mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.125,0.125mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.272,0.272mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.226,0.226mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.319,0.319mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.164,0.164mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.170,0.170mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.150,0.150mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.628,0.628mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.430,0.430mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.205,0.205mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.302,0.302mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.096,0.096mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.312,0.312mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.127,0.127mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.188,0.188mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.194,0.194mm,AI,high,
+16-32-2.jpg,b2-s06,2026-10-30T16:31:00,06:20:05,2026-10-30T16:35:49,crystal,0.250,0.250mm,AI,high,
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.127,0.127mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.160,0.160mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.211,0.211mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.165,0.165mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.163,0.163mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.151,0.151mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.168,0.168mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.307,0.307mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.252,0.252mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.138,0.138mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.333,0.333mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.325,0.325mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.204,0.204mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.216,0.216mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.201,0.201mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.348,0.348mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.200,0.200?mm,AI,low,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,,0.1??mm,AI,low,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.075,0.075mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.087,0.087mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.149,0.149mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.336,0.336mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.163,0.163mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.203,0.203mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.398,0.398mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.192,0.192mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.281,0.281mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.474,0.474mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.189,0.189mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.204,0.204mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.210,0.210mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-3.jpg,b2-s06,2026-10-30T16:31:00,06:20:22,2026-10-30T16:36:06,crystal,0.242,0.242mm,AI,high,0.200 and 0.1?? labels overprint each other; 0.075 cut at right edge
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.202,0.202mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.186,0.186mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.159,0.159mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.192,0.192mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.186,0.186mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.213,0.213mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.187,0.187mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.212,0.212mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.233,0.233mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.241,0.241mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.183,0.183mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.166,0.166mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.155,0.155mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.565,0.565mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.040,0.040mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.121,0.121mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.214,0.214mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.462,0.462mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.150,0.150mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.211,0.211mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.408,0.408mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.177,0.177mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.162,0.162mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.312,0.312mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.288,0.288mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.258,0.258mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.143,0.143mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.179,0.179mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.182,0.182mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.368,0.368mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.385,0.385mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.280,0.280mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.238,0.238mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.189,0.189mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.331,0.331mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.146,0.146mm,AI,high,
+16-32-4.jpg,b2-s06,2026-10-30T16:31:00,06:20:54,2026-10-30T16:36:38,crystal,0.193,0.193mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.124,0.124mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.190,0.190mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.143,0.143mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.277,0.277mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.113,0.113mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.254,0.254mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.231,0.231mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.093,0.093mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.305,0.305mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.533,0.533mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.197,0.197mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.250,0.250mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.485,0.485mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.209,0.209mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.441,0.441mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.294,0.294mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.199,0.199mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.144,0.144mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.393,0.393mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.370,0.370mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.400,0.400mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.333,0.333mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.490,0.490mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.431,0.431mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.172,0.172mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.416,0.416mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.377,0.377mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.153,0.153mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.128,0.128mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.133,0.133mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.269,0.269mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.232,0.232mm,AI,high,
+16-32.jpg,b2-s06,2026-10-30T16:31:00,06:19:56,2026-10-30T16:35:40,crystal,0.169,0.169mm,AI,high,
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.273,0.273mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.178,0.178mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.240,0.240mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.206,0.206mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.323,0.323mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.221,0.221mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.163,0.163mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.316,0.316mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.191,0.191mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.215,0.215mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.238,0.238mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.232,0.232mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.311,0.311mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,,0.26?mm,AI,low,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.229,0.229mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.087,0.087mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.318,0.318mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.226,0.226mm,AI,high,one label cut at right edge (0.26?)
+16-58-2.jpg,b2-s07,2026-10-30T16:58:00,06:49:04,2026-10-30T17:04:48,crystal,0.334,0.334mm,AI,high,one label cut at right edge (0.26?)
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.514,0.514mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.228,0.228mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.164,0.164mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.170,0.170mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.124,0.124mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.306,0.306mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.201,0.201mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.134,0.134mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.153,0.153mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.279,0.279mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.196,0.196mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.265,0.265mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,,0.1??mm,AI,low,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.204,0.204mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.197,0.197mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.211,0.211mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.153,0.153mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.095,0.095mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.145,0.145mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.415,0.415mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.203,0.203mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.232,0.232mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.234,0.234mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.154,0.154mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.236,0.236mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.558,0.558mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.568,0.568mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.172,0.172mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.146,0.146mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.115,0.115mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.239,0.239mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.177,0.177mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.178,0.178mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.089,0.089mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.214,0.214mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-3.jpg,b2-s07,2026-10-30T16:58:00,06:49:28,2026-10-30T17:05:12,crystal,0.142,0.142mm,AI,high,0.1?? and 0.204 overprint each other
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.163,0.163mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.096,0.096mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.324,0.324mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.199,0.199mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.258,0.258mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.202,0.202mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.265,0.265mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.212,0.212mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.128,0.128mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.319,0.319mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.219,0.219mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.221,0.221mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.125,0.125mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.265,0.265mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.263,0.263mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.258,0.258mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.306,0.306mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.329,0.329mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.391,0.391mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.302,0.302mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.808,0.808mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.323,0.323mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.170,0.170mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.244,0.244mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.220,0.220mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.113,0.113mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.196,0.196mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.213,0.213mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.215,0.215mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.319,0.319mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.190,0.190mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.307,0.307mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58-4.jpg,b2-s07,2026-10-30T16:58:00,06:49:52,2026-10-30T17:05:36,crystal,0.180,0.180mm,AI,high,0.163 and 0.125 cut at right edge but legible
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.223,0.223mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.245,0.245mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.237,0.237mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.190,0.190mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.153,0.153mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.494,0.494mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.496,0.496mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.218,0.218mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.286,0.286mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.649,0.649mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.214,0.214mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.423,0.423mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.156,0.156mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.464,0.464mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.238,0.238mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.372,0.372mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.250,0.250mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.225,0.225mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.215,0.215mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.513,0.513mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.276,0.276mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.438,0.438mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+16-58.jpg,b2-s07,2026-10-30T16:58:00,06:47:38,2026-10-30T17:03:22,crystal,0.241,0.241mm,AI,high,0.494/0.496 two near-parallel lines on one crystal
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.214,0.214mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.562,0.562mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.319,0.319?mm,AI,low,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.602,0.602mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.283,0.283mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.501,0.501mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.382,0.382mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.349,0.349mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.183,0.183mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.511,0.511mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.263,0.263mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.186,0.186mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.491,0.491mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.289,0.289mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.299,0.299mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.117,0.117mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.157,0.157mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.631,0.631mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.182,0.182mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.314,0.314mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.638,0.638mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.159,0.159mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.342,0.342mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.335,0.335mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.326,0.326mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.236,0.236mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.402,0.402mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.163,0.163mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.487,0.487mm,AI,high,0.319/0.602 labels overprint each other
+17-48-2.jpg,b2-s08,2026-10-30T17:48:00,07:33:26,2026-10-30T17:49:10,crystal,0.203,0.203mm,AI,high,0.319/0.602 labels overprint each other
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.232,0.232mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.296,0.296mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.159,0.159mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.579,0.579mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.609,0.609mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.196,0.196mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.350,0.350mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.272,0.272mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.308,0.308mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.231,0.231mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.212,0.212mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.504,0.504mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.124,0.124mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.161,0.161mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.338,0.338mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.361,0.361mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.416,0.416mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.424,0.424mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.362,0.362mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.187,0.187mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.175,0.175mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.162,0.162mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.287,0.287mm,AI,high,
+17-48-3.jpg,b2-s08,2026-10-30T17:48:00,07:34:16,2026-10-30T17:50:00,crystal,0.178,0.178mm,AI,high,
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.218,0.218mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.263,0.263mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.256,0.256mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.457,0.457mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.249,0.249mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.425,0.425mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.456,0.456mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.597,0.597mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.547,0.547mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.221,0.221mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.316,0.316mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.485,0.485mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.137,0.137?mm,AI,low,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.348,0.348mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.407,0.407mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.279,0.279mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.650,0.650mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.421,0.421mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.349,0.349mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.459,0.459mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.409,0.409mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.466,0.466mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.211,0.211mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.599,0.599mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.224,0.224mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,,0.48?mm,AI,low,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.561,0.561mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.695,0.695mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.364,0.364mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.314,0.314mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.223,0.223mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.217,0.217mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48-4.jpg,b2-s08,2026-10-30T17:48:00,07:34:30,2026-10-30T17:50:14,crystal,0.288,0.288mm,AI,high,0.137/0.348 overprint; 0.316 legible but cut; 0.48? cut at right edge
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.235,0.235mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.279,0.279mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.240,0.240mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.221,0.221mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.214,0.214mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.167,0.167mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.397,0.397mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.307,0.307mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.232,0.232mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.223,0.223mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.205,0.205mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.229,0.229mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.200,0.200mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.408,0.408mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.467,0.467mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.493,0.493mm,AI,high,
+17-48.jpg,b2-s08,2026-10-30T17:48:00,07:33:03,2026-10-30T17:48:47,crystal,0.119,0.119mm,AI,high,
+MICRO.jpg,,,01:17:29,2026-10-30T11:33:13,crystal,0.010,0.010mm,AI,high,
+MICRO.jpg,,,01:17:29,2026-10-30T11:33:13,crystal,0.019,0.019mm,AI,high,
+MICRO.jpg,,,01:17:29,2026-10-30T11:33:13,crystal,0.014,0.014mm,AI,high,
+MICRO.jpg,,,01:17:29,2026-10-30T11:33:13,crystal,0.012,0.012mm,AI,high,
+MICRO.jpg,,,01:17:29,2026-10-30T11:33:13,scale,0.318,0.318mm,AI,high,horizontal reference line
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.027,0.027mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.029,0.029mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.027,0.027mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.031,0.031mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.024,0.024mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.031,0.031mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.030,0.030mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.032,0.032mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.022,0.022mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.023,0.023mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.031,0.031mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.035,0.035mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,crystal,0.023,0.023mm,AI,high,0.386 or 0.388)
+POOCKU cca 1 MINUTA.jpg,b1-s03,2026-10-30T11:32:00,01:25:19,2026-10-30T11:41:03,scale,0.386,0.386mm,AI,medium,horizontal reference line; label overprinted by the line (0.386 or 0.388)
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.399,0.399mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.482,0.482mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.951,0.951mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.718,0.718mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.640,0.640mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.325,0.325mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.358,0.358mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.162,0.162mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.193,0.193mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.472,0.472mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.268,0.268mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-2.jpg,b2-s09,2026-10-30T18:04:00,07:56:51,2026-10-30T18:12:35,crystal,0.469,0.469mm,AI,high,0.193 cut at right edge but legible
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.277,0.277mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.260,0.260mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.549,0.549mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.475,0.475mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.656,0.656mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.283,0.283mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.707,0.707mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.410,0.410mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.473,0.473mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.508,0.508mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.197,0.197mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.429,0.429mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.310,0.310mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.523,0.523mm,AI,high,
+POSUS-18-04-3.jpg,b2-s09,2026-10-30T18:04:00,07:57:07,2026-10-30T18:12:51,crystal,0.314,0.314mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.420,0.420mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.512,0.512mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.766,0.766mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.373,0.373mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.334,0.334mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.275,0.275mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.714,0.714mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.945,0.945mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.351,0.351mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.318,0.318mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.356,0.356mm,AI,high,
+POSUS-18-04-4.jpg,b2-s09,2026-10-30T18:04:00,07:57:48,2026-10-30T18:13:32,crystal,0.334,0.334mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.487,0.487mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.710,0.710mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.319,0.319mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.303,0.303mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.263,0.263mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.242,0.242mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.790,0.790mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.210,0.210mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.961,0.961mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.450,0.450mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.375,0.375mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.588,0.588mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.246,0.246mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.132,0.132mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.127,0.127mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.221,0.221mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.143,0.143mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.173,0.173mm,AI,high,
+POSUS-18-04-5.jpg,b2-s09,2026-10-30T18:04:00,07:58:38,2026-10-30T18:14:22,crystal,0.101,0.101mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.306,0.306mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.563,0.563mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.743,0.743mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.431,0.431mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.479,0.479mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.539,0.539mm,AI,high,
+POSUS-18-04.jpg,b2-s09,2026-10-30T18:04:00,07:56:33,2026-10-30T18:12:17,crystal,0.717,0.717mm,AI,high,
+PREDOCKOM.jpg,b1-s02,2026-10-30T11:30:00,01:22:20,2026-10-30T11:38:04,crystal,0.042,0.042mm,AI,high,
+PREDOCKOM.jpg,b1-s02,2026-10-30T11:30:00,01:22:20,2026-10-30T11:38:04,crystal,0.034,0.034mm,AI,high,
+PREDOCKOM.jpg,b1-s02,2026-10-30T11:30:00,01:22:20,2026-10-30T11:38:04,crystal,0.035,0.035mm,AI,high,
+PREDOCKOM.jpg,b1-s02,2026-10-30T11:30:00,01:22:20,2026-10-30T11:38:04,crystal,0.018,0.018mm,AI,high,
+PREDOCKOM.jpg,b1-s02,2026-10-30T11:30:00,01:22:20,2026-10-30T11:38:04,crystal,0.029,0.029mm,AI,high,
+PREDOCKOM.jpg,b1-s02,2026-10-30T11:30:00,01:22:20,2026-10-30T11:38:04,crystal,0.032,0.032mm,AI,high,

@@ -4,7 +4,7 @@
     "stem": "2026-02-05 10-37-26",
     "start_wallclock": "2026-02-04T10:34:32",
     "timezone": "Europe/Bratislava",
-    "note": "Batch-match prediction. Operator inputs: (1) camera DVR had wrong DATE field — true recording date = 2026-02-04; HH:MM:SS authoritative (read from frame-0 DVR overlay). (2) batch-1 phases scale to batch-2 by 70/77.6 = 0.9021 (SCADA-trace point-count ratio measured by operator). Anchor: observed b1-e00 @ 2026-02-04T11:46:10. Formula: b1_event_wallclock = anchor - (b2_e10.t - b2_event.t) * scale. Template: datasets/2026-02-04 11-08-51.json.",
+    "note": "Batch-match prediction. Operator inputs: (1) camera DVR had wrong DATE field — true recording date = 2026-02-04; HH:MM:SS authoritative (read from frame-0 DVR overlay). (2) batch-1 phases scale to batch-2 by 70/77.6 = 0.9021 (SCADA-trace point-count ratio measured by operator). Anchor: observed b1-e00 @ 2026-02-04T11:46:10. Formula: b1_event_wallclock = anchor - (b2_e10.t - b2_event.t) * scale. Template: datasets/2026-02-04 11-08-51.json. DATE CONTRADICTED (2026-11-03): scripts/check_clip_overlap.py finds no shared frame between the end of clip '2026-02-05 10-37-26' (live until DVR 11:09:06) and the first 150 s of the 2026-02-04 PAL recording (max 6 SIFT inliers vs ~950 for the positive control 'Zaznam 2026-03-10 183943' against the same PAL frames). The clips' file birth times are 2026-02-05 (10-18-50: 10:33:52, 10-37-26: 11:15:04 = recording end), matching their filenames, and the PC-to-DVR clock offset is 174 s for the clips vs 11.5 s for the PAL recording. The operator's June 2026 statement that the clips are from 2026-02-04 is kept below pending the author's decision; if the clips are from 2026-02-05, the batch-match prediction and the 'boiling' segment below do not apply and no phase or time-since-seeding is known.",
     "probe": {
       "container_format": "mov,mp4,m4a,3gp,3g2,mj2",
       "video_codec": "h264",
@@ -28,16 +28,18 @@
       "phase": "boiling",
       "t_start": 0.0,
       "t_end": 2255.833,
-      "note": "Predicted whole-clip phase. No predicted phase transitions fall inside this clip; entire window sits in b1's 'boiling' phase."
+      "note": "Predicted whole-clip phase under the 2026-02-04 hypothesis (contradicted, see media.note). No predicted phase transition falls inside this clip."
     }
   ],
   "context": {
     "batch_match_prediction": true,
     "scale_factor": 0.9020618556701031,
-    "scale_source": "operator-measured ratio 70/77.6 of SCADA-trace point counts (b1/b2)",
+    "scale_source": "operator input of June 2026 (commit 42aee0a): ratio 70/77.6 of SCADA-trace lengths b1/b2; how it was measured is not recorded (plausibly lengths on the trend photo, Krystal_260204_161114.pdf p. 3)",
     "anchor": {
       "event_id": "b1-e00",
       "wallclock": "2026-02-04T11:46:10"
-    }
+    },
+    "date_status": "contradicted (scripts/check_clip_overlap.py; file birth times 2026-02-05)",
+    "b1_seeding_check": "Same-day hypothesis only: the trend photo (Krystal PDF p. 3, scripts/check_anchors.py trend) shows the b1 seeding steam cut at 08:47:55; corrected by the -1.5 min photo bias measured on b2 (photo 12:29:43 vs SCADA 12:31:30) this is ~08:49:30 +- 3 min, vs 08:36:35 predicted by the batch match."
   }
 }

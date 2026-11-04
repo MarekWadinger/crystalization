@@ -41,13 +41,32 @@ class LensSetup:
     """Extra distance e between the lens flange and the sensor."""
 
     pixel_pitch_um: float
-    """Sensor pixel pitch in micrometres."""
+    """Sensor-plane pitch of one frame pixel in micrometres.
+
+    For an anisotropic pixel (``pixel_aspect != 1``) this is the geometric mean
+    ``sqrt(pitch_x · pitch_y)``: the side of the square with the pixel's area.
+    It is exact for areas and for the area-equivalent diameter; per-axis
+    lengths use :attr:`pixel_pitch_x_um` / :attr:`pixel_pitch_y_um`.
+    """
 
     sensor_width: float
     """Sensor active-area width."""
 
     sensor_height: float
     """Sensor active-area height."""
+
+    pixel_aspect: float = 1.0
+    """Sensor-plane ``pitch_x / pitch_y`` of one frame pixel (1 = square)."""
+
+    @property
+    def pixel_pitch_x_um(self) -> float:
+        """Sensor-plane µm per frame pixel along a row."""
+        return self.pixel_pitch_um * self.pixel_aspect**0.5
+
+    @property
+    def pixel_pitch_y_um(self) -> float:
+        """Sensor-plane µm per frame pixel down a column."""
+        return self.pixel_pitch_um / self.pixel_aspect**0.5
 
     @property
     def aperture_diameter(self) -> float:
@@ -144,7 +163,9 @@ def mm_per_pixel_at(
         Δx(d_o) = pixel_pitch / M(d_o) = pixel_pitch · d_o / i_fixed
 
     which is **linear in d_o**: doubling the object distance doubles the
-    millimetres-per-pixel.
+    millimetres-per-pixel. ``pixel_pitch`` is the geometric-mean pitch
+    (:attr:`LensSetup.pixel_pitch_um`); multiply by ``sqrt(pixel_aspect)``
+    or divide by it for the x or y axis.
     """
     i_fixed = image_distance_for_focus(lens, d_focus)
     d = np.asarray(d_o, dtype=np.float64)

@@ -12,43 +12,71 @@ import numpy as np
 
 from optics.config import load_camera
 
-# (value, 1-sigma, provenance)
+# (value, 1-sigma, provenance). A uniform ±h spread enters as σ = h/√3.
 _cfg = load_camera()
+_PX, _PY = _cfg.sample_pitch_um
+_U = 3**-0.5
 INPUTS: dict[str, tuple[float, float, str]] = {
     "f": (
         _cfg.focal_length_mm,
         0.7,
-        "datasheet 35 mm; ±2 % typical CCTV tolerance (ASSUMED)",
+        "lens engraving 35 mm (PHOTO); ±2 % CCTV tolerance (ASSUMED)",
     ),
-    "e": (_cfg.extension_tube_mm, 0.5, "operator tape/caliper 2026-09-07"),
+    "e": (
+        _cfg.extension_tube_mm,
+        5.0 * _U,
+        'Q&A 8(A) "≈ 6 cm" (PLANT), uniform ±5 mm',
+    ),
     "x": (
         _cfg.focus_travel_mm,
-        1.0,
-        "~3 exposed helicoid turns ≈ 1 mm (operator estimate)",
+        1.0 * _U,
+        "focus travel 1 mm, AI guess (ESTIMATE), uniform 0–2 mm",
     ),
-    "p": (
-        _cfg.native_pixel_pitch_um,
-        0.02,
-        "Sony IMX307/IMX327 unit cell 2.9 µm (datasheet)",
+    "px": (
+        _PX,
+        0.02 * _PX * _U,
+        "µm per PAL sample, CCD cell × clock / 13.5 MHz (ESTIMATE), "
+        "line mapping uniform ±2 % (optics.scale_chain)",
     ),
-    "t": (_cfg.sight_glass_thickness_mm, 0.5, "operator 2026-09-07"),
-    "a": (_cfg.air_gap_mm, 1.0, "operator 2026-09-07"),
+    "py": (
+        _PY,
+        0.05 * _U,
+        "µm per PAL line = CCD row (ESTIMATE), candidates 6.25–6.30",
+    ),
+    "t": (
+        _cfg.sight_glass_thickness_mm,
+        0.5,
+        'Q&A 8(C) "20 mm" (PLANT)',
+    ),
+    "a": (
+        _cfg.air_gap_mm,
+        5.0 * _U,
+        'Q&A 8(B) "≈ 2 cm" (PLANT), uniform ±5 mm',
+    ),
     "n": (
         _cfg.sight_glass_index,
         0.03,
-        "borosilicate 1.47 assumed; soda-lime would be 1.52",
+        "borosilicate 1.47 (ASSUMED); soda-lime would be 1.52",
     ),
 }
 
 
 def derived(
-    f: float, e: float, x: float, p: float, t: float, a: float, n: float
+    f: float,
+    e: float,
+    x: float,
+    px: float,
+    py: float,
+    t: float,
+    a: float,
+    n: float,
 ) -> dict[str, float]:
     i = f + e + x
     d = f * i / (i - f)
     delta = t * (1 - 1 / n)
     return {
-        "um_per_px": p * f / (e + x),
+        "um_per_px_x_PAL": px * f / (e + x),
+        "um_per_px_y_PAL": py * f / (e + x),
         "d_focus_mm": d,
         "H_to_inner_face_mm": d + delta,
         "H_behind_front_mm": d - (t - delta) - a,
@@ -103,8 +131,10 @@ def main() -> None:
         )
     print(
         "\nNot in the table (discrete, not Gaussian): the C-mount flange depth. "
-        "If the measured 60 mm already includes the 5 mm C-mount adapter ring, "
-        "e is 55 mm: µm/px +9 %, d_focus +2.0 mm, H′ shifts −5 mm."
+        "If the plant's ≈ 60 mm already includes the 5 mm CS→C adapter ring, "
+        "e is 55 mm: µm/px +9 %, d_focus +2.0 mm, H′ shifts −5 mm. "
+        "Per-recording µm/px with 95 % intervals (PAL and 1080p, x and y): "
+        "uv run python -m optics.scale_chain."
     )
 
 

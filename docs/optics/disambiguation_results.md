@@ -1,218 +1,91 @@
-# Depth disambiguation — pipeline implementation and results
+# Depth disambiguation: pipeline and current results
 
-**Date:** 2026-06-13 (Saturday evening, follow-up to the Friday drop)
-**Pipeline code:** [`../../src/optics/disambiguate.py`](../../src/optics/disambiguate.py)
-**Reproduce:** `uv run python -m optics.disambiguate`
-**Per-crystal data:** [`crystal_observations.csv`](./crystal_observations.csv) (21,320 rows)
+**Updated:** 2026-11-03 (rerun at the analog-PAL pixel scale, `bfa6295`).
+**Pipeline code:** [`../../src/optics/disambiguate.py`](../../src/optics/disambiguate.py),
+[`../../src/optics/csd.py`](../../src/optics/csd.py).
+**Reproduce:** `uv run python -m optics.disambiguate` (figs 09, 10 and the git-ignored
+`crystal_observations.csv`); every number below, old vs new:
+`uv run --frozen python scripts/rerun_paper_numbers.py` → [`rerun_results.md`](./rerun_results.md).
 
-## What got built
+> **Read first.** None of the sizes on this page measures crystals. No hand-labelled annotations
+> exist yet. The edge detector's size distribution follows its area window. The watershed tiles the
+> frame, so its distribution follows its own seed spacing. The near/far split is a tie-break (below).
 
-The algorithm Marek proposed in chat — use the focal-plane apparent-size
-distribution ``P_focus(s)`` as a Bayesian prior to disambiguate front
-vs back of focus — has been wired end-to-end:
+## What the pipeline does
 
-1. Detect crystals on every 15-th frame (60 sampled frames total) using
-   the existing edge-based detector in `src/annotator/detection.py`.
-2. For each detected crystal, score the mean Laplacian-variance
-   sharpness inside its bounding rectangle, normalise against the
-   99.5-percentile to get ``s_norm ∈ [0, 1]``.
-3. Invert the Gaussian-PSF sharpness model ``S = (σ² + σ_floor²)⁻⁵ᐟ²``
-   to recover the geometric blur ``c``.
-4. Invert ``c(d_o) = K · |d_o − d_focus| / d_o`` to get the two
-   symmetric depths ``d_near`` and ``d_far``.
-5. Compute the implied physical sizes ``w_near = s_obs · mm_per_px(d_near)``
-   and ``w_far = s_obs · mm_per_px(d_far)``.
-6. Pick the side whose implied physical size is more probable under
-   ``P_focus`` (converted to physical units at d_focus).
+1. Detect crystals on every 15th frame of `datasets/2026-02-05 10-36-32.mp4` (60 frames, auto crop
+   1826 × 906 px) with the watershed (`optics.detect_watershed`) or the edge detector
+   (`annotator.detection`). The area window is `detection_area_px` from `configs/camera_100.toml`:
+   `[9, 356 474]` px² on the 1080p clips (3 px side up to a 1 mm square at 1.465 × 1.914 µm/px).
+2. Score each detection by the mean Laplacian-variance inside its box; normalise to the 99.5th
+   percentile.
+3. The top 15 % in sharpness define the focal-plane size prior `P_w(w)`.
+4. For the others, invert `S = (σ² + σ_floor²)^(−5/2)` to the CoC, then `c(d_o)` to the two
+   candidate depths, and keep the side whose implied size is more probable under `P_w`.
+5. Sizes are area-equivalent: `sqrt(w·h)` of the box times the geometric-mean µm/px (1.673 µm on
+   the clips). That is exact for areas under the anisotropic pixel, but not a length along either axis.
 
-## Real numbers
-
-Running on `datasets/2026-02-05 10-36-32.mp4` with the **verified**
-Camera-100 setup (f=35 mm, **F/1.6**, **e=45 mm**, **d_focus=62.2 mm** — superseded 2026-09-07 by e=60 mm, d_focus=55.1 mm, 1.66 µm/px. Rerun at the new geometry: edge detector median 0.037 mm (mean 0.051, CV 0.83), watershed median 0.074 mm (CV 0.40); depth spread ±0.005 mm. Body below is the historical 2026-06-15 run;
-operator inspection 2026-06-15):
+## Current numbers (60 frames, watershed, current window)
 
 | Quantity | Value |
 |---|---:|
-| Sampled frames | 60 (every 15-th of 1568) |
-| Total detections | **14,654** |
-| Detections / frame (average) | ~244 |
-| Top-15 % sharpness → focal plane | 2,198 |
-| Remaining detections | 12,456 |
-| Bayes near / far split | **79.2 % / 20.8 %** |
-| Median estimated physical size | **0.052 mm** |
-| Mean estimated physical size | **0.074 mm** |
-| IQR | 0.049 mm |
-| Mean absolute depth correction | **0.00001 mm (0.01 % of median size)** |
+| Detections | 52 784 (focus 7 918, near 33 957, far 10 909) |
+| Near / far split | 76 / 24 |
+| Off-focus p_near within 0.500 ± 0.002 | 99.7 % (0.1–99.9 % quantiles 0.498–0.504) |
+| Median / mean area-equivalent size | 0.075 / 0.082 mm (CV 0.43, log-normal s 0.41) |
+| Mean depth correction | 0.005 % of the median |
+| \|d − d_focus\| of near/far assignments, p50 / p99 | 3.1 / 5.6 µm |
 
-> **2026-06-15 hardware revision.** Operator calipered the silver
-> collar between lens and camera body: **45 mm** (not the previously-
-> estimated 10 mm). Operator also confirmed the iris ring is set to
-> **F/1.6** (wide open). This moves d_focus from 165 mm → **62.2 mm**
-> and µm/px from 10.4 → **2.18 µm/px**. Every per-crystal size is
-> therefore rescaled by a factor of ~4.8× *down* from the earlier
-> reported numbers. Median moves from 0.25 mm (mid-strike, scale-wrong)
-> to **0.05 mm (seed-magma / first hour of strike, scale-correct)** —
-> matches operator's confirmation that the recording is the start of a
-> 4-hour boiling-pan strike.
->
-> The 2026-06-14 *DVR-overlay crop* fix (top 55 px + bottom 120 px
-> removed) is unchanged. The 21,320 → 14,654 detection count and the
-> Bayes 79/21 split survive into the new calibration unchanged because
-> they are scale-invariant.
+All four detector × window runs are in [`rerun_results.md`](./rerun_results.md). With the legacy
+`[80, 8000]` px² window, the paper's numbers come back exactly: edge 18 823 detections, median
+0.037 mm, 70 / 30; watershed 52 302, median 0.075 mm, 72 / 28. The legacy window was tuned to a
+guessed ~52 µm crystal, so it only matches those old numbers.
 
-### Before / after DVR-overlay crop (size numbers at the *corrected* µm/px = 2.18)
+## The near/far split is a tie-break, not a finding
 
-| Quantity | Before (contaminated) | After (cropped) | Change |
-|---|---:|---:|---:|
-| Total detections | 21 320 | 14 654 | **−31 % spurious detections removed** |
-| Power-law tail α | 5.36 | **4.57** | overlay was steepening the tail |
-| Median size | 0.045 mm | 0.052 mm | +15 % (less downward bias) |
-| Mean size | 0.066 mm | 0.074 mm | +11 % |
-| IQR | 0.039 mm | 0.049 mm | +25 % (wider, more realistic) |
-| Near / far split | 50.03 / 49.97 | **79.2 / 20.8** | Bayes step now actually picks a side |
-| Mean depth correction | 0.00002 mm | 0.00001 mm | depth correction operationally zero |
+The assigned depths lie within ≈ 6 µm of focus. There the near and far hypotheses imply sizes that
+differ by only ≈ 2δ/d_focus ≈ 0.02 %. For 99.6–99.9 % of the off-focus detections in every run,
+their prior likelihoods are therefore equal to within ±0.002. `side = "near" if p_near > 0.5` then
+decides on the sign of a rounding-level difference. The 70–80 % "near" shares (and the earlier
+79 / 21) say nothing about where the slurry sits. The two interpretations once offered (slurry in
+front of the focal plane, or a right-skewed prior) are both unsupported at this aperture.
 
-The crop changes are all in the direction the contamination model
-predicts: text glyphs were (a) producing thousands of false detections
-inside the timestamp / `CH01` bands, (b) inflating the high-sharpness
-tail (perfect glyph edges are sharper than any in-focus crystal can
-ever be) which steepened the α fit, and (c) populating the
-"focal-plane" subset with rectangular text strokes, biasing the size
-prior toward small narrow shapes.
+## Why the size signal is so weak here
 
-## The 79 / 21 near-side split — what it actually says
+The thin-lens geometry is `d_focus = 55.08 mm`, `K = f²/(N(d_focus − f)) = 38.1 mm` at F/1.6. A
+symmetric pair needs **δ ≈ 1.3 mm** for a 5 % size ratio. The detector loses edges once the CoC
+reaches a few resolution elements. The resolution element is the CCD cell / PAL sample (6.5 µm
+geometric mean at the sensor), not the upscaled clip pixel, so that happens at |δ| ≈ 47 µm (5 PAL
+samples), where the ratio is 0.17 %. The in-focus half-slice (CoC ≤ 1 PAL sample) is ±9.4 µm at
+F/1.6 and ±94 µm at F/16. The figures and the paper quoted ±4.2 µm, ±21 µm and 0.08 %, which use
+the clip pixel (2.9 µm).
 
-After the crop, the Bayes step no longer flips a coin. It assigns
-**79 % of non-focal detections to the near side** of the focal plane.
-Two interpretations are consistent with the data:
+Which crystals are in front of the lens depends on the time since seeding, not on a fixed
+population. On the seed pan (ZRA) the slurry is ≈ 10–19 µm (microscope, `MICRO.jpg`), 22–35 µm
+two minutes after seeding, and 0.2–0.8 mm two hours later (A. Fedor's microscope run 2026-10-30,
+values AI-transcribed from the photo overlays, [`../../datasets/README.md`](../../datasets/README.md)).
+The Mastersizer of the slurry (Dv50 6.81 µm, `docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf`)
+describes only the seeding material. The clip's own time since seeding is unknown: its date is
+disputed, and the "≈ 2 h after seeding" label was a batch-match prediction (`datasets/README.md`).
 
-1. **Geometric reality.** Crystals in this video genuinely sit closer
-   to the camera than the operator-set focal plane (the focus ring
-   reading at "4 m" was probably an estimate, and the actual
-   slurry-front position is closer to the glass than that — focusing
-   slightly *past* the slurry is a common operator habit because it
-   moves the depth-of-field rear-limit further into the flow).
-2. **Prior-shape Bayes asymmetry.** The empirical size prior (from
-   focal-plane detections) is right-skewed with mode near 0.15 mm.
-   The "far" hypothesis multiplies apparent size by a factor > 1, so
-   far hypotheses systematically land in the prior's tail and lose to
-   near hypotheses for moderate observed apparent sizes. Some of the
-   79 / 21 split is therefore "the prior + the geometry pull
-   together toward near", not "we measured near-side population".
+## What would make disambiguation work
 
-Both effects are present. **Disentangling them requires either**
-(a) stopping the lens down to widen the DoF so we see physical
-crystals truly far behind focus, or (b) the growth-curve calibration
-discussed in the next section, which gives an independent size prior
-from process kinetics rather than from the in-frame focal-plane
-detections.
+1. Stop the lens down (F/16 widens the slice ≈ 10×; the recommendation stands).
+2. A detector validated against hand labels (Cellpose, Phase 1 of `papers/cep/ROADMAP.md`) that
+   finds blurred crystals, so detections reach |δ| of a millimetre.
+3. Optical flow over consecutive frames (apparent speed ∝ 1/d_o) instead of a size prior.
 
-## Why the Bayes step *was* indifferent before the crop — and what that means
+## Superseded history
 
-![disambiguation panels](./figures/09_disambiguation.png)
+- 2026-06-13 run (e = 10 mm, then 45 mm, d_focus 62.2 mm, 2.18 µm/px, Hanwha 2.9 µm pitch): median
+  0.052 mm, 79.2 / 20.8. Its reading as "seed magma, first hour of a 4-hour A-strike, operator
+  confirmed" is **retracted**: the camera is on the seed pan, and no operator confirmation exists.
+- 2026-09-07 note (e = 60 mm "measured on site"): the geometry values are the plant's approximations
+  from the 2026-08-12 Q&A ("≈ 6 cm", "≈ 2 cm", "20 mm"), not site measurements.
+- The DVR-overlay crop finding stands: the glyphs created thousands of false detections and pushed
+  α from 4.57 to 5.36.
 
-The middle panel shows that the recovered ``d_near`` distribution is
-concentrated in **[~61.9, 62.1] mm** and ``d_far`` in **[~62.3,
-62.5] mm** — a depth spread of barely **±0.15 mm** around focus at
-F/1.6 (it would have been ±0.7 mm at the originally-assumed F/4).
-The two
-distributions sit symmetric in 1/d_o around d_focus, exactly as the
-geometry predicts. But that range is so narrow that the implied
-apparent-size ratio between near and far hypotheses is at most ~1 %.
+## CSV columns (`crystal_observations.csv`, git-ignored, rewritten by each run)
 
-The discriminability plot below makes this concrete:
-
-![discriminability](./figures/10_discriminability.png)
-
-To resolve front vs back from size *alone*, the crystals would have to
-sit at least **4–5 mm from focus**. At F/4 with focus at 165 mm, that
-puts the geometric blur at ~60–75 µm — roughly 20–25 sensor pixels.
-**The edge-based detector cannot find blobs that blurry**: its
-adaptive-threshold step requires edge contrast that vanishes once the
-PSF spreads over more than a few pixels. So the detector implicitly
-filters down to a ~1 mm depth slice around focus, where the geometric
-ambiguity is unresolvable from size alone.
-
-This is a **clean finding**, not a failure:
-
-> The mathematical framework Marek proposed is correct; the
-> disambiguation works as soon as crystals sit far enough from focus.
-> But the current edge-based detector pre-selects an in-focus slice
-> within which the size correction is operationally negligible
-> (0.4 % of the median crystal size on average).
-
-## Verifiable headline number
-
-**Median estimated crystal size = 0.052 mm** (mean 0.074 mm, IQR
-0.049 mm) on overlay-cropped frames at the verified F/1.6, e=45 mm
-setup.
-
-The depth correction makes a **0.01 %** difference on average — the
-F/1.6 DoF window is so narrow (±6 µm at 1-pixel blur) that the
-detector sees essentially **a single depth slice**. So a single
-mm/px scale at d_focus is overwhelmingly sufficient for the
-crystal-size read-out at this aperture; the depth-aware machinery is
-demonstrated but not load-bearing.
-
-The 0.05 mm median is **squarely in the seed-magma / very-early-strike
-range** (Bubník et al., *Sugar Technologists Manual*), consistent
-with the operator-confirmed fact that the recording captures the
-first hour of a 4-hour boiling-pan strike. No further interpretive
-ambiguity — the previously-puzzling 0.25 mm result was an artefact of
-the wrong extension-tube estimate, now corrected.
-
-## How to push the disambiguation into the operationally useful regime
-
-Two changes would move the system from "ambiguity-killing in theory"
-to "ambiguity-killing in practice":
-
-1. **Stop the lens down to F/16** (the recommendation already in §5.1
-   of [`README.md`](./README.md)). DoF widens 10×, so the detector
-   would pick up crystals across a ±60 µm depth band — still tight
-   given the macro setup but enough that the size ratio between
-   symmetric depth hypotheses becomes resolvable.
-2. **Switch the detector to a blur-tolerant scheme.** Either
-   (a) a CNN fine-tuned on partially-defocused crystals, or
-   (b) a Hough-like approach that tolerates blurry edges. Either would
-   admit detections from ±0.5–1 mm depth, where the size ratio at the
-   current F/1.6 is already 1–2 %. At that point the focal-plane size
-   prior turns into a useful disambiguation signal.
-
-Both have follow-on benefits (more crystals counted, finer size
-distribution) — they aren't depth-disambiguation-specific.
-
-## What's in the CSV
-
-[`crystal_observations.csv`](./crystal_observations.csv) — 21,320 rows,
-one per detection. Columns:
-
-| Column | Meaning |
-|---|---|
-| `frame_idx` | Source frame number |
-| `x_px`, `y_px` | Detection centre in pixels |
-| `apparent_size_px` | Geometric mean of bounding rectangle (sqrt(w·h)) |
-| `sharpness_score` | Mean Laplacian-variance inside the rect |
-| `s_normalised` | Sharpness / 99.5-percentile, clipped to [0,1] |
-| `coc_mm` | Geometric blur diameter from sharpness inversion |
-| `d_near`, `d_far` | The two symmetric depth hypotheses (mm) |
-| `w_near_mm`, `w_far_mm` | Implied physical sizes under each hypothesis |
-| `p_near` | Posterior probability of the near hypothesis |
-| `side` | "near" / "far" / "focus" |
-| `physical_size_mm` | Final depth-corrected size estimate |
-
-## Status
-
-- [x] Pipeline implemented, tested, runs end-to-end on the plant video.
-- [x] Per-crystal CSV produced for downstream inspection.
-- [x] Headline number reported: median crystal = 0.22 mm.
-- [x] Finding: depth correction is **operationally negligible** (0.4 %)
-      for the current F/4 + edge-detector combination — single-scale
-      mm/px is sufficient for size read-out.
-- [x] Finding: front/back disambiguation needs **either F/16 aperture
-      OR a blur-tolerant detector** to become operational.
-- [ ] Cross-check the 0.22 mm result against lab MA / CV for the
-      process stream visible at 2018-11-09 10:33 (DVR timestamp).
-- [ ] On-site measure of the extension tube + F-number to remove the
-      ±15 % absolute-scale uncertainty.
-
-— Marek Wadinger, 2026-06-13
+`frame_idx, x_px, y_px, apparent_size_px (sqrt(w·h) in frame px), sharpness_score, s_normalised,
+coc_mm, d_near, d_far, w_near_mm, w_far_mm, p_near, side, physical_size_mm`.

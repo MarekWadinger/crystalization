@@ -1,35 +1,50 @@
-% Appendix A of manuscript v0.2 (docs/paper/manuscript.md). The figure numbers of the manuscript's code comments are
-% replaced by references, because the LaTeX figures are numbered differently (2a/2b, 5b, 5c, 14 merged or renumbered).
+% Appendix C. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft; table updated in the soft-sensor reframe
+% 2026-11-04): lists the scripts that actually generate the
+% paper's numbers and figures. Test counts from `uv run pytest --collect-only`.
 \section{Reproduction}\label{app:repro}
 
-All numerical results and figures regenerate from the open-source repository via:
+Every input value lives in \code{configs/camera_100.toml}, tagged with its source class; \code{tests/test_provenance.py}
+fails if a value lacks a class. The environment and the optics tests are set up with
 {\footnotesize
 \begin{verbatim}
-uv sync --group dev --group annotator \
-        --group sharpness-layers \
-        --group optics --group scale-overlay
-uv run pytest tests/test_optics.py -q   # 10 tests
+uv sync --group dev --group optics \
+  --group annotator
+uv run pytest -q tests/test_optics.py \
+  tests/test_scale_chain.py \
+  tests/test_provenance.py   # 30 tests
+uv run pytest -q tests/test_softsensor.py  # 21
+uv run python scripts/softsensor_results.py
 \end{verbatim}}
-\noindent followed by the figure generators in \tabref{tab:repro}.
+\noindent The full suite (\code{uv run pytest -q}) gives 160 passed, 1 failed and 2 skipped; the failing frame-scale
+test of \code{test_crystal_rules} fails on the base branch too and concerns no number of this paper.
+\code{scripts/softsensor_results.py} writes the estimator results to \code{docs/softsensor/results.md}. \tabref{tab:repro} lists the generators.
+\code{scripts/rerun_paper_numbers.py} writes each computed optics and detector number with its
+previous value, source class and generating function to \code{docs/optics/rerun_results.md};
+\code{scripts/detector_checks.py} writes the label-free detector checks to \code{docs/optics/detector_checks.md};
+\code{optics.scale_chain} writes the scale budget to \code{docs/optics/scale_chain.md}; \code{make -C papers/cep
+figures} collects the figures. The recordings are read from \code{datasets/}.
 
-\begin{table*}
-\centering\tabfont
-\caption{Figure generators.}\label{tab:repro}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.4\textwidth}@{}}
+\begin{table}[!ht]
+\centering\scriptsize\setlength{\tabcolsep}{3pt}
+\caption{Generators of the paper's numbers and figures. Each command follows \texttt{uv run python}
+(\texttt{uv run --frozen python} for the rerun script, \texttt{uv run --with openpyxl python} for the anchors);
+$^\ast$: runs without the videos.}\label{tab:repro}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.5\columnwidth}>{\raggedright\arraybackslash}p{0.46\columnwidth}@{}}
 \toprule
-Command & Figures \\
+Command & Output \\
 \midrule
-\code{uv run python -m optics.plots} & \ref{fig:mmpx}, \ref{fig:shift}, \ref{fig:coc}, \ref{fig:sharpness},
-\ref{fig:dof} \\
-\code{uv run python -m optics.measure} & \ref{fig:measured} \\
-\code{uv run python -m optics.qualitative} & \ref{fig:layers}, \ref{fig:detection} \\
-\code{uv run python -m optics.disambiguate} & \ref{fig:discrim}, \ref{fig:disamb} \\
-\code{uv run python -m optics.csd} & \ref{fig:csd} \\
-\code{uv run python -m optics.pipeline_diagram} & \ref{fig:pipeline} \\
-\code{uv run scale-overlay-app} & \ref{fig:overlays} (interactive) \\
+\code{-m optics.scale_chain} (\code{--no-video}$^\ast$: budget) & \tabref{tab:scale}, \ref{sec:chain} \\
+\code{-m optics.error_budget}$^\ast$ & 1$\sigma$ budget, \ref{sec:slab} \\
+\code{scripts/rerun_paper_numbers.py} & other optics and detector numbers; \tabref{tab:dof} \\
+\quad\code{--no-video}$^\ast$ & optics rows \\
+\code{scripts/check_clip_overlap.py} & clip date, \ref{sec:chain}, \ref{sec:recording} \\
+\code{scripts/check_anchors.py} & anchors, clock, \secref{sec:data} \\
+\code{scripts/microscope_summary.py}$^\ast$ & \tabref{tab:microscope} \\
+\code{scripts/traced_vs_lab.py}$^\ast$ & $b_\mathrm{sel}$, $\beta(L)$, \secref{sec:bias} \\
+\code{scripts/detector_checks.py} & \tabref{tab:ws-sweep}, \figref{fig:time} \\
+\code{-m optics.optical_layout}$^\ast$ & \figref{fig:layout} \\
+\code{scripts/softsensor_results.py}$^\ast$ & \S\S\,\ref{sec:growth}--\ref{sec:results}; Tables~\ref{tab:ident},
+\ref{tab:loso}, \ref{tab:robust} \\
 \bottomrule
 \end{tabular}
-\end{table*}
-
-The complete numerical audit trail --- every claim mapped to its source (datasheet, derived formula, in-frame
-measurement, or literature verification) --- lives in \code{docs/optics/README.md} \S\S\,11--13.
+\end{table}

@@ -1,0 +1,111 @@
+% Section 2. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame), from hardware.tex (sec:plant) and
+% csd.tex (sec:expected, tab:microscope) of docs/cep-grounded-draft. Numbers: scripts/microscope_summary.py,
+% scripts/check_anchors.py; dataset facts: datasets/README.md. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Process and data}\label{sec:process}
+
+This section gives the process, the recordings, the process signals and the microscope reference that the
+measurement model (RQ1) and the estimator (RQ3) use.
+
+\subsection{The seed pan and its strikes}\label{sec:plant}
+
+The camera is installed on the \textbf{seed pan} of the Slovensk\'e cukrovary sugar plant in Sere\v{d}, Slovakia: the
+vacuum pan designated ZRA in the plant's DCS (Slovak \emph{o\v{c}kovac\'i varostroj}; plant Q\&A, 2026-08-12, and the
+DeltaV ``Udaje ZRA'' screen, \citealp{SlovenskeCukrovary2026}; English--Slovak glossary in
+\ref{app:glossary}). A strike starts from syrup, which is concentrated to supersaturation and seeded with seed
+slurry (\emph{mikroo\v{c}ko}), a suspension of milled sucrose in a non-solvent liquid. The crystals then grow during
+boil-up while syrup is fed, and the massecuite is tightened (\emph{su\v{s}enie}) and discharged. The product is seed
+massecuite (\emph{o\v{c}kovacia cukrovina}), which is dosed into the A pans (operator A.~Fedor, pers.\ comm.,
+2026-11-03). The pan is mechanically stirred in normal operation (stirrer current tag EI1004), which is the basis
+for treating its contents as a well-mixed massecuite (\secref{sec:layer}).
+
+The camera views the pan contents through a circular sight glass in a bolted flange, about 150~mm in diameter and
+20~mm thick (plant statements). A lamp inside the pan, an optical fibre ``very close to the glass'' (plant statement;
+an estimated 1--2~mm from the inner face, not measured), backlights the massecuite, so crystals appear as dark
+outlines on a bright field.
+
+\subsection{Recordings, process signals and samples}\label{sec:data}
+
+\tabref{tab:data} lists the data. The \emph{sampled run of 2026-10-30} covers two strikes, b1 and b2, seeded at
+11:29:33 and 15:22:00 (run sidecar). Its camera recording is a lossless $720 \times 576$, 25~fps file; its capture
+path (recorder export or capture card) is not recorded \pending{capture chain of the 2026-10-30 recording}.
+Samples were drawn from the pan during both strikes. Each was photographed under a microscope (\secref{sec:microscope})
+and its refractometric dry substance and polarisation were measured, from which Brix and purity follow (run
+sidecar). No DCS export exists for this day \pending{DCS export for 2026-10-30, requested from the plant}.
+
+The \emph{PAL recording of 2026-02-04} is the recorder's own $720 \times 576$ file. It covers strike b2 from before
+seeding (12:30, operator note; steam valve cut at 12:31:30 in the DCS) to discharge (16:00:10, the level passing the
+glass). A DCS export of the seed pan for the same afternoon, at 30~s, holds the heating-steam pressure (PIC1001), the
+pan vacuum (PIC1002), the signal QI1003, the syrup-feed controller (QIC1000), the massecuite temperature (TI1006),
+the stirrer current (EI1004) and the receiver level (LI1009), but not the pan level LI1000. QI1003 is labelled
+viscosity in the DCS and reads on a Brix scale; it measures the whole massecuite, not the mother liquor, so it is not
+a true Brix. The recorder clock agrees with the DCS clock to about $\pm 30$~s (\code{scripts/check_anchors.py}). No
+size reference exists for this day. Three 1080p screen recordings of disputed date have no size reference either;
+they are used only in \ref{app:detectors}.
+
+Every frame is cropped to the live camera picture before analysis: the recorder's date band and channel label are
+sharp digital glyphs that would otherwise dominate any sharpness statistic (\ref{app:optics}).
+
+\begin{table*}
+\centering\tabfont
+\caption{Data used in this paper (\texttt{datasets/README.md}). DCS: distributed control system export.}\label{tab:data}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.2\textwidth}%
+>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.12\textwidth}%
+>{\raggedright\arraybackslash}p{0.21\textwidth}@{}}
+\toprule
+Run & Camera & Size reference & DCS & Use \\
+\midrule
+2026-10-30, sampled run, strikes b1 and b2 & lossless $720 \times 576$, 25~fps & microscope photographs of samples
+(\tabref{tab:microscope}); lab Brix and purity & none (requested) & measurement model, anchor, estimator validation \\
+2026-02-04, strike b2 & recorder PAL file, $720 \times 576$ & none & 30~s, no LI1000 & failed classical-detector baseline
+(\secref{sec:csd-time}); baseline inputs \\
+1080p clips, date disputed & screen recordings of the recorder output & none & none & \ref{app:detectors} only \\
+Seed slurry, labelled 2025-01-16 & -- & laser diffraction \citep{Mastersizer2025} & -- & size at seeding \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Microscope reference}\label{sec:microscope}
+
+The seed slurry dosed into the seed pan has $\mathrm{Dv}(10)/\mathrm{Dv}(50)/\mathrm{Dv}(90) = 1.57/6.77/18.6$~\um{}
+(laser diffraction in 2-propanol, mean of three runs, measured 2025-03-04 by the AGRANA central laboratory;
+\citealp{Mastersizer2025}). In the sampled run of 2026-10-30, crystals in the samples were measured under a
+microscope: one chord per operator-picked crystal, burned into 54 photographs and transcribed into
+\code{datasets/microscope_annotations.csv} (1052 readable values, one AI reading; a human second reading is
+\pending{second reading of the quoted samples}; \tabref{tab:microscope}). The microscope camera clock is known to
+$\pm 47$~s. The seed-slurry photograph shows 10--19~\um. The photograph taken just before seeding in b1 already
+shows 18--42~\um{} crystals (median 33~\um), larger than the 29~\um{} median 2~min after seeding; whether they are
+residual massecuite or spontaneous nucleation is open. From about 30--40~min the median exceeds 0.1~mm, and 122~min
+after seeding it is 0.48~mm (b1, range 0.22--1.14~mm). At equal times the strikes differ: at 96~min the b1 median is
+355~\um{} and the b2 median 225~\um. These are chords of operator-picked crystals, not distributions; the largest
+single values may be agglomerates, and the 2--3~\um{} chords at the b2 seeding are a few microscope pixels long,
+below the optical resolution. We define the crystal size $L$ of this paper as the median microscope chord, the
+laboratory definition against which the camera is calibrated. \secref{sec:measurement} relates the camera signal to
+it.
+
+\begin{table}
+\centering\tabfont
+\caption{Microscope chords of operator-picked crystals against time since seeding $t$, seed pan, sampled run of
+2026-10-30 (photographs, single AI transcription; \texttt{scripts/\allowbreak microscope\_summary.py}). Selected
+samples; all 20 are in \texttt{datasets/\allowbreak README.md}. $^\dagger$Taken 27~s before seeding.
+$^\ddagger$Includes 2--3~\um{} chords below the optical resolution.}\label{tab:microscope}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Strike & Sample & $t$ (min) & $n$ & min / median / max (\textmu m) \\
+\midrule
+-- & seed slurry & -- & 4 & 10 / 13 / 19 \\
+b1 & 11:30$^\dagger$ & 0 & 6 & 18 / 33 / 42 \\
+b1 & 11:32 & 2 & 13 & 22 / 29 / 35 \\
+b1 & 12:07 & 37 & 50 & 38 / 114 / 271 \\
+b1 & 12:30 & 60 & 37 & 62 / 199 / 317 \\
+b1 & 13:06 & 96 & 35 & 154 / 355 / 596 \\
+b1 & 13:32 & 122 & 26 & 220 / 483 / 1137 \\
+b1 & 14:20 & 170 & 51 & 189 / 452 / 995 \\
+b2 & 15:22$^\ddagger$ & 0 & 20 & 2 / 10 / 23 \\
+b2 & 15:52 & 30 & 50 & 22 / 103 / 218 \\
+b2 & 16:31 & 69 & 121 & 40 / 209 / 628 \\
+b2 & 16:58 & 96 & 109 & 87 / 225 / 808 \\
+b2 & 17:48 & 146 & 103 & 117 / 299 / 695 \\
+b2 & 18:04 & 162 & 65 & 101 / 399 / 961 \\
+\bottomrule
+\end{tabular}
+\end{table}

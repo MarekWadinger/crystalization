@@ -9,6 +9,24 @@ video.
 > **DERIVED** (computed from FACT/DATASHEET — formula shown), or **ESTIMATE**
 > (informed guess with stated assumption and uncertainty). No other category
 > is allowed in this document.
+>
+> **Single source of the numbers:** [`configs/camera_100.toml`](../../configs/camera_100.toml),
+> where every value carries its source class (MEASURED, PHOTO, DATASHEET, PLANT,
+> ESTIMATE, ASSUMED, CHOICE, DERIVED, UNSOURCED). Where this page and the
+> config disagree, the config wins. Pixel-scale derivation and its budget:
+> [`../optics/scale_chain.md`](../optics/scale_chain.md).
+>
+> **2026-11-03 audit.** This page used to describe a Hanwha HCB-6000 (colour
+> CMOS, 1920 × 1080, 2.9 µm pitch). That model appears only in the Polz price
+> quote; every photo of the installed camera shows an analog B/W **"ADEMCO
+> VIDEO"** box camera (§1.1). The geometry values once tagged "measured
+> 2026-09-07" are the plant's approximate answers of 2026-08-12 (Q&A below);
+> no site measurement was made on 2026-09-07.
+>
+> Sources cited by short name: **Q&A** = "Potrebné dáta a otázky -
+> Zodpovedane.docx", A. Fedor, 2026-08-12 (Drive `sugar_plant/sered/`; English
+> in [`../sered/notes_plant_dcs_qa_photos.md`](../sered/notes_plant_dcs_qa_photos.md)
+> §3 items 8–10, §4); **Aug-photos** = Drive `sugar_plant/sered/photos/20260810_*.jpg`.
 
 ---
 
@@ -18,18 +36,25 @@ video.
 
 | Item | Value | Source |
 |---|---|---|
-| Make / model | Hanwha Vision HCB-6000 | Polz quote `P5PI-100`, 6 Oct 2025 |
-| Lens not included | "Cena bez objetivu: 125 EUR" on the quote | Polz quote |
+| Label on the body | **"ADEMCO VIDEO"**, white analog box camera | PHOTO: Aug-photos 20260810_111738/111741 |
+| Rear panel | DIP switches L/L–INT, AI–AES, VIDEO/D.D., AGC, BLC, NC; V-PHASE and ALC pots; BNC video out; 12 VDC / 24 VAC terminal | PHOTO: Aug-photos 20260810_111636 |
+| Output | analog monochrome PAL (CVBS) | DERIVED from the rear panel and from the 720 × 576 grey recordings |
+| Model | **unread** (sticker not photographed) | — |
+| Best-match class | Ademco ACM570E-class: 1/3" CCD, 752 × 582 cells of 6.50 × 6.25 µm, 14.1875 MHz CCD clock. Alternative ACM380E-class: 500 × 582 cells of 9.8 × 6.3 µm ([manual](https://www.manualslib.com/manual/892194/Ademco-Acm380e.html)) | ESTIMATE (config `[camera]`) |
+| Body mount | C or CS unknown. If CS with a 5 mm CS→C ring, and the ≈ 6 cm "spacer" includes that ring, µm/px is +8.9 % | open |
+| Hanwha HCB-6000 | **not the installed camera**: it appears only in the Polz quote `P5PI-100` (6 Oct 2025, "Cena bez objetivu: 125 EUR"); it is a colour CMOS camera without DIP switches | quote vs photos (Q&A notes §7 item 1) |
 
-### 1.2 Camera body — from manufacturer datasheet
+### 1.2 Signal chain to the recordings
+
+The camera's analog line is digitised by a DVR. The plant says it does not
+record, it only has "a signal-processing device" (Q&A item 10); the DVR make is
+unknown.
 
 | Item | Value | Source |
 |---|---|---|
-| Sensor | 1/2.8" progressive-scan CMOS | [hanwhavision.com](https://www.hanwhavision.com/en/products/camera/analog/analog-box/hcb-6000/) |
-| Native resolution | 1920 × 1080 | same |
-| Output formats | AHD / TVI / CVI / CVBS-PAL | same |
-| Lens mount | C / CS | same |
-| Frame rate | 30 fps | same |
+| PAL recordings (e.g. `2026-02-04 11-08-51.mp4`) | 720 × 576, one sample = one BT.601 13.5 MHz sample, one line = one CCD row | MEASURED (ffprobe); sampling rate ESTIMATE |
+| Sensor-plane size of a PAL sample | **6.831 µm (x) × 6.250 µm (y)** (cell × 14.1875 / 13.5 MHz; one row) | ESTIMATE, `python -m optics.scale_chain` |
+| 1080p clips (`2026-02-05 *.mp4`) | screen recordings of the DVR monitor output: the PAL picture stretched **2.677 × (x) and 1.875 × (y)** in a black pillarbox. They add no resolution | MEASURED from the DVR's own OSD glyphs, [`../optics/scale_chain.md`](../optics/scale_chain.md) |
 
 ### 1.3 Lens
 
@@ -38,7 +63,8 @@ video.
 | Brand on barrel | `FUJINON` | engraving in [`122620.jpg`](./20260205_122620.jpg) |
 | Focal length / max aperture engraved | `1:1.6 / 35` | engraving in [`122620.jpg`](./20260205_122620.jpg) |
 | Model | `HF35HA-1B` | operator (confirmed `B` suffix) |
-| Focus ring current position | **4 m** (the `4` tick is aligned with the body index when looking down at the top of the horizontally mounted lens) | operator, read from [`122532.jpg`](./20260205_122532.jpg) |
+| Focus ring current position | **not readable**: the ring carries only NEAR … FAR, no distance scale (Q&A item 9; Aug-photos 20260810_112149–112202). so the earlier "4 m" reading of [`122532.jpg`](./20260205_122532.jpg) cannot be a distance; which `4` mark was read is unclear. Retracted (§6) | PLANT + PHOTO |
+| Iris setting | **F/1.6**, "if I read it correctly"; ring between 1.6 and 2 on the photos | PLANT (Q&A item 9), PHOTO 20260810_112120 |
 
 ### 1.4 Lens — from manufacturer datasheet
 
@@ -67,6 +93,8 @@ video.
 | Standard mark | `DIN 89..` (last digit worn; `DIN 8902` most likely — see below) | engraving on glass, photos [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg) |
 | Flange bolt count | **8** | operator, from [`122524.jpg`](./20260205_122524.jpg) |
 | Material | tempered soda-lime (DIN 8902 disc, ≤ 150 °C, Ø 10–350 mm, 3–25 mm thick) | DIN standard |
+| Thickness / diameter | **20 mm / Ø150 mm** | PLANT: Q&A item 8(C) |
+| Refractive index used | 1.47 (borosilicate) | ASSUMED; contradicts the soda-lime reading of the stamp (1.52 → Δ = 6.84 mm instead of 6.39 mm). The pixel scale at focus does not depend on it |
 
 DIN 89xx candidates: **8902** (round soda-lime, ≤ 150 °C) is the fit for a round
 disc on a ~70–80 °C vessel. **8901** is withdrawn; **8903** is rectangular. If
@@ -78,6 +106,7 @@ the temperature margin is tight or the disc is quartz, cross-check against
 | Item | Value | Source |
 |---|---|---|
 | Location | **inside the vessel** | operator |
+| Type | **optical fibre** light guide, "very close to the glass", est. 1–2 mm from the inner face | PLANT: Q&A item 8(D); blue armoured cable into the flange on Aug-photos 20260810_111738 |
 | Fixing screws (visible on the module) | 3 × **A2-70** stainless (ISO 3506, ~304 SS, 700 MPa) | engraving on bolt heads, operator |
 | Power feed | two cables (blue + brown — European mains colours) crossing the 8-bolt flange itself | operator |
 | Blue cable | 90° knee → straight run → taped joint after the knee; no other bends | operator |
@@ -85,6 +114,14 @@ the temperature margin is tight or the disc is quartz, cross-check against
 | Manufacturer / model | **not identified** | — |
 
 ### 1.7 Installation
+
+The vessel is the **seed pan** (ZRA, *očkovací varostroj*): it is seeded with
+milled-sugar slurry (*mikroočko*) and makes the seed massecuite for the A pans
+(Q&A; A. Fedor 2026-11-03; [`../sered/README.md`](../sered/README.md)). Crystal sizes
+there run from ≈ 10–19 µm (slurry) through 22–35 µm one to two minutes after
+seeding to 0.2–0.8 mm about two hours later (microscope, 2026-10-30,
+[`../../datasets/README.md`](../../datasets/README.md)); there is no single
+"≈ 9 µm" population in front of the lens.
 
 Camera outside the vessel, looking through the sight glass. Lamp inside the
 vessel, on the sight-glass side, facing the glass. Mains cables run through
@@ -107,14 +144,23 @@ over any longer path.
 
 ## 2. DERIVED
 
-### 2.1 Sensor active area and pixel pitch
+### 2.1 Sensor active area and pixel pitch (ESTIMATE, candidate datasheet)
 
 | Item | Value | Formula |
 |---|---|---|
-| Sensor active area | 5.57 × 3.13 mm | 1920 × 1080 × 2.9 µm (Sony IMX307/IMX327 die, identified from the HCB-6000 total-pixel count 1945×1097) |
-| Pixel pitch at sensor | **2.9 µm/px** | Sony datasheet |
+| Sensor active area | 4.89 × 3.64 mm | 752 × 6.50 µm by 582 × 6.25 µm (ACM570E-class candidate) |
+| Sensor-plane µm per PAL sample / line | **6.831 × 6.250 µm** | cell × CCD clock / DVR rate; one row per line |
+| Sensor-plane µm per 1080p clip pixel | **2.552 × 3.333 µm** | PAL sample / (2.677, 1.875) |
+| Slurry-plane µm/px at focus, PAL | **3.92 × 3.59 µm** (95 %: ±≈ 10 %) | pitch · f / (e + x); `python -m optics.scale_chain` |
+| Slurry-plane µm/px at focus, 1080p clip | **1.464 × 1.913 µm** (95 %: ±≈ 10 %; +8.9 % if the ring is in the tube) | same |
 
-### 2.2 Forward optical scale at the user-reported focus reading
+Superseded: 5.57 × 3.13 mm and 2.9 µm/px (Hanwha HCB-6000 / Sony IMX307, an AI
+inference from the quote, commit b997e2f), which gave an isotropic 1.66 µm/px.
+
+### 2.2 Forward optical scale at the user-reported focus reading (superseded)
+
+> Historical. It rests on the retracted "4 m" focus reading and the Hanwha
+> sensor; kept as the record of why an extension tube was suspected.
 
 Bare lens (no extension tube), focus ring at 4 m → using the thin-lens
 magnification M = f / (d − f):
@@ -157,7 +203,7 @@ DN125, or DN150**. Using the lens body (29 × 29.5 mm per the Fujinon
 datasheet) as a known scale in photo [`122524.jpg`](./20260205_122524.jpg),
 the clear viewing aperture looks roughly 3–4× the lens width.
 
-> **Measured 2026-09-07: Ø150 mm (DN150), 20 mm thick.** Index still assumed borosilicate.
+> **Plant answer (Q&A item 8(C), 2026-08-12): Ø150 mm (DN150), 20 mm thick.** Index still assumed borosilicate.
 > Superseded estimate: DN100, Ø100 mm clear, 15 mm thick.
 > Refractive index assumed n_g ≈ 1.47 (borosilicate, visible band).
 > **Verify by tape-measuring the flange OD or the bolt-circle diameter.**
@@ -170,7 +216,10 @@ Assumptions:
 - The visible horizontal FOV in [`snapshot 1.png`](../../datasets/snapshot%201.png) is **~20 mm** (visual
   estimate based on the crystal sizes appearing to be roughly 0.5–1.5 mm,
   which is normal for industrial massecuite). **This is the dominant
-  assumption — confirm it before trusting the tube length.**
+  assumption — confirm it before trusting the tube length.** (Superseded:
+  the camera is on the seed pan, not an A pan, and the plant states the
+  spacer as ≈ 6 cm, Q&A item 8(A). The calculation below is kept only as the
+  record of how in-scene anchoring went wrong by ≈ 6×.)
 
 Calculation:
 
@@ -200,14 +249,16 @@ Sensitivity to the FOV assumption:
 
 | Item | How to close |
 |---|---|
-| Lens-front → outside face of sight glass | **measured 2026-09-07: 20 mm** |
-| Sight-glass clear diameter | tape-measure flange OD or bolt-circle Ø |
-| Sight-glass thickness | **measured 2026-09-07: 20 mm** |
-| Inside of glass → typical crystal plane | tape measure or process-flow diagram |
-| Iris (F-stop) currently locked at | read the iris ring against the body index dot in person |
-| Extension tube length, exact | **measured 2026-09-07: 60 mm** |
-| Camera-side capture chain (DVR model, AHD/CVBS, codec, rescaling) | check the recorder rack |
-| DIP-switch state on the external control box | sharp photo of the switch row in [`122519.jpg`](./20260205_122519.jpg) |
+| Lens-front → outside face of sight glass | plant **≈ 2 cm** (Q&A item 8(B)); a caliper reading is still missing |
+| Sight-glass clear diameter | plant Ø150 mm (Q&A item 8(C)); clear aperture not measured |
+| Sight-glass thickness | plant **20 mm** (Q&A item 8(C)) |
+| Inside of glass → typical crystal plane | plant: focus on the inner glass face; fibre lamp 1–2 mm behind it (Q&A item 8(D)) |
+| Iris (F-stop) currently locked at | plant **F/1.6** "if I read it correctly" (Q&A item 9) |
+| Extension tube length, exact | plant **≈ 6 cm** (Q&A item 8(A)). **Dominant term of the scale budget** (±5 mm → ±8 %); a caliper reading and a photo of the mount would cut the 95 % budget from ±10 % to ±3 % |
+| Is a 5 mm CS→C ring inside the ≈ 6 cm? | photo of the body mount; +8.9 % in µm/px if yes |
+| Camera model sticker | photo of the sticker; removes the 752- vs 500-cell CCD term (0.6–0.8 %) |
+| Focus-helicoid travel | 1 mm is an AI guess (no record); ±1 mm → ∓1.6 % in µm/px; caliper the lens body length |
+| Camera-side capture chain (DVR model, codec, rescaling) | plant: "will be supplied" (Q&A item 10). The 1080p display stretch is measured (§1.2); the DVR's 13.5 MHz sampling is assumed |
 | °Brix and temperature of the liquor over the video archive period | DCS historian export |
 | Lab MA / CV sieve results over the same period | lab archive |
 | Maintenance log entries for Camera 100 | plant MaR records |
@@ -245,7 +296,11 @@ Sensitivity to the FOV assumption:
 | Distortion ≤ −0.1 % | retracted — no verified source |
 | Two rings, one focus and one iris (with NEAR/FAR on focus ring) | unverified — operator reports `NEAR/FAR` shares visual field with the f-stop marks |
 | Iris currently F/4 | retracted — was wrong interpretation; operator says the `4` reading is the focus position |
+| Focus ring at 4 m | retracted 2026-11-03 — the ring has no distance scale (Q&A item 9; Aug-photos 20260810_112149–112202) |
+| Camera = Hanwha HCB-6000, 1/2.8" CMOS, 2.9 µm pitch | retracted 2026-11-03 — quote only; the installed body is an "ADEMCO VIDEO" analog B/W PAL CCD (§1.1) |
+| e = 60 mm, a = 20 mm, t = 20 mm "measured on site 2026-09-07" | corrected 2026-11-03 — plant approximations "≈ 6 cm", "≈ 2 cm", "20 mm" from the 2026-08-12 Q&A; 2026-09-07 is the date they were relayed in chat |
+| The imaged population is the ≈ 9 µm Mastersizer slurry | retracted 2026-11-03 — the Mastersizer (Dv50 6.81 µm) describes the seed slurry before seeding; crystals in the seed pan grow to 0.2–0.8 mm within ≈ 2 h (microscope 2026-10-30) |
 
 ---
 
-*Last updated: 2026-06-03. Maintained by Marek Wadinger.*
+*Last updated: 2026-11-03 (camera, scale and geometry sources). Maintained by Marek Wadinger.*

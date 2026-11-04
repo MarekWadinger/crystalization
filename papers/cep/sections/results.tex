@@ -1,0 +1,183 @@
+% Section 6. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame), review round 2. Failed
+% classical-detector baseline moved from csd.tex
+% (sec:csd-time, fig 19) of docs/cep-grounded-draft: scripts/detector_checks.py time.
+% Estimator numbers: docs/softsensor/results.md (scripts/softsensor_results.py); every number is labelled REAL or
+% SIMULATED as there. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Results}\label{sec:results}
+
+This section reports what can be run before the detector is trained: the failed classical-detector baseline, the
+growth of the two strikes, the estimator on simulated camera signals, the interim process-signal baseline and the
+first real camera points (RQ3).
+
+\subsection{Failed classical-detector baseline}\label{sec:csd-time}
+
+A size signal must at least move when the crystals grow. We ran the edge and watershed detectors of the earlier
+pipeline (\ref{app:detectors}) on strike b2 of the 2026-02-04 PAL recording: 10 frames, 1~s apart, at 13
+times from 40~min before seeding to 200~min after it, with the configured window of $[9,\ 71\,020]$ PAL samples$^2$
+(\code{scripts/detector_checks.py time}; \figref{fig:time}). The edge median stays at 8.4--9.7 PAL samples and the
+watershed median at 48--58 over the whole strike, within 16\,\% and 20\,\%. Both return before seeding, when the pan
+holds concentrating syrup, the same values as at its end. In the 2026-10-30 run the microscope medians grow 17-fold,
+from 29 to 483~\um{} within 122~min. That run is from another day, but a growth of this order is what seeding and
+boiling imply. A detector whose median does not move over 240~min does not measure crystal size. Only the
+frames before seeding, when the pan holds syrup, are a true negative control, and the detectors fail it: they return
+the same sizes from syrup as from massecuite before discharge. These detectors define the floor that the camera size
+signal must clear.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{19_detector_vs_time}
+\caption{\textbf{Do the classical detectors see the crystals grow?} Median and interquartile range of the edge and
+watershed detections against time since seeding, strike b2 of the 2026-02-04 PAL recording (10 frames per time;
+configured window; area-equivalent size in PAL samples, detector outputs rather than crystal sizes;
+\texttt{scripts/detector\_checks.py time}). Over a comparable span the microscope medians of another strike grow
+17-fold (\tabref{tab:microscope}).}\label{fig:time}
+\end{figure}
+
+\subsection{Growth of the two strikes}\label{sec:res-growth}
+
+The microscope medians (REAL, single AI transcription; \code{scripts/softsensor_results.py}) give the growth state the
+estimator must track. A $\Delta L$-law fit $L = L_\mathrm{init} + G(t - t_\mathrm{lag})$, with $L_\mathrm{init}$ the first median after
+seeding, over 37--122~min gives b1 a growth rate
+of 4.35~\um/min (OLS 95\,\% interval 3.98--4.72, bootstrap over crystals 3.49--6.11) and a lag of 20.4~min; after
+122~min the b1 median stops growing (483, 486 and 452~\um{} at 122, 160 and 170~min). Strike b2 is ahead of b1 early
+(b2/b1 median ratio 1.35 at 30~min, 1.03 at 52~min) and then slows: from 69~min its growth rate is 1.21~\um/min
+(bootstrap 0.65--1.84), and at 96~min the ratio is 0.64. Over the common window 30--97~min, $G_{b1} - G_{b2}$ is
+2.23~\um/min (bootstrap 1.23--3.20). The two strikes thus differ by more than a constant time factor $\tau_s$: b2 leads early and
+lags later. Applied to the noise-free interpolated curves, the flag rule of \secref{sec:ekf} finds the relative growth
+rate of b2 slower than that of b1 from 34~min and faster from 134~min, after b1 has stopped growing, and the size of
+b2 more than 20\,\% below b1 from 84~min. A slowing strike of this kind is what an operator would want to see.
+
+\subsection{Estimator mechanics on simulated camera signals}\label{sec:res-sim}
+
+To test the estimator before the detector exists, we built a SIMULATED camera signal from the test strike's
+microscope curve, $y_k = \ln L(t_k) + \theta + v_k$ once per minute while $L \ge 40$~\um, with $\theta$ drawn from its
+prior and $v_k \sim \mathcal{N}(0, \sigma_v^2)$ with $\sigma_v^2 = R$, 200 seeds per setting. The noise levels
+$\sigma_v = 0.10$ and 0.18 are scratch per-frame values for outline and chord traces, not from a repository script;
+the simulation uses them as the noise of each update, an upper bound when an update pools several frames. It has no
+bias $\beta$ and no outliers. Because the signal is built from the same medians it is scored against, these runs test
+the filter (noise, unknown $\theta$, unknown growth), not the camera. \tabref{tab:loso} gives the leave-one-strike-out
+result.
+
+\begin{table*}
+\centering\tabfont
+\caption{Leave-one-strike-out on the sampled run of 2026-10-30, SIMULATED camera signal (mean, and [5\,\%, 95\,\%]
+for the log size, over 200 seeds) against the references without camera, which use the other strike's REAL
+microscope curve. RMSE of log size, $G/L$ and growth age at the held-out microscope times (growth age where it is
+defined). $G/L$ flags:
+share of seeds / median flag time in min since seeding; on the noise-free curves the rule fires at 34~min (b2 slower,
+b1 faster) and 134~min (b2 faster, b1 slower). $^\ast$Interim: laboratory Brix and purity, temperature assumed
+70.8~\textdegree C (\secref{sec:baseline}); it has no posterior uncertainty, so its flags fire on any 20\,\% gap and
+are not decisions. Sources: \texttt{docs/softsensor/results.md}, section~3;
+\texttt{docs/softsensor/process\_baseline.md}, section~2.}\label{tab:loso}
+\begin{tabular}{@{}llllrrll@{}}
+\toprule
+Test & Estimate & Anchor & Log size & $G/L$ (\%/min) & Age (min) & $G/L$ slower & $G/L$ faster \\
+\midrule
+b2 & nominal curve (b1) & -- & 0.310 & 1.263 & 31.0 & 0\,\% & 0\,\% \\
+b2 & anchor only, shift in $\ln L$ & one & 0.570 [0.429, 0.705] & 1.263 & 28.5 & 0\,\% & 0\,\% \\
+b2 & anchor only, shift in time & one & 0.338 [0.321, 0.362] & 1.293 & 34.4 & 98\,\% / 119 & 0\,\% \\
+b2 & EKF, $\sigma_v = 0.10$ & none & 0.144 [0.036, 0.312] & 0.663 & 8.8 & 0\,\% & 100\,\% / 141 \\
+b2 & EKF, $\sigma_v = 0.10$ & one & 0.085 [0.029, 0.194] & 0.663 & 5.4 & 0\,\% & 100\,\% / 141 \\
+b2 & EKF, $\sigma_v = 0.18$ & none & 0.154 [0.049, 0.318] & 0.719 & 9.5 & 0\,\% & 90\,\% / 141 \\
+b2 & EKF, $\sigma_v = 0.18$ & one & 0.104 [0.047, 0.222] & 0.719 & 6.6 & 0\,\% & 90\,\% / 141 \\
+b2 & process-signal baseline$^\ast$ & none & 0.836 & 1.427 & 30.2 & 0\,\% & 100\,\% / 27 \\
+b2 & process-signal baseline$^\ast$ & one & 0.891 [0.872, 0.910] & 1.049 & 15.0 & 22\,\% / 39 & 100\,\% / 27 \\
+b1 & nominal curve (b2) & -- & 0.319 & 1.404 & 39.5 & 0\,\% & 0\,\% \\
+b1 & anchor only, shift in $\ln L$ & one & 0.384 [0.272, 0.515] & 1.404 & 50.3 & 0\,\% & 0\,\% \\
+b1 & anchor only, shift in time & one & 0.337 [0.309, 0.369] & 1.328 & 41.9 & 56\,\% / 99 & 57\,\% / 69 \\
+b1 & EKF, $\sigma_v = 0.10$ & none & 0.150 [0.042, 0.334] & 0.518 & 18.1 & 100\,\% / 157 & 100\,\% / 84 \\
+b1 & EKF, $\sigma_v = 0.10$ & one & 0.092 [0.035, 0.198] & 0.517 & 10.3 & 100\,\% / 157 & 100\,\% / 84 \\
+b1 & EKF, $\sigma_v = 0.18$ & none & 0.158 [0.051, 0.340] & 0.561 & 18.8 & 66\,\% / 162 & 86\,\% / 85 \\
+b1 & EKF, $\sigma_v = 0.18$ & one & 0.109 [0.047, 0.225] & 0.561 & 12.3 & 66\,\% / 162 & 86\,\% / 85 \\
+b1 & process-signal baseline$^\ast$ & none & 0.637 & 1.413 & 66.4 & 100\,\% / 11 & 100\,\% / 43 \\
+b1 & process-signal baseline$^\ast$ & one & 0.321 [0.300, 0.353] & 1.176 & 28.7 & 100\,\% / 11 & 100\,\% / 69 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+With an anchor, the SIMULATED log-size RMSE is 0.085--0.109 against 0.310--0.319 for the nominal curve; without one
+it is 0.144--0.158, and the standard deviation of $\theta$ ends at 0.157 against 0.087--0.092 with the anchor, as
+Lemma~\ref{lem:scale} predicts. The anchor-only references are no better than the plain nominal curve (0.337--0.570),
+because the strikes cross after the anchor at 30--37~min: shifting the other strike's curve through one sample does
+not predict where this strike goes next. The anchor pays off only together with the camera (b2, $\sigma_v = 0.10$:
+0.085 with the anchor against 0.144 without). The growth-age error falls from 31.0--39.5~min for the nominal curve to
+5.4--12.3~min with camera and anchor, over the times where the growth age is defined.
+
+The scale-free $G/L$ flag is identical with and without the anchor, as $\theta$ cancels in it. It catches the late
+divergences: b2 is flagged relatively faster at 141~min in 90--100\,\% of the seeds (noise-free curves: 134~min), and
+b1 relatively slower at 157--162~min in 66--100\,\% (134~min). It misses or lags the early divergence at 34~min: b2 is
+never flagged slower, and b1 is flagged faster only at 84--85~min. With two strikes the nominal curve of each is the
+other, so a strike flagged slower makes the other faster by construction; the flags show the mechanics, not a
+detection rate.
+
+\subsection{Interim process-signal baseline}\label{sec:res-process}
+
+The interim process-signal baseline (\secref{sec:baseline}, \tabref{tab:loso}) does worse than the nominal curve: a
+log-size RMSE of 0.836 without and 0.891 with the anchor for b2, and 0.637 and 0.321 for b1, against 0.310 and 0.319
+(INTERIM, \code{docs/softsensor/process_baseline.md}). It does not fit its own training strike well either (training
+log-size RMSE 0.591 for b1, 0.652 for b2). The reason is structural. The Brix input reads the whole massecuite, the
+laboratory sample as much as QI1003: the crystals dissolve when the sample is diluted (our interpretation). As the crystal content
+grows, KP computed from it rises over the post-seeding b1 samples from 1.04 to 2.27 (at the assumed 70.8~\textdegree C),
+while the microscope growth rate between samples stays at 3.5--4.9~\um/min from 16 to 122~min and then stops in
+tightening. A growth rate driven by this KP therefore rises when the crystals do not grow faster. After the first
+minutes of a strike, KP is an index rather than the supersaturation of the mother liquor; the DCS export will
+replace the driver but not this property. A direct measurement of size, such as the camera, does not depend on it.
+
+\subsection{Robustness to a camera bias that changes}\label{sec:res-robust}
+
+The filter assumes a constant $\theta$ and $\beta = 0$. \tabref{tab:robust} runs the same leave-one-strike-out with
+camera signals that break these assumptions (SIMULATED, $\sigma_v = 0.18$, one anchor, 100 seeds, means): a
+size-dependent bias $\beta = \gamma \ln(L/L_\mathrm{ref})$ with $L_\mathrm{ref} = 100$~\um{} (a choice), as in
+Corollary~\ref{cor:beta}; a random walk in $\theta$ whose spread over 60--122~min equals $\ln 1.75$, a ratio inside the
+1.4--2.0 of the packed traced frames (\secref{sec:bias}); and a
+packing ramp in which $\theta$ falls linearly by $\ln 1.75$ between 60 and 122~min. A bias with $\gamma = 0.1$ is
+tolerable. With $|\gamma| = 0.3$ the log-size error is close to or worse than the nominal curve's, although the
+$G/L$ error stays below that of every reference. A drifting $\theta$ breaks the estimate: the log-size error exceeds
+the nominal curve's on both strikes, and the packing ramp flags b2 relatively slower in 69\,\% of the seeds, the wrong
+direction for its late divergence. Letting the filter track $\theta$ ($Q_\theta = 0.001$~min$^{-1}$, a choice)
+removes these false flags but also the true ones (b2 faster: 94\,\% to 25\,\%). The camera therefore adds value only
+if its bias stays constant within a strike, which is criterion (c) of \secref{sec:validation}.
+
+\begin{table}
+\centering\tabfont\setlength{\tabcolsep}{2.5pt}
+\caption{Robustness, SIMULATED ($\sigma_v = 0.18$, one anchor, 100 seeds, means; \texttt{docs/softsensor/results.md},
+section~4). Last column: b2 $G/L$ flags, slower / faster (noise-free curves: faster at 134~min). References without
+camera: nominal curve 0.310 / 0.319 log size and 1.263 / 1.404 $G/L$; time-shifted anchor 0.338 / 0.337 and
+1.293 / 1.328.}\label{tab:robust}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & & \multicolumn{2}{c}{Log-size RMSE} & \multicolumn{2}{c}{$G/L$ RMSE} & b2 flags \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Camera & $Q_\theta$ & b2 & b1 & b2 & b1 & (\%) \\
+\midrule
+model & 0 & 0.105 & 0.112 & 0.673 & 0.562 & 0 / 94 \\
+$\gamma = 0.1$ & 0 & 0.152 & 0.194 & 0.726 & 0.599 & 0 / 96 \\
+$\gamma = 0.3$ & 0 & 0.324 & 0.419 & 0.877 & 0.721 & 0 / 100 \\
+$\gamma = -0.3$ & 0 & 0.273 & 0.306 & 0.650 & 0.592 & 0 / 72 \\
+$\theta$ random walk & 0 & 0.512 & 0.485 & 1.495 & 1.188 & 38 / 46 \\
+packing ramp & 0 & 0.447 & 0.343 & 1.282 & 0.577 & 69 / 0 \\
+model & 0.001 & 0.119 & 0.108 & 0.670 & 0.568 & 0 / 25 \\
+packing ramp & 0.001 & 0.330 & 0.295 & 0.806 & 0.562 & 0 / 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Real camera points}\label{sec:res-signal}
+
+The only REAL camera signal so far is the blind AI chord tracing of \secref{sec:bias}: 12 frame-and-reader medians
+from 6 frames at two sample times of b1, up to 62~min, run through the filter with $\sigma_v = 0.18$ and b2 as the
+nominal curve. In the window the points cover, which holds the held-out samples at 49 and 60~min, the filter is no
+better than the nominal curve in log size: 0.060 with the anchor and 0.075 without, against 0.046 for the nominal curve
+and 0.095 and 0.073 for the anchor-only references shifted in $\ln L$ and in time. Its $G/L$ error, 0.54~\%/min, lies
+between the nominal curve's 0.66 and the time-shifted reference's 0.46. No flag is raised. As EXTRAPOLATION beyond the
+camera data, open loop, the filter follows b1 to 122~min (494~\um{} against 483~\um) and then overshoots the plateau
+(673~\um{} against 486~\um{} at 160~min). Two held-out samples and a dozen AI-traced points are thin evidence.
+
+The claim that the camera aids the estimator waits on the fine-tuned detector: detector metrics against the hand
+labels \pending{precision, recall, $F_1$ of the three detectors and held-out AP@0.5 of the fine-tuned model,
+hand-labelled frames}, inter-annotator agreement \pending{duplicate-labelled frames}, $y_k$ against $z_j$ over both
+strikes with the acceptance tests (a)--(c) of \secref{sec:validation} \pending{figure: $y_k$ and $z_j$ against $t$,
+2026-10-30, b1 and b2}, the noise $R$ (\secref{sec:bias}) \pending{per-frame $\sigma_\mathrm{ln}$ and detections per
+frame}, the leave-one-strike-out of \tabref{tab:loso} with the detector signal \pending{estimator on the fine-tuned
+detector signal, \code{scripts/softsensor_results.py}}; the process-signal baseline on DCS data waits on the export
+(\secref{sec:baseline}). \secref{sec:discussion} reads these results from the operator's side.

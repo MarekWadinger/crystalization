@@ -1,72 +1,66 @@
-% Section 9 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
-\section{Discussion and limitations}\label{sec:discussion}
+% Section 7. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame). Only numbers stated in sections 2-6
+% and the appendices, with their scripts there. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Discussion}\label{sec:discussion}
 
-\subsection{Where the pipeline performs}\label{sec:performs}
+\subsection{What the soft sensor gives the operator}\label{sec:performs}
 
-\begin{itemize}
-\item \textbf{Geometric optics chain is closed end-to-end.} The thin-lens model with documented Fujinon datasheet plus
-in-scene anchoring gives a self-consistent mm/px to within ${\sim}10$\,\%.
-\item \textbf{Defocus structure matches theory to ${\sim}9$\,\%.} The Laplacian-variance tail exponent post-full-crop
-($\alpha = 4.88$) is consistent with the Gaussian-PSF + diffraction-floor model (theoretical 5.0) to within 2.4\,\%.
-\item \textbf{The within-detector homogeneous-slurry self-consistency check passes.} The focal-plane, near-side, and
-far-side density curves overlap closely (\figref{fig:csd} right). Per \secref{sec:selfcheck} this confirms that the
-detector behaves consistently across depth, not that the underlying CSD is depth-independent; a genuine validation
-requires an external reference (the Mastersizer granulometry now cited in \secref{sec:csd} is one such reference but
-lies below the detector's bandpass).
-\item \textbf{The pipeline produces an internally self-consistent CSD of detector-bandpassed features: median
-0.074~mm, CV 0.40, log-normal $\boldsymbol{s = 0.39}$} (watershed detector + full crop) --- derived from raw video
-with a complete numerical audit trail at the verified Camera 100 hardware configuration. These numbers describe the
-$\approx 20$--200~\um{} feature population the detector resolves; they are \textbf{not} a measurement of the crystal
-CSD (see \secref{sec:csd} preface and \secref{sec:notperform} for the size-ground-truth retraction).
-\end{itemize}
+Differences between strikes matter to the operator because the seed massecuite of each strike is drawn into the A
+pans, where the product is boiled, and because the supersaturation target (KP) of the boil-up is the operator's lever
+on growth (\secref{sec:plant}). A strike that grows slower than usual is one in which the operator could raise the KP
+or the feed, or adjust the draw into the A pans. We know of no plant specification for the size of the seed
+massecuite, so the sensor cannot report a deviation from a target; it can report a deviation from earlier strikes.
 
-\subsection{Where the pipeline does not perform}\label{sec:notperform}
+The camera alone gives the operator the relative growth rate of the strike, the shape of its growth curve and its
+growth rate compared with earlier strikes (Lemma~\ref{lem:scale}). These answer the boil-up question: is this strike
+growing slower than the last one? They need no scale, so they do not depend on the unvalidated gain, but they do
+depend on the detector staying unbiased across sizes (Corollary~\ref{cor:beta}). One microscope sample adds absolute
+size and growth age, which the draw into the A pans and the end of tightening need. If $\theta$ stays constant between
+strikes, one sample per run serves several strikes; if packing changes the selection bias, each strike needs its own.
+On simulated camera signals the filter tracks both strikes (\secref{sec:res-sim}); on the first real camera points
+it does not yet beat the nominal curve (\secref{sec:res-signal}), and the comparison with the process signals is open.
+The simulations also set the requirement for the detector: its bias against the microscope must stay constant within
+a strike, because a packing drift of $\theta$ produces false flags (\secref{sec:res-robust}).
 
-\begin{itemize}
-\item \textbf{The detector cannot resolve the true crystal population on the case-study recording.} Independent
-Mastersizer granulometry of the same product gives $\mathrm{Dv}(50) = 6.81$~\um, $D[4;3] = 8.71$~\um{}
-(\code{docs/Granulometry_Zuckerslurry Se 2025-01-16 A.pdf}; \citealp{Mastersizer2025}). The recording captures the
-seed pan rather than the A-strike, and at the documented 1.66~\umpx{} scale the area filter $[80, 8000]$~px$^2$
-bandpasses $\approx 20$--200~\um{} features, entirely above the $\approx 9$~\um{} crystal population. The numbers
-reported in \secref{sec:csd} therefore describe agglomerate / cluster / bandpassed structure, not the underlying CSD.
-The fix is a detector retuned to the correct length scale (or a CNN-based segmentation; \secref{sec:recs}), not a
-parameter sweep of the current one.
-\item \textbf{Front/back disambiguation is geometrically valid but operationally degenerate at F/1.6.} The verified
-F/1.6 aperture produces a $\pm 4.2$~\um{} in-focus depth window --- about the size of a median seed-slurry crystal. The detector
-therefore sees one depth slice and the 79 / 21 near-side split observed in \secref{sec:sizing} is not robust evidence
-of a geometric offset; it could equally reflect the right-skew of the empirical prior.
-\item \textbf{Paraxial sight-glass model breaks at sub-pixel scales.} Exact flat-port projection requires
-\citet{Agrawal2012}'s 12th-degree polynomial; for the 0.05~mm crystals at 1.66~\umpx{} the residual refractive
-distortion is $<1$\,\% and below detector noise, but metric reconstruction to sub-pixel precision would require the
-refractive correction.
-\item \textbf{DVR overlay contamination is a real engineering hazard.} Without cropping, the apparent agreement with
-theory ($\alpha = 5.36$, $+7$\,\%) was spurious. Future deployments must verify overlay positions at ingestion and
-crop accordingly.
-\item \textbf{Soft-anchoring against expected crystal size is unreliable.} The v0.1 manuscript anchored
-$e \approx 10$~mm by matching the in-frame autocorrelation period to ``typical massecuite'' --- and was $4.5\times$
-off the true $e = 60$~mm without any data-internal inconsistency flagging the error. Caliper measurement (or
-\secref{sec:growth}'s growth-curve self-calibration) remains the only robust route.
-\end{itemize}
+A second route to absolute size avoids the camera's scale symmetry. A soft sensor of the mass of crystals from plant
+measurements exists for industrial sugar crystallization \citep{Damour2010}. With the number of crystals $N_c$ set by
+the seed dose and a constant shape factor, the mean crystal mass $m_c/N_c$ is proportional to $L^3$, so
+$L \propto (m_c/N_c)^{1/3}$ carries no unknown camera gain. Its uncertainty sits instead in the seed count and the
+shape factor, neither of which is measured at Sere\v{d}. This mass-balance estimate is an alternative to the anchor
+and a candidate future baseline; we have not built it. The interim process-signal baseline shows why process
+signals alone fall short: its Brix input reads the whole massecuite, so its supersaturation index rises while the
+growth rate does not, and it predicts size worse than the nominal curve (\secref{sec:res-process}). That is an
+argument for measuring size directly.
 
-\subsection{Operational recommendations}\label{sec:recs}
+\subsection{Limitations}\label{sec:notperform}
+
+The gain is modelled, not measured: no object of known size has been imaged through the glass, and its budget is
+conditional on the sensor format, the recorder rate and a tube of ${\approx}\,60$~mm (\secref{sec:budget}). It enters
+only $\theta$, which an anchor fixes, but without an anchor it bounds the absolute size. The tube length, air gap,
+glass thickness and F-number are approximate plant statements, and the camera model is the best-matching candidate,
+to be confirmed (\ref{app:optics}). The microscope series consists of chords of operator-picked crystals, read once
+by an AI transcription, not a measured distribution (\secref{sec:microscope}), and it covers one run. The selection
+bias and the packing bias rest on AI tracings of twelve frames (\secref{sec:bias}). The resolution element is assumed
+to be the PAL sample although bandwidth, interlace and compression may coarsen it (\secref{sec:layer}). That the layer
+at the glass represents the well-mixed massecuite is untested, and static marks or crystals adhering to the glass could
+bias it (\secref{sec:layer}). The size-independent growth law is applied to a median of picked crystals; for sucrose,
+growth per surface area can depend on size \citep{Martins2007}. The PAL recording of 2026-02-04 has DCS data but no
+size reference, and the sampled run of 2026-10-30 has size references but no DCS data yet (\secref{sec:data}),
+so the process-signal baseline has not run. The estimator evaluation rests on two strikes of one run, tuned on one and
+tested on the other; nothing in it estimates the variability between strikes or days, and the nominal curve of each
+strike is the other strike. Its truth is the single AI transcription of operator-picked chords. The simulated camera
+signal is built from that truth with assumed noise and no bias, so it tests the filter, not the camera; the real
+camera points are twelve AI tracings of one strike. The priors, the $\ln G$ coordinates, the 40~\um{} floor and the
+flag rule are analysis choices.
+
+\subsection{Recommendations}\label{sec:recs}
 
 \begin{enumerate}
-\item \textbf{Stop the lens down by at least 4 stops} (from current F/1.6 to F/8 or further, ideally F/16). At F/16
-the in-focus depth widens $10\times$ to $\pm 42$~\um{} --- finally letting the disambiguation pipeline see real 3-D
-crystal distribution and pushing the apparent-size ratio for symmetric depth hypotheses past the discriminability
-threshold.
-\item \textbf{Replace the edge-based detector with a blur-tolerant scheme} (CNN fine-tuned on partially-defocused
-crystals, or a Hough-like approach). This populates the discriminability regime (\figref{fig:discrim}) regardless of
-aperture choice.
-\item \textbf{Apply time-dependent detector parameters scheduled against the growth curve} (\secref{sec:growth}).
-Replaces the fixed $\mathit{min\_area}/\mathit{max\_area}$ cuts with a time-varying window matched to the expected
-current crystal size --- eliminates both the small-feature noise floor and the max-area truncation bias
-simultaneously.
+\item \textbf{Measure the geometry at the next shutdown}: read the camera's model sticker (cell size, CCD clock),
+caliper the extension tube and photograph the mount, and read the recorder model (sampling) and the glass stamp
+(index). A ruler or graticule imaged at the inner glass face of the empty pan would measure the gain in the image and
+locate the focal plane.
+\item \textbf{Record the PAL stream and log its clock against the DCS.} Screen recordings add no resolution but an
+anisotropic stretch and a moving picture edge (\ref{app:optics}). Logging the recorder clock against the DCS
+keeps the time since seeding traceable; on the 2026-02-04 recording the two agree to about $\pm 30$~s
+(\code{scripts/check_anchors.py}).
 \end{enumerate}
-
-\subsection{Generalisation}\label{sec:general}
-
-The same pipeline applies to any through-sight-glass monitoring problem with multi-batch process kinetics:
-pharmaceutical crystallisation, mineral flotation, polymer particulation. The homogeneous-slurry assumption is the
-only application-specific constraint, and \secref{sec:homog}'s self-consistency check (focal-plane vs near/far
-density overlap) reports its validity directly.

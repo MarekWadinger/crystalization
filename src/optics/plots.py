@@ -22,6 +22,7 @@ from optics.config import (
 from optics.model import (
     LensSetup,
     circle_of_confusion,
+    magnification,
     mm_per_pixel_at,
 )
 from optics.psf import sharpness_diffraction, sharpness_gaussian
@@ -104,49 +105,40 @@ def fig_mm_per_pixel(out_path: Path) -> None:
 def fig_coc_vs_distance(out_path: Path) -> None:
     """Geometric CoC vs object distance — asymmetric near/far.
 
-    Zoomed to ±20 % of focus where DoF live; beyond that the lens is
-    saturated at its hyperfocal blur limit and the model becomes
-    uninteresting.
+    Zoomed to ±20 % of focus. The CoC axis is logarithmic so that the
+    one-sample line (a few µm) is visible next to blur of several mm; the
+    limit ``c → K`` for ``d_o → ∞`` is stated in the legend.
     """
     half = max(2.0, D_FOCUS * 0.2)
-    d_o = np.linspace(D_FOCUS - half, D_FOCUS + half, 600)
+    d_o = np.linspace(D_FOCUS - half, D_FOCUS + half, 40001)  # ~1 µm steps
     c = circle_of_confusion(CAMERA_100, D_FOCUS, d_o) * 1000.0  # µm
 
-    fig, (axL, axR) = plt.subplots(1, 2, figsize=(11.5, 4.2))
-    axL.plot(d_o, c)
-    axL.set_xlabel("object distance d_o (mm)")
-    axL.set_ylabel("circle of confusion c (µm at sensor)")
-    axL.set_title(
-        f"CoC vs d_o (geometric)\n"
-        f"f={CAMERA_100.focal_length:.0f} mm, "
-        f"F/{CAMERA_100.f_number:.1f}, focus={D_FOCUS:.0f} mm"
-    )
-    _annotate_focus(axL, D_FOCUS)
     c_inf = (
         CAMERA_100.aperture_diameter
         * CAMERA_100.focal_length
         / (D_FOCUS - CAMERA_100.focal_length)
         * 1000.0
     )
+    fig, (axL, axR) = plt.subplots(1, 2, figsize=(11.5, 4.2))
+    axL.semilogy(d_o, np.maximum(c, 1e-3), label="geometric CoC")
+    axL.set_xlabel("object distance d_o (mm)")
+    axL.set_ylabel("circle of confusion c (µm at sensor, log)")
+    axL.set_title(
+        f"CoC vs d_o (geometric)\n"
+        f"f={CAMERA_100.focal_length:.0f} mm, "
+        f"F/{CAMERA_100.f_number:.1f}, d_focus={D_FOCUS:.1f} mm"
+    )
+    axL.axvline(D_FOCUS, color="k", linestyle="--", linewidth=1.0, alpha=0.6)
     axL.axhline(
         CAMERA_100.pixel_pitch_um,
         color="C3",
         linestyle=":",
-        linewidth=1.0,
-        label=f"1-pixel blur ({CAMERA_100.pixel_pitch_um:.1f} µm)",
+        linewidth=1.2,
+        label=f"1 PAL sample ({CAMERA_100.pixel_pitch_um:.1f} µm)",
     )
-    axL.set_ylim(0, c.max() * 1.05)
-    axL.legend()
-    # context note for the saturation limit (rendered in title only —
-    # within this ±15 mm window the curve is not yet saturated)
-    axL.text(
-        0.02,
-        0.95,
-        f"hyperfocal limit (d_o → ∞): c_∞ = {c_inf:.0f} µm",
-        transform=axL.transAxes,
-        fontsize=8,
-        alpha=0.7,
-    )
+    axL.plot([], [], " ", label=f"c at d_o → ∞: {c_inf / 1000:.1f} mm")
+    axL.set_ylim(1.0, c.max() * 2.0)
+    axL.legend(loc="lower right", fontsize=9)
 
     # Reciprocal-distance view: symmetric and linear.
     u = 1.0 / d_o
@@ -193,8 +185,12 @@ def fig_sharpness_vs_distance(out_path: Path) -> None:
     # in defocus units, then a properly-zoomed window at ~50× FWHM.
     coarse = np.linspace(D_FOCUS - 5.0, D_FOCUS + 5.0, 20000)
     c_coarse = circle_of_confusion(CAMERA_100, D_FOCUS, coarse)
+    m_focus = magnification(CAMERA_100, D_FOCUS)
     s_coarse = sharpness_diffraction(
-        c_coarse, CAMERA_100.f_number, sensor_floor_mm=sensor_floor
+        c_coarse,
+        CAMERA_100.f_number,
+        sensor_floor_mm=sensor_floor,
+        magnification=m_focus,
     )
     above_half = s_coarse >= 0.5
     fwhm_mm = (
@@ -210,7 +206,10 @@ def fig_sharpness_vs_distance(out_path: Path) -> None:
     c = circle_of_confusion(CAMERA_100, D_FOCUS, d_o)
     s_geom = sharpness_gaussian(c, sigma_floor=sensor_floor)
     s_diff = sharpness_diffraction(
-        c, CAMERA_100.f_number, sensor_floor_mm=sensor_floor
+        c,
+        CAMERA_100.f_number,
+        sensor_floor_mm=sensor_floor,
+        magnification=m_focus,
     )
 
     # FWHM-matched Gaussian for visual reference (NOT the model).
@@ -366,7 +365,7 @@ def fig_sight_glass_shift(out_path: Path) -> None:
         d_o,
         apparent,
         color="C0",
-        label=f"through DIN 8902 (t={SIGHT_GLASS.thickness:.0f} mm, n={SIGHT_GLASS.refractive_index:.2f})",
+        label=f"through glass, t = {SIGHT_GLASS.thickness:.0f} mm, n = {SIGHT_GLASS.refractive_index:.2f} (assumed)",
     )
     ax.set_xlabel("real object distance d_o (mm)")
     ax.set_ylabel("apparent object distance (mm)")

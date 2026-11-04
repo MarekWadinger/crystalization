@@ -18,7 +18,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from optics.config import lens_from_config_and_video, load_camera
-from optics.model import LensSetup, circle_of_confusion
+from optics.model import LensSetup, circle_of_confusion, magnification
 from optics.psf import sharpness_diffraction
 from optics.video_io import CropBox, resolve_crop
 
@@ -70,6 +70,20 @@ def collect_sharpness_histogram(
     return centres, hist
 
 
+def fit_band(
+    density: NDArray[np.float64],
+    *,
+    quantile_lo: float = 0.5,
+    quantile_hi: float = 0.95,
+) -> tuple[int, int]:
+    """Bin indices ``[lo, hi)`` between two quantiles of the cumulative histogram."""
+    cdf = np.cumsum(density) / density.sum()
+    return (
+        int(np.searchsorted(cdf, quantile_lo)),
+        int(np.searchsorted(cdf, quantile_hi)),
+    )
+
+
 def fit_power_law_tail(
     centres: NDArray[np.float64],
     density: NDArray[np.float64],
@@ -77,14 +91,15 @@ def fit_power_law_tail(
     quantile_lo: float = 0.5,
     quantile_hi: float = 0.95,
 ) -> tuple[float, float]:
-    """Fit a power law ``density ∝ centres^(-alpha)`` to the right tail.
+    """Fit a power law ``density ∝ centres^(-alpha)`` over a quantile band.
 
-    Returns ``(alpha, intercept)``. We use the upper half of the histogram
-    (sharp-ish pixels) so the fit is dominated by the focused-slice tail.
+    Returns ``(alpha, intercept)`` of ``log density = intercept − alpha · log x``
+    over the bins between the ``quantile_lo`` and ``quantile_hi`` points of the
+    cumulative histogram (:func:`fit_band`).
     """
-    cdf = np.cumsum(density) / density.sum()
-    lo_idx = int(np.searchsorted(cdf, quantile_lo))
-    hi_idx = int(np.searchsorted(cdf, quantile_hi))
+    lo_idx, hi_idx = fit_band(
+        density, quantile_lo=quantile_lo, quantile_hi=quantile_hi
+    )
     x = centres[lo_idx:hi_idx]
     y = density[lo_idx:hi_idx]
     mask = (x > 0) & (y > 0)
@@ -110,7 +125,9 @@ def predicted_sharpness_marginal(
     """
     d = np.linspace(d_min, d_max, n)
     c = circle_of_confusion(lens, d_focus, d)
-    s = sharpness_diffraction(c, lens.f_number)
+    s = sharpness_diffraction(
+        c, lens.f_number, magnification=magnification(lens, d_focus)
+    )
     # depth is uniform → density of s is the inverse |ds/dd|
     ds_dd = np.gradient(s, d)
     density = 1.0 / np.maximum(np.abs(ds_dd), 1e-12)
@@ -124,65 +141,49 @@ def fig_measured_vs_theory(
     out_path: Path,
     lens: LensSetup,
     d_focus: float,
-    depth_range_mm: float = 5.0,
 ) -> dict[str, float]:
-    """Render the measured-vs-theoretical sharpness comparison."""
+    """Render the measured sharpness density with its fitted slope.
+
+    The fit line is drawn only over the 50–95 % band it was fitted on, which
+    is shaded. No model curve is drawn: a population spread uniformly over a
+    depth range much wider than the in-focus slice gives a density that is not
+    comparable with this pixel statistic (papers/cep §4.4).
+    """
+    del lens, d_focus  # kept for call compatibility; no model panel
     centres, density = collect_sharpness_histogram(video_path)
     alpha, intercept = fit_power_law_tail(centres, density)
+    lo_idx, hi_idx = fit_band(density)
+    x_lo, x_hi = float(centres[lo_idx]), float(centres[hi_idx - 1])
 
-    # Drop the leftmost mode (background log1p(0)=0 baseline)
     mask = density > 0
-    centres = centres[mask]
-    density = density[mask]
-
-    fig, (axL, axR) = plt.subplots(1, 2, figsize=(11.5, 4.4))
-    axL.semilogy(
-        centres, density, color="C0", label="measured (Laplacian-var)"
+    fig, ax = plt.subplots(figsize=(6.8, 4.2))
+    ax.axvspan(x_lo, x_hi, color="0.85", label="fit band (50–95 % of pixels)")
+    ax.semilogy(
+        centres[mask], density[mask], color="C0", label="measured density"
     )
     if not np.isnan(alpha):
-        x_fit = np.linspace(centres[len(centres) // 2], centres[-1], 50)
+        x_fit = np.linspace(max(x_lo, 1e-6), x_hi, 50)
         y_fit = np.exp(intercept) * x_fit ** (-alpha)
-        axL.semilogy(
+        ax.semilogy(
             x_fit,
             y_fit,
             color="C3",
             linestyle="--",
-            label=f"power-law fit: α = {alpha:.2f}",
+            linewidth=2.0,
+            label=f"log–log fit over the band: α = {alpha:.2f}",
         )
-    axL.set_xlabel("log1p(Laplacian²) — sharpness")
-    axL.set_ylabel("density (log)")
-    axL.set_title(
-        f"Measured pixel-sharpness distribution\n({Path(video_path).name})"
-    )
-    axL.legend(loc="upper right")
-    axL.grid(True, alpha=0.3)
-
-    s_pred, density_pred = predicted_sharpness_marginal(
-        lens, d_focus, d_focus - depth_range_mm, d_focus + depth_range_mm
-    )
-    axR.semilogy(
-        s_pred, density_pred, color="C1", label="theory (uniform depth)"
-    )
-    axR.set_xlabel("predicted normalised sharpness")
-    axR.set_ylabel("density (log)")
-    axR.set_title(
-        "Theoretical density under uniform depth in\n"
-        f"[{d_focus - depth_range_mm:.0f}, {d_focus + depth_range_mm:.0f}] mm"
-    )
-    axR.legend(loc="upper right")
-    axR.grid(True, alpha=0.3)
-    fig.suptitle(
-        "Measured distribution has a heavy tail consistent with a power-law cusp",
-        y=1.02,
-        fontsize=11,
-    )
+    ax.set_xlabel("per-pixel sharpness log(1 + G * (∇²I)²)")
+    ax.set_ylabel("density (log)")
+    ax.legend(loc="upper right", fontsize=9)
+    ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(out_path, dpi=180, bbox_inches="tight")
     plt.close(fig)
     return {
         "alpha_measured": alpha,
         "intercept_measured": intercept,
-        "n_centres": float(len(centres)),
+        "band_lo": x_lo,
+        "band_hi": x_hi,
     }
 
 

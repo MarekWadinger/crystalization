@@ -1,6 +1,6 @@
-# DRAFT highlights (CEP: 3-5 bullets, <= 85 characters each), drawn only from claims in manuscript v0.2; replace after the Phase 4 reframing.
-Thin-lens model fixes the scale at 1.66 µm/px at a 55.1 mm working distance
-Measured sharpness tail exponent 4.88 matches the predicted 5.0 within 2.4 %
-A focal-plane size prior can break the front/back defocus ambiguity
-At F/1.6 the in-focus slice is ±4.2 µm; stopping down to F/16 widens it to ±42 µm
-Mastersizer data show the detector sees 20–200 µm features, not the 9 µm crystals
+# CEP highlights: 3-5 bullets, <= 85 characters each. Submitted as a separate file; not typeset in main.tex.
+A soft sensor of seed-pan crystal growth is designed around an installed camera
+Camera signal: log crystal size plus a constant gain-and-selection offset and noise
+The camera alone observes relative growth rate and curve shape, not absolute size
+One microscope sample makes absolute crystal size observable
+Classical detectors fail as a baseline: their medians stay flat over a full strike

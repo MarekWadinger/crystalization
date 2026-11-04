@@ -6,7 +6,7 @@
     "event_id": "b1-e00",
     "phase": "discharge",
     "wallclock": "2026-02-04T11:46:10",
-    "source": "Observed in datasets/2026-02-04 11-08-51.json (the long batch-2 recording, first event annotated)."
+    "source": "Observed in datasets/2026-02-04 11-08-51.json: massecuite level passes the sight glass at 11:46:10-11:46:16 in the video; SCADA vented 11:46:00 (scripts/check_anchors.py). Operator note: about 11:48."
   },
   "secondary_anchor": {
     "event_id": "b1-e01",
@@ -16,16 +16,18 @@
   },
   "caveats": [
     "Linear inter-event scaling is a first-order approximation but holds remarkably well on the only directly-comparable phase: observed b1 discharge -> empty gap is 20s vs b2's 20s (ratio 1.0000); the global 0.902 scale predicts 18s, off by only 2s. This validates using the 0.9021 factor uniformly across phases as a first cut, but a per-phase scale calibration will be needed before any quantitative claim depends on the exact predicted wallclock of a non-observed event.",
-    "Clip filenames (e.g. '2026-02-05 10-18-50.mp4') and the DVR-burnt date overlay are both unreliable — the camera/DVR clock had a wrong DATE field. HH:MM:SS ran true relative to the SCADA wallclock. Per operator, the clips' actual recording date is 2026-02-04 (the same day as the long batch-2 recording), and every wallclock here is rendered on that date.",
-    "All clips fall entirely inside b1's 'boiling' phase; zero predicted transitions fall inside any clip."
+    "Clip filenames (e.g. '2026-02-05 10-18-50.mp4') carry 2026-02-05; the DVR overlay date (2018-11-09) is wrong. The operator stated in June 2026 that the clips are from 2026-02-04. This is CONTRADICTED (2026-11-03): no shared frames with the 2026-02-04 PAL recording (scripts/check_clip_overlap.py) and file birth times on 2026-02-05. Pending the author's decision.",
+    "All clips fall entirely inside b1's 'boiling' phase; zero predicted transitions fall inside any clip.",
+    "Independent check of b1-e06_pred (08:36:35): the DeltaV trend photo (Krystal PDF p. 3, scripts/check_anchors.py trend) shows the b1 seeding steam cut at 08:47:55 (photo), ~08:49:30 +- 3 min after the -1.5 min bias measured on b2 against SCADA. The batch match is ~13 min early for seeding.",
+    "The scale 70/77.6 is an operator input whose measurement is not recorded (commit 42aee0a). With the trend-photo b1 seeding (~08:49:30) and the observed discharges, b1 seeding-to-discharge is ~2 h 57 min vs 3 h 29 min for b2 (12:31:00 SCADA to 16:00:10), ratio ~0.85, not 0.90."
   ],
   "events": [
     {
       "id": "b1-e01b_pred",
       "source_b2_event": "b2-e01b",
       "phase": "new_batch_vacuum_pull",
-      "label": "16:07 novy - vakuum",
-      "label_en": "PREDICTED from b2-e01b: 16:07 — new batch begins; vacuum re-established",
+      "label": "",
+      "label_en": "PREDICTED from b2-e01b: vacuum re-established for the new strike",
       "qualifier": "predicted",
       "wallclock": "2026-02-04T08:01:16.958763",
       "gap_from_b2_e10_s": 14958.0,
@@ -79,7 +81,7 @@
       "id": "b1-e06_pred",
       "source_b2_event": "b2-e06",
       "phase": "stabilization_and_seeding",
-      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť pb2-rve kryštaliky (velmi male inkluzie)",
+      "label": "12:30 stabilizacia - opäť bubliny - očkovanie navaranie a obmedzena para - vidieť prve kryštaliky (velmi male inkluzie)",
       "label_en": "PREDICTED from b2-e06: 12:30 — stabilization; bubbles again; seeding (graining) with limited steam; first crystals visible as very small inclusions",
       "qualifier": "predicted",
       "wallclock": "2026-02-04T08:36:35.000000",

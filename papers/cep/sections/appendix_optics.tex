@@ -1,0 +1,214 @@
+% Appendix A. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame): moved from hardware.tex (sec:camera,
+% tab:inputs, sec:chain, sec:recording crop), optics.tex and defocus.tex of docs/cep-grounded-draft; text kept, notation
+% and terminology unified. Numbers: python -m optics.scale_chain, python -m optics.error_budget,
+% scripts/rerun_paper_numbers.py (docs/optics/rerun_results.md). Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Camera, signal chain and optics}\label{app:optics}
+
+\subsection{Camera and lens}\label{sec:camera}
+
+The installed camera body is labelled ``ADEMCO VIDEO''. It is an analogue monochrome PAL box camera: its rear panel
+carries the switches ALC, V-PHASE, INT/L-L, AI/AES, VIDEO/DD, BLC and AGC, a BNC video output and a 12~VDC/24~VAC
+supply (plant photographs, 2026-08-10). The model sticker has not been read. The best-matching model, to be
+confirmed, is an Ademco ACM570E-class camera with a 1/3\,in CCD of $752 \times 582$ cells of $6.50 \times 6.25$~\um;
+the alternative is the ACM380E class with $500 \times 582$ cells of $9.8 \times 6.3$~\um. Both belong to one Ademco
+camera family \citep{AdemcoACM380E}, but the available manual gives only the NTSC-type cell counts, so the PAL cell
+sizes above are our estimates. An earlier plant note matched the rear panel to the Honeywell HCC334/484 family
+instead; no candidate is confirmed, and neither is the 1/3\,in format on which both Ademco candidates agree. The
+Hanwha HCB-6000 named in an earlier supplier quotation \citep{PolzQuote2025} is a colour CMOS camera without these
+switches and is ruled out.
+
+The lens is a Fujinon HF35HA-1B (lens label, photographed), a C-mount machine-vision lens with $f = 35$~mm, an
+F-number range of F/1.6--F/22, a minimum object distance of 0.25~m, a back focal distance of 15.03~mm and a body
+length of 29.5~mm at infinity focus \citep{FujinonHF35HA1B}. An extension tube between lens and camera body brings the
+working distance into the macro range. \tabref{tab:inputs} lists the geometry with its source class as recorded in
+\code{configs/camera_100.toml}. The tube length, the air gap, the glass thickness and the F-number are approximate
+plant statements, not caliper readings; the focus-helicoid travel is our estimate. The stated tube length is taken as
+the spacer alone, without a 5~mm CS-to-C adapter ring. The worn stamp of the sight glass reads ``DIN 890\ldots'';
+DIN~8902 \citep{DIN8902} would make it soda-lime glass, whereas the model assumes the borosilicate index $n_g = 1.47$
+\citep{SchottBorofloat33}.
+
+\begin{table}
+\centering\tabfont
+\caption{Inputs of the optical and sampling model with their source class (\texttt{configs/camera\_100.toml}).
+\emph{Plant}: approximate statement of plant staff; \emph{estimate}: our estimate with a stated basis;
+\emph{assumed}: chosen without evidence.}\label{tab:inputs}
+\begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.36\columnwidth}@{}}
+\toprule
+Input & Value & Class and basis \\
+\midrule
+focal length $f$ & 35~mm & photo (lens engraving) \\
+F-number $N$ & 1.6 & plant (``if I read it correctly'') \\
+iris stops & 1.6, 2, 4, 8, 16 & photo (iris ring) \\
+extension tube $e$ & ${\approx}\,60$~mm & plant (``$\approx 6$~cm'') \\
+focus-helicoid travel $\xi$ & 1~mm & estimate (no distance scale) \\
+air gap, lens to glass, $a$ & ${\approx}\,20$~mm & plant (``$\approx 2$~cm'') \\
+glass thickness $t_g$ & 20~mm & plant \\
+glass index $n_g$ & 1.47 & assumed (borosilicate) \\
+CCD cell, x $\times$ y & $6.50 \times 6.25$~\um & estimate (candidate model) \\
+CCD clock & 14.1875~MHz & estimate (candidate model) \\
+DVR sampling & 13.5~MHz & estimate (BT.601 rate) \\
+PAL raster & $720 \times 576$ & measured (recording) \\
+1080p stretch, x $\times$ y & $2.677 \times 1.875$ & measured (\ref{sec:chain}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Signal chain: PAL camera, recorder and screen recordings}\label{sec:chain}
+
+The picture reaches the recorder as an analogue PAL line, so the sampling grid of a recording is set by the recorder
+and not by the sensor. The digital video recorder (DVR) samples each line at the ITU-R BT.601 luma rate of 13.5~MHz
+into 720 samples and keeps 576 lines \citep{ITUBT601,ITUBT656}. One recorded sample thus spans a CCD cell width times
+the ratio of the CCD clock to the DVR rate, $6.50~\text{\textmu m} \times 14.1875 / 13.5 = 6.831$~\um{} on the sensor,
+and one line spans one cell row, 6.250~\um{} (\code{python -m optics.scale_chain}). These are the sensor pitches
+$p_\mathrm{x}$ and $p_\mathrm{y}$. The resulting sample aspect, 1.093, is close to the PAL pixel aspect ratio $59/54$. Where the
+digitised window starts within the analogue line is known only to about $\pm 2$\,\%, which enters the budget of
+\ref{sec:budget-detail}.
+
+Two kinds of recording exist. The PAL recordings are this $720 \times 576$ raster as stored. The three
+$1920 \times 1080$ clips dated \code{2026-02-05} are screen recordings of the DVR monitor output: the PAL picture is
+rescaled and pillarboxed, so the clips add no resolution. We measured the rescaling from the DVR's on-screen display.
+The date and \code{CH01} glyphs are drawn into both kinds of recording; locating them in each clip over their PAL
+separation (115 samples, 503 lines) gives a stretch of 2.6773 clip pixels per PAL sample along a row (27 fits on three
+clips, range 2.6752--2.6795) and 1.8755 per line down a column, which equals $1080/576$ within 0.03\,\%. The row
+stretch is not $1920/720 = 2.667$. This method assumes that the recorder draws its display into the PAL raster before
+rescaling it. The picture edges give an independent check: the camera picture spans 684.8 PAL samples and 1827--1836
+clip pixels, a ratio of 2.668--2.681, consistent with 2.677 although the moving right edge makes it a check, not a
+measurement. On the sensor, a clip pixel spans $2.552 \times 3.333$~\um, and three clip pixels along a row are about
+one PAL sample. At the focal plane a clip pixel is $1.464 \times 1.913$~\um{} (95\,\% budget 1.336--1.624 and
+1.752--2.116~\um).
+
+A direct registration of PAL and clip frames is not possible: feature matching finds no frame of the long PAL
+recording in the clip \code{10-37-26} (\code{scripts/check_clip_overlap.py}).
+
+\emph{Frame conditioning.} The clips carry two sources of artificially sharp edges: the DVR on-screen display (a date
+and time band at the top and a \code{CH01} label at the bottom) and the pillarbox. The picture spans columns 42.4 to
+1869.5--1878.0; the left edge is the DVR's hard mask, and the right edge is the analogue end of the line, which moves
+by about 8 clip pixels (3 PAL samples) between and within clips (\code{python -m optics.scale_chain}). A rectangular
+crop removes both; the automatic crop of \code{optics.video_io.resolve_crop} keeps $1826 \times 906$~px (80\,\%), and
+because the right edge moves, any crop must leave a margin. Without the crop the slope of the per-pixel sharpness
+density changes from 4.88--4.90 to 5.36 (\code{scripts/rerun_paper_numbers.py}, rows 48--51), so the overlays must be
+removed before any sharpness statistic is interpreted.
+
+\subsection{Thin-lens scale model}\label{sec:thinlens}
+
+Under the Gaussian thin-lens approximation \citep[\S\,5.2]{Hecht2017}, the object distance $d_o$ and the image
+distance $i$ satisfy
+\begin{equation}\label{eq:thinlens}
+\frac{1}{f} = \frac{1}{d_o} + \frac{1}{i}, \qquad M = \frac{i}{d_o} = \frac{f}{d_o - f},
+\end{equation}
+with $M$ the transverse magnification. An extension tube of length $e$ sets the image distance at infinity focus to
+$f + e$ \citep{PhotonsToPhotos2024}, and the focus helicoid adds its travel $\xi$, so that $i = f + e + \xi = 96$~mm
+and the focal-plane object distance is $d_\mathrm{focus} = f i / (i - f) = 55.08$~mm, with $M = 1.743$
+(\tabref{tab:inputs}; \code{scripts/rerun_paper_numbers.py}). Once focus is set, $i$ is fixed. A point at lateral
+position $X$ and depth $d_o$ is imaged, sharp or blurred, about the chief ray through the lens centre, at $X i / d_o$
+on the sensor. The object-plane scale along axis x or y, for a sensor pitch $p_\mathrm{x}$ or $p_\mathrm{y}$, is therefore
+\begin{equation}\label{eq:pixelsize}
+\mu_\mathrm{x}(d_o) = \frac{p_\mathrm{x}}{M(d_o)} = p_\mathrm{x} \, \frac{d_o}{i}, \qquad \mu_\mathrm{y}(d_o) = p_\mathrm{y} \, \frac{d_o}{i},
+\end{equation}
+linear in $d_o$. At the focal plane $\mu = p f / (e + \xi)$, so the scale there depends only on $f$, $e$ and $\xi$.
+A sight glass of thickness $t_g$ and index $n_g$ shifts the apparent object distance toward the lens by
+$z_g = t_g (1 - 1/n_g) = 6.39$~mm in the paraxial limit \citep{Hecht2017}; it moves the focal plane but, at a fixed $i$,
+not the scale. We have not computed the residual distortion of the flat port over the field \citep{Agrawal2012}.
+
+\subsection{Scale budget}\label{sec:budget-detail}
+
+\tabref{tab:scale} gives the per-axis scale at the focal plane (\code{python -m optics.scale_chain};
+\code{docs/optics/scale_chain.md}). The uncertainty comes from a Monte Carlo propagation over 200\,000 draws: $e$
+uniform within $\pm 5$~mm (the plant's ``$\approx 6$~cm'' read as rounded to the centimetre), $\xi$ uniform over
+0--2~mm, $f$ normal with $\sigma = 2$\,\% (assumed lens tolerance), the line-to-sample mapping uniform within
+$\pm 2$\,\% (x only) and the camera candidate (x up to $+0.6$\,\%, y up to $+0.8$\,\%). The tube alone moves the
+scale by $-7.6$ to $+8.9$\,\% over $e \pm 5$~mm, against $\pm 2.0$\,\% for the focal-length tolerance, $\pm 2.0$\,\%
+for the line mapping, $-1.6$ to $+1.7$\,\% for the focus travel and less than 1\,\% for the camera candidate. The glass
+index, the glass thickness and the air gap do not enter, because a parallel plate moves the focal plane but leaves the
+magnification at a fixed $i$ unchanged. A 1/2\,in CCD with the same cell count would make the scale about 33\,\%
+coarser.
+
+\begin{table}
+\centering\tabfont
+\caption{Object-plane scale $\mu$ at the focal plane, \um{} per PAL sample (median and 95\,\% interval of the Monte
+Carlo input-uncertainty budget, conditional on a 1/3\,in sensor, 13.5~MHz sampling and $e = 60 \pm 5$~mm; nominal
+$\hat\mu$ in brackets; not validated in the image). Source: \texttt{python -m optics.scale\_chain}.}\label{tab:scale}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Axis & Median [nominal] & 95\,\% interval \\
+\midrule
+x & 3.932 [3.919] & 3.576--4.347 \\
+y & 3.601 [3.586] & 3.285--3.967 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Where the focal plane sits relative to the glass}\label{sec:slab}
+
+\figref{fig:layout} draws the optical stack to scale. The lens datasheet gives the back focal distance but not the
+position of the front principal plane $H$ \citep{FujinonHF35HA1B}, so the focal plane cannot be placed relative to
+the glass from the datasheet and the plant geometry alone. The geometry is, however, consistent with a focal plane at
+the inner glass face. In that case the real distance from $H$ to the inner face is $d_\mathrm{focus} + z_g = 55.08 +
+6.39 = 61.47$~mm, and subtracting $t_g = 20$~mm and $a \approx 20$~mm places $H$ $21.5 \pm 3.4$~mm (1$\sigma$,
+\code{python -m optics.error_budget}) behind the front element, inside the 30.5~mm lens body (29.5~mm plus the 1~mm
+focus travel). On the image side, for a C-mount body, the flange depth of 17.53~mm, the tube and the lens body put
+the rear principal plane $H'$, which lies $i = 96$~mm in front of the sensor, 12.0~mm behind the front element
+(\code{python -m optics.error_budget}). Both planes then fall inside the lens body. This is a consistency check on the
+stated geometry, not a measurement of the focal-plane position. An empty-pan frame in which the scratches of the
+glass's inner face are sharp would locate the plane directly. The pan dimensions play no role in the depth range:
+the optical slice is far thinner than any of them.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.85\textwidth]{18_optical_layout}
+\caption{\textbf{What does the optical chain from sensor to massecuite look like?} Layout drawn to scale from
+\texttt{configs/camera\_100.toml} (\texttt{python -m optics.optical\_layout}); the colour of each dimension gives its
+source class. The camera body length (40~mm) is assumed and enters no number; the lens body (30.5~mm, including the
+1~mm focus travel) is an estimate; tube $e$, air gap $a$ and glass thickness are plant statements; the sensor-to-$H'$
+distance $i = f + e + \xi = 96$~mm is derived. The placement of the focal plane at the inner glass face, and hence
+$H \to$ focal plane $= 61.5$~mm, is an assumption (\ref{sec:slab}).}\label{fig:layout}
+\end{figure*}
+
+\subsection{Circle of confusion and sharpness}\label{sec:coc}
+
+For a lens focused at $d_\mathrm{focus}$ with aperture diameter $f / N$, the geometric circle-of-confusion (CoC)
+diameter at the sensor for an object at $d_o$ follows from similar triangles and Eq.~\eqref{eq:thinlens}
+\citep{Pentland1987}:
+\begin{equation}\label{eq:coc}
+b(d_o) = b_\infty \, \frac{|d_o - d_\mathrm{focus}|}{d_o}, \qquad b_\infty = \frac{f^2}{N (d_\mathrm{focus} - f)},
+\end{equation}
+with $b_\infty = 38.12$~mm at F/1.6. In the reciprocal distance it is linear and symmetric,
+$b = b_\infty d_\mathrm{focus} |1/d_o - 1/d_\mathrm{focus}|$, so a blur diameter alone does not tell whether an object
+lies near or far of the focal plane \citep{SellentFavaro2014}. Close to focus, $b \approx b_\infty |\delta| /
+d_\mathrm{focus}$ with the signed defocus $\delta = d_o - d_\mathrm{focus}$.
+
+\label{sec:psf}The diffraction width enters at the working F-number $N_w = N(1 + M) = 2.74\,N$; at $\lambda_w = 550$~nm
+its FWHM at the sensor is 2.4~\um{} (0.37 PAL samples) at F/1.6 (\code{scripts/rerun_paper_numbers.py}, rows
+106--109; Gaussian approximation of the Airy pattern, \citealp{ZhangZerubia2007}).
+
+\subsection{Depth of field}\label{sec:dof}
+
+The in-focus slice is the depth range in which the CoC stays below one resolution element. For both recording types
+that element is the PAL sample, 6.53~\um{} on the sensor as a geometric mean; a 1080p clip pixel (2.92~\um) is an
+upscaled fraction of a sample. \tabref{tab:dof} gives the slice for both definitions. With the PAL sample, the
+in-focus slice at F/1.6 is $\pm 9.4$~\um. The geometric slice grows in proportion to $N$ (Eq.~\ref{eq:coc}), but diffraction grows with $N_w$: its FWHM reaches one PAL sample at about F/4.4 and is 1.8
+samples at F/8 and 3.7 samples (23.9~\um) at F/16. Beyond about F/4 no depth meets the one-sample criterion, so the
+geometric $\pm 94$~\um{} at F/16 bounds only the geometric blur. Depths here are in air-equivalent thin-lens
+coordinates; beyond the inner glass face, a paraxial depth in a medium of index $n_s$ is $n_s$ times longer.
+
+The PAL sample as resolution element is an assumption, and it is optimistic. The analogue bandwidth of camera and
+recorder is undocumented; even the BT.601 luma passband of 5.75~MHz \citep{ITUBT601} resolves only about 600 points in
+the 52~\textmu s active line, against 720 samples; the two interlaced fields of a moving massecuite can halve the
+vertical resolution; and the H.264 compression of the recordings removes fine texture. Each would coarsen the element
+and widen the slice in proportion \pending{effective resolution of the recorded PAL chain}.
+
+\begin{table}
+\centering\tabfont
+\caption{In-focus half-slice (geometric CoC $b \le$ one resolution element), in \textmu m of
+air-equivalent object depth (\texttt{scripts/rerun\_paper\_numbers.py}, rows 16--18 and 21--23). Element: PAL sample
+(6.53~\um) or upscaled clip pixel (2.92~\um). At F/16 the diffraction FWHM alone is 3.7 PAL samples, so that row
+bounds the geometric blur only.}\label{tab:dof}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Quantity & PAL sample & clip pixel \\
+\midrule
+half-slice, F/1.6 & $\pm 9.4$ & $\pm 4.2$ \\
+geometric half-slice, F/16 & $\pm 94$ & $\pm 42$ \\
+\bottomrule
+\end{tabular}
+\end{table}

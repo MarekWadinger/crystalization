@@ -1,140 +1,95 @@
-% Section 1 of manuscript v0.2 (docs/paper/manuscript.md), converted without changes to claims or numbers.
+% Section 1. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame). Literature verdicts: papers/cep/SOURCES.md
+% and the citation-finder list of 2026-11-04 (CLAIM_CHANGES.md). Claim changes: papers/cep/CLAIM_CHANGES.md.
 \section{Introduction}\label{sec:intro}
 
-\subsection{What the operator needs to see}\label{sec:intro-need}
+\subsection{Crystal growth in the seed pan}\label{sec:intro-need}
 
-Industrial sucrose production runs as a sequence of evaporative-cooling crystallization ``strikes'' in vacuum pans. A
-typical white-sugar plant operates a three-massecuite scheme --- A-, B-, and C-product --- each of which is charged
-with purified syrup, concentrated to the meta-stable supersaturated state, \textbf{seeded} with a small mass of milled
-sugar or magma, and then run for \textbf{three to four hours} while supersaturation is held in the growth region by
-controlled vapour-pressure decrease \citep{Bubnik1995,Asadi2006}. Throughout the strike, the operator must intervene
-with sweetwater additions, vacuum and temperature setpoints, and timing of cuts and discharges. The two parameters
-that ultimately matter to the plant are the \textbf{mean aperture (MA)} and the \textbf{coefficient of variation (CV)}
-of the discharged crystal-size distribution: MA drives downstream classification, CV controls centrifuge efficiency
-and the recoverable molasses fraction. A strike that lands on the wrong MA or with excessive CV must be reworked at
-substantial energy and yield cost.
+White sugar is crystallized in batch vacuum pans. The Slovensk\'e cukrovary plant in Sere\v{d}, Slovakia, runs a
+three-product scheme with A, B and C pans and a seed pan, ZRA \citep{SlovenskeCukrovary2026}. The seed pan grains
+each strike with seed slurry and produces the seed massecuite from which the A pans boil the product. The product
+is specified by the mean aperture (MA) and the coefficient of variation (CV) of its crystal-size distribution (CSD);
+for Sere\v{d} white sugar an MA of 0.76--0.95~mm is reported \citep{Bennar2010}, and MA and CV are used to
+characterise sugar crystal size in the industry \citep{Daniels2017}.
 
-Without a calibrated, real-time view of the in-vessel CSD, operator interventions rely on indirect proxies ---
-conductivity, refractive index, boiling-point elevation --- that are coupled to CSD only through plant-specific
-heuristics. \textbf{A reliable, non-invasive, in-line crystal-size measurement is among the most-requested unsolved
-sensor problems in industrial crystallization} \citep{Nagy2013,Simon2015}.
+Three operator decisions depend on how the crystals in the seed pan grow. The operator decides how much seed
+massecuite to draw into each A pan. When growth is slow, the operator can raise the boil-up feed or the
+supersaturation target (KP) of the recipe. And the operator decides when tightening ends and the strike is
+discharged. We know of no plant specification for the size of the seed massecuite, so each decision rests on the
+operator's judgement of the strike. The distributed control system (DCS) trends level, vacuum, massecuite
+temperature, stirrer current and a signal on a Brix scale \citep{SlovenskeCukrovary2026}. None of these signals is a
+crystal size, which is available only from samples drawn from the pan, such as the microscope samples of
+\secref{sec:microscope}. A signal that tracks the
+growth of each strike online would let an estimator report how far a strike has grown and whether it is growing
+slower than the nominal strike.
 
-\subsection{Why the dominant instruments fall short}\label{sec:intro-instruments}
+\subsection{Instruments and soft sensors}\label{sec:intro-instruments}
 
-Four families of measurement principle dominate the literature on in-line CSD monitoring; each has well-documented
-limitations.
+In-line CSD measurement remains an active topic of process analytical technology \citep{Nagy2013,Simon2015}.
+Focused beam reflectance measurement records chord lengths, and recovering a size distribution from them is an
+ill-posed inversion \citep{Heath2002,Worlitschek2003,Wynn2003,Kail2009,Czapla2010}. In situ microscopy and flow-cell
+imaging yield images from which sizes are extracted by image analysis \citep{Eggers2008,Kempkes2008}, and fouling of
+spectroscopic probes can prevent routine use in unseeded crystallization \citep{Borissova2009}. Image-based CSD
+monitoring includes online image analysis of sucrose crystal size and morphology in the laboratory
+\citep{Ferreira2011}, off-line analysis of massecuite samples reporting MA and CV \citep{Daniels2017}, imaging through
+the wall of a crystallizer \citep{Huo2020}, and in situ imaging of glycine \citep{Larsen2007} and potassium
+dihydrogen phosphate \citep{Borchert2014}, with deep-learning segmentation in recent work \citep{Gao2018,Manee2019}.
 
-\paragraph{Probe-based optical instruments} Mettler-Toledo's \emph{Focused Beam Reflectance Measurement} (FBRM) scans
-a laser through the slurry and infers a chord-length distribution from back-scattered pulses
-\citep{Worlitschek2003,Heath2002}. FBRM has become a \emph{de facto} research standard but suffers from three issues
-for sugar use: (i) the chord-length-to-size inversion is geometrically ill-posed and biases the recovered CSD by
-15--40\,\% depending on particle shape \citep{Czapla2010}; (ii) the optical window must be kept clean against viscous
-massecuite, a heavy maintenance burden at sugar-pan temperatures and concentrations; (iii) each FBRM probe costs
-50--150~kEUR and requires dedicated data acquisition. The companion \emph{Particle Vision Microscopy} (PVM) probe
-produces real in-line images but no calibrated size --- sizes must be hand-measured on extracted frames --- and its
-very shallow depth-of-field limits useful observation to a thin slice immediately in front of the probe
-\citep{Wynn2003,Eggers2008}.
+Soft sensors predict process variables that are otherwise available only at a low rate or off-line, usually quality
+variables measured in a laboratory \citep{Kadlec2009}. For industrial sugar crystallization, a model-based soft sensor
+estimates the mass of crystals, the dissolved-sucrose concentration and the purity from plant measurements
+\citep{Damour2010}, and model-based estimators of supersaturation use level, Brix and temperature
+\citep{Morales2023} or standard process measurements \citep{Lohani2026}. None of these reports crystal size or growth rate
+directly, although a crystal mass with a known crystal count implies a mean size (\secref{sec:performs}). In batch crystallization, extended and unscented Kalman filters estimate the states of a moment model of
+a fed-batch crystallizer \citep{Mesbah2011}, online imaging closes a nucleation-control loop \citep{Borsos2017}, and
+growth rates are fitted off-line to imaging-based size distributions \citep{Ochsenbein2014}. Commercial pan microscopes report MA and CV in-line, behind
+a dedicated sight glass \citep{BoucheGaillac2015,Selby2024} or as an insertion probe \citep{Honkanen2023,Honkanen2024};
+the latter takes the growth rate as the time derivative of the volumetric mean size, without an estimator \citep{Honkanen2023}. We
+found no report of size measurement from an existing operator sight-glass camera, and no recursive estimator that
+fuses an in situ camera size for an industrial sugar pan.
 
-\paragraph{Indirect spectroscopic and acoustic methods} NIR and Raman spectroscopy can track \emph{solute
-concentration} and \emph{supersaturation} in real time \citep{Borissova2009}; acoustic-emission methods correlate
-ultrasonic absorption with loading. None of these \emph{measure} CSD; they all require calibration against an
-independent CSD reference, inheriting that reference's biases.
+\subsection{The installed camera as a sensor}\label{sec:intro-blocks}
 
-\paragraph{Off-line laser diffraction and sieving} The industrial gold standards --- Malvern Mastersizer, sieve
-cascades --- deliver a calibrated CSD but only after sampling, dilution, and laboratory transport. The shortest
-practical cycle is 30--60 minutes, far slower than the operator-decision time scale during the latter half of a
-strike.
+At Sere\v{d} a closed-circuit camera already looks through the sight glass of the seed pan; a supplier quoted
+125~EUR, without lens, for a replacement box camera of a different type \citep{PolzQuote2025}. To serve an
+estimator, its signal needs a measurement model with three elements. The \emph{measurement gain} converts PAL samples
+to micrometres; it follows only from approximate plant statements of the optical geometry, because no scale target
+can be placed in a running pan. The \emph{sampled layer} is the part of the massecuite the camera sees: a thin
+in-focus slice at the glass, backlit through a short gap to a lamp. The \emph{detector} turns frames into crystal
+outlines, and its errors depend on crystal size and packing. Each element adds a gain, a bias or noise to the size
+signal, and together they decide which growth quantities an estimator can recover. We design a soft sensor of crystal
+growth around this camera and test its estimator in simulation and on first real camera points.
 
-\paragraph{Through-sight-glass image analysis} A \emph{retrofit-free} alternative is to install a camera looking
-through an existing sight glass. Hardware investment is a few hundred Euro; no in-vessel modification is required.
-Academic and industrial groups have demonstrated the approach for pharmaceutical crystallization
-\citep{Larsen2007,Borchert2014}, with recent work exploiting CNNs
-for detection and shape classification \citep{Salami2021}. Yet \textbf{published through-sight-glass approaches share
-two persistent weaknesses}:
-\begin{enumerate}
-\item Pixel-to-millimetre \textbf{calibration is treated as a prerequisite, not part of the inference}. Calibration
-is accomplished by inserting a physical scale target --- a stage micrometer, engraved reticle, or reference crystal
---- into the slurry or line of sight. This is an intrusive operation requiring process shutdown and re-assembly. It
-is typically performed once at install time and treated as static, even though installations drift mechanically and
-thermally.
-\item The \textbf{depth-of-field structure of the lens} is universally ignored. Through a sight glass, the slurry is
-a three-dimensional volume; crystals at different depths project to different metric scales and with different
-defocus levels. The standard approach is to apply a single scale to every detection --- accepting either a sampling
-bias (sharpness thresholding) or a sizing bias (no correction).
-\end{enumerate}
+\subsection{Research questions and contributions}\label{sec:rq}
 
-\subsection{The methodological building blocks already exist}\label{sec:intro-blocks}
-
-The components needed to address both weaknesses are mature in the optics, computer-vision, and
-crystallization-engineering literatures. Our contribution is their composition into an end-to-end pipeline, not their
-individual derivation:
-\begin{itemize}
-\item \textbf{Geometric optics through a sight glass:} Gaussian thin-lens model
-(\citealp[Ch.~5]{Hecht2017}; \citealp[Ch.~4]{BornWolf1999}), flat-glass refractive shift
-(\citealp[\S\,5.6]{Hecht2017}; exact polynomial form in \citealp{Agrawal2012}).
-\item \textbf{Defocus and depth-from-defocus:} geometric circle-of-confusion \citep{Pentland1987,Pertuz2013},
-Gaussian-PSF sharpness fall-off \citep{SubbaraoSurya1994}, Sum-Modified-Laplacian focus measure
-\citep{NayarNakagawa1994}.
-\item \textbf{Front/back ambiguity for circular apertures:} \citet{Zhou2011} establish that circular-aperture defocus
-is symmetric in reciprocal object distance, breaking sign disambiguation from blur alone.
-\item \textbf{Crystal-growth kinetics:} McCabe's $\Delta L$ law \citep{McCabe1929,RandolphLarson1988} predicts
-linear-in-time growth at fixed supersaturation, providing the cross-batch invariant we exploit for self-validation.
-\end{itemize}
-
-\subsection{Problem statement and research questions}\label{sec:rq}
-
-Given a fixed camera looking through a sight glass into the vessel, with sensor pitch known, lens partially
-characterised, glass standard known but thickness only estimated, and an archive of complete batches with known
-start-of-strike timestamps, deliver: (a) a per-frame estimate of the CSD that \textbf{accounts for the
-depth-of-field structure of the lens}, (b) uncertainty quantification on every numerical output, (c) a soft-sensor
-read-out of time-since-graining validated against the wall-clock reference --- using only the video archive, batch
-start timestamps, and documented optics, without any in-line scale target or hardware modification.
-
-The work is organised around four research questions:
+We ask three questions:
 \begin{description}
-\item[RQ1.] Does the thin-lens model yield a self-consistent pixel-to-millimetre mapping under the documented lens
-parameters, and to what precision are the uncertain parameters (extension tube, focus setting) bounded by in-scene
-evidence alone? (\secref{sec:optics})
-\item[RQ2.] Does the empirical per-pixel sharpness distribution agree with the geometric-optics Gaussian-PSF
-prediction, and to what precision? (\secref{sec:defocus})
-\item[RQ3.] Can the front/back depth ambiguity of circular-aperture defocus be broken using the focal-plane
-apparent-size distribution as a \textbf{single-component} Bayesian prior under a homogeneous-slurry assumption?
-(\S\S\,\ref{sec:detection}--\ref{sec:sizing})
-\item[RQ4.] Across multiple boiling-pan strikes, does the per-batch median apparent crystal size as a function of
-time-into-strike collapse to a single curve, and can this collapse identify the lens-stack parameters that would
-otherwise be hardware-measured? (\secref{sec:growth} outlook)
+\item[RQ1.] What does the installed camera measure: how does its size signal depend on the crystal size in the pan
+through the gain, the sampled layer and the detector, and with what uncertainty? (\secref{sec:measurement})
+\item[RQ2.] Which growth-state quantities are observable from the camera signal alone, and what reference makes
+absolute size observable? (\secref{sec:growth})
+\item[RQ3.] Does a camera-aided estimator track the growth state of each strike, its growth rate and growth age,
+better and earlier than references without the camera? (\S\S\,\ref{sec:estimator}--\ref{sec:results})
 \end{description}
+For RQ3 we compare the camera-aided estimator with anchor-only and nominal-curve references; the process-signal
+baseline waits on DCS data for the sampled run. The real-data answer waits on the detector signal, after the results
+freeze of 2026-11-23; here we test the estimator in simulation and on twelve real camera points.
 
-\subsection{The pipeline at a glance}\label{sec:glance}
-
-The full pipeline composes six stages. \figref{fig:pipeline} shows the dataflow.
-
-\begin{figure*}
-\centering
-\includegraphics[width=0.75\textwidth]{13_pipeline}
-\caption{\textbf{What is the full pipeline, end to end?} Stages A--E (top row) compose the forward measurement: raw
-video $\rightarrow$ DVR-overlay crop $\rightarrow$ per-frame sharpness analysis $\rightarrow$ per-crystal defocus
-inversion $\rightarrow$ thin-lens optics scale $\rightarrow$ aggregated CSD. Stage F (bottom bar) is the cross-batch
-growth-curve self-validation discussed in \secref{sec:growth}. Every block is implemented as a reproducible Python
-module under \texttt{src/optics/} and is exercised by the case-study run of
-\S\S\,\ref{sec:optics}--\ref{sec:csd}.}\label{fig:pipeline}
-\end{figure*}
-
-\subsection{Contributions}\label{sec:contrib}
-
+The contributions are:
 \begin{enumerate}
-\item \textbf{A complete, open-source pipeline} that delivers calibrated CSD from raw through-sight-glass video by
-integrating geometric optics, defocus analysis, Bayesian disambiguation, and growth-curve self-validation. MIT
-licence, code at \emph{(URL)}.
-\item \textbf{A single-component depth-aware sizing framework} that breaks the front/back defocus ambiguity using the
-focal-plane apparent-size distribution as prior, under a documented homogeneous-slurry assumption that admits a
-built-in self-consistency check (\secref{sec:sizing}).
-\item \textbf{A quantitative treatment of detector--depth interaction}, including the explicit conditions under which
-the disambiguation regime is operationally resolvable and the discriminability ceiling imposed by edge-based
-detectors (\secref{sec:selectivity}).
-\item \textbf{A validated industrial case study} at Slovensk\'e cukrovary, Sere\v{d}, demonstrating the pipeline on
-archived video with a complete numerical audit trail.
-\item \textbf{An honest failure-mode discussion} including the DVR-overlay contamination we encountered, the loss of
-disambiguation power when the detector's depth selectivity is too narrow, and the refractive limits of the paraxial
-sight-glass model.
+\item \textbf{A measurement model of an installed sight-glass camera} for state estimation: the log median camera
+chord equals the log crystal size plus a constant offset, a size-dependent bias and noise, with each term traced to
+a source-classed model of the analogue chain, the optics of the sampled layer or AI tracings of twelve frames matched
+in time to the microscope; the noise terms $R$ and $w_j$ are pending (RQ1; \secref{sec:measurement},
+\ref{app:optics}).
+\item \textbf{An observability condition}: under size-independent growth, the camera alone observes the relative
+growth rate, the shape of the growth curve and growth-rate ratios between strikes that share the offset, and one
+microscope sample restores absolute size; a size-dependent bias distorts the relative growth rate (RQ2;
+\secref{sec:observability}).
+\item \textbf{A camera-aided growth estimator with a per-strike validation protocol}: an extended Kalman filter in log
+coordinates that keep the unobservable direction fixed, tested leave-one-strike-out on simulated camera signals and
+twelve real camera points against anchor-only and nominal-curve references, with classical detectors as a failed
+baseline; the comparison with a process-signal baseline waits on DCS data (RQ3;
+\S\S\,\ref{sec:estimator}--\ref{sec:results}).
+\item \textbf{An open dataset and scripts}: every number is regenerated by a script from the configuration file
+(\ref{app:repro}).
 \end{enumerate}
