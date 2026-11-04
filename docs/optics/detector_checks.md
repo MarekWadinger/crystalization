@@ -38,37 +38,37 @@ late). Discharge (level passes the glass) at 210 min. At each time, 10 frames 1 
 sampled frame (`optics.disambiguate.detect_observations`). Figure: `figures/19_detector_vs_time.png`, with the
 2026-10-30 microscope medians (another day, operator-picked chords) for reference.
 
-| t since seeding (min) | detector | detections / frame | median (µm) | IQR (µm) |
+| t since seeding (min) | detector | detections / frame | median (PAL samples) | IQR (PAL samples) |
 |---:|---|---:|---:|---|
-| -40 | edge | 347 | 33 | 22–54 |
-| -40 | watershed | 42 | 194 | 129–324 |
-| -20 | edge | 368 | 32 | 22–54 |
-| -20 | watershed | 85 | 186 | 132–276 |
-| 0 | edge | 299 | 32 | 21–52 |
-| 0 | watershed | 85 | 180 | 133–272 |
-| 10 | edge | 397 | 34 | 22–58 |
-| 10 | watershed | 57 | 210 | 147–320 |
-| 20 | edge | 331 | 36 | 23–60 |
-| 20 | watershed | 79 | 212 | 146–327 |
-| 30 | edge | 290 | 36 | 23–60 |
-| 30 | watershed | 80 | 216 | 149–313 |
-| 45 | edge | 237 | 35 | 22–61 |
-| 45 | watershed | 92 | 216 | 153–301 |
-| 60 | edge | 245 | 33 | 22–57 |
-| 60 | watershed | 111 | 200 | 142–277 |
-| 90 | edge | 229 | 34 | 22–59 |
-| 90 | watershed | 115 | 196 | 141–274 |
-| 120 | edge | 257 | 35 | 22–56 |
-| 120 | watershed | 116 | 201 | 141–273 |
-| 150 | edge | 267 | 36 | 23–58 |
-| 150 | watershed | 104 | 204 | 150–281 |
-| 180 | edge | 209 | 34 | 22–58 |
-| 180 | watershed | 134 | 186 | 138–250 |
-| 200 | edge | 224 | 31 | 21–51 |
-| 200 | watershed | 148 | 184 | 137–245 |
+| -40 | edge | 347 | 8.8 | 5.9–14.4 |
+| -40 | watershed | 42 | 51.8 | 34.4–86.4 |
+| -20 | edge | 368 | 8.5 | 5.8–14.4 |
+| -20 | watershed | 85 | 49.6 | 35.2–73.5 |
+| 0 | edge | 299 | 8.4 | 5.7–13.9 |
+| 0 | watershed | 85 | 48.1 | 35.3–72.6 |
+| 10 | edge | 397 | 9.2 | 5.9–15.3 |
+| 10 | watershed | 57 | 56.0 | 39.1–85.2 |
+| 20 | edge | 331 | 9.7 | 6.2–16.1 |
+| 20 | watershed | 79 | 56.5 | 38.9–87.3 |
+| 30 | edge | 290 | 9.5 | 6.0–16.0 |
+| 30 | watershed | 80 | 57.6 | 39.8–83.5 |
+| 45 | edge | 237 | 9.4 | 5.9–16.2 |
+| 45 | watershed | 92 | 57.5 | 40.7–80.1 |
+| 60 | edge | 245 | 8.9 | 5.8–15.3 |
+| 60 | watershed | 111 | 53.4 | 38.0–73.7 |
+| 90 | edge | 229 | 8.9 | 5.8–15.8 |
+| 90 | watershed | 115 | 52.2 | 37.7–73.0 |
+| 120 | edge | 257 | 9.3 | 5.9–14.9 |
+| 120 | watershed | 116 | 53.7 | 37.5–72.9 |
+| 150 | edge | 267 | 9.5 | 6.0–15.5 |
+| 150 | watershed | 104 | 54.2 | 40.1–74.8 |
+| 180 | edge | 209 | 9.0 | 5.9–15.3 |
+| 180 | watershed | 134 | 49.5 | 36.7–66.6 |
+| 200 | edge | 224 | 8.4 | 5.5–13.6 |
+| 200 | watershed | 148 | 49.1 | 36.5–65.3 |
 
-Reading: over 240 min, from 40 min before seeding to 10 min before discharge, the edge median stays at 31–36 µm
-and the watershed median at 180–216 µm, and both give the same value before seeding as at the end of the strike.
+Reading: over 240 min, from 40 min before seeding to 10 min before discharge, the edge median stays at 8.4–9.7 PAL samples
+and the watershed median at 48–58 PAL samples (PAL samples, not µm: the scale is not validated in the image), and both give the same value before seeding as at the end of the strike.
 In the 2026-10-30 run of the same pan the microscope medians grow from 29 µm (2 min) to 483 µm (122 min). A frame
 at 120 min (PAL t = 12 080.5 s) shows faceted crystals some 50–80 samples across; this is a visual reading, not a
 label.
