@@ -104,9 +104,9 @@ Spacing (px) & Clearance (px) & Per frame & Median (\textmu m) & Coverage \\
 
 A first comparison of Cellpose outlines, not checked against labels, on frames of the 2026-10-30 recording with the
 microscope photographs at matched times shows the camera sizes levelling off: the camera 90th percentile rises against
-the microscope one with a log--log slope of only 0.2--0.45, and the level it settles at follows the detector's diameter
-setting \pending{matched-time comparison script and figure}. Late in strike b1 the raw frames show crystals of about
+the microscope one with a log--log slope of only 0.32--0.51 (b1 0.32--0.42, b2 0.48--0.51 over four diameter settings), and the level it
+settles at follows the detector's diameter setting (\code{scripts/cellpose_vs_lab.py}). Late in strike b1 the raw frames show crystals of about
 90--190 PAL samples across, comparable at the modelled scale to the microscope crystals; flat-field division and
 contrast-limited adaptive histogram equalisation split them into facets of 30--50 samples, which Cellpose outlines as
-220--290 crystals per frame where about 37 of microscope size fit. Up to 11:46 the crystals span 3--9 samples and the
+180--443 crystals per frame. Up to 11:46 the crystals span 3--9 samples and the
 outlines follow texture. These failure modes motivate the fine-tuning of \secref{sec:detector}.
