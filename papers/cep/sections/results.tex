@@ -6,7 +6,8 @@
 \section{Results}\label{sec:results}
 
 This section reports what can be run before the detector is trained: the failed classical-detector baseline, the
-growth of the two strikes, the estimator on simulated camera signals and on the first real camera points (RQ3).
+growth of the two strikes, the estimator on simulated camera signals, the interim process-signal baseline and the
+first real camera points (RQ3).
 
 \subsection{Failed classical-detector baseline}\label{sec:csd-time}
 
@@ -64,8 +65,10 @@ for the log size, over 200 seeds) against the references without camera, which u
 microscope curve. RMSE of log size, $G/L$ and growth age at the held-out microscope times (growth age where it is
 defined). $G/L$ flags:
 share of seeds / median flag time in min since seeding; on the noise-free curves the rule fires at 34~min (b2 slower,
-b1 faster) and 134~min (b2 faster, b1 slower). Source: \texttt{scripts/softsensor\_results.py},
-\texttt{docs/softsensor/results.md}, section~3.}\label{tab:loso}
+b1 faster) and 134~min (b2 faster, b1 slower). $^\ast$Interim: laboratory Brix and purity, temperature assumed
+70.8~\textdegree C (\secref{sec:baseline}); it has no posterior uncertainty, so its flags fire on any 20\,\% gap and
+are not decisions. Sources: \texttt{docs/softsensor/results.md}, section~3;
+\texttt{docs/softsensor/process\_baseline.md}, section~2.}\label{tab:loso}
 \begin{tabular}{@{}llllrrll@{}}
 \toprule
 Test & Estimate & Anchor & Log size & $G/L$ (\%/min) & Age (min) & $G/L$ slower & $G/L$ faster \\
@@ -77,6 +80,8 @@ b2 & EKF, $\sigma_v = 0.10$ & none & 0.144 [0.036, 0.312] & 0.663 & 8.8 & 0\,\% 
 b2 & EKF, $\sigma_v = 0.10$ & one & 0.085 [0.029, 0.194] & 0.663 & 5.4 & 0\,\% & 100\,\% / 141 \\
 b2 & EKF, $\sigma_v = 0.18$ & none & 0.154 [0.049, 0.318] & 0.719 & 9.5 & 0\,\% & 90\,\% / 141 \\
 b2 & EKF, $\sigma_v = 0.18$ & one & 0.104 [0.047, 0.222] & 0.719 & 6.6 & 0\,\% & 90\,\% / 141 \\
+b2 & process-signal baseline$^\ast$ & none & 0.836 & 1.427 & 30.2 & 0\,\% & 100\,\% / 27 \\
+b2 & process-signal baseline$^\ast$ & one & 0.891 [0.872, 0.910] & 1.049 & 15.0 & 22\,\% / 39 & 100\,\% / 27 \\
 b1 & nominal curve (b2) & -- & 0.319 & 1.404 & 39.5 & 0\,\% & 0\,\% \\
 b1 & anchor only, shift in $\ln L$ & one & 0.384 [0.272, 0.515] & 1.404 & 50.3 & 0\,\% & 0\,\% \\
 b1 & anchor only, shift in time & one & 0.337 [0.309, 0.369] & 1.328 & 41.9 & 56\,\% / 99 & 57\,\% / 69 \\
@@ -84,6 +89,8 @@ b1 & EKF, $\sigma_v = 0.10$ & none & 0.150 [0.042, 0.334] & 0.518 & 18.1 & 100\,
 b1 & EKF, $\sigma_v = 0.10$ & one & 0.092 [0.035, 0.198] & 0.517 & 10.3 & 100\,\% / 157 & 100\,\% / 84 \\
 b1 & EKF, $\sigma_v = 0.18$ & none & 0.158 [0.051, 0.340] & 0.561 & 18.8 & 66\,\% / 162 & 86\,\% / 85 \\
 b1 & EKF, $\sigma_v = 0.18$ & one & 0.109 [0.047, 0.225] & 0.561 & 12.3 & 66\,\% / 162 & 86\,\% / 85 \\
+b1 & process-signal baseline$^\ast$ & none & 0.637 & 1.413 & 66.4 & 100\,\% / 11 & 100\,\% / 43 \\
+b1 & process-signal baseline$^\ast$ & one & 0.321 [0.300, 0.353] & 1.176 & 28.7 & 100\,\% / 11 & 100\,\% / 69 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -102,6 +109,19 @@ b1 relatively slower at 157--162~min in 66--100\,\% (134~min). It misses or lags
 never flagged slower, and b1 is flagged faster only at 84--85~min. With two strikes the nominal curve of each is the
 other, so a strike flagged slower makes the other faster by construction; the flags show the mechanics, not a
 detection rate.
+
+\subsection{Interim process-signal baseline}\label{sec:res-process}
+
+The interim process-signal baseline (\secref{sec:baseline}, \tabref{tab:loso}) does worse than the nominal curve: a
+log-size RMSE of 0.836 without and 0.891 with the anchor for b2, and 0.637 and 0.321 for b1, against 0.310 and 0.319
+(INTERIM, \code{docs/softsensor/process_baseline.md}). It does not fit its own training strike well either (training
+log-size RMSE 0.591 for b1, 0.652 for b2). The reason is structural. The Brix input reads the whole massecuite, the
+laboratory sample as much as QI1003: the crystals dissolve when the sample is diluted (our interpretation). As the crystal content
+grows, KP computed from it rises over the post-seeding b1 samples from 1.04 to 2.27 (at the assumed 70.8~\textdegree C),
+while the microscope growth rate between samples stays at 3.5--4.9~\um/min from 16 to 122~min and then stops in
+tightening. A growth rate driven by this KP therefore rises when the crystals do not grow faster. After the first
+minutes of a strike, KP is an index rather than the supersaturation of the mother liquor; the DCS export will
+replace the driver but not this property. A direct measurement of size, such as the camera, does not depend on it.
 
 \subsection{Robustness to a camera bias that changes}\label{sec:res-robust}
 
@@ -159,5 +179,5 @@ hand-labelled frames}, inter-annotator agreement \pending{duplicate-labelled fra
 strikes with the acceptance tests (a)--(c) of \secref{sec:validation} \pending{figure: $y_k$ and $z_j$ against $t$,
 2026-10-30, b1 and b2}, the noise $R$ (\secref{sec:bias}) \pending{per-frame $\sigma_\mathrm{ln}$ and detections per
 frame}, the leave-one-strike-out of \tabref{tab:loso} with the detector signal \pending{estimator on the fine-tuned
-detector signal, \code{scripts/softsensor_results.py}}, and the comparison with the process-signal baseline
-\pending{DCS export for 2026-10-30}. \secref{sec:discussion} reads these results from the operator's side.
+detector signal, \code{scripts/softsensor_results.py}}; the process-signal baseline on DCS data waits on the export
+(\secref{sec:baseline}). \secref{sec:discussion} reads these results from the operator's side.

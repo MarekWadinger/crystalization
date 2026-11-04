@@ -41,11 +41,11 @@ estimates the mass of crystals, the dissolved-sucrose concentration and the puri
 \citep{Morales2023} or standard process measurements \citep{Lohani2026}. None of these reports crystal size or growth rate
 directly, although a crystal mass with a known crystal count implies a mean size (\secref{sec:performs}). In batch crystallization, extended and unscented Kalman filters estimate the states of a moment model of
 a fed-batch crystallizer \citep{Mesbah2011}, online imaging closes a nucleation-control loop \citep{Borsos2017}, and
-growth rates are fitted off-line to imaging-based size distributions \citep{Ochsenbein2014}. To our knowledge, no
-in situ camera size has been fused in a recursive estimator for an industrial sugar pan, and we found no
-peer-reviewed in-line CSD measurement through the sight glass of one; the sugar-technology trade literature and
-commercial pan-camera systems were not covered by this search \pending{search of the sugar-trade literature and
-vendor pan cameras}.
+growth rates are fitted off-line to imaging-based size distributions \citep{Ochsenbein2014}. Commercial pan microscopes report MA and CV in-line, behind
+a dedicated sight glass \citep{BoucheGaillac2015,Selby2024} or as an insertion probe \citep{Honkanen2023,Honkanen2024};
+the latter takes the growth rate as the time derivative of the volumetric mean size, without an estimator \citep{Honkanen2023}. We
+found no report of size measurement from an existing operator sight-glass camera, and no recursive estimator that
+fuses an in situ camera size for an industrial sugar pan.
 
 \subsection{The installed camera as a sensor}\label{sec:intro-blocks}
 

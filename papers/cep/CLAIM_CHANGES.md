@@ -21,7 +21,7 @@ Each line: old → new. Evidence in brackets. Nothing here depends on hand-label
 15. §7 new: the configured 1 mm max size excludes the 1.137 mm chord at 122 min (bound was set from the 0.821 mm first reading). For the config owner: revisit `max_size_um` (CHOICE). [configs/camera_100.toml; microscope_summary.py]
 16. §7 new: case-study clip has no matched reference (date contradicted; 1 h 41–1 h 48 min even on 02-04, not "≈ 2 h"). [datasets/README.md; scripts/check_clip_overlap.py, scripts/check_anchors.py]
 17. §7 edge CSD table "18 823 / 0.037 / CV 0.83 / s 0.57" → kept as the legacy-window column beside the configured window (47 414 / 0.018 / CV 2.16 / s 0.80); conclusion: the edge distribution follows the area window. [rerun rows 58–81]
-18. §7 watershed: "median 0.074, CV 0.40, s 0.40, 52 302", "verified Camera 100 hardware configuration" → 0.075 / 0.43 / 0.41 / 52 784 (configured) and 0.075 / 0.40 / 0.40 / 52 302 (legacy); the watershed output follows its seed constants, not the window. Evidence in repo: window insensitivity (rerun rows 82–105) and the 12 px seed floor (code). Supporting evidence NOT in repo: a scratch sweep of `_PEAK_MIN_DISTANCE`/`_PEAK_THRESHOLD_ABS` on frames 300/750/1200 (median basin 36 → 53 → 90 px for constants 6/3 → 12/6 → 24/12). Paper text is qualitative ("largely reflect"); a sweep script should be added before submission.
+18. §7 watershed: "median 0.074, CV 0.40, s 0.40, 52 302", "verified Camera 100 hardware configuration" → 0.075 / 0.43 / 0.41 / 52 784 (configured) and 0.075 / 0.40 / 0.40 / 52 302 (legacy); the watershed output follows its seed constants, not the window. Evidence in repo: window insensitivity (rerun rows 82–105) and the 12 px seed floor (code). Supporting evidence NOT in repo: a scratch sweep of `_PEAK_MIN_DISTANCE`/`_PEAK_THRESHOLD_ABS` on frames 300/750/1200 (median basin 36 → 53 → 90 px for constants 6/3 → 12/6 → 24/12). Paper text is qualitative ("largely reflect"); a sweep script should be added before submission. [Round 4, 2026-11-04: the committed `scripts/watershed_seed_sweep.py` (frames 300/750/1200, layers pooled) gives median basins 36.5 / 45.2 / 90.3 px for 6/3, 12/6, 24/12; the scratch value 53 px for 12/6 is not reproduced; App B cites the committed numbers.]
 19. §7 fig 17 / §watershed: "102 / 740, legacy found ≈ 14 %", "order of magnitude consistent with a visual count" → 441 / 981 in the figure (code default window 50–50 000 px², aspect 4), 840 / 966 under the configured window; visual-count claim removed. [rerun rows 54–57]
 20. §7 "three things move as a better detector should" (median doubles, CV halves, near/far toward 50/50) → removed; a narrower CV is not evidence of a narrower crystal distribution; near/far is a tie-break. [rerun rows 82–105]
 21. §7 edge failure mechanisms (closing merges clusters rejected by max_area; facets invent crystals; peripheral bias) → removed: under the configured window max_area no longer rejects merged blobs; the other two were visual impressions without labels.
@@ -456,6 +456,66 @@ REAL / EXTRAPOLATION kept as in results.md):
 138. App D glossary: table* → single-column table, source column merged into "Meaning [source]" (21 → 20 pages). No
     content change.
 139. §7.1 adds the requirement sentence (a packing drift of θ produces false flags, §6.4).
+
+Round 4, final integration except Cellpose (2026-11-04; branch committed at 51641fa, these edits uncommitted). The author
+agreed to the round 1–3 decisions (title, Lemma 1, ln G state, estimand, constant-θ requirement).
+
+140. §5.2 / §6: process-signal baseline `\pending` → interim baseline (INTERIM, `scripts/softsensor_process_baseline.py`,
+    `docs/softsensor/process_baseline.md`, `src/softsensor/process.py`): G = k_g max(KP − 1, 0) (g = 1 assumed); KP as
+    the plant's DCS formula sheet writes it (reproduces the live KP_akt 1.208 vs 1.210; source
+    docs/sered/notes_plant_dcs_qa_photos.md §2.2, notes_data_lab.md §3c); driver = lab Brix and purity, T assumed
+    70.8 °C (median TI1006 while boiling, 2025 DCS); L_0 = 13.0 µm (four chords of the seed-slurry photo); k_g 16.26
+    (from b1) / 9.88 µm/min (from b2). tab:loso rows "process-signal baseline (interim)": b2 0.836 / 0.891 [0.872,
+    0.910], G/L 1.427 / 1.049, age 30.2 / 15.0 min; b1 0.637 / 0.321 [0.300, 0.353], 1.413 / 1.176, 66.4 / 28.7 min;
+    flags as in the file, marked "not decisions". The DCS export replaces the lab driver, T and the seeding time but not
+    the structural limitation. 2026-02-04 pipeline check: seeding detected at 12:31:30 vs the 12:30 note. The
+    g < 1 diagnostic rows are not mentioned (author decision pending). Remaining `\pending` pinned to the DCS export.
+141. New §6.4 "Interim process-signal baseline": it does worse than the nominal curve (and fits its own training strike
+    with log RMSE 0.591 / 0.652) because the Brix input reads the whole massecuite (lab sample and QI1003 alike; crystal
+    dissolution on dilution is our interpretation): KP rises 1.04 → 2.27 over the post-seeding b1 samples while the
+    microscope growth rate stays 3.5–4.9 µm/min from 16 to 122 min; argument for a direct size measurement. One
+    sentence each in §7.1 and §8 RQ3. [process_baseline.md §1, §2, §6; results.md §1]
+142. σ_w `\pending` → bootstrap median 0.071, range 0.031–0.157 over 18 post-seeding samples, sampling noise only (not
+    operator choice, transcription or clock) (§3.5, tab:terms). [scripts/microscope_anchor_noise.py,
+    docs/softsensor/anchor_noise.md]. The evaluation's assumed anchor SD 0.1 is unchanged.
+143. App B: committed watershed seed sweep added (median basin 36.5 / 45.2 / 90.3 clip px for 6/3, 12/6, 24/12);
+    item 18 annotated (scratch 53 px not reproduced). [scripts/watershed_seed_sweep.py,
+    docs/optics/watershed_seed_sweep.md]
+144. Fig 18 caption "sharp-focus plane", "H → focus" → "focal plane", "H → focal plane" (generator relabelled); tab:dof
+    caption "CoC b". Regenerated figs 04, 10, 18 checked against captions (CoC b, signed δ, PAL sample, massecuite).
+    Fig 18 still prints "glass t = 20 mm" where the text uses t_g (generator, out of scope).
+145. Intro novelty sentence "We found no peer-reviewed in-line CSD measurement through the sight glass of one; the
+    sugar-technology trade literature and commercial pan-camera systems were not covered by this search \pending" →
+    "Commercial pan microscopes report MA and CV in-line, behind a dedicated sight glass (BoucheGaillac2015, Selby2024)
+    or as an insertion probe (Honkanen2023, Honkanen2024); the latter takes the growth rate as the time derivative of
+    the volumetric mean size, without an estimator (Honkanen2023). We found no report of size measurement from an
+    existing operator sight-glass camera, and no recursive estimator that fuses an in situ camera size for an
+    industrial sugar pan." [refs_round2.md §1; BoucheGaillac2015 vendor-authored trade journal, no DOI; Honkanen2023
+    peer-reviewed proceedings, no DOI]. Selby2024 pages: bib uses the publisher's 46–54; Crossref gives 42–50 (bib
+    comment; check the print copy).
+146. §3.3 Cellpose `\pending{citation for Cellpose-SAM}` → Pachitariu2025 (Cellpose-SAM, bioRxiv preprint),
+    Stringer2021 (Cellpose), PachitariuStringer2022 (fine-tuning); "Cellpose 4.2.1.1 with the base model cpsam" (uv.lock
+    pin). NEEDS Marian Choma's confirmation: the base model `cpsam` is inferred from the checkpoint date
+    (cpsam_20260517_223507 predates cpsam_v2 of cellpose 4.2.0). Fine-tuning set and AP stay `\pending` (Cellpose agent).
+147. §4.2 Lemma 1: adds CastroDeBoer2020 and MassonisVillaverde2020 (scaling symmetry → structural unidentifiability;
+    breaking it restores observability) as the same mechanism, Villaverde2019 for θ as a constant state; "the lemma and
+    its corollary are our derivation" kept (the cited results are continuous-time).
+148. §5.1 adds that Mesbah2011 also compared a moving-horizon estimator, the alternative if the EKF proves fragile.
+149. Bibliography: 10 entries appended from refs_round2.md (Stringer2021, PachitariuStringer2022, Pachitariu2025,
+    CastroDeBoer2020, MassonisVillaverde2020, Villaverde2019, BoucheGaillac2015, Selby2024, Honkanen2023,
+    Honkanen2024). Not added: BellmanAstrom1970 (M), MartinsRochaRein2005 (optional), Kwon2015 (M).
+150. AI_USE.md: five log rows for 2026-11-04 (analysis agents, reframe writing, estimator and baseline code, DOI-checked
+    citation search, review agents) and a drafted declaration; declarations.tex carries the same text, marked "draft
+    from AI_USE.md; each author confirms".
+151. Page budget (21–22 → 20 pages): cut from the appendices fig 04 (dof envelope; tab:dof keeps the numbers), the
+    spectral-isotropy check paragraph (1.002 / 1.065 / 1.132), the PSF / sharpness-model paragraph and Eq. sharpness
+    (the 10.5 µm sharpness FWHM row of tab:dof goes with it; diffraction FWHM kept in one sentence), tab:ws-compare
+    (key numbers stay in the App B text; log-normal shape, percentiles and near/far rows dropped), tab:ws-constants
+    (values in the text), fig 10 (discriminability; 0.17 % / 1.3 mm in the text). App D: intro paragraph folded into
+    the caption, five unused rows dropped (boiling house, vacuum break, vapour, pan operator, standard syrup) and
+    meanings shortened (no definitional change). App C generator table updated. Generators unchanged.
+152. Conclusions `\pending` "estimator on the detector signal and the process-signal baseline" → "estimator on the
+    fine-tuned detector signal; process-signal baseline on the DCS export".
 
 Not done here (out of scope or needs the author):
 - On-image text of generated figures still uses old terms: fig 18 ("sugar slurry (inside the vessel)", "1 PAL pixel =

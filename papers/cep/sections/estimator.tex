@@ -15,7 +15,8 @@ in Eq.~\eqref{eq:jacobians} (\code{src/softsensor/ekf.py}). It takes the camera
 output $y_k$ (Eq.~\ref{eq:meas}) with the row $C$ and the anchors $z_j$ (Eq.~\ref{eq:anchor}) with the row $C^z$ of
 Eq.~\eqref{eq:jacobians}. On a semi-industrial fed-batch crystallizer, extended and unscented Kalman filters estimate
 the states accurately, and a disturbance model in the observer recovers performance lost to model error
-\citep{Mesbah2011}; the offset $\theta$ plays that role here. The extended filter can fail even without plant--model
+\citep{Mesbah2011}; the offset $\theta$ plays that role here. The same study compared a moving-horizon estimator, the
+alternative if the extended filter proves fragile. The extended filter can fail even without plant--model
 mismatch \citep{HaseltineRawlings2005}; with linear measurement rows the only nonlinearity is the size update.
 
 The filter starts at seeding, which the DCS gives. In the evaluation of \secref{sec:validation} the priors come from
@@ -41,18 +42,27 @@ anchor. The 20\,\% band, the 1.96 and the 10~min are analysis choices, not tuned
 
 \subsection{Process-signal baseline and references}\label{sec:baseline}
 
-The baseline answers whether the camera adds information beyond what the DCS already provides. It has the same
-growth state without $\theta$ and without the camera. Its growth rate follows from the DCS inputs $u_k$, the
-heating-steam pressure, the pan vacuum, the QI1003 signal, the syrup feed, the massecuite temperature and the stirrer
-current (\secref{sec:data}), through a model whose kinetic parameters are calibrated on the microscope anchors. Our
-group's supersaturation soft sensor from standard process measurements \citep{Lohani2026} is its predecessor. Both
-estimators take the time since seeding from the DCS, where the seeding is a step in the steam valve (12:31:30
-against the operator's 12:30 on 2026-02-04). No DCS export exists for the sampled run of 2026-10-30
-(\secref{sec:data}), so the baseline cannot run on the only run with size references \pending{process-signal baseline
-on 2026-10-30, needs the DCS export}.
+The baseline answers whether the camera adds information beyond what the process signals already provide. It has
+the same growth state without $\theta$ and without the camera, and its growth rate follows the plant's own
+supersaturation coefficient: $G = k_g \max(\mathrm{KP} - 1, 0)$, a law linear in $\mathrm{KP} - 1$ (an assumption).
+KP is computed exactly as the plant's DCS formula sheet writes it, from Brix, purity and temperature; this form
+reproduces the live DCS value KP\_akt of the seed pan, 1.208 against 1.210 (\code{src/softsensor/process.py};
+\code{docs/sered/notes_plant_dcs_qa_photos.md}, \code{docs/sered/notes_data_lab.md}). The size starts at
+$L_0 = 13.0$~\um, the median of the four chords of the seed-slurry photograph, and $k_g$ is fitted on the training
+strike's microscope medians: 16.26~\um/min from b1 and 9.88~\um/min from b2 (\code{scripts/softsensor_process_baseline.py},
+\code{docs/softsensor/process_baseline.md}). With the anchor, the predicted size restarts at the anchor. Our group's
+supersaturation soft sensor from standard process measurements \citep{Lohani2026} is its predecessor.
 
-Until the DCS data arrive, RQ3 compares the camera-aided estimator with three references without the camera,
-none a substitute for the baseline. The \emph{nominal-curve prediction} is the interpolated microscope medians of the
+No DCS export exists yet for the sampled run of 2026-10-30 (\secref{sec:data}), so the baseline runs in an interim
+form: Brix and purity come from the laboratory samples, interpolated linearly, and the temperature is assumed at
+70.8~\textdegree C, the median massecuite temperature (TI1006) of the seed pan while boiling in the 2025 DCS data. The
+DCS export will replace the laboratory driver by QI1003 at 30~s, the assumed temperature by TI1006 and the operator's
+seeding time by the steam cut \pending{DCS export for 2026-10-30, requested from the plant}. It will not remove the
+structural limitation of \secref{sec:res-process}: both the laboratory Brix and QI1003 read the whole massecuite. On
+the 2026-02-04 export the DCS path of the baseline runs end to end and detects the seeding at 12:31:30, against the
+operator's 12:30.
+
+RQ3 also compares the camera-aided estimator with three references without the camera. The \emph{nominal-curve prediction} is the interpolated microscope medians of the
 other strike of the same run, read at the same time since seeding; it is what an operator expects from the clock
 alone. Two \emph{anchor-only references} pass the nominal curve through the anchor: one shifts it in $\ln L$, the
 other shifts it in time, to the growth age at the anchor; before the anchor both equal the nominal curve. With two
@@ -86,6 +96,6 @@ $t \ge 30$~min, with an assumed anchor standard deviation of 0.1. Metrics at the
 strike are the log-size RMSE, the growth-rate RMSE against a $\pm 10$~min central difference of the microscope curve,
 the RMSE of $G/L$, the growth-age RMSE where it is defined, and the share and median time of flags, against the time
 at which the same flag rule fires on the noise-free interpolated microscope curves. The camera-aided estimator passes if it beats the anchor-only references, the nominal curve
-and the process-signal baseline on both strikes \pending{acceptance margins and the process-signal baseline}. Carrying $\theta$ from an anchored strike to
+and the process-signal baseline on both strikes \pending{acceptance margins, author decision}. Carrying $\theta$ from an anchored strike to
 an unanchored one tests whether $\theta$ is shared (Lemma~\ref{lem:scale}(iv)) \pending{b2 with $\theta$ from b1}.
 \secref{sec:results} reports what can be run now.

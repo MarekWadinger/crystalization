@@ -26,24 +26,10 @@ elliptical kernel that grows by 4~px per layer from 3~px, fits external contours
 and keeps a contour if its area lies in the size window and its aspect ratio is at most~3. The \emph{watershed
 detector} (\code{optics.detect_watershed}) opens the outline map with a $3 \times 3$ kernel and distance-transforms its
 complement. Seeds are the h-maxima ($h_\mathrm{max} = 2.5$~px) of the distance map that lie at least 6~px from any
-outline and at least 12~px from each other (\tabref{tab:ws-constants}). A marker-controlled watershed on the negative
+outline and at least 12~px from each other (module constants of \code{optics.detect_watershed}, a choice). A marker-controlled watershed on the negative
 distance map, a standard image-segmentation method~\citep{Vincent1991,BeucherMeyer1993}, grows one basin per seed;
 each basin is fitted and filtered as above. A detection's size is the geometric mean of its rectangle sides.
 
-\begin{table}
-\centering\tabfont
-\caption{Seed constants of the watershed detector (choice; module constants of \texttt{optics.detect\_watershed}).
-The \textmu m values use the modelled 1080p clip scale.}\label{tab:ws-constants}
-\begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.5\columnwidth}@{}}
-\toprule
-Constant & Value & Role \\
-\midrule
-\code{_PEAK_MIN_DISTANCE} & 12~px & minimum seed spacing; $17.6 \times 23.0$~\um{} ($x \times y$) \\
-\code{_PEAK_THRESHOLD_ABS} & 6~px & minimum distance of a seed from any outline \\
-\code{_H_MAXIMA_PARAM} & 2.5~px & h-maxima height $h_\mathrm{max}$; suppresses plateau peaks \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 \label{sec:window}The area window is read from \code{configs/camera_100.toml} by
 \code{optics.config.detection_area_px}. Its lower bound is $3^2 = 9$ samples$^2$ (\code{min_side_px} $= 3$, choice);
@@ -68,25 +54,16 @@ with object distance (Eq.~\ref{eq:pixelsize}). For a near-side defocus $|\delta|
 \approx \frac{2|\delta|}{d_\mathrm{focus}}.
 \end{equation}
 Over the admitted $\pm 47$~\um{} the ratio departs from one by at most 0.17\,\% (0.08\,\% in clip pixels), whereas
-5\,\% needs $|\delta| \approx 1.3$~mm (\figref{fig:discrim}). This bounds the magnification change used in
+5\,\% needs $|\delta| \approx 1.3$~mm. This bounds the magnification change used in
 \secref{sec:layer}. It also answers the near/far question of the earlier pipeline: a size prior cannot separate
 hypotheses that differ by 0.17\,\%, and on the clip 99.6--99.9\,\% of the off-focus detections had a near probability
 within $0.500 \pm 0.002$, so its near/far labels were tie-breaks. The mean depth correction was 0.005--0.013\,\% of the
-median size (\tabref{tab:ws-compare}).
+median size (\code{scripts/rerun_paper_numbers.py}).
 
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{10_discriminability}
-\caption{Near/far apparent-size difference $d_\mathrm{far}/d_\mathrm{near} - 1$ against the near-side defocus
-$|\delta|$ at F/1.6, log axes (\texttt{optics.disambiguate.fig\_discriminability}); the top axis gives the sensor CoC
-in PAL samples (6.53~\um). Solid line: in-focus half-slice, 9.4~\um{} (CoC = 1 sample). Dashed: the assumed
-five-sample detection cutoff, 47~\um, where the difference is 0.17\,\%. Dotted: 5\,\%, reached at
-$|\delta| \approx 1.3$~mm.}\label{fig:discrim}
-\end{figure}
 
 \subsection{Detector output on the clip}\label{sec:csd-edge}
 
-\tabref{tab:ws-compare} lists the aggregated output of both detectors under the configured and the earlier window.
+On 60 frames of the clip (\code{scripts/rerun_paper_numbers.py}), sizes are detector outputs, not crystal sizes.
 Widening the window from 15--150~\um{} to 5--1000~\um{} raises the edge detections from 18\,823 to 47\,414, halves the
 median from 0.037 to 0.018~mm and raises the CV from 0.83 to 2.16: the edge-detector distribution depends on the area
 window. By visual reading, not checked against labels, the small detections are outline fragments and the large ones
@@ -97,31 +74,11 @@ rectangles around blurred regions.
 sweep}, six single frames, so the configured median is 88 rather than 75~\um) shows that the kept basins cover
 86\,\% of the cropped frame: the detector tiles the picture whether or not a crystal outline separates the basins. The
 median hardly moves with the seed spacing between 6 and 16~px, but it follows the seed clearance, from 63 to 108~\um{}
-for 3 to 9~px, and from 60 to 148~\um{} when both constants are scaled together. A narrower CV than the edge
+for 3 to 9~px, and from 60 to 148~\um{} when both constants are scaled together. A second sweep on three frames with the
+three sharpness layers pooled (\code{scripts/watershed_seed_sweep.py}) gives median basins of 36.5, 45.2 and
+90.3 clip pixels for the constants 6/3, 12/6 and 24/12~px. A narrower CV than the edge
 detector's is therefore not evidence of a narrower crystal distribution.
 
-\begin{table*}
-\centering\tabfont
-\caption{Aggregated detector output on the case-study clip, 60 frames (\texttt{scripts/\allowbreak
-rerun\_paper\_numbers.py}; sizes area-equivalent, modelled scale). These are detector outputs, not crystal sizes.}\label{tab:ws-compare}
-\begin{tabular}{@{}lrrrr@{}}
-\toprule
- & \multicolumn{2}{c}{Watershed} & \multicolumn{2}{c}{Edge} \\
-\cmidrule(lr){2-3}\cmidrule(l){4-5}
-Statistic & configured window & $[80, 8000]$~px$^2$ & configured window & $[80, 8000]$~px$^2$ \\
-\midrule
-Detections & 52\,784 & 52\,302 & 47\,414 & 18\,823 \\
-Median (mm) & 0.075 & 0.075 & 0.018 & 0.037 \\
-Mean (mm) & 0.082 & 0.081 & 0.034 & 0.051 \\
-Std (mm) & 0.035 & 0.033 & 0.073 & 0.042 \\
-CV & 0.43 & 0.40 & 2.16 & 0.83 \\
-5 / 25th percentile (mm) & 0.039 / 0.056 & 0.039 / 0.056 & 0.007 / 0.012 & 0.021 / 0.027 \\
-75 / 95th percentile (mm) & 0.100 / 0.149 & 0.099 / 0.145 & 0.032 / 0.092 & 0.056 / 0.135 \\
-Log-normal shape $\sigma_\mathrm{ln}$ / scale (mm) & 0.41 / 0.076 & 0.40 / 0.075 & 0.80 / 0.021 & 0.57 / 0.042 \\
-Mean depth correction / median & 0.005\,\% & 0.005\,\% & 0.013\,\% & 0.007\,\% \\
-\bottomrule
-\end{tabular}
-\end{table*}
 
 \begin{table}
 \centering\tabfont

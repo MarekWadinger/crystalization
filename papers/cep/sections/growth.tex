@@ -133,7 +133,10 @@ end & 0.863 & 0.893 & 0.732 & 0.916 \\
 
 The fusion of fast online outputs with slow laboratory samples follows the multirate estimators of \citet{Gudi1995}
 and \citet{FatehiHuang2017}; augmenting a filter with a constant bias state follows \citet{Friedland1969}, here as a
-multiplicative gain that becomes additive in the log. The scale symmetry and its corollary are our derivation.
+multiplicative gain that becomes additive in the log. Scaling symmetries that leave the output invariant are a known cause of
+structural unidentifiability, and breaking them restores observability \citep{CastroDeBoer2020,MassonisVillaverde2020};
+treating the constant $\theta$ as a state in an observability test follows \citet{Villaverde2019}. Lemma~\ref{lem:scale}
+is the same mechanism for the discrete-time growth model; the lemma and its corollary are our derivation.
 
 Three consequences shape the estimator. First, without an anchor the uncertainty of the absolute size never falls
 below the prior uncertainty of $\theta$, which the gain budget and the selection bias set together. Second, what the

@@ -22,10 +22,11 @@ before seeding to discharge and fail as a baseline. An extended Kalman filter in
 $(\ln L, \ln G, \theta)$, fed a simulated camera signal, lowers the log-size error at held-out microscope times from
 0.310--0.319 for the nominal curve to 0.085--0.109 with one anchor, where anchor-only references do no better than the
 nominal curve; its scale-free $G/L$ flag catches the late divergence of the two strikes but misses or lags the early
-one. This tests the filter, not the camera, and it holds only if the camera bias stays constant within a strike: a
+one, and an interim process-signal baseline, driven by whole-massecuite Brix, does worse than the nominal curve.
+The simulation tests the filter, not the camera, and it holds only if the camera bias stays constant within a strike: a
 packing drift of $\theta$ breaks it. Twelve AI-traced real camera points do no better than the nominal curve where
 they exist. The answer waits on the fine-tuned detector and on DCS data for the sampled run
-\pending{estimator on the detector signal and the process-signal baseline}.
+\pending{estimator on the fine-tuned detector signal; process-signal baseline on the DCS export}.
 
 The next steps are the fine-tuned detector validated against hand labels, the DCS export of the sampled run and site
 measurements of the camera geometry. The code, configuration and number-generating scripts are released open source

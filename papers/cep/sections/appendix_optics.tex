@@ -77,11 +77,8 @@ measurement. On the sensor, a clip pixel spans $2.552 \times 3.333$~\um, and thr
 one PAL sample. At the focal plane a clip pixel is $1.464 \times 1.913$~\um{} (95\,\% budget 1.336--1.624 and
 1.752--2.116~\um).
 
-An image-content check is weaker. The ratio of the widths of the massecuite-texture power spectrum along the two axes
-of the PAL recording gives a sample aspect of 1.002, 1.065 and 1.132 in three spatial-frequency bands, against the
-predicted 1.093. It brackets the prediction but cannot pin the aspect better than about $\pm 10$\,\%. A direct
-registration of PAL and clip frames is not possible: feature matching finds no frame of the long PAL recording in the
-clip \code{10-37-26} (\code{scripts/check_clip_overlap.py}).
+A direct registration of PAL and clip frames is not possible: feature matching finds no frame of the long PAL
+recording in the clip \code{10-37-26} (\code{scripts/check_clip_overlap.py}).
 
 \emph{Frame conditioning.} The clips carry two sources of artificially sharp edges: the DVR on-screen display (a date
 and time band at the top and a \code{CH01} label at the bottom) and the pillarbox. The picture spans columns 42.4 to
@@ -163,8 +160,8 @@ the optical slice is far thinner than any of them.
 \texttt{configs/camera\_100.toml} (\texttt{python -m optics.optical\_layout}); the colour of each dimension gives its
 source class. The camera body length (40~mm) is assumed and enters no number; the lens body (30.5~mm, including the
 1~mm focus travel) is an estimate; tube $e$, air gap $a$ and glass thickness are plant statements; the sensor-to-$H'$
-distance $i = f + e + \xi = 96$~mm is derived. The placement of the sharp-focus plane at the inner glass face, and hence
-$H \to$ focus $= 61.5$~mm, is an assumption (\ref{sec:slab}).}\label{fig:layout}
+distance $i = f + e + \xi = 96$~mm is derived. The placement of the focal plane at the inner glass face, and hence
+$H \to$ focal plane $= 61.5$~mm, is an assumption (\ref{sec:slab}).}\label{fig:layout}
 \end{figure*}
 
 \subsection{Circle of confusion and sharpness}\label{sec:coc}
@@ -180,29 +177,16 @@ $b = b_\infty d_\mathrm{focus} |1/d_o - 1/d_\mathrm{focus}|$, so a blur diameter
 lies near or far of the focal plane \citep{SellentFavaro2014}. Close to focus, $b \approx b_\infty |\delta| /
 d_\mathrm{focus}$ with the signed defocus $\delta = d_o - d_\mathrm{focus}$.
 
-\label{sec:psf}We approximate the defocus point-spread function by a Gaussian of width $\rho = \kappa b$, where the
-constant $\kappa$ depends on the camera \citep{Pentland1987,SubbaraoSurya1994}; we take $\kappa = 1/2$, whereas a
-uniform disk of diameter $b$ would give $b/4$ per axis. A Laplacian-type focus measure \citep{Pertuz2013} weights the
-image spectrum by $\nu^4$ at spatial frequency $\nu$; for a one-dimensional integral over a texture with a flat
-spectrum,
-\begin{equation}\label{eq:sharpness}
-\Phi(\rho) \propto \int_0^{\infty} \mathrm{e}^{-4 \pi^2 (\rho^2 + \rho_0^2) \nu^2} \, \nu^4 \, \mathrm{d}\nu
-\propto (\rho^2 + \rho_0^2)^{-5/2},
-\end{equation}
-where the floor $\rho_0$ combines, in quadrature, half a geometric-mean PAL sample and the diffraction width
-$0.42 \lambda_w N_w$, the Gaussian approximation of the paraxial Airy pattern \citep{ZhangZerubia2007} at the working
-F-number $N_w = N(1 + M) = 2.74\,N$. At $\lambda_w = 550$~nm the diffraction FWHM at the sensor is 2.4~\um{} (0.37 PAL
-samples) at F/1.6 (\code{scripts/rerun_paper_numbers.py}, rows 106--109). The exponent 5 is a property of these
-assumptions; in two dimensions, over a texture whose power spectrum falls as $|\nu|^{-\alpha}$, it becomes
-$6 - \alpha$.
+\label{sec:psf}The diffraction width enters at the working F-number $N_w = N(1 + M) = 2.74\,N$; at $\lambda_w = 550$~nm
+its FWHM at the sensor is 2.4~\um{} (0.37 PAL samples) at F/1.6 (\code{scripts/rerun_paper_numbers.py}, rows
+106--109; Gaussian approximation of the Airy pattern, \citealp{ZhangZerubia2007}).
 
 \subsection{Depth of field}\label{sec:dof}
 
 The in-focus slice is the depth range in which the CoC stays below one resolution element. For both recording types
 that element is the PAL sample, 6.53~\um{} on the sensor as a geometric mean; a 1080p clip pixel (2.92~\um) is an
 upscaled fraction of a sample. \tabref{tab:dof} gives the slice for both definitions. With the PAL sample, the
-in-focus slice at F/1.6 is $\pm 9.4$~\um. The geometric slice grows in proportion to $N$ (Eq.~\ref{eq:coc};
-\figref{fig:dof}), but diffraction grows with $N_w$: its FWHM reaches one PAL sample at about F/4.4 and is 1.8
+in-focus slice at F/1.6 is $\pm 9.4$~\um. The geometric slice grows in proportion to $N$ (Eq.~\ref{eq:coc}), but diffraction grows with $N_w$: its FWHM reaches one PAL sample at about F/4.4 and is 1.8
 samples at F/8 and 3.7 samples (23.9~\um) at F/16. Beyond about F/4 no depth meets the one-sample criterion, so the
 geometric $\pm 94$~\um{} at F/16 bounds only the geometric blur. Depths here are in air-equivalent thin-lens
 coordinates; beyond the inner glass face, a paraxial depth in a medium of index $n_s$ is $n_s$ times longer.
@@ -215,7 +199,7 @@ and widen the slice in proportion \pending{effective resolution of the recorded 
 
 \begin{table}
 \centering\tabfont
-\caption{In-focus half-slice (geometric CoC $\le$ one resolution element) and sharpness FWHM, in \textmu m of
+\caption{In-focus half-slice (geometric CoC $b \le$ one resolution element), in \textmu m of
 air-equivalent object depth (\texttt{scripts/rerun\_paper\_numbers.py}, rows 16--18 and 21--23). Element: PAL sample
 (6.53~\um) or upscaled clip pixel (2.92~\um). At F/16 the diffraction FWHM alone is 3.7 PAL samples, so that row
 bounds the geometric blur only.}\label{tab:dof}
@@ -225,17 +209,6 @@ Quantity & PAL sample & clip pixel \\
 \midrule
 half-slice, F/1.6 & $\pm 9.4$ & $\pm 4.2$ \\
 geometric half-slice, F/16 & $\pm 94$ & $\pm 42$ \\
-sharpness FWHM, F/1.6 & 10.5 & 5.5 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\begin{figure}
-\centering
-\includegraphics[width=\columnwidth]{04_dof_envelope}
-\caption{\textbf{How thick is the in-focus slice at each aperture?} Geometric CoC against object distance for the
-engraved iris stops F/1.6, F/2, F/4, F/8 and F/16. Dotted and dashed lines: one and two PAL samples (6.5 and
-13.1~\um{} on the sensor). At F/1.6 the CoC stays within one sample over $\pm 9.4$~\um; at F/16 over
-$\pm 94$~\um. The curves are geometric; diffraction, not drawn, exceeds one sample beyond about F/4.4
-(\ref{sec:dof}).}\label{fig:dof}
-\end{figure}
