@@ -1,0 +1,139 @@
+% Section 3. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame), review round 2. Built from optics.tex
+% (sec:budget), defocus.tex (sec:dof), sizing.tex (sec:homog), detection.tex (sec:window, sec:selectivity) and csd.tex
+% (sec:depthsmall, matched-time tracing) of docs/cep-grounded-draft. Numbers: python -m optics.scale_chain,
+% scripts/rerun_paper_numbers.py, scripts/traced_vs_lab.py. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Camera measurement model \emph{(RQ1)}}\label{sec:measurement}
+
+This section gives the measurement equation that RQ1 asks for and that the estimator of \secref{sec:estimator}
+uses: how the camera size signal depends on the crystal size in the pan, term by term, with the evidence for each.
+
+The camera is an analogue monochrome PAL closed-circuit camera behind a 35~mm lens on an extension tube, focused
+through the sight glass at F/1.6 (\ref{app:optics}). The recorder samples each analogue line at 13.5~MHz into 720
+samples and keeps 576 lines \citep{ITUBT601}. This recorded PAL sample, not a sensor cell and not a pixel of a screen
+recording, is the unit of every camera size in this paper.
+
+For update $k$, a detector (\secref{sec:detector}) outlines the crystals in $n_f$ frames, giving $n$ outlines in total.
+The longest chord of each outline is converted to micrometres per axis at the nominal scale
+$\hat\mu_\mathrm{x} = 3.919$ and $\hat\mu_\mathrm{y} = 3.586$~\um{} per PAL sample (\secref{sec:budget}). The
+\emph{camera size signal} $y_k$ is the log of the median chord, modelled as
+\begin{equation}\label{eq:meas}
+y_k = \ln L_k + \theta + \beta(L_k) + v_k, \qquad \theta = \ln(\lambda\, b_\mathrm{sel}),
+\end{equation}
+where $L_k$ is the crystal size by the laboratory definition (the median microscope chord, \secref{sec:microscope}),
+the first component of the growth state of \secref{sec:mechanism}; $\lambda$ is the measurement gain,
+$b_\mathrm{sel}$ the selection and definition bias of camera against operator, $\beta(L)$ a size-dependent bias and
+$v_k$ the noise of the median, with variance $R = \sigma_v^2$. The logarithm turns the unknown gain and selection
+factors into one additive constant $\theta$. \tabref{tab:terms} lists each term with its evidence.
+
+\begin{table*}
+\centering\tabfont
+\caption{Terms of the measurement equation~\eqref{eq:meas} and of the microscope anchor~\eqref{eq:anchor}, with the
+evidence for each. Values not yet produced by a repository script are marked pending.}\label{tab:terms}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.11\textwidth}>{\raggedright\arraybackslash}p{0.23\textwidth}%
+>{\raggedright\arraybackslash}p{0.33\textwidth}>{\raggedright\arraybackslash}p{0.25\textwidth}@{}}
+\toprule
+Term & Meaning & Value & Source \\
+\midrule
+$\lambda$ & nominal over true object-plane scale & 95\,\% budget $\pm 9.8$\,\% (x), $\pm 9.5$\,\% (y); not validated
+in the image & \texttt{optics.scale\_chain} (\secref{sec:budget}) \\
+$\theta = \ln(\lambda b_\mathrm{sel})$ & gain and selection combined & for the AI tracings, $\mathrm{e}^{-\theta}$
+(microscope over traced median) 0.86--1.02 (chord readers), 1.14--1.32 (outline readers), separate crystals &
+\texttt{scripts/traced\_vs\_lab.py} (\secref{sec:bias}) \\
+depth & magnification change inside the admitted depth & $\le 0.17$\,\%; dropped &
+\texttt{scripts/rerun\_paper\_numbers.py} (\secref{sec:layer}) \\
+$\beta(L)$ & resolution floor; packing; size window & 3 samples $= 11.8 \times 10.8$~\um; packed-field
+$\mathrm{e}^{-\theta}$ 1.4--2.0 at 122--170~min; 1~mm window & configuration, \texttt{scripts/traced\_vs\_lab.py}
+(\secref{sec:bias}) \\
+$v_k$, $R$ & noise of the per-update median & \pending{per-frame $\sigma_\mathrm{ln}$ and detections per frame} &
+\secref{sec:bias} \\
+$w_j$ & noise of the microscope anchor & \pending{bootstrap $\sigma$ of $w_j$}; photo clock $\pm 47$~s &
+\secref{sec:anchor} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Measurement gain}\label{sec:budget}
+
+The gain $\lambda = \hat\mu / \mu$ is the ratio of the nominal to the true object-plane scale $\mu$, in \um{} per
+PAL sample. A thin-lens model of the stated geometry gives the nominal scale above; at the focal plane it depends
+only on the focal length, the extension-tube length $e$ and the focus travel (\ref{app:optics}). A Monte Carlo budget
+over the inputs gives a 95\,\% interval of $\pm 9.8$\,\% along x and $\pm 9.5$\,\% along y (\tabref{tab:scale}),
+dominated by the tube: each millimetre of $e$ moves the scale by $\mp 1.64$\,\%. The tube term is common to both
+axes, so we treat $\lambda$ as one factor; read as a normal prior on $\ln\lambda$, the budget gives a standard
+deviation of $\ln(1.098)/1.96 \approx 0.05$. The interval is conditional on the plant's ``$\approx 6$~cm'' being the
+tube alone, on the camera candidates and on 13.5~MHz sampling, and no object of known size has been imaged through
+the glass: $\lambda$ is a prior, not a calibration.
+
+\subsection{Sampled layer}\label{sec:layer}
+
+If the focal plane lies at the inner glass face, as the stated geometry allows (\ref{app:optics}), the image is a
+backlit projection through the slab of massecuite, about 1--2~mm thick, between the glass and the lamp, with the sharp
+plane at the glass. With the PAL sample as resolution element, the in-focus slice at F/1.6 is $\pm 9.4$~\um{} of
+air-equivalent depth; the element is an optimistic assumption \pending{effective resolution of the recorded PAL
+chain}. Within the depth a detector can admit, under an assumed cutoff, the magnification changes by at most
+0.17\,\% (\ref{sec:selectivity}). One scale at the focal plane therefore suffices, and the estimator needs no depth
+state.
+
+The sampled layer is a projection, not a section. From about half an hour after seeding the microscope medians exceed
+0.1~mm (\tabref{tab:microscope}), 5 to 25 times the full slice of 19~\um. Such a crystal extends over hundreds of
+micrometres in depth; its backlit outline is the projection of the whole crystal, blurred by different amounts along
+its rim. The camera therefore measures crystal silhouettes, and a per-crystal depth is not defined. That the layer
+next to the glass represents the bulk of the stirred pan is the well-mixed-massecuite assumption, not a measured
+fact. Static objects would violate it: scratches or crystals adhering to the glass would enter every frame. On the
+2026-10-30 recording, frames 60~s apart are uncorrelated, so no static layer on the glass is imaged
+\pending{matched-time comparison script and figure}; a temporal-median background test would measure the share of
+static detections \pending{share of static detections}.
+
+\subsection{Detector}\label{sec:detector}
+
+The detector is a Cellpose segmentation model \pending{citation for Cellpose-SAM (\code{cpsam})} fine-tuned on crystal
+outlines hand-labelled by five annotators on frames of both recordings (\secref{sec:validation})
+\pending{Cellpose model version, fine-tuning set and held-out AP@0.5}. Its size window must admit chords above
+1~mm: the configured 1~mm area-equivalent upper bound may exclude crystals like the 1.14~mm chord the microscope
+shows at 122~min. A first reading with an untuned model showed two failure modes that the fine-tuning must remove:
+while the crystals span only 3--9 PAL samples, early in the strike, the outlines follow texture, and flat-field
+division with contrast equalisation splits large crystals into facets (\ref{sec:cellpose-first}). The edge and
+watershed detectors of the earlier pipeline are not used in $y_k$; they are the failed classical-detector baseline of
+\secref{sec:csd-time}.
+
+\subsection{Selection bias, size-dependent bias and noise}\label{sec:bias}
+
+The offset $\theta$ belongs to the detector, so it is fitted from the anchor, not fixed beforehand. Camera and
+operator measure different crystals with different chords: the camera sees every crystal in the layer, in random
+orientation, whereas the operator picks separated, well-formed crystals on a slide and draws one chord each. Four
+blind AI annotators traced crystals on twelve raw frames of the 2026-10-30 recording, three at each of 12:07, 12:30,
+13:32 and 14:20 in b1 (\code{scripts/traced_vs_lab.py}, \code{datasets/camera_traced_chords.csv}). Two drew the
+longest chord of every clearly bounded crystal and two outlined every crystal following the team's labelling
+protocol. Their sizes grow with the microscope sizes (log--log slope of the 90th percentile 0.64 for chords, 0.78 for
+outlines). Where the crystals are separate (12:07, 12:30), the microscope size divided by the traced size at the
+nominal scale, $\mathrm{e}^{-\theta}$ for these tracings, is 0.86--1.02 for chords and 1.14--1.32 for outlines. The
+two methods differ by about 30\,\%, more than the gain budget, so the tracing does not fix $\theta$ for another
+detector. All are AI annotations \pending{human annotation of the twelve frames}.
+
+The size-dependent bias $\beta(L)$ has three known sources. At small sizes the outline is limited by resolution:
+three PAL samples are $11.8 \times 10.8$~\um, and the untuned detector traced texture while crystals spanned 3--9
+samples, up to about 35~\um. The estimator therefore uses $y_k$ only above 40~\um, a choice just above that range
+\pending{lower size limit from the fine-tuned detector}. At large sizes the field packs: on the packed frames at
+122--170~min the microscope-over-traced ratio rises to 1.4--2.0, so $\beta$ turns negative, although there the
+annotators could not close the outlines of large crystals and these values are not a measurement. And the upper bound
+of the size window truncates the largest chords. Within the valid range we set $\beta = 0$; outside it the update is
+skipped. Corollary~\ref{cor:beta} gives the effect of a $\beta$ that is not zero.
+
+The noise $v_k$ is the sampling error of the median: for $n$ log-normal chords of shape $\sigma_\mathrm{ln}$,
+$R \approx (\pi/2)\,\sigma_\mathrm{ln}^2 / n$.\footnote{The asymptotic variance of a sample median is
+$1/(4 n\, g(m)^2)$, with $g(m)$ the density at the median; for the log chords $g(m) = \varphi(0)/\sigma_\mathrm{ln}$,
+with $\varphi$ the standard normal density, which gives $\pi \sigma_\mathrm{ln}^2 / (2n)$.} $R$ follows from the
+detections per update and their spread \pending{per-frame $\sigma_\mathrm{ln}$ and detections per frame from the
+fine-tuned detector, \code{scripts/softsensor_results.py}}.
+
+\subsection{Microscope anchor}\label{sec:anchor}
+
+A microscope sample $j$ drawn at time $t_j$ gives
+\begin{equation}\label{eq:anchor}
+z_j = \ln L(t_j) + w_j,
+\end{equation}
+the log median chord of the picked crystals. It contains no gain and no camera selection bias, because $L$ is defined
+by it. Its noise $w_j$ is the sampling error of a median of a few tens of picked chords \pending{bootstrap $\sigma$ of
+$w_j$ over the picked crystals, repository script}. The photo clock is known to $\pm 47$~s, short against the tens of
+minutes between samples. With $y_k$ and $z_j$ defined, \secref{sec:growth} asks which growth quantities they make
+observable.

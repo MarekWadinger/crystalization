@@ -1,79 +1,63 @@
-% Section 9. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft). Only numbers stated in sections 2-8, with
-% their scripts there. Claim changes: papers/cep/CLAIM_CHANGES.md.
-\section{Discussion and limitations}\label{sec:discussion}
+% Section 7. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame). Only numbers stated in sections 2-6
+% and the appendices, with their scripts there. Claim changes: papers/cep/CLAIM_CHANGES.md.
+\section{Discussion}\label{sec:discussion}
 
-\subsection{What the installed camera delivers now}\label{sec:performs}
+\subsection{What the soft sensor gives the operator}\label{sec:performs}
 
-The optical side is modelled up to its stated inputs. The model gives the scale at the focused plane per axis with
-an input-uncertainty budget of about $\pm 10$\,\% at 95\,\% (\tabref{tab:scale}), conditional on a 1/3\,in sensor,
-13.5~MHz sampling and a tube of ${\approx}\,60$~mm without an adapter ring. The plant's ``$\approx 6$~cm'' for the tube dominates the budget; every other term is about 2\,\% or
-less. The budget does not validate the scale: a first matched-time comparison, once the detector's fragmentation of
-large crystals is set aside, bounds the true scale to at most about 1.3 times the modelled one on the frames with
-separate crystals (\secref{sec:validation}). Any detector on the clips must use the anisotropic clip pixel, and its resolution element is the PAL sample in
-both recordings (\secref{sec:budget}).
+Differences between strikes matter to the operator because the seed massecuite of each strike is drawn into the A
+pans, where the product is boiled, and because the supersaturation target (KP) of the boil-up is the operator's lever
+on growth (\secref{sec:plant}). A strike that grows slower than usual is one in which the operator could raise the KP
+or the feed, or adjust the draw into the A pans. We know of no plant specification for the size of the seed
+massecuite, so the sensor cannot report a deviation from a target; it can report a deviation from earlier strikes.
 
-At F/1.6 the camera samples a slice of $\pm 9.4$~\um{} about the focused plane (\tabref{tab:dof}). Within it the
-magnification is constant well below the scale uncertainty (mean depth correction 0.005--0.013\,\%;
-\secref{sec:depthsmall}), so a single focal-plane scale suffices. The same thinness makes the size prior
-uninformative (\secref{sec:disamb-result}). Stopping down does not rescue it. The size ratio depends only on
-$\delta / d_\mathrm{focus}$ (Eq.~\ref{eq:ratio}), and the geometric admitted range grows only in proportion to $N$
-(Eq.~\ref{eq:coc}): even at F/16 the assumed five-sample cutoff lies near $\pm 0.47$~mm, below the
-$\delta \approx 1.3$~mm at which the ratio reaches 5\,\%. Diffraction at the working F-number $N(1 + M)$ adds
-3.7 PAL samples of blur at F/16, so the outlines on which the detectors rely would degrade first
-(\secref{sec:dof}).
+The camera alone gives the operator the relative growth rate of the strike, the shape of its growth curve and its
+growth rate compared with earlier strikes (Lemma~\ref{lem:scale}). These answer the boil-up question: is this strike
+growing slower than the last one? They need no scale, so they do not depend on the unvalidated gain, but they do
+depend on the detector staying unbiased across sizes (Corollary~\ref{cor:beta}). One microscope sample adds absolute
+size and growth age, which the draw into the A pans and the end of tightening need. If $\theta$ stays constant between
+strikes, one sample per run serves several strikes; if packing changes the selection bias, each strike needs its own.
+On simulated camera signals the filter tracks both strikes (\secref{sec:res-sim}); on the first real camera points
+it does not yet beat the nominal curve (\secref{sec:res-signal}), and the comparison with the process signals is open.
+The simulations also set the requirement for the detector: its bias against the microscope must stay constant within
+a strike, because a packing drift of $\theta$ produces false flags (\secref{sec:res-robust}).
 
-Neither classical detector measures crystal size: on the case-study clip their output depends on the area window
-or tiles the frame (\S\S\,\ref{sec:csd-edge}--\ref{sec:watershed}), and over a full PAL strike their medians stay
-flat from before seeding to discharge (\secref{sec:csd-time}). Resolution is not the obstacle for most of a strike: from about half
-an hour after seeding the microscope medians exceed 0.1~mm (\tabref{tab:microscope}), tens of PAL samples at the modelled scale, and only
-the slurry crystals of 10--19~\um{} sit at the resolution limit (\secref{sec:expected}). The missing piece is a
-detector validated against hand-labelled crystals (\secref{sec:validation}).
+A second route to absolute size avoids the camera's scale symmetry. A soft sensor of the mass of crystals from plant
+measurements exists for industrial sugar crystallization \citep{Damour2010}. With the number of crystals $N_c$ set by
+the seed dose and a constant shape factor, the mean crystal mass $m_c/N_c$ is proportional to $L^3$, so
+$L \propto (m_c/N_c)^{1/3}$ carries no unknown camera gain. Its uncertainty sits instead in the seed count and the
+shape factor, neither of which is measured at Sere\v{d}. This mass-balance estimate is an alternative to the anchor
+and a candidate future baseline; we have not built it.
 
 \subsection{Limitations}\label{sec:notperform}
 
-The scale is modelled, not measured in the image: no object of known size has been imaged through the glass, and
-its interval is an input budget conditional on the sensor format, the recorder rate and a tube of ${\approx}\,60$~mm
-(\S\S\,\ref{sec:budget}, \ref{sec:validation}). The
-tube length, air gap, glass thickness and F-number are approximate plant statements, the camera model with its cell
-size and CCD clock is the best-matching candidate, to be confirmed, and the 13.5~MHz sampling is the BT.601 rate, not
-a datasheet value of the installed recorder (\tabref{tab:inputs}). The case-study clip has no size reference: its
-recording date is contradicted by the image data, so its strike phase is unknown (\secref{sec:recording}), and the
-microscope series is from another day. That series consists of chords of operator-picked crystals, read once by an AI
-transcription from the photographs' overlays, not a measured distribution (\secref{sec:expected}). The depth of field
-rests on the resolution element, assumed to be the PAL sample although bandwidth, interlace and compression may
-coarsen it (\secref{sec:dof}). The PSF constant $k = 1/2$ has no page-checked source; it sets the sharpness FWHM and
-the CoC inverted in \secref{sec:impl}, not the in-focus slice or the asymptotic exponent (\secref{sec:psf}). The
-point-object depth model does not describe crystals much thicker than the slice (\secref{sec:homog}). The sight glass is treated
-paraxially, its residual distortion over the field has not been computed, and its index is assumed
-(\secref{sec:shift}). Slurry homogeneity is untested, and static marks or crystals adhering to the glass may enter the focal subset
-(\S\S\,\ref{sec:homog}, \ref{sec:selfcheck}). Frame content matters: the recorder
-overlays and the pillarbox move the sharpness slope from 5.36 to 4.88--4.90 (\tabref{tab:crop}), and the right picture
-edge moves by about 8 clip pixels between and within clips, so crops must keep a margin (\secref{sec:recording}).
+The gain is modelled, not measured: no object of known size has been imaged through the glass, and its budget is
+conditional on the sensor format, the recorder rate and a tube of ${\approx}\,60$~mm (\secref{sec:budget}). It enters
+only $\theta$, which an anchor fixes, but without an anchor it bounds the absolute size. The tube length, air gap,
+glass thickness and F-number are approximate plant statements, and the camera model is the best-matching candidate,
+to be confirmed (\ref{app:optics}). The microscope series consists of chords of operator-picked crystals, read once
+by an AI transcription, not a measured distribution (\secref{sec:microscope}), and it covers one run. The selection
+bias and the packing bias rest on AI tracings of twelve frames (\secref{sec:bias}). The resolution element is assumed
+to be the PAL sample although bandwidth, interlace and compression may coarsen it (\secref{sec:layer}). That the layer
+at the glass represents the well-mixed massecuite is untested, and static marks or crystals adhering to the glass could
+bias it (\secref{sec:layer}). The size-independent growth law is applied to a median of picked crystals; for sucrose,
+growth per surface area can depend on size \citep{Martins2007}. The PAL recording of 2026-02-04 has DCS data but no
+size reference, and the sampled run of 2026-10-30 has size references but no DCS data yet (\secref{sec:data}),
+so the process-signal baseline has not run. The estimator evaluation rests on two strikes of one run, tuned on one and
+tested on the other; nothing in it estimates the variability between strikes or days, and the nominal curve of each
+strike is the other strike. Its truth is the single AI transcription of operator-picked chords. The simulated camera
+signal is built from that truth with assumed noise and no bias, so it tests the filter, not the camera; the real
+camera points are twelve AI tracings of one strike. The priors, the $\ln G$ coordinates, the 40~\um{} floor and the
+flag rule are analysis choices.
 
-\subsection{Operational recommendations}\label{sec:recs}
+\subsection{Recommendations}\label{sec:recs}
 
 \begin{enumerate}
 \item \textbf{Measure the geometry at the next shutdown}: read the camera's model sticker (cell size, CCD clock),
-caliper the extension tube or spacer and photograph the mount, and read the recorder model (sampling)
-and the glass stamp (index). A ruler or graticule imaged at the inner glass face of the empty pan would measure the
-scale in the image and locate the focal plane.
-\item \textbf{Record the PAL stream, not the monitor.} Screen recordings add no resolution but an anisotropic
-stretch and a moving picture edge. Logging the recorder clock against the control system keeps the time since
-seeding traceable; on the 2026-02-04 recording the two agree to about $\pm 30$~s (\code{scripts/check_anchors.py}).
-\item \textbf{Replace the classical detectors by a validated segmentation}, such as a fine-tuned Cellpose model
-scored as in \secref{sec:validation}, with a size window that admits the largest microscope crystals, whose chords reach
-1.14~mm and may exceed the current 1~mm area-equivalent bound (\secref{sec:expected}).
-\item \textbf{Treat the camera as a thin-slice sensor at F/1.6.} A single focal-plane scale suffices; depth
-disambiguation would need detections far outside the in-focus slice, which neither the engraved stops nor the current
-detectors provide, and beyond about F/4.4 diffraction at the working F-number exceeds one PAL sample
-(\secref{sec:dof}).
+caliper the extension tube and photograph the mount, and read the recorder model (sampling) and the glass stamp
+(index). A ruler or graticule imaged at the inner glass face of the empty pan would measure the gain in the image and
+locate the focal plane.
+\item \textbf{Record the PAL stream and log its clock against the DCS.} Screen recordings add no resolution but an
+anisotropic stretch and a moving picture edge (\ref{app:optics}). Logging the recorder clock against the DCS
+keeps the time since seeding traceable; on the 2026-02-04 recording the two agree to about $\pm 30$~s
+(\code{scripts/check_anchors.py}).
 \end{enumerate}
-
-\subsection{Towards a soft sensor}\label{sec:softsensor}
-
-The control use of the camera is a soft sensor of the growth state of each strike, with the growth model of
-\secref{sec:growth} as measurement equation, anchored in physical units by the microscope series. Driven by a
-validated camera median against time since seeding, a state estimator could return the time since seeding or flag a
-strike that leaves the nominal curve, and be compared with an estimator using the plant's process signals alone. This
-paper provides the modelled scale, the depth model and the validation protocol; the camera size signal is
-\pending{validated camera size against time, 2026-10-30}.

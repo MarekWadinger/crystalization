@@ -1,25 +1,32 @@
-% Section 10. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft). Claim changes: papers/cep/CLAIM_CHANGES.md.
+% Section 8. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame). Claim changes: papers/cep/CLAIM_CHANGES.md.
 \section{Conclusions}\label{sec:conclusions}
 
-We examined what the camera installed at the sight glass of the Sere\v{d} seed pan can measure before any detector
-is trusted. The picture is an analogue PAL signal digitised by the recorder; the 1080p clips are screen recordings
-of it and add no resolution. A source-classed model of this chain gives a pixel scale of $1.464 \times 1.913$~\um{}
-per clip pixel and $3.92 \times 3.59$~\um{} per PAL sample at the focused plane, with an input-uncertainty budget of
-about $\pm 10$\,\% at 95\,\% if the sensor is 1/3\,in, the recorder samples at 13.5~MHz and the tube is
-${\approx}\,60$~mm (RQ1). The budget is not a validation: no object of known size has been imaged through the glass,
-and a first matched-time comparison with the microscope disagrees (\secref{sec:validation}). We therefore report no
-absolute crystal size from the camera; camera growth is treated in pixels, its scale to be identified by the
-microscope anchor (\secref{sec:growth}). At F/1.6 the in-focus slice is $\pm 9.4$~\um, and
-per-pixel sharpness statistics are sensitive to the recorder overlays and the pillarbox, which must be cropped
-(RQ2). In so thin a slice a single focal-plane scale suffices, and for objects thinner than the slice a single-component
-size prior cannot tell front from back: within the admitted depth range the two hypotheses differ by at most
-0.17\,\%, and the near/far labels are tie-breaks (RQ3). The edge-detector distribution depends on its area window,
-the watershed tiles the frame and follows its seed clearance, and over a full PAL strike both medians stay flat from
-before seeding to discharge, so neither measures crystal size (RQ4).
+We designed a soft sensor of crystal growth around the camera installed at the sight glass of the Sere\v{d} seed pan
+and tested its estimator in simulation and on first real camera points.
 
-The seed-pan microscope series of 2026-10-30, with median chords of operator-picked crystals from 29~\um{} to 483~\um{}
-122~min after seeding, defines the range a camera size measurement must cover and the independent reference that a growth-curve
-calibration needs. The next steps are a segmentation validated against hand-labelled crystals
-(\secref{sec:validation}) and site measurements of the camera model, the tube and the scale at the inner glass face
-(\secref{sec:recs}); with both, a camera size signal can enter the growth-state soft sensor of \secref{sec:softsensor}. The
-code, configuration and number-generating scripts are released open source (Appendix~\ref{app:repro}).
+\emph{RQ1: what does the installed camera measure, and with what uncertainty?} The log median camera chord equals the log crystal size plus a constant offset
+$\theta$, a size-dependent bias and noise. The offset combines a measurement gain, modelled as $3.92 \times 3.59$~\um{}
+per PAL sample with an input-uncertainty budget of about $\pm 10$\,\% at 95\,\% and not validated in the image, with
+the selection bias between camera and operator. The in-focus slice is thin enough for one scale. The size-dependent bias comes from resolution at small
+sizes, packing late in the strike and the size window.
+
+\emph{RQ2: which growth-state quantities are observable from the camera alone, and what reference makes absolute
+size observable?} Under size-independent growth, scaling size and growth rate by a common factor and
+shifting $\theta$ leaves the camera signal unchanged. The camera alone observes the relative growth rate, the shape of
+the growth curve and the growth-rate ratio between strikes, provided $\theta$ is shared; one microscope sample
+restores absolute size and growth age. A size-dependent bias distorts the relative growth rate.
+
+\emph{RQ3: does a camera-aided estimator track the growth state of each strike better and earlier than references
+without the camera?} Not yet answered. Classical edge and watershed detectors return medians that stay flat from
+before seeding to discharge and fail as a baseline. An extended Kalman filter in
+$(\ln L, \ln G, \theta)$, fed a simulated camera signal, lowers the log-size error at held-out microscope times from
+0.310--0.319 for the nominal curve to 0.085--0.109 with one anchor, where anchor-only references do no better than the
+nominal curve; its scale-free $G/L$ flag catches the late divergence of the two strikes but misses or lags the early
+one. This tests the filter, not the camera, and it holds only if the camera bias stays constant within a strike: a
+packing drift of $\theta$ breaks it. Twelve AI-traced real camera points do no better than the nominal curve where
+they exist. The answer waits on the fine-tuned detector and on DCS data for the sampled run
+\pending{estimator on the detector signal and the process-signal baseline}.
+
+The next steps are the fine-tuned detector validated against hand labels, the DCS export of the sampled run and site
+measurements of the camera geometry. The code, configuration and number-generating scripts are released open source
+(\ref{app:repro}).

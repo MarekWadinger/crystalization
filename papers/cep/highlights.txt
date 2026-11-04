@@ -1,6 +1,6 @@
 # CEP highlights: 3-5 bullets, <= 85 characters each. Submitted as a separate file; not typeset in main.tex.
-PAL chain model: 1.46 × 1.91 µm per clip pixel, ±10 % input budget, not validated
-1080p screen recordings of the PAL camera add no resolution
-At F/1.6 the in-focus slice is ±9.4 µm and front/back stays ambiguous
-Classical detector medians stay flat over a full strike, from before seeding on
-Picked seed-pan crystals grow from 29 to 483 µm in 122 min (microscope chords)
+A soft sensor of seed-pan crystal growth is designed around an installed camera
+Camera signal: log crystal size plus a constant gain-and-selection offset and noise
+The camera alone observes relative growth rate and curve shape, not absolute size
+One microscope sample makes absolute crystal size observable
+Classical detectors fail as a baseline: their medians stay flat over a full strike

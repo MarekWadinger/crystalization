@@ -1,4 +1,5 @@
-% Appendix A. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft): lists the scripts that actually generate the
+% Appendix C. Grounded rewrite 2026-11-03 (branch docs/cep-grounded-draft; table updated in the soft-sensor reframe
+% 2026-11-04): lists the scripts that actually generate the
 % paper's numbers and figures. Test counts from `uv run pytest --collect-only`.
 \section{Reproduction}\label{app:repro}
 
@@ -11,9 +12,13 @@ uv sync --group dev --group optics \
 uv run pytest -q tests/test_optics.py \
   tests/test_scale_chain.py \
   tests/test_provenance.py   # 30 tests
+uv run pytest -q tests/test_softsensor.py  # 21
+uv run python scripts/softsensor_results.py
 \end{verbatim}}
-\noindent The full suite collects 142 tests (\code{uv run pytest -q}). \tabref{tab:repro} lists the generators.
-\code{scripts/rerun_paper_numbers.py} writes each computed number of \S\S\,\ref{sec:optics}--\ref{sec:csd} with its
+\noindent The full suite (\code{uv run pytest -q}) gives 160 passed, 1 failed and 2 skipped; the failing frame-scale
+test of \code{test_crystal_rules} fails on the base branch too and concerns no number of this paper.
+\code{scripts/softsensor_results.py} writes the estimator results to \code{docs/softsensor/results.md}. \tabref{tab:repro} lists the generators.
+\code{scripts/rerun_paper_numbers.py} writes each computed optics and detector number with its
 previous value, source class and generating function to \code{docs/optics/rerun_results.md};
 \code{scripts/detector_checks.py} writes the label-free detector checks to \code{docs/optics/detector_checks.md};
 \code{optics.scale_chain} writes the scale budget to \code{docs/optics/scale_chain.md}; \code{make -C papers/cep
@@ -28,25 +33,21 @@ $^\ast$: runs without the videos.}\label{tab:repro}
 \toprule
 Command & Output \\
 \midrule
-\code{-m optics.scale_chain} (\code{--no-video}$^\ast$: budget) & \secref{sec:chain}, \tabref{tab:scale} \\
-\code{-m optics.error_budget}$^\ast$ & 1$\sigma$ budget, \secref{sec:slab} \\
-\code{scripts/rerun_paper_numbers.py} & other numbers of \S\S\,\ref{sec:optics}--\ref{sec:csd};
-Tables~\ref{tab:dof}, \ref{tab:crop}, \ref{tab:ws-compare} \\
-\quad\code{--no-video}$^\ast$ / \code{--fig07} & optics rows / \figref{fig:overlays} \\
-\code{scripts/check_clip_overlap.py} & clip date, \S\S\,\ref{sec:chain}--\ref{sec:recording} \\
-\code{scripts/check_anchors.py} & anchors, clock, \secref{sec:expected} \\
+\code{-m optics.scale_chain} (\code{--no-video}$^\ast$: budget) & \tabref{tab:scale}, \ref{sec:chain} \\
+\code{-m optics.error_budget}$^\ast$ & 1$\sigma$ budget, \ref{sec:slab} \\
+\code{scripts/rerun_paper_numbers.py} & other optics and detector numbers; Tables~\ref{tab:dof},
+\ref{tab:ws-compare} \\
+\quad\code{--no-video}$^\ast$ & optics rows \\
+\code{scripts/check_clip_overlap.py} & clip date, \ref{sec:chain}, \ref{sec:recording} \\
+\code{scripts/check_anchors.py} & anchors, clock, \secref{sec:data} \\
 \code{scripts/microscope_summary.py}$^\ast$ & \tabref{tab:microscope} \\
+\code{scripts/traced_vs_lab.py}$^\ast$ & $b_\mathrm{sel}$, $\beta(L)$, \secref{sec:bias} \\
 \code{scripts/detector_checks.py} & \tabref{tab:ws-sweep}, \figref{fig:time} \\
-\code{-m optics.plots}$^\ast$ & Figs.~\ref{fig:coc},
-\ref{fig:sharpness}, \ref{fig:dof} \\
+\code{-m optics.plots}$^\ast$ & \figref{fig:dof} \\
 \code{-m optics.optical_layout}$^\ast$ & \figref{fig:layout} \\
-\code{-m optics.measure} & \figref{fig:measured} \\
-\code{-m optics.qualitative} & \figref{fig:detection} \\
-\code{-m optics.disambiguate} & Figs.~\ref{fig:discrim}, \ref{fig:disamb} \\
-\code{-m optics.csd} & \figref{fig:csd} \\
+\code{-m optics.disambiguate} & \figref{fig:discrim} \\
+\code{scripts/softsensor_results.py}$^\ast$ & \S\S\,\ref{sec:growth}--\ref{sec:results}; Tables~\ref{tab:ident},
+\ref{tab:loso}, \ref{tab:robust} \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\figref{fig:frames} is the first frame of the case-study clip as stored in the repository; it has no generator
-script yet.

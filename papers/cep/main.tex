@@ -1,7 +1,8 @@
 % Journal manuscript, Control Engineering Practice (Elsevier, elsarticle 5p, 20-page limit).
 % Build: make -C papers/cep pdf; limits: make -C papers/cep check.
-% Grounded draft, branch docs/cep-grounded-draft (2026-11-03). Every number comes from a script and
-% configs/camera_100.toml (Appendix A); results that need hand-labelled crystals are marked \pending{}.
+% Soft-sensor reframe, branch docs/cep-soft-sensor-frame (2026-11-04), from docs/cep-grounded-draft. Every number
+% comes from a script and configs/camera_100.toml (Appendix C); results that wait on labels or the estimator scripts
+% are marked \pending{}.
 % Every changed scientific claim is listed for author approval in papers/cep/CLAIM_CHANGES.md.
 \documentclass[5p,authoryear]{elsarticle}
 
@@ -38,13 +39,15 @@
 \DeclareUrlCommand\code{\urlstyle{tt}}% breakable code and paths
 % Results that wait on hand-labelled crystals or site checks.
 \newcommand{\pending}[1]{\textcolor{red}{[PENDING: #1]}}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newproof{pf}{Proof}
 \newcommand{\orcid}[1]{\texorpdfstring{\,\href{https://orcid.org/#1}{\textsuperscript{\textsf{iD}}}}{}}
 
 \begin{document}
 \begin{frontmatter}
 
-\title{Towards in-line crystal sizing through the sight glass of an industrial sugar seed pan: pixel scale, depth
-of field and detector failure modes}
+\title{Estimating crystal growth in an industrial sugar seed pan from an installed sight-glass camera}
 
 % Authors, order and ORCIDs from docs/paper/CREDIT.md. All: Slovak University of Technology in Bratislava.
 \author[STU]{Marek Wadinger\orcid{0000-0002-0167-6331}\corref{cor}}
@@ -59,40 +62,39 @@ of field and detector failure modes}
 country={Slovakia}}
 
 \begin{abstract}
-An in-line crystal-size signal would let a soft sensor track crystal growth in sugar boiling, yet we found no
-peer-reviewed in-line size measurement through the sight glass of an industrial sugar pan. The
-camera at the seed-pan sight glass of Slovensk\'e cukrovary, Sere\v{d}, is an analogue monochrome PAL CCD
-behind a 35~mm lens on an extension tube. A source-tagged model of its signal chain shows that the
-1080p clips are screen recordings of the PAL picture, stretched $2.677 \times 1.875$, adding no resolution. At the focused plane
-the model gives a clip pixel of $1.464 \times 1.913$~\um{} and a PAL sample of $3.92 \times 3.59$~\um; its
-$\pm 10$\,\% (95\,\%) input budget assumes a 1/3\,in sensor, 13.5~MHz sampling and a ${\approx}\,60$~mm tube
-without an adapter ring, and the scale is not validated in the image. We therefore report no absolute
-camera crystal size; camera growth is treated in pixels. With the PAL sample as resolution element, the air-equivalent in-focus slice at F/1.6 is
-$\pm 9.4$~\um; within the depth range the detectors admit under an assumed cutoff, front and back hypotheses differ in implied size by at most
-0.17\,\%, so a size prior cannot separate them. Over a full strike of the PAL recording the medians of an edge and a
-watershed detector stay flat from before seeding to discharge, whereas operator-picked microscope chords of another
-seed-pan run grow from 29 to 483~\um{} in 122~min. A validation against hand-labelled crystals is defined, with
-results pending. Open scripts regenerate every number.
+Operators of an industrial sugar seed pan decide how much seed massecuite to draw into the A pans, when to raise
+the boil-up feed and when to discharge, yet no installed signal measures crystal growth. We design a soft sensor of
+crystal growth around the sight-glass camera of the seed pan at Slovensk\'e cukrovary, Sere\v{d}, and
+test its estimator in simulation and on first real camera points. The log median camera chord is modelled as the log
+crystal size plus a constant offset (gain times selection bias), a size-dependent bias and noise. The gain, modelled
+from the analogue PAL chain as $3.92 \times 3.59$~\um{} per sample ($\pm 10$\,\% at 95\,\%), is not validated in
+the image; the in-focus slice is thin enough for one scale. Under
+size-independent growth, scaling size and growth rate by a common factor and shifting the offset leaves the camera
+signal unchanged: the camera alone observes the relative growth rate, the growth-curve shape and growth-rate
+ratios between strikes, but not absolute size, which one microscope sample restores. Classical edge and watershed
+detectors fail: their medians stay flat over a full strike, whereas microscope chords
+grow from 29 to 483~\um{} in 122~min. On simulated camera signals, an extended Kalman filter lowers the
+log-size error from 0.31--0.32 to 0.085--0.109 with one anchor, provided the camera bias stays constant within a
+strike. On 12 AI-traced real camera points it does no better than
+the nominal curve; validation with a trained detector and process data is \pending{detector, DCS}.
 \end{abstract}
 
 % CEP: 3-5 highlights of <= 85 characters, submitted as the separate file highlights.txt (CEP guide); they are not
 % typeset here, because elsarticle's highlights environment adds a page that counts against the 20-page limit.
 
 \begin{keyword}
-crystal-size distribution \sep sight-glass imaging \sep sugar crystallization \sep depth of field \sep measurement
-uncertainty \sep soft sensor
+state estimation \sep Kalman filter \sep observability \sep soft sensor \sep sugar crystallization \sep
+sight-glass imaging
 \end{keyword}
 
 \end{frontmatter}
 
 \input{sections/introduction}
-\input{sections/hardware}
-\input{sections/optics}
-\input{sections/defocus}
-\input{sections/detection}
-\input{sections/sizing}
-\input{sections/csd}
+\input{sections/process}
+\input{sections/measurement}
 \input{sections/growth}
+\input{sections/estimator}
+\input{sections/results}
 \input{sections/discussion}
 \input{sections/conclusions}
 
@@ -106,6 +108,8 @@ uncertainty \sep soft sensor
 
 % Appendices after the references, so that the declarations sit directly before the references (CEP guide).
 \appendix
+\input{sections/appendix_optics}
+\input{sections/appendix_detectors}
 \input{sections/appendix_reproduction}
 \input{sections/appendix_glossary}
 

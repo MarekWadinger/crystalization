@@ -15,15 +15,23 @@ Dear [Editor's name],
 We submit the manuscript "[Final title]" by Marek Wadinger, Patrik Valábek, Erika Plšičík Pavlovičová, Ananya Lohani,
 Marián Choma and Radoslav Paulen for consideration as a research article in *Control Engineering Practice*.
 
-**Problem.** [One or two sentences: the operator decision in the sugar seed pan that needs an in-line crystal-size
-measurement.]
+**Problem.** Operators of an industrial sugar seed pan decide how much seed massecuite to draw into the A pans, when
+to raise the boil-up feed and when to discharge, without any online signal of crystal growth; the DCS trends level,
+vacuum, temperature, stirrer current and a Brix-scale signal, none of which is a crystal size.
 
-**Contribution.** [Two or three sentences: what the paper adds, stated for control readers, with its main result.]
+**Contribution.** We design a soft sensor of crystal growth around the closed-circuit camera already installed at the
+seed pan's sight glass, and test its estimator in simulation and on first real camera points: a measurement model of the installed camera (gain, sampled layer, detector), an
+observability result (the camera alone observes the relative growth rate and the curve shape, and one microscope
+sample restores absolute size), and a camera-aided extended Kalman filter with a per-strike validation protocol. On simulated camera signals it
+lowers the log-size error at held-out microscope times from 0.310–0.319 to 0.085–0.109 with one anchor, provided the
+camera bias stays constant within a strike; this tests the filter, not the camera. On twelve AI-traced real camera points it does no better than the nominal curve. [Real-camera result from the fine-tuned detector and the
+comparison with a process-signal estimator (needs DCS data for 2026-10-30), to be added after the results freeze on
+2026-11-23.]
 
-**Fit with the journal.** [One or two sentences: why the work belongs in *Control Engineering Practice*. The current
-draft has no soft sensor or estimator and no validated size signal; it reports a measurement-feasibility study with a
-label-free plant-data result (detector medians flat over a full strike). Decide the venue (CEP vs a sensors or
-measurement journal) before filling this in; see `CLAIM_CHANGES.md`.]
+**Fit with the journal.** The paper builds a state estimator on a sensor that is already installed in an industrial
+plant, states what it can and cannot observe, and defines a validation protocol on plant data against microscope samples and a
+process-signal baseline; the validation itself is pending. This is the scope of *Control Engineering Practice*. [Confirm once the real-camera and
+baseline results exist; see `CLAIM_CHANGES.md`.]
 
 **Data and code.** [Zenodo DOI to be added.]
 

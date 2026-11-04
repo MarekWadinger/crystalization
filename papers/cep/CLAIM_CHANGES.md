@@ -176,3 +176,290 @@ Not done (needs data or an author decision):
 74. Author decision 2026-11-04: the tube is Fedor's ≈ 6 cm (spacer ring alone), settled. The AI reading of the site photos (tube ≈ 37–42 mm, gap ≈ 35–46 mm; items 71–73) was never a measurement and is withdrawn. §2.2 and §3.4: photo reading and "contradicting the plant's ≈ 6 cm / ≈ 2 cm" removed. §7.7: "the 1.49 times of a ≈ 40 mm tube is excluded" → "the two methods differ by about 30 %, so the tracing cannot resolve the ±10 % budget". §9.1: "which excludes the ≈ 37–42 mm tube read from site photographs" removed. Config comments on tube and air gap likewise. [docs/sered/notes_plant_dcs_qa_photos.md:267; author 2026-11-04]
 75. Author decision 2026-11-04: no CS-to-C adapter ring in the 6 cm. The ring alternative (+8.9 %) is removed: abstract, tab:scale caption and "With ring" column, §3.2, §2.2 ("is open … \citep{AdemcoACM380E}" → "taken as the spacer alone, without a 5 mm CS-to-C adapter ring"), §9.1, §9.3 rec 1 ("(CS-to-C ring)"), config comment. The matched-time tracing cannot distinguish the two cases (1.00 vs 1.09 against a 30 % spread between methods), so this is an author decision, not a fit. [author 2026-11-04]
 76. Author request 2026-11-04: fig 19 and §7.5 in PAL samples, not µm (no absolute camera size, item 69). Edge median 31–36 µm → 8.4–9.7 PAL samples, watershed 180–216 µm → 48–58 (same detections, unit only; within 16 % and 20 %). Microscope triangles removed from fig 19 (placing them on a pixel axis needs the unvalidated scale); caption cites their 17-fold growth instead. [scripts/detector_checks.py time; docs/optics/detector_checks.md]
+
+## Soft-sensor reframe (branch docs/cep-soft-sensor-frame)
+
+Writer: thesis-writer, 2026-11-04. Brief: scratchpad `brief_reframe.md` (supervisor, plant-expert and optics-expert
+round). Each line: old → new [evidence]. Everything is proposed for author approval; item 85 is a NEW scientific
+claim. Estimator numbers come only from `docs/softsensor/results.md` (`uv run python scripts/softsensor_results.py`)
+and keep its REAL / SIMULATED label.
+
+77. Structure (pure moves, one line): section map applied. §1 Intro → §2 Process and data (`process.tex`: old sec:plant,
+    csd sec:expected → sec:microscope, tab:microscope) → §3 Camera measurement model (`measurement.tex`: optics
+    sec:budget PAL rows, sec:tube sensitivity, defocus sec:dof and csd sec:depthsmall as two sentences, sizing sec:homog
+    projection and static-mark text, matched-time tracing) → §4 Growth model and observability (`growth.tex`) → §5
+    Estimator and baseline (`estimator.tex`, with csd sec:validation) → §6 Results (`results.tex`, csd sec:csd-time and
+    fig 19) → §7 Discussion → §8 Conclusions; App A optics (`appendix_optics.tex`: sec:camera, tab:inputs, sec:chain,
+    crop paragraph, thinlens, shift one sentence, sec:slab, fig:layout, CoC/PSF short, sec:dof, tab:dof, fig:dof); App B
+    classical detectors and near/far (`appendix_detectors.tex`: sec:recording clip, edge/watershed, tab:ws-constants,
+    window, selectivity, fig:discrim, ambiguity/impl/result in one subsection, tab:ws-compare, tab:ws-sweep, first
+    Cellpose reading); App C reproduction; App D glossary. Files hardware/optics/defocus/detection/sizing/csd.tex
+    deleted from the working tree (content moved). Labels kept where the text moved; `\secref` on appendix labels
+    replaced by `\ref` (elsarticle prints "Appendix A.x"); `Appendix~\ref` → `\ref` (it printed "Appendix Appendix").
+78. Cut from the paper (one line): figs 00 (frames), 02 (CoC), 03 (sharpness), 07 (overlay), 08 (sharpness density),
+    09 (disambiguation), 11 (detection overlay), 14 (detector distribution); tab:crop; sec:empirical except one crop
+    sentence (α 5.36 vs 4.88–4.90, App A); sec:selfcheck; sec:overlay; sec:status; sec:softsensor outlook; the 10 mm
+    tube "5.55× coarser" sentence; layer details; the 1080p clip from the main text (App B only). Numbers of cut
+    passages remain in `docs/optics/rerun_results.md`.
+79. Terminology (one line): seed pan (ZRA at first mention) for graining vacuum pan / vessel; seed slurry only for the
+    input seed, massecuite (syrup before seeding) for pan contents, "homogeneous slurry" → well-mixed massecuite
+    (all plant-expert misuse lines: hardware 14, 28, 32, 104, 107, 154; sizing 23, 25, 31; introduction 57; detection 17;
+    defocus 83; optics 66, 111, 120; csd 166; discussion 48); strike for batch; sampled run of 2026-10-30 for
+    laboratory run; DCS for SCADA / control system (DeltaV once); focal plane for focused plane; slab only for the
+    1–2 mm glass–lamp gap; near/far for front/back, App B only; measurement gain λ and µm per PAL sample for pixel scale
+    and µm/px in the main text; tightening for drying; detections / camera size signal y_k for detector "CSD".
+80. Notation (one line): optics focus travel x → ξ, glass thickness t → t_g, refractive shift Δ → z_g, pixel extent
+    Δ_k / Δx → scale μ_x, μ_y, CoC c → b and K → b_∞, PSF σ = k c → ρ = κ b, floors σ_0 / σ_floor → ρ_0, wavelength λ →
+    λ_w, sharpness S → Φ, reciprocal distance u dropped, OTF H dropped, Gaussian kernel G → words, layers L → n_ℓ,
+    h-maxima h → h_max, log-normal shape s → σ_ln, p_near → π_near, crystal width w → ℓ (P_w → P_ℓ), δ = signed
+    defocus only (eq:ratio uses |δ|), spectral slope β → β_ν. Main text: x_k, L, G, θ, λ, b_sel, β(L), v_k / R, z_j /
+    w_j, Q_G, F_k, C, C^z, n_f, τ_b, o_b, τ, u_k, c (scale factor of Proposition 1 only).
+81. Title "Towards in-line crystal sizing through the sight glass … detector failure modes" → "Estimating crystal growth
+    in an industrial sugar seed pan from an installed sight-glass camera" (brief option 2). Option 1 ("… soft sensor …:
+    measurement model, observability and plant validation") is not used because no real-camera estimator result exists
+    yet (item 99). Author decision.
+82. Abstract rewritten around the operator decisions, the measurement model, the observability result, the negative
+    control and the SIMULATED estimator result (log-size RMSE 0.31–0.32 → 0.09–0.11 with one anchor, slower strike
+    flagged); removed: 1080p stretch, clip-pixel scale, front/back sentence, "report no absolute camera size"
+    (superseded by the anchor result); 249 words. [results.md §3; abstract check]
+83. Keywords → state estimation, Kalman filter, observability, soft sensor, sugar crystallization, sight-glass imaging.
+84. Highlights, all five → soft sensor of seed-pan growth; log size plus constant offset and noise; camera alone
+    observes relative growth rate and curve shape, not absolute size; one microscope sample makes absolute size
+    observable; classical detector medians flat over a strike as a negative control.
+85. NEW CLAIM, needs author approval. §4.2 Proposition 1 (scale symmetry) with proof: under L⁺ = L + GΔt (any G
+    sequence, random walk in ln G) and y = ln L + θ + v, (L, G, θ) → (cL, cG, θ − ln c) leaves y unchanged, so L, G, θ
+    are not observable from the camera; G/L, L/L_0 and, for constant G, L/G = t + o_b/G are; growth-rate and τ_b ratios
+    between strikes sharing θ are; one anchor z_j fixes θ and with it L and G in every strike sharing θ. Local version:
+    in (ln L, ln G, θ) the direction q = (1, 1, −1) satisfies F_k q = q and C q = 0, C^z q = 1. Promotes growth.tex
+    lines 17–24 ("(λΔx, λG, λo_b) fit equally"). The brief's "y/ẏ = t + o_b/G" is written as 1/ẏ = L/G = t + o_b/G
+    (y/ẏ was a typo). [derivation in the paper; SIMULATED check: rank 2, null vector [1, 1, −1], rank 3 with one anchor;
+    σ_θ 0.160 → 0.160 without and 0.0875 with an anchor (diffuse priors); SD ln(G/L) at 60 min 0.449 either way;
+    results.md §2; unit test tests/test_softsensor.py]. HermannKrener1977 cited for the rank condition only; the scale
+    result is stated as our derivation.
+86. §4.1 growth model: G random walk → random walk in ln G, state (ln L, ln G, θ) (author decision; the estimator
+    agent's design: keeps the unobservable direction fixed and G > 0; with G the direction (1, G, −1) moves and the EKF
+    gains spurious θ information). Nominal curve L(t; b) = L̄(τ_b t) + o_b, growth age τ = τ_b t, τ̂ < t flags a slow
+    strike; time since seeding is not an estimand (DCS steam cut 12:31:30 vs note 12:30). [src/softsensor/ekf.py
+    docstring and unit test; datasets/README.md anchor table]
+87. §4.1 citations: size-independent growth with the Martins2007 caveat (growth per volume size-independent, per surface
+    area size-dependent; M confidence, abstract only); growth driven by supersaturation (QuintanaHernandez2004). §4.2
+    multirate fusion (Gudi1995, FatehiHuang2017) and bias augmentation (Friedland1969). [citation-finder list]
+88. §4 "Status: no fit implemented; rq4 scripts no result" → cut; the estimator now exists in src/softsensor (§5).
+    The tube-length argument (optics lines 89–93: size changes > 10× per strike, a wrong gain rescales the curve without
+    inconsistency) moved into §4.1 as the motivation for Proposition 1.
+89. §1.1 "operators judge the end of concentration by eye, by touch or conductometrically (Bennar2010)" → removed
+    (unverified for Sereď, plant expert); "control system trends brix, vacuum and stirrer current" → "DCS trends level,
+    vacuum, massecuite temperature, stirrer current and a signal on a Brix scale"; new: three operator decisions (draw
+    into the A pans, boil-up feed / KP when growth is slow, end of tightening); "we know of no plant specification for
+    the size of the seed massecuite"; crystal size only from samples. "grains the seed massecuite" → "grains each strike
+    with seed slurry and produces the seed massecuite". [brief decision 6; docs/sered/README.md]
+90. §1.2 condensed to one instruments paragraph (citations unchanged) plus a new soft-sensor lineage paragraph:
+    Kadlec2009 (soft sensors predict low-rate / off-line quality variables), Damour2010 (CEP sugar soft sensor: crystal
+    mass, concentration, purity, not size or growth), Morales2023 (supersaturation from level, Brix, temperature; M
+    confidence, abstract only), Lohani2026 (supersaturation from standard process measurements; SELF-CITATION: Lohani
+    and Paulen are co-authors), Mesbah2011 (EKF/UKF on a semi-industrial fed-batch crystallizer), Borsos2017 (imaging in
+    a nucleation-control loop), Ochsenbein2014 (growth rates fitted off-line to imaging data). New novelty sentence: "to
+    our knowledge, no in situ camera size has been fused in a recursive estimator for an industrial sugar pan"
+    [citation-finder gap search, not a proof]. Not cited: Paz Suárez 2011, Ma & Wang 2012 (unverified).
+91. §1.3 three installation properties → the three measurement-model elements (gain, sampled layer, detector).
+    §1.4 RQ1–RQ4 (scale; slice and crop; near/far; classical detectors) → RQ1–RQ3 of the brief; old RQ3 near/far → App B.
+    Contributions 1–5 → 1–4: measurement model; observability condition; estimator "with a per-strike validation
+    protocol, tested leave-one-strike-out on simulated signals and first real points; process baseline waits on DCS"
+    (not "validated"); open dataset. Old contributions 2 (DoF) and 3 (0.17 % bound) are now supporting results in §3.2
+    and App B.
+92. §2 data, new facts: 2026-10-30 seedings 11:29:33 / 15:22:00 (sidecar); per-sample refractometric dry substance and
+    polarisation (sidecar); no DCS for 2026-10-30 (`\pending`); DCS export 2026-02-04 at 30 s with PIC1001, PIC1002,
+    QI1003, QIC1000, TI1006, EI1004, LI1009 and no LI1000; QI1003 labelled viscosity, Brix scale, reads the whole
+    massecuite, not a true Brix; new tab:data. tab:microscope adds b1 13:06 and b2 16:58 rows. New definition: crystal
+    size L := median microscope chord (laboratory definition). [datasets/README.md; docs/sered/notes_data_lab.md §2b, §5
+    (QI1003 meaning is marked interp. there); scripts/microscope_summary.py]
+93. §3 new measurement equation y_k = ln L_k + θ + β(L_k) + v_k, θ = ln(λ b_sel), λ = μ̂/μ dimensionless, with new
+    tab:terms (term, meaning, value, source). Per-frame σ 0.10 / 0.18 and σ_w 0.06–0.13 of the brief are not in the
+    paper as measured values (scratch, no repo script): `\pending`. [brief decision 2]
+94. §3.1 new derived number: σ_lnλ = ln(1.098)/1.96 ≈ 0.05 (normal reading of the ±9.8 % budget); λ treated as one
+    factor for both axes because the dominant tube term is common. [tab:scale; optics.scale_chain]
+95. §3.2 "a single focal-plane scale suffices" → "and the estimator needs no depth state" (same evidence: ≤ 0.17 %,
+    mean correction 0.005–0.013 %). "That this slab represents the bulk of the stirred pan is the homogeneity
+    assumption" → "the layer next to the glass represents the well-mixed massecuite: an assumption". [rerun rows]
+96. §3.3 new: the y_k detector is a fine-tuned Cellpose model (`\pending` version, fine-tuning set, AP); classical
+    detectors only as negative control; window must admit chords above 1 mm. Old recommendation 3 folded in here.
+97. §3.4 matched-time tracing: "the true scale is at most about 1.3 times the modelled one" (item 73) → removed; the
+    microscope-over-traced ratio is read as e^(−θ) for the tracings (gain and selection combined), method-dependent
+    (≈ 30 % between methods), so θ belongs to the detector used. Packed-frame ratio 1.4–2.0 → negative β(L). New:
+    β = 0 inside the valid range, update skipped outside; floor 40 µm in the estimator (analysis choice). [scripts/
+    traced_vs_lab.py: chords k p50 0.98–0.99, p90 0.86–1.02; outlines 1.14–1.32; packed 1.42–2.01]
+98. §3.4 new formula R = Var(ln median) ≈ (π/2) σ_ln²/n (asymptotic variance of a sample median, derived in text);
+    §3.5 new anchor equation z_j = ln L(t_j) + w_j; photo clock ±47 s. [derivation; sidecar photo_clock]
+99. §5 estimator design (new, analysis choices for author approval): discrete EKF in (ln L, ln G, θ), steps ≤ 1 min;
+    priors from the training strike (ln L_0, ln G_0 SD 1.0), θ ~ N(0, 0.16²) (the brief's "σ_θ ≈ 0.16 (inference)" is
+    now a stated prior); Q_G grid 1e-5…1e-1 /min tuned on the training strike; camera once per minute while L ≥ 40 µm;
+    flag rule 20 % band, 1.96 σ, 10 consecutive min; anchor = first test sample at t ≥ 30 min, anchor SD 0.1 assumed.
+    Mesbah2011, HaseltineRawlings2005 cited for the filter choice. [src/softsensor; results.md §3]
+100. §5.2 process-signal baseline: defined (DCS inputs, kinetics calibrated on anchors; Lohani2026 predecessor,
+    self-citation) but cannot run on 2026-10-30 (`\pending`, needs DCS). New: the nominal-curve prediction (the other
+    strike's microscope curve) is reported as a reference, explicitly not a substitute. [results.md §3]
+101. §5.3 validation protocol moved; detector level and acceptance (a), (b) unchanged; estimator level → leave one
+    strike out with log-size RMSE, G RMSE vs ±10 min central difference, G/L RMSE and flag share/time vs the 20 %
+    crossing; acceptance margins and θ carried b1 → b2 `\pending`. [src/softsensor/evaluate.py]
+102. §6.1 negative control moved unchanged in numbers; adds "these detectors define the floor the camera signal must
+    clear".
+103. §6.2 NEW RESULT (REAL microscope, single AI transcription): b1 G = 4.35 µm/min over 37–122 min (OLS 95 % 3.98–4.72,
+    bootstrap 3.49–6.11), lag 20.4 min, plateau after 122 min (483 / 486 / 452 µm); b2/b1 1.35 at 30 min, 1.03 at 52,
+    0.64 at 96; b2 G = 1.21 µm/min from 69 min (bootstrap 0.65–1.84); G_b1 − G_b2 = 2.23 µm/min over 30–97 min
+    (bootstrap 1.23–3.20); interpolated b2 > 20 % below b1 at 75 min, > 20 % above from 13 min. [results.md §1, §3]
+104. §6.3 NEW RESULT (SIMULATED, tab:loso): leave-one-strike-out log-size RMSE 0.09–0.11 with anchor, 0.15–0.16
+    without, nominal curve 0.31–0.32; σ_θ end 0.157 without, 0.087–0.092 with anchor; b2 flagged slower in 96–98 % of
+    seeds at median 103–107 min (28–32 min after the 75 min crossing), 60–62 % without anchor; early b2 lead flagged in
+    2–9 % at 24–29 min. Stated as a test of the filter, not the camera (signal built from the scored medians; σ_v 0.10 /
+    0.18 are scratch values; no β, no outliers). [results.md §3]
+105. §6.4 NEW RESULT (REAL camera points, 12 AI chord-trace medians, b1, ≤ 62 min): RMSE 0.060 (anchor) / 0.075 (none)
+    vs nominal 0.046 inside the window; open loop to 122 min 494 vs 483 µm (nominal 262), overshoot at 160 min 673 vs
+    486 µm; all held-out 0.22 vs 0.32; never flags. Stated as thin evidence; camera-aided claim `\pending` fine-tuned
+    detector and DCS. [results.md §4]
+106. §7 discussion rewritten: what the operator gets with and without an anchor; limitations condensed (α, crop, κ,
+    paraxial distortion, case-study clip dropped) and extended (two strikes of one run, AI-transcribed truth, simulated
+    circularity, twelve real points, priors / ln G / floor / flag rule as choices, no DCS for the sampled run);
+    recommendations 4 → 2 (site geometry; PAL stream with clock logging against the DCS); soft-sensor outlook deleted.
+107. §8 conclusions rewritten to RQ1–RQ3; RQ3 "not yet answered", with the SIMULATED and REAL estimator numbers above.
+108. App B first matched-time reading: "the time-varying gap is therefore a detector failure" dropped (the reading now
+    only motivates the fine-tuning); "frames 60 s apart are uncorrelated, no static layer" moved to §3.2; the rest
+    condensed, `\pending` kept.
+109. App D glossary: "Seed pan (graining pan)" → "Seed pan"; "Seeding (graining)" split into Seeding (očkovanie) and
+    Graining = seeding followed by formation ((cz) zrnění varu očkováním); "Seed massecuite (seed magma, footing)" →
+    "Seed massecuite"; "Tightening (drying)" → "Tightening"; Strike = one batch cycle and its massecuite (b1, b2);
+    Massecuite adds "pan contents after seeding (syrup before)". [plant expert via brief]
+110. Bibliography: 14 entries appended from the citation-finder list (Crossref-verified): Kadlec2009, Damour2010,
+    Morales2023 (M), Lohani2026 (self-citation), Mesbah2011, HaseltineRawlings2005, Borsos2017, Ochsenbein2014,
+    Martins2007 (M), QuintanaHernandez2004, HermannKrener1977, Friedland1969, Gudi1995, FatehiHuang2017; each used only
+    for its "supports" line. Not added: Sinopoli2004, Sun2023, Georgieva2003,
+    Simoglou2005, MuskeBadgwell2002, Patience2001, Jiang2021.
+111. Cover letter Problem / Contribution / Fit rewritten (SIMULATED result only, real-camera and baseline results as
+    bracketed placeholders). CRediT "Resources (plant data, SCADA)" → "(plant data, DCS)" (terminology only).
+112. App C table: generators of cut figures removed; rows for `scripts/traced_vs_lab.py` and `scripts/softsensor_*.py`
+    (`\pending`) added; fig 00 "no generator" note removed with the figure.
+
+Review round 2 (referee BLOCKERs, bridging review, notation audit; conservative option applied, all proposals):
+
+113. A1 framing: "We turn the camera … into a soft sensor" → "We design a soft sensor of crystal growth around the
+    sight-glass camera … and test its estimator in simulation and on first real camera points" (abstract, intro §1.3,
+    conclusions opener, highlight 1, cover letter). Abstract adds the negative real result: on 12 AI-traced real camera
+    points the estimator does no better than the nominal curve. Cover letter: "sets out its validation on plant data" →
+    "defines a validation protocol …; the validation itself is pending". [results.md §4]
+114. A2 "flags the slower strike" removed from abstract, highlights and cover letter; §6.3 adds: with two strikes the
+    nominal of each is the other, so a strike flagged slower makes the other faster by construction; the flags show
+    mechanics, not a detection rate. (Conclusions sentence still carries it until the results.md rerun.)
+115. A3 Proposition 1 → Lemma 1 (label prop:scale → lem:scale). Proof gaps fixed: G_N affects no output and is
+    undetermined (statement restricted to k < N); L_0 = o_s holds only if L̄(0) = 0 (stated as a condition); for a
+    linear nominal curve the τ ratio restates the G ratio (stated). HermannKrener1977 cited as the structural rank
+    condition. NEW CLAIM, needs author approval: Corollary 1, β(L) = γ ln L gives y = (1+γ) ln L + θ, so the inferred
+    G/L is biased by (1+γ) while the scale symmetry persists with θ − (1+γ) ln c; a packing ratio growing with size acts
+    as γ < 0. Symbol γ instead of the suggested κ (κ is the PSF constant in App A). [derivation in the paper]
+116. A3 practical identifiability next to the structural result: new tab:ident (SIMULATED, b1, σ_v 0.10, diffuse
+    priors): SD θ end 0.160 / 0.0875 without / with anchor; SD ln(G/L) 0.449 at 60 min and 0.872 at 170 min either way;
+    text: ln(G/L) known only to about a factor e^0.45 at 60 min. [results.md §2; to recheck after the rerun]
+117. A4 RQ3 wording "better and earlier than an estimator using process signals only" → "than references without the
+    camera"; added: comparison with anchor-only and nominal-curve references, the process-signal baseline waits on
+    DCS data, real-data answer after the 2026-11-23 freeze. Contribution 1: "matched-time comparison with the
+    microscope" → "AI tracings of twelve frames matched in time to the microscope; R and w_j pending". Contribution 2
+    adds "that share the offset" and the β distortion. Contribution 3: "with classical detectors as a negative control"
+    → "as a failed baseline", references named.
+118. A5 intro "None of these estimates crystal size or growth rate" → "None of these reports crystal size or growth
+    rate directly, although a crystal mass with a known crystal count implies a mean size". New §7.1 paragraph: mass-
+    balance route L ∝ (m_c/N_c)^(1/3) from a crystal-mass soft sensor (Damour2010) plus seed count and constant shape
+    factor escapes the camera's scale symmetry; alternative and candidate future baseline, not built. [Damour2010
+    supports the crystal-mass estimate only; the scaling is our reasoning]
+119. A5 new §7.1 paragraph on why strike-to-strike growth differences matter (seed massecuite drawn into the A pans; KP
+    of the boil-up as the lever; "we know of no plant specification" → the sensor reports deviation from earlier
+    strikes, not from a target). [plant facts already in §2, §1.1]
+120. A6 "negative control" → "failed classical-detector baseline" (§3.3, §6.1 title and text, tab:data, App B intro,
+    conclusions RQ3, highlight 5); §6.1 adds that only the pre-seeding frames are a true negative control.
+121. A7 gain budget: §3.1 cut to one paragraph; tab:scale and the Monte Carlo term list moved to new App A
+    sec:budget-detail (numbers unchanged). Depth-of-field numbers removed from abstract and conclusions ("thin enough
+    for one scale"). App B: near/far implementation paragraph, inverted depths, prior-bin argument and the near/far
+    split and π_near rows of tab:ws-compare cut; the near/far conclusion is one sentence (99.6–99.9 % within
+    0.500 ± 0.002, tie-breaks); clip paragraph cut to one sentence (date-dispute details and the 1 h 41–48 min
+    estimate dropped).
+122. B flow: two-line opening and one-line handover added to §2–§6; conclusion openers use the RQ wording of §1, RQ2
+    adds "provided θ is shared"; §7 keeps the operator view (the "measurement model is simple" RQ1 recap removed).
+    ±47 µm stays in App B only; 0.17 % once in §3.2 (plus tab:terms). Discussion cross-reference tab:inputs →
+    \ref{app:optics}. R derivation to a footnote; local-rank block split into structural / design / numerical
+    paragraphs; b_sel paragraph now leads "θ belongs to the detector, so it is fitted from the anchor". Terms: "slurry
+    reference" → "seed slurry" (text and tab:microscope); "residual footing" → "residual massecuite"; DeltaV only at
+    first mention (glossary intro "DeltaV screens" → "DCS screens").
+123. C1 correctness: tab:terms quoted "microscope over traced" as b_sel; by Eq. meas that ratio is e^(−θ). Row relabelled
+    θ = ln(λ b_sel) with value "e^(−θ) (microscope over traced median) 0.86–1.02 / 1.14–1.32"; packed-field value also
+    labelled e^(−θ).
+124. C2 notation: growth age τ → a (â); strike index b → s (τ_s, o_s, L(t; s), G_s), names b1/b2 kept; ΔL-law intercept
+    L_0 → L_init in §6.2; Euler e → \mathrm{e} or \exp; axis subscripts upright (μ_x, μ_y, p_x, p_y); crystal width ℓ
+    → w_c (App B); spectral slope β_ν → α (App A; α is free since the sharpness slope symbol was cut); median density
+    f(m) → g(m); h(x_k) dropped from Eq. meas, L_k pointed to §4.1; n (outlines per update) defined against n_f
+    (frames per update); Ḡ defined as the nominal growth rate of a linear nominal curve; R = σ_v² defined at first use;
+    §6.3 states the simulation uses the per-frame σ as per-update noise (an upper bound when an update pools frames).
+125. C3 Δt: the filter propagates in sub-steps of ≤ 1 min (§5.1). 40 µm floor justified as a choice just above the
+    3–9-sample texture range of the untuned detector (9 samples ≈ 35 µm; derived from 3.919 µm per sample). θ prior
+    0.16 written as an inference, (0.05² + 0.15²)^(1/2), with 0.15 a judgement of the selection-bias spread across
+    detectors. [brief "σ_θ ≈ 0.16 (inference)"]
+126. §5.2 retitled "Process-signal baseline and references"; new anchor-only reference (same filter, anchors and priors,
+    no camera updates) described for the coordinator's rerun; acceptance requires beating anchor-only, nominal curve
+    and process-signal baseline on both strikes. [to confirm against results.md after the rerun]
+
+Round 3, after the results.md rerun (estimator agent, `uv run python scripts/softsensor_results.py`; labels SIMULATED /
+REAL / EXTRAPOLATION kept as in results.md):
+
+127. tab:loso rebuilt from results.md §3: rows per test strike = nominal curve, two anchor-only references, EKF at
+    σ_v 0.10 / 0.18 with and without anchor; columns log-size RMSE [5 %, 95 %], G/L RMSE, growth-age RMSE, G/L flags.
+    Old numbers (0.088 / 0.094 / 0.107 / 0.113 anchored, size-flag columns, σ_θ column) → b2 0.085 / 0.104, b1 0.092 /
+    0.109 anchored; 0.144 / 0.154 / 0.150 / 0.158 without; nominal 0.310 / 0.319. [results.md §3]
+128. §5.2 anchor-only reference: "same filter, same anchors and priors, no camera updates" (round 2, my definition) →
+    withdrawn; replaced by the implemented two camera-free references, the nominal curve shifted in ln L through the
+    anchor and shifted in time to the growth age at the anchor. Result §6.3: neither beats the plain nominal curve
+    (0.337–0.570 vs 0.310–0.319) because the strikes cross after the 30–37 min anchor; the anchor pays off only with the
+    camera (b2, σ_v 0.10: 0.085 vs 0.144). [results.md §3]
+129. Evaluated flag: size flag → scale-free G/L flag (d = ln(Ĝ/L̂) − ln(Ḡ/L̄), θ cancels, no anchor needed); size flag
+    kept as a one-sentence definition. Results: identical with and without anchor; b2 relatively faster at 141 min in
+    90–100 % (noise-free curves 134), b1 relatively slower at 157–162 min in 66–100 % (134); early divergence at 34 min
+    missed (b2) or flagged late at 84–85 min (b1). n = 2 caveat kept. Flag truth changed from "interpolated curves first
+    differ by 20 % (75 / 13 min)" to the same flag rule on the noise-free curves (G/L 34 / 134 min, size 84 / 23 min).
+    The round-1/2 size-flag claims (b2 slower in 96–98 % at 103–107 min, 28–32 min late) are withdrawn. [results.md §3]
+130. Growth age: a = τ_s t → defined by L̄(a) = L(t; s) (equal to τ_s t if o_s = 0), on the rising part of the nominal
+    curve only. New: RMSE 5.4–12.3 min with camera and anchor vs 31.0–39.5 min nominal; limits stated (b1 plateau:
+    483 / 484 / 485.5 µm → 122.5 / 137.7 / 160.4 min; undefined above 485.5 µm (b1) and 399.0 µm (b2)). [results.md §3]
+131. NEW CLAIM, needs author approval: key design requirement "the camera adds value only if its bias θ stays constant
+    within a strike". New §6.4 and tab:robust (SIMULATED, σ_v 0.18, one anchor, 100 seeds): γ = 0.1 tolerable (0.152 /
+    0.194); |γ| = 0.3 log-size close to or worse than nominal (0.324 / 0.419; 0.273 / 0.306) while G/L stays below every
+    reference; θ random walk (spread ln 1.75 over 60–122 min) and packing ramp (θ falls ln 1.75 over 60–122 min) worse
+    than nominal (0.512 / 0.485; 0.447 / 0.343), ramp flags b2 slower in 69 % (wrong direction); Q_θ = 0.001 removes the
+    false flags and the true ones (b2 faster 94 % → 25 %). results.md's κ is written γ (Corollary 1 notation). §5.3 new
+    acceptance criterion (c): camera-to-microscope ratios at all matched times from 30 min within a factor 1.25 (an
+    analysis choice), i.e. θ constant, no packing bias. Abstract, conclusions, discussion and cover letter state the
+    requirement. ln 1.75 is described as "inside the 1.4–2.0 of the packed traced frames" (traced_vs_lab.py gives
+    1.42–2.01; results.md's "1.5–2.0, midpoint 1.75" not repeated). [results.md §4]
+132. §6.5 REAL rows: main result = covered window only (held-out 49 and 60 min): log-size RMSE nominal 0.046, anchor-only
+    0.095 (ln shift) / 0.073 (time shift), EKF 0.075 (no anchor) / 0.060 (anchor); G/L RMSE EKF 0.54, nominal 0.66,
+    time-shifted reference 0.46; no flags. Open-loop rows reduced to one sentence labelled EXTRAPOLATION (494 vs 483 µm
+    at 122 min; 673 vs 486 µm at 160 min); "over all held-out times 0.22 vs 0.32" removed. [results.md §5a, §5b]
+133. tab:ident replaced: σ_θ 0.0875 → 0.0876 (diffuse priors, text); table now SD ln(G/L) under leave-one-strike-out
+    priors and Q_G, no anchor, at 30 / 60 / 120 min / end for b1 and b2, σ_v 0.10 / 0.18 (b1 0.450 at 60 min, 0.863 at
+    the end); "anchor changes these by at most 0.025"; "0.45 is a factor of about 1.5 at one sigma". [results.md §2]
+134. Q_G grid 1e-5…1e-1 /min → 1e-5…10 /min; optimum interior: 0.1 trained on b1, 0.0316 trained on b2. [results.md
+    Q_G tuning]
+135. Abstract: "0.09–0.11" → "0.085–0.109 … provided the camera bias stays constant within a strike"; "fail as a
+    baseline" → "fail" (word limit); "operator-picked" dropped from the microscope clause, "of the seed pan of" → "of
+    the seed pan at". Conclusions RQ3: "flags the slower strike in 96–98 %" removed; adds anchor-only references no
+    better than nominal, G/L flag late-divergence result and the constant-bias condition. Cover letter numbers likewise.
+136. §6.2: "b2 falls more than 20 % below b1 at 75 min" → flag rule on the noise-free curves: b2 G/L slower from 34 min,
+    faster from 134 min, size > 20 % below b1 from 84 min. [results.md §3 flag reference]
+137. App C: "full suite collects 142 tests" → 160 passed, 1 failed, 2 skipped; the failing `test_crystal_rules`
+    frame-scale test is pre-existing (fails on the base branch). Adds `uv run pytest -q tests/test_softsensor.py # 21`
+    and `uv run python scripts/softsensor_results.py`; generator row `scripts/softsensor_*.py` (pending) →
+    `scripts/softsensor_results.py` for §§4–6, tab:ident, tab:loso, tab:robust. [estimator agent's run]
+138. App D glossary: table* → single-column table, source column merged into "Meaning [source]" (21 → 20 pages). No
+    content change.
+139. §7.1 adds the requirement sentence (a packing drift of θ produces false flags, §6.4).
+
+Not done here (out of scope or needs the author):
+- On-image text of generated figures still uses old terms: fig 18 ("sugar slurry (inside the vessel)", "1 PAL pixel =
+  …", "Camera 100"), fig 04 (title "Depth of field shrinks dramatically", axis "c"), fig 10 (axis "δ = d_focus − d_near",
+  sign differs from App A's signed δ). Generators are in src/optics (not edited).
+- Page budget (round 2): still 20 of 20. The App D glossary `table*` floats to its own page and leaves page 19 nearly empty; moving it
+  or shrinking it recovers about one page for the pending y_k-vs-z_j figure.

@@ -1,34 +1,145 @@
-% Section 8. Rewritten 2026-11-03 (branch docs/cep-grounded-draft): outlook only; no growth-curve fit exists in src/.
-% Microscope numbers: scripts/microscope_summary.py. Claim changes: papers/cep/CLAIM_CHANGES.md.
-\section{Growth-curve calibration: outlook}\label{sec:growth}
+% Section 4. Soft-sensor reframe 2026-11-04 (branch docs/cep-soft-sensor-frame), review round 2. The non-identifiability
+% statement of growth.tex (docs/cep-grounded-draft, lines 17-24) promoted to Lemma 1 with Corollary 1 (NEW claims,
+% need author approval, CLAIM_CHANGES.md). Microscope numbers: scripts/microscope_summary.py; SIMULATED observability
+% numbers: docs/softsensor/results.md section 2 (scripts/softsensor_results.py).
+\section{Growth model and observability \emph{(RQ2)}}\label{sec:growth}
 
-\subsection{The model}\label{sec:mechanism}
+This section gives the growth model the estimator propagates and answers RQ2: which growth quantities the camera
+signal of \secref{sec:measurement} determines alone, and what the microscope anchor adds.
 
-McCabe's $\Delta L$ law~\citep{McCabe1929,RandolphLarson1988} states that crystals of all sizes grow at the same
-rate, so at constant supersaturation the size grows linearly in time. Across strikes, the supersaturation profile and
-the seed differ. A shared growth curve $G$ with a per-batch time scale $\tau_b$ and offset $o_b$ gives
+\subsection{Growth model}\label{sec:mechanism}
+
+McCabe's $\Delta L$ law states that crystals of all sizes grow at the same rate \citep{McCabe1929,RandolphLarson1988}.
+For sucrose, growth per crystal volume has been found size-independent, whereas growth per surface area is linearly
+size-dependent \citep{Martins2007}; we use the size-independent form for the median size. The growth rate is driven by
+supersaturation \citep{QuintanaHernandez2004}, which the operator changes through the feed, the steam and the
+supersaturation target. With the time step $\Delta t$ between camera updates, the growth state of a strike evolves as
 \begin{equation}\label{eq:growth}
-s_\mathrm{med}(t; b)\, \Delta x(d_\mathrm{focus}) = G(\tau_b t) + o_b + \varepsilon_b(t),
+L_{k+1} = L_k + G_k \Delta t, \quad \ln G_{k+1} = \ln G_k + \eta_k, \quad \theta_{k+1} = \theta_k,
 \end{equation}
-with $s_\mathrm{med}$ the camera's median apparent size in pixels and $t$ the time since seeding. Once $G$ is known,
-a measured median returns the time since seeding or flags a strike that leaves the nominal curve, which is the soft
-sensor this paper works towards.
+with growth rate $G_k > 0$, a random walk in $\ln G$ with process noise $\eta_k$ of variance $Q_G \Delta t$, and the
+offset $\theta$, a constant of the installation and the detector ($Q_\theta = 0$). The estimator carries the state in
+log coordinates, $x_k = (\ln L_k, \ln G_k, \theta)^\top$, so that the camera output~\eqref{eq:meas} is linear in it.
 
-The camera alone does not identify the pixel scale through \eqref{eq:growth}. For any $\lambda > 0$, the triple
-$(\lambda \Delta x, \lambda G, \lambda o_b)$ fits the same data, and likewise one $\tau_b$ must be fixed against the
-time argument of $G$. The scale is identified only if $G$ is anchored in physical units by an independent size
-reference at known times. The microscope series of 2026-10-30 (\tabref{tab:microscope}) provides such an anchor for
-two strikes of the seed pan: the median chord grows from 29~\um{} at 2~min to 483~\um{} at 122~min after seeding in
-b1, and from 10~\um{} at seeding (a sample that includes sub-resolution chords) to 399~\um{} at 162~min in b2. The strikes differ at equal times (at 96~min, 355
-against 225~\um), consistent with a per-batch $\tau_b$; these are medians of operator-picked crystals, not
-distributions.
+Across strikes, the seed dose and the supersaturation profile differ. A nominal growth curve $\bar L(\cdot)$ in
+physical units, with a time factor $\tau_s$ and a size offset $o_s$ for strike $s$, describes this:
+\begin{equation}\label{eq:nominal}
+L(t; s) = \bar L(\tau_s\, t) + o_s,
+\end{equation}
+with $t$ the time since seeding. The \emph{growth age} $a$ is the time at which the nominal curve reaches the strike's
+size, $\bar L(a) = L(t; s)$; for $o_s = 0$ it is $a = \tau_s t$. It is defined only on the rising part of the nominal
+curve. A growth age that falls behind the time since seeding, $\hat a < t$, flags a slow strike, the case in
+which the operator would raise the boil-up feed or the supersaturation target. For a linear nominal curve
+$\bar L(a) = \bar G a$, with $\bar G$ the nominal growth rate, the strike grows at $G_s = \bar G \tau_s$. The
+microscope series shows differences between strikes: at 96~min after seeding the b1 median is 355~\um{} and the b2
+median 225~\um{} (\tabref{tab:microscope}). The time since seeding itself is not an estimand: the DCS shows the
+seeding (\secref{sec:data}).
 
-\subsection{Status}\label{sec:status}
+A camera cannot be calibrated by assuming a typical crystal size, because the size changes by more than an order of
+magnitude within a strike (29 to 483~\um{} in 122~min, \tabref{tab:microscope}). A wrong gain rescales the whole
+growth curve without making it internally inconsistent. Lemma~\ref{lem:scale} makes this precise.
 
-No fit of \eqref{eq:growth} is implemented: \code{optics.csd} aggregates one recording and contains no growth-curve
-code. The exploratory scripts \code{scripts/rq4_*.py} compare detector statistics between the end-of-strike windows of
-the two strikes in the 2026-02-04 PAL recording and test the removal of static sight-glass marks; they rely on the
-detectors of \secref{sec:csd}, whose medians do not follow the strike (\secref{sec:csd-time}), so we report no result
-from them. Fitting
-\eqref{eq:growth} requires camera medians against time since seeding from a validated detector on the 2026-10-30
-recording, paired with the microscope series \pending{validated camera size against time, 2026-10-30, both strikes}.
+\subsection{Observability}\label{sec:observability}
+
+\begin{lemma}[Scale symmetry]\label{lem:scale}
+Let one strike follow Eq.~\eqref{eq:growth} for $k = 0, \dots, N$ with any growth-rate sequence $G_k$, observed by the
+camera through Eq.~\eqref{eq:meas} with $\beta = 0$.
+\begin{enumerate}
+\item[(i)] For every $c > 0$ the state sequences $(L_k, G_k, \theta)$ and $(c L_k, c G_k, \theta - \ln c)$ both satisfy
+Eq.~\eqref{eq:growth} and produce the same outputs $y_k$ for every noise sequence. $L_k$, $G_k$ and $\theta$ are
+therefore not observable from the camera alone.
+\item[(ii)] The relative growth rates $G_k / L_k$, $k < N$, and the shape of the growth curve, $L_k / L_0$, are
+invariant under this map and are determined by the noise-free outputs; $G_N$ affects no output. If $G$ is constant
+and $\bar L(0) = 0$, so that $L_0 = o_s$, then also $L_k/G = t_k + o_s/G$ is determined.
+\item[(iii)] For two strikes $s$ and $s'$ observed with the same $\theta$, the ratio of their growth rates is determined
+by the noise-free outputs; for a linear nominal curve this is the ratio $\tau_s / \tau_{s'}$.
+\item[(iv)] One noise-free anchor $z_j$ (Eq.~\ref{eq:anchor}) in any strike that shares $\theta$ determines $\theta$,
+and with it $L_k$ and $G_k$, $k < N$, in every strike that shares $\theta$.
+\end{enumerate}
+\end{lemma}
+
+\begin{pf}
+(i) Scaling Eq.~\eqref{eq:growth} by $c$ gives $c L_{k+1} = c L_k + c G_k \Delta t$ and adds $\ln c$ to every
+$\ln G_k$, and $\ln(c L_k) + \theta - \ln c = \ln L_k + \theta$. (ii) $y_{k+1} - y_k = \ln(L_{k+1}/L_k) = \ln(1 + G_k
+\Delta t / L_k)$, so $G_k/L_k = (\exp(y_{k+1} - y_k) - 1)/\Delta t$ for $k < N$ and $L_k/L_0 = \exp(y_k - y_0)$; $G_N$
+enters only $L_{N+1}$, which is not observed. With constant $G$, $L_k/G = L_0/G + k\Delta t$, and $L_0 = o_s$ when
+$\bar L(0) = 0$. Conversely, two states with equal outputs have equal $\ln L_0 + \theta$ and equal $G_k/L_k$, so they
+are related by the map with $c = L_0'/L_0$: the map is the only ambiguity. (iii) With a common $\theta$,
+$L_{s,k}/L_{s',k'} = \exp(y_{s,k} - y_{s',k'})$, and $G_s/G_{s'} = (G_s/L_{s,k})(L_{s,k}/L_{s',k'})(L_{s',k'}/G_{s'})$
+is a product of determined factors; with $G_s = \bar G \tau_s$ the ratio $\tau_s/\tau_{s'}$ restates it. (iv)
+$y_j - z_j = \theta$; then $L_k = \exp(y_k - \theta)$ and $G_k = (L_{k+1} - L_k)/\Delta t$. \hfill$\square$
+\end{pf}
+
+\begin{corollary}[Size-dependent bias]\label{cor:beta}
+If $\beta(L) = \gamma \ln L$ with a constant $\gamma > -1$, the outputs are $y_k = (1 + \gamma) \ln L_k + \theta + v_k$.
+The relative growth rate inferred with $\beta = 0$ is then, for $G_k \Delta t \ll L_k$, $(1 + \gamma)\, G_k/L_k$: biased
+by the factor $1 + \gamma$, while the scale symmetry of (i) persists with $\theta - (1 + \gamma) \ln c$.
+\end{corollary}
+
+\begin{pf}
+$y_{k+1} - y_k = (1 + \gamma) \ln(1 + G_k \Delta t / L_k) \approx (1 + \gamma)\, G_k \Delta t / L_k$. \hfill$\square$
+\end{pf}
+
+A packing ratio that grows with size, as on the packed frames of \secref{sec:bias}, acts as $\gamma < 0$: the camera
+then underestimates the relative growth rate, and the scale-free outputs are no longer free of the detector. This is
+why the estimator skips updates outside the valid size range.
+
+The same conclusion holds locally, which is what an extended Kalman filter sees. In the log coordinates of the
+estimator the Jacobians are
+\begin{equation}\label{eq:jacobians}
+\begin{gathered}
+F_k = \begin{pmatrix} L_k/L_{k+1} & G_k \Delta t/L_{k+1} & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}, \\
+C = \begin{pmatrix} 1 & 0 & 1 \end{pmatrix}, \qquad C^z = \begin{pmatrix} 1 & 0 & 0 \end{pmatrix},
+\end{gathered}
+\end{equation}
+for the camera and the anchor. The generator of the map in (i) is the constant direction $q = (1, 1, -1)^\top$: the
+first row of $F_k$ sums to one, so $F_k q = q$ at every state, and $C q = 0$. It lies in the kernel of the
+observability matrix along every trajectory, so the structural rank condition of \citet{HermannKrener1977} fails in
+this direction; an anchor row gives $C^z q = 1$ and removes it.
+
+The log coordinates are a design choice. With $G$ instead of $\ln G$ as state, the direction would be
+$(1, G_k, -1)^\top$ and move with the estimate of $G$, and a filter linearised at noisy estimates would gain spurious
+information on $\theta$; with $\ln G$ it stays fixed (\code{src/softsensor/ekf.py}, unit test in
+\code{tests/test_softsensor.py}).
+
+A numerical check confirms the structural result and shows how well the observable part is determined in practice
+(\code{scripts/softsensor_results.py}, SIMULATED). With a noise-free camera every minute for 60~min from
+$L_0 = 40$~\um{} at $G = 4$~\um/min, the camera alone gives rank 2 with null vector $(1, 1, -1)$, and one anchor at
+30~min gives rank 3. In a filter run over b1 with diffuse priors on $\ln L$ and $\ln G$, the standard deviation of
+$\theta$ stays at its prior of 0.160 without an anchor and falls to 0.0876 with one. \tabref{tab:ident} gives the
+practical identifiability of the structurally observable $\ln(G/L)$ under the evaluation priors of
+\secref{sec:ekf}: a standard deviation of 0.45 at 60~min in b1 is a factor of about 1.5 at one sigma, and it widens
+again when the medians stop growing. The anchor changes these values by at most 0.025, because it informs only the
+scale direction.
+
+\begin{table}
+\centering\tabfont
+\caption{Practical identifiability, SIMULATED: posterior standard deviation of $\ln(G/L)$, leave-one-strike-out priors
+and $Q_G$, no anchor, mean over 20 seeds (prior 1.414; \texttt{docs/softsensor/results.md}, section~2). End: 170~min
+for b1, 162~min for b2.}\label{tab:ident}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{b1} & \multicolumn{2}{c}{b2} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+$t$ (min) & $\sigma_v = 0.10$ & 0.18 & 0.10 & 0.18 \\
+\midrule
+30 & 0.377 & 0.453 & 0.582 & 0.665 \\
+60 & 0.450 & 0.501 & 0.740 & 0.829 \\
+120 & 0.530 & 0.600 & 0.992 & 1.206 \\
+end & 0.863 & 0.893 & 0.732 & 0.916 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The fusion of fast online outputs with slow laboratory samples follows the multirate estimators of \citet{Gudi1995}
+and \citet{FatehiHuang2017}; augmenting a filter with a constant bias state follows \citet{Friedland1969}, here as a
+multiplicative gain that becomes additive in the log. The scale symmetry and its corollary are our derivation.
+
+Three consequences shape the estimator. First, without an anchor the uncertainty of the absolute size never falls
+below the prior uncertainty of $\theta$, which the gain budget and the selection bias set together. Second, what the
+camera alone delivers, the relative growth rate, the curve shape and the comparison between strikes, is what the
+operator needs to see that a strike grows slowly. Third, (iv) holds only if $\theta$ is shared: the same camera,
+optics and detector, and a selection bias that does not change with packing. Whether one anchor per run suffices is
+therefore an empirical question (\secref{sec:validation}). A growth-rate model driven by process signals inherits the
+same symmetry unless its kinetic parameters are known in physical units, so the process-signal baseline also needs the
+microscope anchors. \secref{sec:estimator} builds the filter on these results.
