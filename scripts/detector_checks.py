@@ -173,6 +173,8 @@ def detector_vs_time() -> list[dict[str, float | str]]:
     seed_id = side["kpi_pairing_hint"]["seeding_event_id"]
     t_seed = next(e["t"] for e in side["events"] if e["id"] == seed_id)
     lens = lens_from_config(CFG)  # PAL raster
+    d = CFG.focus_object_distance_mm
+    um_px = 1e3 * float(mm_per_pixel_at(lens, d, np.array([d]))[0])
     cfg_l = _layer_config(detection_area_px(CFG, lens))
     crop = resolve_crop(PAL, None)
     cap = cv2.VideoCapture(PAL)
@@ -192,20 +194,19 @@ def detector_vs_time() -> list[dict[str, float | str]]:
                 crop=crop,
                 detector=det,
             )
-            # PAL samples, not µm: the scale is not validated in the image
-            s = np.array([o.apparent_size_px for o in obs])
+            s = np.array([o.apparent_size_px for o in obs]) * um_px
             rows.append(
                 {
                     "t_min": tm,
                     "detector": det,
                     "per_frame": len(s) / N_PER_TIME,
-                    "median_px": float(np.median(s))
+                    "median_um": float(np.median(s))
                     if s.size
                     else float("nan"),
-                    "p25_px": float(np.percentile(s, 25))
+                    "p25_um": float(np.percentile(s, 25))
                     if s.size
                     else float("nan"),
-                    "p75_px": float(np.percentile(s, 75))
+                    "p75_um": float(np.percentile(s, 75))
                     if s.size
                     else float("nan"),
                 }
@@ -218,23 +219,36 @@ def fig_detector_vs_time(
 ) -> None:
     import matplotlib.pyplot as plt
 
+    from microscope_summary import summary_rows
+
     fig, ax = plt.subplots(figsize=(6.8, 4.0))
     for det, col, mk in (("edge", "C0", "o"), ("watershed", "C1", "s")):
         r = [x for x in rows if x["detector"] == det]
         t = np.array([x["t_min"] for x in r], dtype=float)
-        med = np.array([x["median_px"] for x in r], dtype=float)
-        lo = np.array([x["p25_px"] for x in r], dtype=float)
-        hi = np.array([x["p75_px"] for x in r], dtype=float)
+        med = np.array([x["median_um"] for x in r], dtype=float)
+        lo = np.array([x["p25_um"] for x in r], dtype=float)
+        hi = np.array([x["p75_um"] for x in r], dtype=float)
         ax.fill_between(t, lo, hi, color=col, alpha=0.15, linewidth=0)
         ax.plot(
             t, med, color=col, marker=mk, label=f"{det} detector, median (IQR)"
         )
+    for batch, mk in (("b1", "^"), ("b2", "v")):
+        m = [r for r in summary_rows() if r[0] == batch and r[2] != ""]
+        ax.plot(
+            [float(str(r[2])) for r in m],
+            [float(str(r[6])) for r in m],
+            linestyle="none",
+            marker=mk,
+            color="k",
+            mfc="none",
+            label=f"microscope median chord, 2026-10-30 {batch}",
+        )
     ax.axvline(0.0, color="0.5", linestyle="--", linewidth=1.0)
     ax.set_yscale("log")
     ax.set_xlabel("time since seeding (min)")
-    ax.set_ylabel("area-equivalent size (PAL samples, log)")
+    ax.set_ylabel("size (µm, log)")
     ax.grid(True, which="both", alpha=0.25)
-    ax.legend(fontsize=8, loc="center right")
+    ax.legend(fontsize=7, loc="lower center", ncol=2)
     fig.tight_layout()
     fig.savefig(out, dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -254,13 +268,13 @@ def _print_sweep(rows: list[dict[str, float]]) -> None:
 
 def _print_time(rows: list[dict[str, float | str]]) -> None:
     print(
-        "| t since seeding (min) | detector | detections / frame | median (PAL samples) | IQR (PAL samples) |"
+        "| t since seeding (min) | detector | detections / frame | median (µm) | IQR (µm) |"
     )
     print("|---:|---|---:|---:|---|")
     for r in rows:
         print(
-            f"| {r['t_min']} | {r['detector']} | {r['per_frame']:.0f} | {r['median_px']:.1f} | "
-            f"{r['p25_px']:.1f}–{r['p75_px']:.1f} |"
+            f"| {r['t_min']} | {r['detector']} | {r['per_frame']:.0f} | {r['median_um']:.0f} | "
+            f"{r['p25_um']:.0f}–{r['p75_um']:.0f} |"
         )
 
 

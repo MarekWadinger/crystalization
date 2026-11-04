@@ -14,8 +14,8 @@ first real camera points (RQ3).
 A size signal must at least move when the crystals grow. We ran the edge and watershed detectors of the earlier
 pipeline (\ref{app:detectors}) on strike b2 of the 2026-02-04 PAL recording: 10 frames, 1~s apart, at 13
 times from 40~min before seeding to 200~min after it, with the configured window of $[9,\ 71\,020]$ PAL samples$^2$
-(\code{scripts/detector_checks.py time}; \figref{fig:time}). The edge median stays at 8.4--9.7 PAL samples and the
-watershed median at 48--58 over the whole strike, within 16\,\% and 20\,\%. Both return before seeding, when the pan
+(\code{scripts/detector_checks.py time}; \figref{fig:time}). At the modelled scale the edge median stays at 31--36~\um{} and the
+watershed median at 180--216~\um{} over the whole strike, within 16\,\% and 20\,\%. Both return before seeding, when the pan
 holds concentrating syrup, the same values as at its end. In the 2026-10-30 run the microscope medians grow 17-fold,
 from 29 to 483~\um{} within 122~min. That run is from another day, but a growth of this order is what seeding and
 boiling imply. A detector whose median does not move over 240~min does not measure crystal size. Only the
@@ -28,9 +28,9 @@ signal must clear.
 \includegraphics[width=\columnwidth]{19_detector_vs_time}
 \caption{\textbf{Do the classical detectors see the crystals grow?} Median and interquartile range of the edge and
 watershed detections against time since seeding, strike b2 of the 2026-02-04 PAL recording (10 frames per time;
-configured window; area-equivalent size in PAL samples, detector outputs rather than crystal sizes;
-\texttt{scripts/detector\_checks.py time}). Over a comparable span the microscope medians of another strike grow
-17-fold (\tabref{tab:microscope}).}\label{fig:time}
+configured window; area-equivalent size at the modelled scale, detector outputs rather than crystal sizes;
+\texttt{scripts/detector\_checks.py time}). Open triangles: microscope median chords of the 2026-10-30 run, another
+day (\tabref{tab:microscope}).}\label{fig:time}
 \end{figure}
 
 \subsection{Growth of the two strikes}\label{sec:res-growth}

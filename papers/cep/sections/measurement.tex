@@ -87,9 +87,10 @@ static detections \pending{share of static detections}.
 \subsection{Detector}\label{sec:detector}
 
 The detector is the Cellpose-SAM model \citep{Pachitariu2025}, which builds on the Cellpose framework
-\citep{Stringer2021}: Cellpose 4.2.1.1 with the base model \code{cpsam}, fine-tuned \citep{PachitariuStringer2022}
+\citep{Stringer2021}: Cellpose 4.2.1.1 with the base model \code{cpsam}, to be fine-tuned \citep{PachitariuStringer2022}
 on crystal outlines hand-labelled by five annotators on frames of both recordings (\secref{sec:validation})
-\pending{Cellpose model version, fine-tuning set and held-out AP@0.5}. Its size window must admit chords above
+\pending{Cellpose model version, fine-tuning set and held-out AP@0.5}. Until then the untuned model undersizes the
+crystals. Its size window must admit chords above
 1~mm: the configured 1~mm area-equivalent upper bound may exclude crystals like the 1.14~mm chord the microscope
 shows at 122~min. A first reading with an untuned model showed two failure modes that the fine-tuning must remove:
 while the crystals span only 3--9 PAL samples, early in the strike, the outlines follow texture, and flat-field
