@@ -160,7 +160,7 @@ with p_x, p_y the sensor-plane size of one frame pixel (§1). The pixel is **not
 |---|---|
 | M = f / (d_focus − f) | **1.743 ×** |
 | PAL sample at focus, x × y | **3.919 × 3.586 µm** (95 %: ±9.8 / ±9.5 %) |
-| 1080p clip pixel at focus, x × y | **1.464 × 1.913 µm** (95 %: 1.336–1.624 / 1.752–2.116); geometric mean 1.673 µm, for areas only |
+| 1080p clip pixel at focus, x × y | **1.464 × 1.913 µm** (95 %: 1.331–1.618 / 1.746–2.107); geometric mean 1.673 µm, for areas only |
 | … if the 5 mm CS→C ring is inside the ≈ 6 cm | +8.9 %: clip 1.600 × 2.092 µm |
 | FOV at focus = CCD area / M | **2.80 × 2.09 mm** |
 | px/mm at focus, 1080p | **683 (x), 523 (y)** |

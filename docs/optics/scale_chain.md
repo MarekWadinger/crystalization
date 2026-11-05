@@ -20,10 +20,10 @@ Monte Carlo, 200 000 draws; median and 95 % interval. Class of every row: ESTIMA
 
 | Recording | axis | nominal | median | 95 % interval | ± % | with 5 mm ring: median [95 %] |
 |---|---|---:|---:|---:|---:|---:|
-| PAL 720×576 | x | 3.919 | 3.932 | 3.576–4.347 | 9.8 | 4.283 [3.872–4.768] |
-| PAL 720×576 | y | 3.586 | 3.601 | 3.285–3.967 | 9.5 | 3.923 [3.558–4.352] |
-| 1080p clip | x | 1.464 | 1.469 | 1.336–1.624 | 9.8 | 1.600 [1.447–1.781] |
-| 1080p clip | y | 1.913 | 1.921 | 1.752–2.116 | 9.5 | 2.092 [1.897–2.321] |
+| PAL 720×576 | x | 3.919 | 3.920 | 3.564–4.332 | 9.8 | 4.270 [3.859–4.752] |
+| PAL 720×576 | y | 3.586 | 3.586 | 3.273–3.950 | 9.4 | 3.907 [3.544–4.334] |
+| 1080p clip | x | 1.464 | 1.464 | 1.331–1.618 | 9.8 | 1.595 [1.442–1.775] |
+| 1080p clip | y | 1.913 | 1.913 | 1.746–2.107 | 9.4 | 2.084 [1.890–2.312] |
 
 Geometric mean (side of the equal-area square; for areas only): PAL 720×576 3.749 µm, 1080p clip 1.673 µm. The superseded isotropic model (Hanwha 2.9 µm, µm/px = sensor width / frame width) gave 4.44 µm on PAL and 1.66 µm on the clips.
 
@@ -37,7 +37,6 @@ Geometric mean (side of the equal-area square; for areas only): PAL 720×576 3.7
 | f | focal length | 35 mm | normal σ = 2 % (CCTV tolerance, ASSUMED) | `lens.focal_length_mm` (PHOTO) |
 | n, t, a | glass index, thickness, air gap | 1.47, 20 mm, 20 mm | none at focus: a parallel plate moves the plane, not the scale | `sight_glass.refractive_index` (ASSUMED) |
 | line | analog line → DVR sample (x only) | CCD-clock route 6.831 µm/sample | uniform ±2 % (the 752 cells spread over the nominal 52 µs active line would give 6.963, +1.9 %) | `dvr.active_line_us` (DATASHEET) |
-| cand | camera candidate (752- or 500-cell CCD) | x 6.831, y 6.25 µm | uniform up to x 6.874, y 6.3 µm | `camera.cell_width_um` (ESTIMATE) |
 | disp | 1080p stretch (OSD lever arm) | x 2.677, y 1.875 | uniform ±0.1 % (spread over the three clips) | `display_1080p.stretch_x` (MEASURED) |
 
 ### One input at a time (% change of µm/px)
@@ -50,8 +49,6 @@ Geometric mean (side of the equal-area square; for areas only): PAL 720×576 3.7
 | f ±2 % | x, y | -2.0 | +2.0 |
 | n, t, a | – | +0.0 | +0.0 |
 | line ±2 % | x | -2.0 | +2.0 |
-| cand, 500-cell CCD | x | +0.0 | +0.6 |
-| cand, 6.3 µm rows | y | +0.0 | +0.8 |
 | disp ±0.1 % | x, y (1080p) | -0.1 | +0.1 |
 
 The tube length dominates (±5 mm on e + x = 61 mm). Whether a 5 mm CS→C ring is counted in the 60 mm is a discrete +9 % and is kept out of the interval.

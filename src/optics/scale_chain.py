@@ -60,10 +60,6 @@ PAL_CANDIDATES = (
     / _PAL_NAME,
 )
 
-# The 500-cell alternative camera (ACM380E-class, Sony ICX405AL-type B/W CCD):
-# 9.8 × 6.3 µm cells at a 9.46875 MHz CCD clock. ESTIMATE, same basis as the
-# 752-cell candidate in the config.
-ALT_CELL_X_UM, ALT_CELL_Y_UM, ALT_CLOCK_MHZ = 9.8, 6.3, 9.46875
 RING_MM = 5.0  # CS→C adapter ring that the "≈ 6 cm" tube may already include
 N_MC = 200_000
 
@@ -119,10 +115,6 @@ class Input:
     nominal: str
     spread: str
     config_key: str
-
-
-def _alt_pitch_x(cfg: CameraConfig) -> float:
-    return ALT_CELL_X_UM * ALT_CLOCK_MHZ / cfg.sampling_rate_mhz
 
 
 def budget_inputs(cfg: CameraConfig) -> list[Input]:
@@ -181,13 +173,6 @@ def budget_inputs(cfg: CameraConfig) -> list[Input]:
             "dvr.active_line_us",
         ),
         Input(
-            "cand",
-            "camera candidate (752- or 500-cell CCD)",
-            f"x {px:.3f}, y {cfg.cell_height_um:g} µm",
-            f"uniform up to x {_alt_pitch_x(cfg):.3f}, y {ALT_CELL_Y_UM:g} µm",
-            "camera.cell_width_um",
-        ),
-        Input(
             "disp",
             "1080p stretch (OSD lever arm)",
             f"x {sx:g}, y {sy:g}",
@@ -207,9 +192,10 @@ def sample_budget(
     e = cfg.extension_tube_mm + u(-5.0, 5.0, n) - (RING_MM if ring else 0.0)
     x = u(0.0, 2.0, n)
     f = rng.normal(cfg.focal_length_mm, 0.02 * cfg.focal_length_mm, n)
-    cand = u(0.0, 1.0, n)  # 0 = 752-cell candidate, 1 = 500-cell alternative
-    px = (px0 + cand * (_alt_pitch_x(cfg) - px0)) * (1.0 + u(-0.02, 0.02, n))
-    py = py0 + cand * (ALT_CELL_Y_UM - py0)
+    # No camera-candidate term: the plant gives 752 × 582 cells, and every Sony
+    # 1/3" CCIR B/W CCD of that count has the same 6.50 × 6.25 µm cell.
+    px = px0 * (1.0 + u(-0.02, 0.02, n))
+    py = np.full(n, py0)
     sx0, sy0 = cfg.display_stretch
     sx = sx0 * (1.0 + u(-1e-3, 1e-3, n))
     sy = sy0 * (1.0 + u(-1e-3, 1e-3, n))
@@ -244,8 +230,6 @@ def one_at_a_time(cfg: CameraConfig) -> dict[str, tuple[float, float, str]]:
         "f ±2 %": (-2.0, 2.0, "x, y"),
         "n, t, a": (0.0, 0.0, "–"),
         "line ±2 %": (-2.0, 2.0, "x"),
-        "cand, 500-cell CCD": (0.0, pct(_alt_pitch_x(cfg) / px0), "x"),
-        "cand, 6.3 µm rows": (0.0, pct(ALT_CELL_Y_UM / py0), "y"),
         "disp ±0.1 %": (-0.1, 0.1, "x, y (1080p)"),
     }
 
