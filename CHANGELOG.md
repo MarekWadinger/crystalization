@@ -2,6 +2,59 @@
 
 <!-- kpi:unreleased -->
 
+## v0.14.0 (2026-11-05)
+
+### Fix
+
+- **optics**: scale_chain report ends with one newline
+
+## v0.13.0 (2026-11-05)
+
+### Fix
+
+- **optics**: DIN 8902 glass, focus travel 0 at the FAR stop, tube naming
+
+## v0.12.0 (2026-11-05)
+
+### Fix
+
+- **optics**: drop the camera-candidate term from the scale budget
+
+## v0.11.0 (2026-11-05)
+
+### Feat
+
+- **optics**: side photo panel in the optical-layout figure
+- **scripts**: untuned Cellpose vs microscope slope at matched times
+- **scripts**: microscope anchor noise and watershed seed sweep
+- **softsensor**: process-signal baseline from the plant KP formula
+- **softsensor**: crystal-growth EKF with observability and leave-one-strike-out tests
+- **datasets**: blind matched-time tracing of camera crystals vs lab
+- **scripts**: label-free detector checks (seed sweep, strike time course)
+- **scripts**: rerun every computed paper number from the current config
+- **datasets**: transcribe all 54 microscope photos of the ZRA run
+- **crystal-detector**: export lab-matched frames for annotation
+- **optics**: layout figure colours lengths by source class
+- **config**: source class on every camera input, enforced by test
+- **crystal-detector**: frame switcher, explicit done, filter dropdown
+- **crystal-detector**: Ananya's enhancement and rules in a decluttered annotation GUI
+- **paper**: add CEP Makefile with figures, pdf, check, clean
+- **paper**: collect CEP figures into papers/cep/figures
+
+### Fix
+
+- **paper**: Cellpose-vs-lab slope and counts from their script
+- **paper**: check every citation against the sentence citing it
+- **config**: camera body length is ASSUMED, not ESTIMATE
+- **optics**: neutral figure text; fig 10 on log axes in PAL samples
+- **optics**: diffraction at the working F-number; fig 08 fit over its band
+- **datasets**: flag the 02-04 date of the 1080p clips as contradicted
+- **datasets**: verify strike anchors, repair the 02-04 sidecar
+- **optics**: per-axis pixel scale from the analog PAL chain
+- **crystal-detector**: suggest a chore commit for annotations
+- **paper**: skip comment lines in highlights check
+- **paper**: read LaTeX log with replacement for non-UTF-8 bytes
+
 ## v0.10.0 (2026-11-03)
 
 ### Feat

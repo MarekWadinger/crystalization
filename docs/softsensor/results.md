@@ -203,18 +203,18 @@ Signal: per (raw PAL frame, reader) median of the chord traces (`datasets/camera
 
 | frame | reader | t (min) | n chords | median (µm) |
 |---|---|---|---|---|
-| raw_12027.png | AI-A | 36.45 | 18 | 101.8 |
-| raw_12027.png | AI-B | 36.45 | 16 | 124.4 |
-| raw_12087.png | AI-A | 37.45 | 14 | 116.7 |
-| raw_12087.png | AI-B | 37.45 | 17 | 123.0 |
-| raw_12147.png | AI-A | 38.45 | 18 | 82.5 |
-| raw_12147.png | AI-B | 38.45 | 16 | 121.8 |
-| raw_13407.png | AI-A | 59.45 | 17 | 203.4 |
-| raw_13407.png | AI-B | 59.45 | 24 | 166.2 |
-| raw_13467.png | AI-A | 60.45 | 15 | 211.4 |
-| raw_13467.png | AI-B | 60.45 | 14 | 242.3 |
-| raw_13527.png | AI-A | 61.45 | 13 | 171.4 |
-| raw_13527.png | AI-B | 61.45 | 14 | 247.4 |
+| raw_12027.png | AI-A | 36.45 | 18 | 103.4 |
+| raw_12027.png | AI-B | 36.45 | 16 | 126.4 |
+| raw_12087.png | AI-A | 37.45 | 14 | 118.6 |
+| raw_12087.png | AI-B | 37.45 | 17 | 124.9 |
+| raw_12147.png | AI-A | 38.45 | 18 | 83.9 |
+| raw_12147.png | AI-B | 38.45 | 16 | 123.8 |
+| raw_13407.png | AI-A | 59.45 | 17 | 206.7 |
+| raw_13407.png | AI-B | 59.45 | 24 | 168.8 |
+| raw_13467.png | AI-A | 60.45 | 15 | 214.8 |
+| raw_13467.png | AI-B | 60.45 | 14 | 246.1 |
+| raw_13527.png | AI-A | 61.45 | 13 | 174.1 |
+| raw_13527.png | AI-B | 61.45 | 14 | 251.3 |
 
 ### 5a. Main result: camera-covered window only (REAL)
 
@@ -225,8 +225,8 @@ Held-out times ≤ 62 min (49, 60 min, n = 2); flags only up to 62 min.
 | nominal curve (b2), no data | – | 0.046 | 1.26 | 0.664 | 3.4 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
 | anchor only (scale-shifted nominal) | b1-s05 | 0.095 | 1.43 | 0.664 | 7.4 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
 | anchor only (age-shifted nominal) | b1-s05 | 0.073 | 1.04 | 0.458 | 5.6 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
-| EKF, REAL camera | none | 0.075 | 1.10 | 0.542 | 3.4 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
-| EKF, REAL camera | b1-s05 | 0.060 | 1.07 | 0.532 | 3.0 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
+| EKF, REAL camera | none | 0.067 | 1.10 | 0.538 | 3.4 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
+| EKF, REAL camera | b1-s05 | 0.059 | 1.08 | 0.534 | 3.1 (2.0/2) | 0 % | 0 % | 0 % | 0 % |
 
 ### 5b. EXTRAPOLATION beyond the camera data (REAL, open loop)
 
@@ -237,8 +237,8 @@ After 61.5 min the EKF has no camera data and predicts open loop. All held-out t
 | nominal curve (b2), no data | – | 0.319 | 5.45 | 1.404 | 39.5 (4.0/7) | 0 % | 0 % | 0 % | 0 % |
 | anchor only (scale-shifted nominal) | b1-s05 | 0.376 | 5.25 | 1.404 | 54.0 (4.0/7) | 0 % | 0 % | 0 % | 0 % |
 | anchor only (age-shifted nominal) | b1-s05 | 0.335 | 5.34 | 1.367 | 41.8 (4.0/7) | 0 % | 0 % | 0 % | 100 % / 77 |
-| EKF, REAL camera | none | 0.221 | 4.00 | 0.733 | 5.8 (4.0/7) | 0 % | 0 % | 0 % | 0 % |
-| EKF, REAL camera | b1-s05 | 0.222 | 4.00 | 0.730 | 6.2 (4.0/7) | 0 % | 0 % | 0 % | 0 % |
+| EKF, REAL camera | none | 0.229 | 4.04 | 0.732 | 7.1 (4.0/7) | 0 % | 0 % | 0 % | 0 % |
+| EKF, REAL camera | b1-s05 | 0.227 | 4.03 | 0.731 | 6.8 (4.0/7) | 0 % | 0 % | 0 % | 0 % |
 
 Flag reference for b1 vs nominal b2 (REAL microscope): samples size slower never, faster (60, 79]; curves size slower 27, faster 84, G/L slower 134, faster 34 (min).
 
@@ -246,13 +246,13 @@ Per held-out time (REAL camera; estimate = exp(ln L̂) ± posterior SD of ln L; 
 
 | t (min) | window | microscope median (µm) | EKF, anchor none (µm) | SD ln(G/L), anchor none | EKF, anchor b1-s05 (µm) | SD ln(G/L), anchor b1-s05 | nominal b2 (µm) |
 |---|---|---|---|---|---|---|---|
-| 49.5 | covered | 155 | 140 ± 0.24 | 0.742 | 143 ± 0.18 | 0.741 | 160 |
-| 60.5 | covered | 199 | 203 ± 0.18 | 0.558 | 205 ± 0.13 | 0.554 | 188 |
-| 79.5 | EXTRAPOLATION | 276 | 292 ± 0.28 | 0.761 | 294 ± 0.26 | 0.761 | 215 |
-| 96.5 | EXTRAPOLATION | 355 | 372 ± 0.42 | 0.891 | 374 ± 0.40 | 0.891 | 226 |
-| 122.5 | EXTRAPOLATION | 483 | 494 ± 0.60 | 1.045 | 497 ± 0.59 | 1.045 | 262 |
-| 160.4 | EXTRAPOLATION | 486 | 673 ± 0.83 | 1.227 | 676 ± 0.83 | 1.228 | 388 |
-| 170.4 | EXTRAPOLATION | 452 | 720 ± 0.88 | 1.270 | 723 ± 0.88 | 1.271 | 399 |
+| 49.5 | covered | 155 | 142 ± 0.24 | 0.742 | 144 ± 0.18 | 0.741 | 160 |
+| 60.5 | covered | 199 | 206 ± 0.18 | 0.557 | 206 ± 0.13 | 0.554 | 188 |
+| 79.5 | EXTRAPOLATION | 276 | 296 ± 0.28 | 0.761 | 296 ± 0.26 | 0.760 | 215 |
+| 96.5 | EXTRAPOLATION | 355 | 377 ± 0.42 | 0.891 | 377 ± 0.40 | 0.890 | 226 |
+| 122.5 | EXTRAPOLATION | 483 | 501 ± 0.60 | 1.045 | 501 ± 0.60 | 1.045 | 262 |
+| 160.4 | EXTRAPOLATION | 486 | 683 ± 0.83 | 1.228 | 682 ± 0.83 | 1.228 | 388 |
+| 170.4 | EXTRAPOLATION | 452 | 731 ± 0.88 | 1.271 | 729 ± 0.88 | 1.271 | 399 |
 
 ## Q_G tuning (SIMULATED)
 

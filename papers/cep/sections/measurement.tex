@@ -14,7 +14,7 @@ recording, is the unit of every camera size in this paper.
 
 For update $k$, a detector (\secref{sec:detector}) outlines the crystals in $n_f$ frames, giving $n$ outlines in total.
 The longest chord of each outline is converted to micrometres per axis at the nominal scale
-$\hat\mu_\mathrm{x} = 3.919$ and $\hat\mu_\mathrm{y} = 3.586$~\um{} per PAL sample (\secref{sec:budget}). The
+$\hat\mu_\mathrm{x} = 3.985$ and $\hat\mu_\mathrm{y} = 3.646$~\um{} per PAL sample (\secref{sec:budget}). The
 \emph{camera size signal} $y_k$ is the log of the median chord, modelled as
 \begin{equation}\label{eq:meas}
 y_k = \ln L_k + \theta + \beta(L_k) + v_k, \qquad \theta = \ln(\lambda\, b_\mathrm{sel}),
@@ -37,11 +37,11 @@ Term & Meaning & Value & Source \\
 $\lambda$ & nominal over true object-plane scale & 95\,\% budget $\pm 9.8$\,\% (x), $\pm 9.5$\,\% (y); not validated
 in the image & \texttt{optics.scale\_chain} (\secref{sec:budget}) \\
 $\theta = \ln(\lambda b_\mathrm{sel})$ & gain and selection combined & for the AI tracings, $\mathrm{e}^{-\theta}$
-(microscope over traced median) 0.86--1.02 (chord readers), 1.14--1.32 (outline readers), separate crystals &
+(microscope over traced median) 0.85--1.01 (chord readers), 1.12--1.30 (outline readers), separate crystals &
 \texttt{scripts/traced\_vs\_lab.py} (\secref{sec:bias}) \\
 depth & magnification change inside the admitted depth & $\le 0.17$\,\%; dropped &
 \texttt{scripts/rerun\_paper\_numbers.py} (\secref{sec:layer}) \\
-$\beta(L)$ & resolution floor; packing; size window & 3 samples $= 11.8 \times 10.8$~\um; packed-field
+$\beta(L)$ & resolution floor; packing; size window & 3 samples $= 12.0 \times 10.9$~\um; packed-field
 $\mathrm{e}^{-\theta}$ 1.4--2.0 at 122--170~min; 1~mm window & configuration, \texttt{scripts/traced\_vs\_lab.py}
 (\secref{sec:bias}) \\
 $v_k$, $R$ & noise of the per-update median & \pending{per-frame $\sigma_\mathrm{ln}$ and detections per frame} &
@@ -60,15 +60,13 @@ only on the focal length, the extension-tube length $e$ and the focus travel (\r
 over the inputs gives a 95\,\% interval of $\pm 9.8$\,\% along x and $\pm 9.5$\,\% along y (\tabref{tab:scale}),
 dominated by the tube: each millimetre of $e$ moves the scale by $\mp 1.64$\,\%. The tube term is common to both
 axes, so we treat $\lambda$ as one factor; read as a normal prior on $\ln\lambda$, the budget gives a standard
-deviation of $\ln(1.098)/1.96 \approx 0.05$. The interval is conditional on the plant's ``$\approx 6$~cm'' being the
-tube alone, on the camera candidates and on 13.5~MHz sampling, and no object of known size has been imaged through
+deviation of $\ln(1.097)/1.96 \approx 0.05$. The interval is conditional on the plant's ``$\approx 6$~cm'' being the
+tube alone, on the 1/3\,in Sony cell and on 13.5~MHz sampling, and no object of known size has been imaged through
 the glass: $\lambda$ is a prior, not a calibration.
 
 \subsection{Sampled layer}\label{sec:layer}
 
-If the focal plane lies at the inner glass face, as the stated geometry allows (\ref{app:optics}), the image is a
-backlit projection through the slab of massecuite, about 1--2~mm thick, between the glass and the lamp, with the sharp
-plane at the glass. With the PAL sample as resolution element, the in-focus slice at F/1.6 is $\pm 9.4$~\um{} of
+With the PAL sample as resolution element, the in-focus slice at F/1.6 is $\pm 9.7$~\um{} of
 air-equivalent depth; the element is an optimistic assumption \pending{effective resolution of the recorded PAL
 chain}. Within the depth a detector can admit, under an assumed cutoff, the magnification changes by at most
 0.17\,\% (\ref{sec:selectivity}). One scale at the focal plane therefore suffices, and the estimator needs no depth
@@ -108,12 +106,12 @@ blind AI annotators traced crystals on twelve raw frames of the 2026-10-30 recor
 longest chord of every clearly bounded crystal and two outlined every crystal following the team's labelling
 protocol. Their sizes grow with the microscope sizes (log--log slope of the 90th percentile 0.64 for chords, 0.78 for
 outlines). Where the crystals are separate (12:07, 12:30), the microscope size divided by the traced size at the
-nominal scale, $\mathrm{e}^{-\theta}$ for these tracings, is 0.86--1.02 for chords and 1.14--1.32 for outlines. The
+nominal scale, $\mathrm{e}^{-\theta}$ for these tracings, is 0.85--1.01 for chords and 1.12--1.30 for outlines. The
 two methods differ by about 30\,\%, more than the gain budget, so the tracing does not fix $\theta$ for another
 detector. All are AI annotations \pending{human annotation of the twelve frames}.
 
 The size-dependent bias $\beta(L)$ has three known sources. At small sizes the outline is limited by resolution:
-three PAL samples are $11.8 \times 10.8$~\um, and the untuned detector traced texture while crystals spanned 3--9
+three PAL samples are $12.0 \times 10.9$~\um, and the untuned detector traced texture while crystals spanned 3--9
 samples, up to about 35~\um. The estimator therefore uses $y_k$ only above 40~\um, a choice just above that range
 \pending{lower size limit from the fine-tuned detector}. At large sizes the field packs: on the packed frames at
 122--170~min the microscope-over-traced ratio rises to 1.4--2.0, so $\beta$ turns negative, although there the

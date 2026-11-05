@@ -23,20 +23,20 @@ def cfg():
     return load_camera()
 
 
-def test_pal_scale_in_slurry_is_about_3_9_by_3_6_um(cfg) -> None:
+def test_pal_scale_in_slurry_is_about_3_98_by_3_65_um(cfg) -> None:
     # Arrange
     lens = lens_from_config(cfg, 720, 576)
     # Act
     ux, uy = um_per_px_xy_at_focus(cfg, lens)
-    # Assert — 6.83 × 6.25 µm sensor pitch over M = 61/35
-    assert ux == pytest.approx(3.92, abs=0.01)
-    assert uy == pytest.approx(3.59, abs=0.01)
+    # Assert — 6.83 × 6.25 µm sensor pitch over M = 60/35 (lens at its FAR stop)
+    assert ux == pytest.approx(3.98, abs=0.01)
+    assert uy == pytest.approx(3.65, abs=0.01)
 
 
-def test_1080p_scale_in_slurry_is_about_1_46_by_1_91_um(cfg) -> None:
+def test_1080p_scale_in_slurry_is_about_1_49_by_1_94_um(cfg) -> None:
     ux, uy = um_per_px_xy_at_focus(cfg, lens_from_config(cfg, 1920, 1080))
-    assert ux == pytest.approx(1.465, abs=0.01)
-    assert uy == pytest.approx(1.914, abs=0.01)
+    assert ux == pytest.approx(1.488, abs=0.01)
+    assert uy == pytest.approx(1.944, abs=0.01)
 
 
 def test_1080p_pixel_is_anisotropic_about_1_3(cfg) -> None:
