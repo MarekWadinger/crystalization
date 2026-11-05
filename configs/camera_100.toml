@@ -70,17 +70,17 @@ stretch_y = 1.875                     # MEASURED: clip rows per PAL line, OSD le
 model = "Fujinon HF35HA-1B"           # PHOTO: lens label, docs/lens/20260205_122620.jpg, Aug-photos 20260810_112218.jpg
 focal_length_mm = 35.0                # PHOTO: lens engraving "1:1.6/35mm" (optical focal length, not body length)
 body_length_mm = 29.5                 # DATASHEET: docs/lens/fujinon-hf35ha-1b.pdf, length at FAR (∞); grows by focus_travel_mm when focused closer
-focus_travel_mm = 1.0                 # ESTIMATE: AI guess from "~3 exposed helicoid turns" (commit b997e2f); Marek never stated it; no distance scale on the lens (Q&A item 9). ±1 mm → ±1.6 % in µm/px. The DATASHEET minimum object distance 0.25 m allows up to ≈ 5.5 mm (the error budget samples 0–2 mm)
+focus_travel_mm = 0.0                 # PHOTO: author decision, Marek Wadinger 2026-11-05: the lens is fully screwed in, at its FAR (∞) stop (Aug-photos 20260810_112149–112202). Replaces the 1 mm AI guess (commit b997e2f). The DATASHEET range is 0 (∞) to ≈ 5.5 mm (0.25 m MOD)
 f_number = 1.6                        # PLANT: Q&A item 9 "F = 1.6, if I read it correctly"; Aug-photos 20260810_112120 show the ring between 1.6 and 2. The "operator inspection 2026-06-15" has no surviving record
 iris_stops = [1.6, 2.0, 4.0, 8.0, 16.0]  # PHOTO: engraved on the iris ring, docs/lens/20260205_122600.jpg; drives the DoF-vs-F figure
-extension_tube_mm = 60.0              # PLANT: Q&A item 8(A) "≈ 6 cm" (not a caliper reading). from Fedor, spacer ring between lens and camera body; settled by the author 2026-11-04. The earlier 45 mm was our own guess without a tape
+extension_tube_mm = 60.0              # PLANT: Q&A item 8(A) "≈ 6 cm" (not a caliper reading). from Fedor, tube between lens and camera body; settled by the author 2026-11-04. The earlier 45 mm was our own guess without a tape
 air_gap_mm = 20.0                     # PLANT: Q&A item 8(B) "≈ 2 cm", lens front rim → outer glass face.; no effect on µm/px at focus
 
 [sight_glass]
-standard = "DIN 8902"                 # ESTIMATE: worn stamp reads "DIN 890…"; 8902 is the likeliest (soda-lime)
+standard = "DIN 8902"                 # PHOTO: worn stamp "DIN 890…" (docs/lens/20260205_122524.jpg, 122532.jpg); settled as DIN 8902 (round soda-lime sight glass) by author decision 2026-11-05
 thickness_mm = 20.0                   # PLANT: Q&A item 8(C) "20 mm" (our own drawing had said 2 mm)
 diameter_mm = 150.0                   # PLANT: Q&A item 8(C) "diameter 150 mm" (DN150)
-refractive_index = 1.47               # ASSUMED: borosilicate. Contradicts the DIN 8902 estimate (soda-lime 1.52 → Δ 6.85 mm instead of 6.39); error budget carries ±0.03
+refractive_index = 1.52               # ESTIMATE: typical n_d of soda-lime glass, the material of DIN 8902 (standard settled by the author 2026-11-05); no datasheet of this disc; error budget carries ±0.03
 
 [detection]
 # Size window of the crystal detector's area filter. A detected contour of area
@@ -101,5 +101,5 @@ extension_sweep_mm = [5.0, 10.0, 20.0, 40.0]  # CHOICE: standard C-mount extensi
 slurry_depth_mm = 40.0                # CHOICE: width of the slurry band in 18_optical_layout; the pan is far deeper
 
 [focus]
-# i_fixed = f + e + focus_travel = 96 mm  ⇒  d_focus = f·i/(i−f) = 35·96/61 = 55.082 mm
-object_distance_mm = 55.1             # DERIVED: from focal_length (PHOTO), extension_tube (PLANT ≈) and focus_travel (ESTIMATE)
+# i_fixed = f + e + focus_travel = 95 mm  ⇒  d_focus = f·i/(i−f) = 35·95/60 = 55.417 mm
+object_distance_mm = 55.42            # DERIVED: from focal_length (PHOTO), extension_tube (PLANT ≈) and focus_travel (PHOTO, author decision)

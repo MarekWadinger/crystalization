@@ -172,7 +172,7 @@ def optics_rows() -> dict[str, float]:
     add(
         "image distance i = f + e + x",
         "optics.tex fig 18 caption",
-        "96 mm",
+        "95 mm",
         f"{i:.0f} mm",
         "free",
         weakest(*geo),
@@ -181,7 +181,7 @@ def optics_rows() -> dict[str, float]:
     add(
         "focused object distance d_focus",
         "hardware.tex, optics.tex, figs 01/02/06/09",
-        "55.1 mm",
+        "55.4 mm",
         f"{d:.1f} mm (exact {d:.3f}; config [focus] {d_cfg})",
         "free",
         weakest(*geo),
@@ -267,9 +267,9 @@ def optics_rows() -> dict[str, float]:
     add(
         "sight-glass shift Δ = t(1 − 1/n)",
         "optics.tex, fig 05/18",
-        "6.39 mm",
-        f"{delta:.2f} mm (n = 1.52 soda-lime: "
-        f"{CFG.sight_glass_thickness_mm * (1 - 1 / 1.52):.2f})",
+        "6.84 mm",
+        f"{delta:.2f} mm (n = 1.47 borosilicate: "
+        f"{CFG.sight_glass_thickness_mm * (1 - 1 / 1.47):.2f})",
         "free",
         weakest(*glass),
         "optics.model.SightGlass.apparent_shift",
@@ -307,7 +307,7 @@ def optics_rows() -> dict[str, float]:
     add(
         "scale change per ±1 mm focus travel",
         "optics.tex §stackup",
-        "∓1.6 %",
+        "∓1.7 %",
         f"∓{100 / (e + x):.2f} %",
         "free",
         weakest(*geo),
@@ -316,7 +316,7 @@ def optics_rows() -> dict[str, float]:
     add(
         "CoC saturation K = c_∞ = f²/(N(d − f))",
         "optics.tex §dent (K), fig 02",
-        "38.13 mm",
+        "37.50 mm",
         f"{k:.2f} mm",
         "free",
         weakest(*geo, "lens.f_number"),
@@ -522,7 +522,7 @@ def optics_rows() -> dict[str, float]:
     add(
         "real H → inner glass face",
         "optics.tex eq hreal",
-        "61.47 mm",
+        "— (removed 2026-11-05)",
         f"{h_inner:.2f} mm",
         "free",
         weakest("UNSOURCED", *glass),
@@ -531,7 +531,7 @@ def optics_rows() -> dict[str, float]:
     add(
         "H behind front element",
         "optics.tex eq hfront",
-        "21.5 mm",
+        "— (removed 2026-11-05)",
         f"{h_inner - CFG.sight_glass_thickness_mm - CFG.air_gap_mm:.1f} mm "
         f"(with d_focus instead of d_dent: {d + delta - CFG.sight_glass_thickness_mm - CFG.air_gap_mm:.1f})",
         "free",

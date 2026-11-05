@@ -61,7 +61,7 @@ here so this chapter stands alone numerically.
 | stretch | 1080p clip px per PAL sample (x) / line (y) | **2.677 / 1.875** (MEASURED) | DVR OSD glyphs registered between the recordings |
 | t_glass | Sight-glass thickness | **20 mm** (PLANT) | Q&A item 8(C), A. Fedor 2026-08-12; DIN 8902 disc, Ø150 mm (DN150), 8-bolt flange |
 | a | Lens front → outer glass face (air gap) | **≈ 20 mm** (PLANT, "≈ 2 cm") | Q&A item 8(B) |
-| n_g | Sight-glass refractive index | **1.47** (ASSUMED — borosilicate; the DIN 8902 stamp suggests soda-lime 1.52) | does not enter the scale at focus |
+| n_g | Sight-glass refractive index | **1.52** (ESTIMATE — soda-lime, from the DIN 8902 stamp; author decision 2026-11-05) | does not enter the scale at focus |
 | e | Extension tube length | **≈ 60 mm** (PLANT, "≈ 6 cm"; the 45 mm was our own estimate sent with the questions). Whether a 5 mm CS→C ring is inside it is open (+8.9 % in µm/px) | Q&A item 8(A) |
 | x | Focus-helicoid travel | **1 mm** (ESTIMATE, AI guess, no record) | ±1 mm → ∓1.6 % in µm/px |
 | N_op | F-number in service | **F/1.6** (PLANT, "if I read it correctly"; ring between 1.6 and 2 on the photos) | Q&A item 9, Aug-photos 20260810_112120 |
@@ -94,10 +94,10 @@ thin-lens equation in Hecht §5.2), giving ``m = e/f`` at infinity focus.
 
 For the verified Camera 100 setup (`LensSetup` in
 [`../../src/optics/model.py`](../../src/optics/model.py)):
-``f = 35 mm``, ``e = 60 mm``, focus-ring travel ``x ≈ 1 mm`` → image distance
-``i = f + e + x = 96 mm`` → focused object distance at that ring setting
+``f = 35 mm``, ``e = 60 mm``, focus-ring travel ``x = 0`` (lens at its FAR stop, author decision 2026-11-05) → image distance
+``i = f + e + x = 95 mm`` → focused object distance at that ring setting
 
-$$ d_{\text{focus}} = \frac{f\,i}{i - f} = \frac{35 \cdot 96}{61} = \mathbf{55.1\ mm}. $$
+$$ d_{\text{focus}} = \frac{f\,i}{i - f} = \frac{35 \cdot 95}{60} = \mathbf{55.4\ mm}. $$
 
 This is a **macro setup** — working distance of about 6 cm, near 1:1
 magnification. The focus ring may be off the infinity tick, but the
@@ -114,7 +114,7 @@ below we use the central value ``d_focus = 55.1 mm``.
 > the plant's Q&A answer (2026-08-12, relayed 2026-09-07) gave ``e ≈ 60 mm``,
 > ``d_focus = 55.1 mm`` and ``t = 20 mm``, ``a ≈ 20 mm``. With the
 > superseded isotropic 2.9 µm pitch this was 1.66 µm/px; with the analog
-> chain it is 1.464 × 1.913 µm/px on the 1080p clips (§3). The detector
+> chain it is 1.489 × 1.944 µm/px on the 1080p clips (§3). The detector
 > medians that moved with these revisions (0.25 → 0.037 mm) are detector
 > artefacts, not crystal sizes, and no strike stage can be read from them
 > ([`rerun_results.md`](./rerun_results.md)).
@@ -137,8 +137,8 @@ $$ \Delta = t\left(1 - \frac{1}{n_g}\right) $$
 
 (Hecht §5.6.1, paraxial limit; same formula in any introductory optics
 text — see [Concepts of Physics, "Refraction from a glass slab"](https://www.concepts-of-physics.com/optics/refraction-from-a-glass-slab.php)
-for a step-by-step derivation). With t = 20 mm and n_g = 1.47,
-**Δ = 6.39 mm**, independent of the object distance. The optical
+for a step-by-step derivation). With t = 20 mm and n_g = 1.52,
+**Δ = 6.84 mm**, independent of the object distance. The optical
 calculations are with **apparent** object distance; the real distance
 to a crystal is the apparent value plus Δ. (Caveat: this is the
 *first-order* paraxial form — see §6.3.3 for the exact 12th-degree
@@ -158,9 +158,9 @@ with p_x, p_y the sensor-plane size of one frame pixel (§1). The pixel is **not
 
 | Quantity | Value (d_focus = 55.1 mm, e ≈ 60 mm); class ESTIMATE |
 |---|---|
-| M = f / (d_focus − f) | **1.743 ×** |
-| PAL sample at focus, x × y | **3.919 × 3.586 µm** (95 %: ±9.8 / ±9.5 %) |
-| 1080p clip pixel at focus, x × y | **1.464 × 1.913 µm** (95 %: 1.331–1.618 / 1.746–2.107); geometric mean 1.673 µm, for areas only |
+| M = f / (d_focus − f) | **1.714 ×** |
+| PAL sample at focus, x × y | **3.985 × 3.646 µm** (95 %: ±9.7 / ±9.3 %) |
+| 1080p clip pixel at focus, x × y | **1.489 × 1.944 µm** (95 %: 1.355–1.643 / 1.776–2.138); geometric mean 1.701 µm, for areas only |
 | … if the 5 mm CS→C ring is inside the ≈ 6 cm | +8.9 %: clip 1.600 × 2.092 µm |
 | FOV at focus = CCD area / M | **2.80 × 2.09 mm** |
 | px/mm at focus, 1080p | **683 (x), 523 (y)** |
@@ -226,11 +226,11 @@ mapping — defocus spreads each point across many pixels but the
 
 | d_o (mm) | 1080p µm/px x × y | PAL µm/px x × y |
 |---:|---:|---:|
-| 50 | 1.330 × 1.737 | 3.56 × 3.26 |
-| **55.1 (focus)** | **1.465 × 1.914** | **3.92 × 3.59** |
-| 60 | 1.596 × 2.085 | 4.27 × 3.91 |
-| 65 | 1.729 × 2.258 | 4.63 × 4.23 |
-| 80 | 2.128 × 2.779 | 5.70 × 5.21 |
+| 50 | 1.343 × 1.754 | 3.60 × 3.29 |
+| **55.4 (focus)** | **1.489 × 1.945** | **3.98 × 3.65** |
+| 60 | 1.612 × 2.105 | 4.31 × 3.95 |
+| 65 | 1.746 × 2.281 | 4.67 × 4.28 |
+| 80 | 2.149 × 2.807 | 5.75 × 5.26 |
 
 (`optics.config.um_per_px_xy_at_focus` × d_o/d_focus; ESTIMATE.)
 
@@ -409,7 +409,7 @@ contribute, producing a tail that looked artificially fat.
    polynomial (Agrawal et al., *A Theory of Multi-Layer Flat
    Refractive Geometry*, CVPR 2012; Chadebecq et al., IJCV 2020). The
    paraxial form here is adequate for FOV and pixel-pitch budgeting
-   (Δ = 6.39 mm), but a refractive-aware calibration would be needed
+   (Δ = 6.84 mm), but a refractive-aware calibration would be needed
    for sub-pixel metric reconstruction — e.g. PMC10781309 reports
    pinhole-model RMSE of 2.28–2.42 mm vs 0.26–0.39 mm with explicit
    refraction. Not a concern at our 1.5–1.9 µm/px (1080p) scale, where
@@ -460,7 +460,7 @@ budget. For crystal counting at a fixed depth a single scale per axis is good en
 
 | Question | Answer |
 |---|---|
-| 1. mm/px at the focused plane | **1.464 × 1.913 µm/px** on the 1080p clips, **3.92 × 3.59 µm/px** per PAL sample (ESTIMATE, ±≈ 10 % at 95 %, +8.9 % if the CS→C ring is in the tube). The pixel is anisotropic. |
+| 1. mm/px at the focused plane | **1.489 × 1.944 µm/px** on the 1080p clips, **3.98 × 3.65 µm/px** per PAL sample (ESTIMATE, ±≈ 10 % at 95 %, +9.1 % if the CS→C ring is in the tube). The pixel is anisotropic. |
 | 2. How does mm/px change with depth? | **Strictly linear in d_o**: Δx(d_o) = p_x · d_o / i_fixed, same for y. Within the in-focus slice (±9.4 µm at F/1.6) the variation is ≈ 0.02 %. |
 | 3. Sharpness distribution vs depth? | **Power-law cusp** ``S ∝ c^{-5}``, asymmetric in d_o, symmetric in 1/d_o. NOT Gaussian, NOT gamma. The measured tail exponent on the fully cropped clip is 4.90, within 2 % of 5.0. |
 | 4. Can sharpness be paired with mm/px? | **Yes** — the scale-overlay app does exactly this. The sharpness map identifies which pixels are at the focused plane; the geometric model maps those pixels to mm at that depth. |
@@ -642,12 +642,12 @@ Walking the document claim-by-claim. ``D-R`` = deep-research vote
 | 1 | ~~Hanwha HCB-6000 1/2.8" sensor, 2.9 µm pitch~~ → analog B/W PAL CCD "ADEMCO VIDEO", PAL sample 6.831 × 6.250 µm | photos (PHOTO) + candidate datasheet (ESTIMATE) | `optics.scale_chain` |
 | 1 | Fujinon HF35HA-1B, f=35 mm, F/1.6–22, MOD 0.25 m | Fujinon datasheet | FACT |
 | 1 | DIN 8902 sight-glass, 8-bolt flange | operator photo `lens/20260205_122524.jpg` | FACT |
-| 1 | Sight-glass thickness 20 mm, n_g ≈ 1.47 | plant Q&A 2026-08-12 + borosilicate | PLANT / ASSUMED |
+| 1 | Sight-glass thickness 20 mm, n_g ≈ 1.52 | plant Q&A 2026-08-12 + DIN 8902 stamp (soda-lime) | PLANT / ESTIMATE |
 | 2 | ``M = f / (d_o − f)`` | Hecht §5.2; thin-lens identity | code (`test_thin_lens_round_trip_finite_distance`), D-R 3-0 |
 | 2 | ``m = e/f`` at infinity focus; ``m_x = m + x/f`` | Photons-to-Photos, derived from Hecht §5.2 | D-R 3-0; verbatim quote retrieved 2026-06-13 |
-| 2.1 | ``Δ = t(1 − 1/n_g) = 6.39 mm`` | Hecht §5.6 paraxial | code (`test_sight_glass_shift_independent_of_distance`), D-R 3-0 |
+| 2.1 | ``Δ = t(1 − 1/n_g) = 6.84 mm`` | Hecht §5.6 paraxial | code (`test_sight_glass_shift_independent_of_distance`), D-R 3-0 |
 | 2.1 | Exact flat-port projection is 12th-degree polynomial | Agrawal CVPR 2012 | D-R 3-0 |
-| 3 | µm/px at focus = 1.464 × 1.913 (1080p), 3.919 × 3.586 (PAL) at e ≈ 60 mm, d_focus = 55.1 mm | derived from §1–2 | `optics.scale_chain`; ESTIMATE |
+| 3 | µm/px at focus = 1.489 × 1.944 (1080p), 3.985 × 3.646 (PAL) at e ≈ 60 mm, d_focus = 55.4 mm | derived from §1–2 | `optics.scale_chain`; ESTIMATE |
 | 3.1 | First-decorrelation pixel offset = 42.5 px (median) | autocorrelation, this video | UNSOURCED (no script in the repo) |
 | 3.1 | Massecuite crystal size 0.5–1.0 mm | Bubník et al. *Sugar Technologists Manual* | FACT (textbook) |
 | 4 | mm/px linear in d_o: ``Δx(d_o) = pitch · d_o / i_fixed`` | Hecht §5.2 + Pertuz 2013 | code (`test_mm_per_pixel_is_linear_in_d_o`), D-R 3-0 |
@@ -688,7 +688,7 @@ only as the audit trail of that revision; current values are in §1 and §12.
 | *superseded* — **2.9 µm/px** sensor pitch | §1 | an AI inference (Sony IMX307/IMX327) from the Hanwha price quote; the installed camera is an analog PAL CCD (2026-11-03) |
 | *superseded* — **5.57 × 3.13 mm** sensor active | §1 | 1920 × 1080 × 2.9 µm |
 | **6.831 × 6.250 µm** per PAL sample | §1 | CCD cell × 14.1875 / 13.5 MHz; `optics.scale_chain` (ESTIMATE) |
-| **6.39 mm** glass shift | §2.1 | 20 · (1 − 1/1.47) = 6.395 mm — Hecht §5.6 formula, verified in `test_sight_glass_shift_independent_of_distance` |
+| **6.84 mm** glass shift | §2.1 | 20 · (1 − 1/1.52) = 6.842 mm — Hecht §5.6 formula, verified in `test_sight_glass_shift_independent_of_distance` |
 | *superseded* — **157.5 mm** d_focus at infinity ring | §2 | 35 · 45 / (45 − 35) = 157.5 — thin-lens equation |
 | *superseded* — **165 mm** chosen d_focus | §2 | ESTIMATE within 157.5–200 mm bracket from infinity ring + 4 m ring |
 | *superseded* — **10.40 µm/px** at focus | §3 | 2.8 · 165 / 44.42 ≈ 10.40 — direct from `mm_per_pixel_at` |
@@ -723,7 +723,7 @@ absolute scale, not on the structural results.*
 ## 15. Measurement-error budget (DERIVED)
 
 Generated by ``uv run python -m optics.error_budget`` from ``configs/camera_100.toml``
-(2026-11-03, analog-PAL chain). The object-plane scale is ``µm/px = p·f/(e + x)`` per axis:
+(2026-11-05, analog-PAL chain). The object-plane scale is ``µm/px = p·f/(e + x)`` per axis:
 the glass and the air gap do not enter it. The plant's "≈ 6 cm" tube dominates. The
 per-recording 95 % intervals (PAL and 1080p, x and y) are in [`scale_chain.md`](./scale_chain.md).
 
@@ -733,22 +733,22 @@ per-recording 95 % intervals (PAL and 1080p, x and y) are in [`scale_chain.md`](
 |---|---:|---:|---|
 | f | 35 | ±0.7 | lens engraving 35 mm (PHOTO); ±2 % CCTV tolerance (ASSUMED) |
 | e | 60 | ±2.88675 | Q&A 8(A) "≈ 6 cm" (PLANT), uniform ±5 mm |
-| x | 1 | ±0.57735 | focus travel 1 mm, AI guess (ESTIMATE), uniform 0–2 mm |
+| x | 0 | ±0 | focus travel 0 mm, lens at its FAR stop (author decision 2026-11-05) |
 | px | 6.83102 | ±0.0788778 | µm per PAL sample, CCD cell × clock / 13.5 MHz (ESTIMATE), line mapping uniform ±2 % (optics.scale_chain) |
-| py | 6.25 | ±0.0288675 | µm per PAL line = CCD row (ESTIMATE), candidates 6.25–6.30 |
+| py | 6.25 | ±0 | µm per PAL line = CCD row (ESTIMATE); one cell for all 752 × 582 candidates |
 | t | 20 | ±0.5 | Q&A 8(C) "20 mm" (PLANT) |
 | a | 20 | ±2.88675 | Q&A 8(B) "≈ 2 cm" (PLANT), uniform ±5 mm |
-| n | 1.47 | ±0.03 | borosilicate 1.47 (ASSUMED); soda-lime would be 1.52 |
+| n | 1.52 | ±0.03 | soda-lime 1.52, DIN 8902 stamp (ESTIMATE); borosilicate would be 1.47 |
 
 ## Propagated 1 σ per derived quantity (linear; MC check in last column)
 
 | Quantity | Value | σ from f | σ from e | σ from x | σ from px | σ from py | σ from t | σ from a | σ from n | total σ (lin) | total σ (MC) | rel. |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| um_per_px_x_PAL | 3.919 | 0.078 | 0.185 | 0.037 | 0.045 | 0.000 | 0.000 | 0.000 | 0.000 | **0.210** | 0.211 | 5.4 % |
-| um_per_px_y_PAL | 3.586 | 0.072 | 0.170 | 0.034 | 0.000 | 0.017 | 0.000 | 0.000 | 0.000 | **0.188** | 0.190 | 5.2 % |
-| d_focus_mm | 55.082 | 1.503 | 0.950 | 0.190 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **1.789** | 1.800 | 3.2 % |
-| H_to_inner_face_mm | 61.477 | 1.503 | 0.950 | 0.190 | 0.000 | 0.000 | 0.160 | 0.000 | 0.278 | **1.817** | 1.830 | 3.0 % |
-| H_behind_front_mm | 21.477 | 1.503 | 0.950 | 0.190 | 0.000 | 0.000 | 0.340 | 2.887 | 0.278 | **3.424** | 3.435 | 15.9 % |
+| um_per_px_x_PAL | 3.985 | 0.080 | 0.192 | 0.000 | 0.046 | 0.000 | 0.000 | 0.000 | 0.000 | **0.213** | 0.215 | 5.3 % |
+| um_per_px_y_PAL | 3.646 | 0.073 | 0.175 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **0.190** | 0.192 | 5.2 % |
+| d_focus_mm | 55.417 | 1.517 | 0.982 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **1.807** | 1.822 | 3.3 % |
+| H_to_inner_face_mm | 62.259 | 1.517 | 0.982 | 0.000 | 0.000 | 0.000 | 0.171 | 0.000 | 0.260 | **1.834** | 1.850 | 2.9 % |
+| H_behind_front_mm | 22.259 | 1.517 | 0.982 | 0.000 | 0.000 | 0.000 | 0.329 | 2.887 | 0.260 | **3.431** | 3.443 | 15.4 % |
 | H2_behind_front_mm | 12.026 | 0.700 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **0.700** | 0.702 | 5.8 % |
 
 Not in the table (discrete, not Gaussian): the C-mount flange depth. If the plant's ≈ 60 mm already includes the 5 mm CS→C adapter ring, e is 55 mm: µm/px +9 %, d_focus +2.0 mm, H′ shifts −5 mm. Per-recording µm/px with 95 % intervals (PAL and 1080p, x and y): uv run python -m optics.scale_chain.

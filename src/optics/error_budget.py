@@ -29,8 +29,8 @@ INPUTS: dict[str, tuple[float, float, str]] = {
     ),
     "x": (
         _cfg.focus_travel_mm,
-        1.0 * _U,
-        "focus travel 1 mm, AI guess (ESTIMATE), uniform 0–2 mm",
+        0.0,
+        "focus travel 0 mm, lens at its FAR stop (author decision 2026-11-05)",
     ),
     "px": (
         _PX,
@@ -40,8 +40,8 @@ INPUTS: dict[str, tuple[float, float, str]] = {
     ),
     "py": (
         _PY,
-        0.05 * _U,
-        "µm per PAL line = CCD row (ESTIMATE), candidates 6.25–6.30",
+        0.0,
+        "µm per PAL line = CCD row (ESTIMATE); one cell for all 752 × 582 candidates",
     ),
     "t": (
         _cfg.sight_glass_thickness_mm,
@@ -56,7 +56,7 @@ INPUTS: dict[str, tuple[float, float, str]] = {
     "n": (
         _cfg.sight_glass_index,
         0.03,
-        "borosilicate 1.47 (ASSUMED); soda-lime would be 1.52",
+        "soda-lime 1.52, DIN 8902 stamp (ESTIMATE); borosilicate would be 1.47",
     ),
 }
 

@@ -145,7 +145,7 @@ def budget_inputs(cfg: CameraConfig) -> list[Input]:
             "x",
             "focus-helicoid travel",
             f"{cfg.focus_travel_mm:g} mm",
-            "uniform 0–2 mm",
+            "none: lens at its FAR stop (author decision 2026-11-05)",
             "lens.focus_travel_mm",
         ),
         Input(
@@ -190,7 +190,7 @@ def sample_budget(
     u = rng.uniform
     px0, py0 = cfg.sample_pitch_um
     e = cfg.extension_tube_mm + u(-5.0, 5.0, n) - (RING_MM if ring else 0.0)
-    x = u(0.0, 2.0, n)
+    x = np.full(n, cfg.focus_travel_mm)  # at the FAR stop: no spread
     f = rng.normal(cfg.focal_length_mm, 0.02 * cfg.focal_length_mm, n)
     # No camera-candidate term: the plant gives 752 × 582 cells, and every Sony
     # 1/3" CCIR B/W CCD of that count has the same 6.50 × 6.25 µm cell.
@@ -226,7 +226,6 @@ def one_at_a_time(cfg: CameraConfig) -> dict[str, tuple[float, float, str]]:
             "x, y",
         ),
         "ring (e − 5 mm)": (0.0, pct((e + x) / (e - RING_MM + x)), "x, y"),
-        "x 0–2 mm": (pct((e + x) / (e + 2)), pct((e + x) / e), "x, y"),
         "f ±2 %": (-2.0, 2.0, "x, y"),
         "n, t, a": (0.0, 0.0, "–"),
         "line ±2 %": (-2.0, 2.0, "x"),

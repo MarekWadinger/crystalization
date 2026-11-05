@@ -365,7 +365,7 @@ def fig_sight_glass_shift(out_path: Path) -> None:
         d_o,
         apparent,
         color="C0",
-        label=f"through glass, t = {SIGHT_GLASS.thickness:.0f} mm, n = {SIGHT_GLASS.refractive_index:.2f} (assumed)",
+        label=f"through glass, t = {SIGHT_GLASS.thickness:.0f} mm, n = {SIGHT_GLASS.refractive_index:.2f} (DIN 8902 soda-lime)",
     )
     ax.set_xlabel("real object distance d_o (mm)")
     ax.set_ylabel("apparent object distance (mm)")

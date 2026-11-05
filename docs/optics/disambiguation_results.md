@@ -1,6 +1,6 @@
 # Depth disambiguation: pipeline and current results
 
-**Updated:** 2026-11-03 (rerun at the analog-PAL pixel scale, `bfa6295`).
+**Updated:** 2026-11-05 (rerun with focus travel ξ = 0, lens at its FAR stop; author decision).
 **Pipeline code:** [`../../src/optics/disambiguate.py`](../../src/optics/disambiguate.py),
 [`../../src/optics/csd.py`](../../src/optics/csd.py).
 **Reproduce:** `uv run python -m optics.disambiguate` (figs 09, 10 and the git-ignored
@@ -16,29 +16,29 @@
 1. Detect crystals on every 15th frame of `datasets/2026-02-05 10-36-32.mp4` (60 frames, auto crop
    1826 × 906 px) with the watershed (`optics.detect_watershed`) or the edge detector
    (`annotator.detection`). The area window is `detection_area_px` from `configs/camera_100.toml`:
-   `[9, 356 474]` px² on the 1080p clips (3 px side up to a 1 mm square at 1.465 × 1.914 µm/px).
+   `[9, 345 389]` px² on the 1080p clips (3 px side up to a 1 mm square at 1.489 × 1.945 µm/px).
 2. Score each detection by the mean Laplacian-variance inside its box; normalise to the 99.5th
    percentile.
 3. The top 15 % in sharpness define the focal-plane size prior `P_w(w)`.
 4. For the others, invert `S = (σ² + σ_floor²)^(−5/2)` to the CoC, then `c(d_o)` to the two
    candidate depths, and keep the side whose implied size is more probable under `P_w`.
-5. Sizes are area-equivalent: `sqrt(w·h)` of the box times the geometric-mean µm/px (1.673 µm on
+5. Sizes are area-equivalent: `sqrt(w·h)` of the box times the geometric-mean µm/px (1.701 µm on
    the clips). That is exact for areas under the anisotropic pixel, but not a length along either axis.
 
 ## Current numbers (60 frames, watershed, current window)
 
 | Quantity | Value |
 |---|---:|
-| Detections | 52 784 (focus 7 918, near 33 957, far 10 909) |
+| Detections | 52 784 (focus 7 918, near 33 958, far 10 908) |
 | Near / far split | 76 / 24 |
-| Off-focus p_near within 0.500 ± 0.002 | 99.7 % (0.1–99.9 % quantiles 0.498–0.504) |
-| Median / mean area-equivalent size | 0.075 / 0.082 mm (CV 0.43, log-normal s 0.41) |
-| Mean depth correction | 0.005 % of the median |
-| \|d − d_focus\| of near/far assignments, p50 / p99 | 3.1 / 5.6 µm |
+| Off-focus p_near within 0.500 ± 0.002 | 99.6 % (0.1–99.9 % quantiles 0.497–0.504) |
+| Median / mean area-equivalent size | 0.076 / 0.083 mm (CV 0.43, log-normal s 0.41) |
+| Mean depth correction | 0.006 % of the median |
+| \|d − d_focus\| of near/far assignments, p50 / p99 | 3.0 / 6.0 µm |
 
 All four detector × window runs are in [`rerun_results.md`](./rerun_results.md). With the legacy
-`[80, 8000]` px² window, the paper's numbers come back exactly: edge 18 823 detections, median
-0.037 mm, 70 / 30; watershed 52 302, median 0.075 mm, 72 / 28. The legacy window was tuned to a
+`[80, 8000]` px² window, the old paper's numbers come back (2026-11-05, ξ = 0): edge 18 823 detections, median
+0.037 mm, 70 / 30; watershed 52 302, median 0.076 mm (0.075 before ξ = 0), 72 / 28. The legacy window was tuned to a
 guessed ~52 µm crystal, so it only matches those old numbers.
 
 ## The near/far split is a tie-break, not a finding
@@ -52,12 +52,12 @@ front of the focal plane, or a right-skewed prior) are both unsupported at this 
 
 ## Why the size signal is so weak here
 
-The thin-lens geometry is `d_focus = 55.08 mm`, `K = f²/(N(d_focus − f)) = 38.1 mm` at F/1.6. A
+The thin-lens geometry is `d_focus = 55.42 mm`, `K = f²/(N(d_focus − f)) = 37.5 mm` at F/1.6. A
 symmetric pair needs **δ ≈ 1.3 mm** for a 5 % size ratio. The detector loses edges once the CoC
 reaches a few resolution elements. The resolution element is the CCD cell / PAL sample (6.5 µm
-geometric mean at the sensor), not the upscaled clip pixel, so that happens at |δ| ≈ 47 µm (5 PAL
-samples), where the ratio is 0.17 %. The in-focus half-slice (CoC ≤ 1 PAL sample) is ±9.4 µm at
-F/1.6 and ±94 µm at F/16. The figures and the paper quoted ±4.2 µm, ±21 µm and 0.08 %, which use
+geometric mean at the sensor), not the upscaled clip pixel, so that happens at |δ| ≈ 48 µm (5 PAL
+samples), where the ratio is 0.17 %. The in-focus half-slice (CoC ≤ 1 PAL sample) is ±9.7 µm at
+F/1.6 and ±97 µm at F/16. The figures and the paper quoted ±4.2 µm, ±21 µm and 0.08 %, which use
 the clip pixel (2.9 µm).
 
 Which crystals are in front of the lens depends on the time since seeding, not on a fixed

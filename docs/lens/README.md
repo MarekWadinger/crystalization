@@ -40,7 +40,7 @@ video.
 | Rear panel | DIP switches L/L–INT, AI–AES, VIDEO/D.D., AGC, BLC, NC; V-PHASE and ALC pots; BNC video out; 12 VDC / 24 VAC terminal | PHOTO: [20260810_111636][ph-rear], [20260205_122519](20260205_122519.jpg) |
 | Output | analog monochrome PAL (CVBS) | DERIVED from the rear panel and the 720 × 576 grey recordings (ffprobe, [config `[dvr]`](../../configs/camera_100.toml)) |
 | Model | **unread** (sticker not photographed; no photo shows the underside) | — |
-| Sensor | **752 × 582 pixels** (plant). The same e-mail gives "44 µm/px" and a "32 × 24 mm" field of view: that is the Fujinon datasheet's 1/3" object field at its 0.25 m minimum object distance (§1.4), i.e. the bare lens **without** the 60 mm tube; with the tube the scale is ≈ 11× finer (3.92 × 3.59 µm, [scale_chain.md](../optics/scale_chain.md)) | PLANT: R. Gála (head of MaR) e-mail, [screenshot](../sered/plant_email_gala_camera.jpg); date to be supplied |
+| Sensor | **752 × 582 pixels** (plant). The same e-mail gives "44 µm/px" and a "32 × 24 mm" field of view: that is the Fujinon datasheet's 1/3" object field at its 0.25 m minimum object distance (§1.4), i.e. the bare lens **without** the 60 mm tube; with the tube the scale is ≈ 11× finer (3.98 × 3.65 µm, [scale_chain.md](../optics/scale_chain.md)) | PLANT: R. Gála (head of MaR) e-mail, [screenshot](../sered/plant_email_gala_camera.jpg); date to be supplied |
 | Best-match class | Ademco ACM570-family body with a PAL 1/3" 752 × 582 Sony CCD; see §1.1.1 | ESTIMATE ([config `[camera]`](../../configs/camera_100.toml)) |
 | Body mount | **CS**: the rear panel matches the ACM570E, whose manual gives "CS or C (C mount adapter supplied)" ([p. 12][m570-12]), i.e. a CS body that takes C lenses through a 5 mm ring. The ACM574TPX "adjustable back focus" option ([p. 15][m574-15]) is excluded: its panel has a back-focus adjuster and lock ([p. 5][m574-5]), ours has neither ([rear photo][ph-rear]). The C adapter is presumably the thin part (≈ 3 mm visible) between tube and body ([20260205_122510](20260205_122510.jpg)); to confirm with a side photo. Author decision (2026-11-04, [CLAIM_CHANGES 75](../../papers/cep/CLAIM_CHANGES.md)): that ring is not part of the ≈ 6 cm; if it were, µm/px would be +8.9 % | DATASHEET (ACM570E family), PHOTO, author decision |
 | Hanwha HCB-6000 | **not the installed camera**: it appears only in the [Polz quote `P5PI-100`](../Camera_100_Slovenske_cukrovary.pdf) (6 Oct 2025, "Cena bez objetivu: 125 EUR"); it is a colour CMOS camera without DIP switches | quote vs photos ([Q&A notes §7 item 1](../sered/notes_plant_dcs_qa_photos.md)) |
@@ -101,7 +101,7 @@ unknown.
 | Brand on barrel | `FUJINON` | engraving in [`122620.jpg`](./20260205_122620.jpg) |
 | Focal length / max aperture engraved | `1:1.6 / 35` | engraving in [`122620.jpg`](./20260205_122620.jpg) |
 | Model | `HF35HA-1B` | operator (confirmed `B` suffix) |
-| Focus ring current position | **not readable**: the ring carries only NEAR … FAR, no distance scale ([Q&A item 9][qa]; Aug-photos [20260810_112149][ph-focus1]–[112202][ph-focus2]). so the earlier "4 m" reading of [`122532.jpg`](./20260205_122532.jpg) cannot be a distance; which `4` mark was read is unclear. Retracted (§6) | PLANT + PHOTO |
+| Focus ring current position | **at the FAR (∞) stop, lens fully screwed in: focus travel ξ = 0** (author decision, Marek Wadinger, 2026-11-05). The ring carries only NEAR … FAR, no distance scale ([Q&A item 9][qa]; Aug-photos [20260810_112149][ph-focus1]–[112202][ph-focus2]). so the earlier "4 m" reading of [`122532.jpg`](./20260205_122532.jpg) cannot be a distance; which `4` mark was read is unclear. Retracted (§6) | PLANT + PHOTO |
 | Iris setting | **F/1.6**, "if I read it correctly"; ring between 1.6 and 2 on the photos | PLANT ([Q&A item 9][qa]), PHOTO [20260810_112120][ph-iris] |
 
 ### 1.4 Lens — from manufacturer datasheet
@@ -128,13 +128,13 @@ unknown.
 
 | Item | Value | Source |
 |---|---|---|
-| Standard mark | `DIN 89..` (last digit worn; `DIN 8902` most likely — see below) | engraving on glass, photos [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg) |
+| Standard mark | **DIN 8902**: engraving reads `DIN 890…` (last digit worn); settled as DIN 8902 by the author (2026-11-05) | engraving on glass, photos [`122524.jpg`](./20260205_122524.jpg), [`122532.jpg`](./20260205_122532.jpg) |
 | Flange bolt count | **8** | operator, from [`122524.jpg`](./20260205_122524.jpg) |
 | Material | tempered soda-lime (DIN 8902 disc, ≤ 150 °C, Ø 10–350 mm, 3–25 mm thick) | DIN standard |
 | Thickness / diameter | **20 mm / Ø150 mm** | PLANT: [Q&A item 8(C)][qa] |
-| Refractive index used | 1.47 (borosilicate) | ASSUMED; contradicts the soda-lime reading of the stamp (1.52 → Δ = 6.84 mm instead of 6.39 mm). The pixel scale at focus does not depend on it |
+| Refractive index used | 1.52 (soda-lime) | ESTIMATE: typical n_d of soda-lime glass, the DIN 8902 material; no datasheet of this disc (until 2026-11-05: 1.47 borosilicate, ASSUMED; Δ = 6.84 mm instead of 6.39 mm). The pixel scale at focus does not depend on it |
 
-DIN 89xx candidates: **8902** (round soda-lime, ≤ 150 °C) is the fit for a round
+Settled 2026-11-05 (author): **DIN 8902**. Background on the DIN 89xx candidates: **8902** (round soda-lime, ≤ 150 °C) is the fit for a round
 disc on a ~70–80 °C vessel. **8901** is withdrawn; **8903** is rectangular. If
 the temperature margin is tight or the disc is quartz, cross-check against
 **DIN 7080** (round borosilicate, ≤ 280 °C).
@@ -189,8 +189,8 @@ over any longer path.
 | Sensor active area | 4.89 × 3.64 mm | 752 × 6.50 µm by 582 × 6.25 µm (ACM570E-class candidate) |
 | Sensor-plane µm per PAL sample / line | **6.831 × 6.250 µm** | cell × CCD clock / DVR rate; one row per line |
 | Sensor-plane µm per 1080p clip pixel | **2.552 × 3.333 µm** | PAL sample / (2.677, 1.875) |
-| Slurry-plane µm/px at focus, PAL | **3.92 × 3.59 µm** (95 %: ±≈ 10 %) | pitch · f / (e + x); `python -m optics.scale_chain` |
-| Slurry-plane µm/px at focus, 1080p clip | **1.464 × 1.913 µm** (95 %: ±≈ 10 %; +8.9 % if the ring is in the tube) | same |
+| Slurry-plane µm/px at focus, PAL | **3.98 × 3.65 µm** (95 %: ±≈ 10 %) | pitch · f / (e + x); `python -m optics.scale_chain` |
+| Slurry-plane µm/px at focus, 1080p clip | **1.489 × 1.944 µm** (95 %: ±≈ 10 %; +9.1 % if the ring is in the tube) | same |
 
 Superseded: 5.57 × 3.13 mm and 2.9 µm/px (Hanwha HCB-6000 / Sony IMX307, an AI
 inference from the quote, commit b997e2f), which gave an isotropic 1.66 µm/px.
@@ -241,9 +241,9 @@ DN125, or DN150**. Using the lens body (29 × 29.5 mm per the Fujinon
 datasheet) as a known scale in photo [`122524.jpg`](./20260205_122524.jpg),
 the clear viewing aperture looks roughly 3–4× the lens width.
 
-> **Plant answer ([Q&A item 8(C)][qa], 2026-08-12): Ø150 mm (DN150), 20 mm thick.** Index still assumed borosilicate.
+> **Plant answer ([Q&A item 8(C)][qa], 2026-08-12): Ø150 mm (DN150), 20 mm thick.** Standard DIN 8902 (author, 2026-11-05): soda-lime, n ≈ 1.52.
 > Superseded estimate: DN100, Ø100 mm clear, 15 mm thick.
-> Refractive index assumed n_g ≈ 1.47 (borosilicate, visible band).
+> Refractive index n_g ≈ 1.52 (soda-lime, DIN 8902; was 1.47 borosilicate until 2026-11-05).
 > **Verify by tape-measuring the flange OD or the bolt-circle diameter.**
 
 ### 3.2 Extension tube length
@@ -256,7 +256,7 @@ Assumptions:
   which is normal for industrial massecuite). **This is the dominant
   assumption — confirm it before trusting the tube length.** (Superseded:
   the camera is on the seed pan, not an A pan, and the plant states the
-  spacer as ≈ 6 cm, [Q&A item 8(A)][qa]. The calculation below is kept only as the
+  tube as ≈ 6 cm, [Q&A item 8(A)][qa]. The calculation below is kept only as the
   record of how in-scene anchoring went wrong by ≈ 6×.)
 
 Calculation:
@@ -290,19 +290,17 @@ Sensitivity to the FOV assumption:
 | Lens-front → outside face of sight glass | plant **≈ 2 cm** ([Q&A item 8(B)][qa]); a caliper reading is still missing |
 | Sight-glass clear diameter | plant Ø150 mm ([Q&A item 8(C)][qa]); clear aperture not measured |
 | Sight-glass thickness | plant **20 mm** ([Q&A item 8(C)][qa]) |
-| Inside of glass → typical crystal plane | plant: focus on the inner glass face; fibre lamp 1–2 mm behind it ([Q&A item 8(D)][qa]) |
+| Inside of glass → typical crystal plane | focus on the inner glass face is **our assumption** (drawn on the figure we sent; the plant did not state it, [Q&A notes](../sered/notes_plant_dcs_qa_photos.md)); fibre lamp 1–2 mm behind the inner face is plant ([Q&A item 8(D)][qa]) |
 | Iris (F-stop) currently locked at | plant **F/1.6** "if I read it correctly" ([Q&A item 9][qa]) |
 | Extension tube length, exact | plant **≈ 6 cm** ([Q&A item 8(A)][qa]). **Dominant term of the scale budget** (±5 mm → −7.6 / +8.9 % worst case); a caliper reading and a photo of the mount would cut the 95 % budget from ±10 % to ±3 % |
 | Is a 5 mm CS→C ring inside the ≈ 6 cm? | photo of the body mount; +8.9 % in µm/px if yes |
 | Camera model sticker | photo of the sticker; removes the 752- vs 500-cell CCD term (0.6–0.8 %) |
-| Focus-helicoid travel | 1 mm is an AI guess (no record); ±1 mm → ∓1.6 % in µm/px; caliper the lens body length |
 | Camera-side capture chain (DVR model, codec, rescaling) | plant: "will be supplied" ([Q&A item 10][qa]). The 1080p display stretch is measured (§1.2); the DVR's 13.5 MHz sampling is assumed |
 | °Brix and temperature of the liquor over the video archive period | DCS historian export |
 | Lab MA / CV sieve results over the same period | lab archive |
 | Maintenance log entries for Camera 100 | plant MaR records |
 | Illuminator manufacturer / model | photo of any nameplate on the module; measure module OD |
 | Gap between lamp face and inner sight-glass surface (= imaging slab thickness) | direct measurement at maintenance window; sets depth of field for µm/px |
-| Last visible digit of the sight-glass `DIN 89..` engraving | clean the disc rim, photograph obliquely |
 
 ---
 

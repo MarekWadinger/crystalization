@@ -264,7 +264,7 @@ Live values 15.11.2025 23:32: Podtlak −80.6 kPa, Viskozita 81.5, Hladina 50.5 
 6. **TIC1602_PID/PID1/PV.CV = heating-steam pressure, gauge? SP = setpoint for absolute pressure, not the differential? OUT = steam valve opening? Same steam as evaporator body 4A? Data request (1-min 26.10–1.11.2025, 30-s 4.2.2026 11–17 h)** -> "These steam pressures and also the heating-steam pressure are all pressures **inside the pan**." **All pans except ZRA get vapour from 4A; ZRA gets it from the 3rd vapour** (*z 3 brydy*). Hourly data are already available.
 7. **LI1000/AI1/PV.CV = level in the seed pan (*hladina v očkovacom varostroji*), same windows** -> Requested, to be delivered later. This confirms **LI1000 = ZRA level and ZRA = očkovací varostroj**. [Q0] had asked "the Excel only has refrigerant; is there a separate massecuite-level signal for ZRA?"
 8. **Optics, four unknowns of [FIG]:**
-   - (A) spacer ring between lens and camera body (*medzikrúžok*; we estimated 45 mm) -> **≈ 6 cm**
+   - (A) tube between lens and camera body (*medzikrúžok*; we estimated 45 mm) -> **≈ 6 cm**
    - (B) lens front to outer face of the sight glass -> **≈ 2 cm** (photos available)
    - (C) sight-glass thickness -> **20 mm, diameter 150 mm** ([FIG] itself says "2 mm")
    - (D) lamp to inner glass face -> it is an **optical fibre**; there is a gap that could not be measured because of the position; "very close to the glass", **est. 1–2 mm**
@@ -281,7 +281,7 @@ Live values 15.11.2025 23:32: Podtlak −80.6 kPa, Viskozita 81.5, Hladina 50.5 
 ---
 
 ## 4. Camera / optics facts
-- [FIG] optical chain: camera body labelled **"Hanwha HCB-6000"** (sensor plane "snímač") -> spacer ring (A) -> **Fujinon HF35HA-1B, length 29.5 mm** -> air gap (B) -> sight glass (*priezor*, C) -> massecuite -> lamp -> massecuite.
+- [FIG] optical chain: camera body labelled **"Hanwha HCB-6000"** (sensor plane "snímač") -> tube (A) -> **Fujinon HF35HA-1B, length 29.5 mm** -> air gap (B) -> sight glass (*priezor*, C) -> massecuite -> lamp -> massecuite.
 - Focus plane = inner glass surface ("rovina, kde kamera ostrí"). **Our assumption**: it is drawn on our own [FIG], which we sent with the questions; the plant did not state it. With the lamp 1–2 mm from the inner face (8(D)), the image is a backlit projection through a ~1–2 mm slurry slab, sharp at the glass if this assumption holds.
 - Photos confirm the lens: **FUJINON 1:1.6/35 mm HF35HA-1B**, FUJIFILM Corporation, made in China [P:20260810_112218], [P:20260810_112208].
   - Aperture ring reads 1.6–2 near the index [P:20260810_112120/112128].
@@ -289,7 +289,7 @@ Live values 15.11.2025 23:32: Podtlak −80.6 kPa, Viskozita 81.5, Hladina 50.5 
 - **Camera body in photos is labelled "ADEMCO VIDEO"** (white analog box camera) [P:1786375479369/379/391], [P:20260810_111738/111741].
   - Rear panel [P:20260810_111636]: DIP switches L/L–INT, AI–AES, VIDEO, D.D., AGC OFF, BLC OFF, NC; V-PHASE pot, ALC pot, BNC "VIDEO" out, 2-pin power terminal, POWER LED.
   - Interp.: this is a classic analog CVBS camera with auto-iris (video-drive) support, which is consistent with PAL output.
-- Mounting [P:20260810_111738]: camera on a **Fotomate quick-release plate on an angle bracket bolted to the sight-glass flange**. The lens appears to sit almost against the glass, but the photos (tape measure + lens body as ruler; also [P:20260810_111741], [P:1786375479369/391]) read the lens front ≈ 35–46 mm from the glass, not the "≈ 2 cm" of 8(B), and the spacer tube ≈ 37–42 mm, not "≈ 6 cm" (2026-11-03 analysis). A tape measure was laid from the flange outward (~29 cm span to the rear of the body).
+- Mounting [P:20260810_111738]: camera on a **Fotomate quick-release plate on an angle bracket bolted to the sight-glass flange**. The lens appears to sit almost against the glass, but the photos (tape measure + lens body as ruler; also [P:20260810_111741], [P:1786375479369/391]) read the lens front ≈ 35–46 mm from the glass, not the "≈ 2 cm" of 8(B), and the tube ≈ 37–42 mm, not "≈ 6 cm" (2026-11-03 analysis). A tape measure was laid from the flange outward (~29 cm span to the rear of the body).
   - A blue armoured cable with a steel ferrule enters the flange at the top. Interp.: this is the **fibre-optic light guide** (lamp) passing through the window flange, which matches [ZOD] "optical fibre".
 - Sight glass: round, bolted flange, heavy deposit/fouling around it. Bolt count not determinable: no photo (Aug or [`docs/lens/`](../lens/) Feb) shows the full bolt circle, and heads of two sizes are visible on the part that is shown. (An earlier reading here said ~12; `docs/lens/README.md` records 8 from the operator.)
 - Plant has no recording: only a signal-processing device [ZOD]. The PAL recordings must come from elsewhere (interp.).
@@ -328,7 +328,7 @@ Live values 15.11.2025 23:32: Podtlak −80.6 kPa, Viskozita 81.5, Hladina 50.5 
 - DVR/signal chain make, model, codec, rescaling: "will be supplied" [ZOD]. The plant states it does not record at all.
 - Focus distance (mm) not readable from the lens [ZOD], [P:20260810_112149–112202].
 - Lamp-to-glass distance only estimated (1–2 mm) [ZOD].
-- Spacer ring "≈ 6 cm" and lens-glass gap "≈ 2 cm" are rough ("cca") [ZOD].
+- Tube "≈ 6 cm" and lens-glass gap "≈ 2 cm" are rough ("cca") [ZOD].
 - Which evaporator vapour heats which pan is ambiguous (see §7).
 - Exact meaning of PIC1001 (field) versus DCS PIC1002 (ZRA Podtlak) is not documented. Interp.: PIC1001 = steam-side pressure.
 - Abbreviations not defined in any file: CSA, CSB AfS, UC, SS, MSZ, KSZ, KP_akt. My readings: UC = očkovacia cukrovina; SS = štandardný sirup; KP = koeficient presýtenia (setpoint) / KP_akt (actual).
@@ -338,7 +338,7 @@ Live values 15.11.2025 23:32: Podtlak −80.6 kPa, Viskozita 81.5, Hladina 50.5 
 ## 7. Contradictions
 1. **Camera body:** [FIG] says "Hanwha HCB-6000", but every camera photo shows a body labelled **"ADEMCO VIDEO"** [P:1786375479369], [P:20260810_111738]. Possibly a relabelled/OEM body or a different camera; this needs confirmation.
 2. **Sight-glass thickness:** [FIG] says C = **2 mm**; [ZOD] answer says **20 mm** (Ø150 mm).
-3. **Spacer ring:** team estimate 45 mm [Q0]/[ZOD] versus plant answer **≈ 60 mm** [ZOD].
+3. **Tube:** team estimate 45 mm [Q0]/[ZOD] versus plant answer **≈ 60 mm** [ZOD].
 4. **Heating vapour:** [ZOD] says all pans use 4A vapour except ZRA, which uses 3rd vapour. The DCS screens show **ZRA and A1–A3 on "4A.B" and B1, B2, C1, C2 on "3.B"** [S:Varna_all], [S:ZRA_prehlad], [S:C1_prehlad].
 5. **TIC1602 meaning:** the question assumes heating-steam pressure; [ZOD] says the pressures are "inside the pan". The DCS trend labels **PIC1602** as "Podtlak" (in-pan vacuum), while C-pan steam-loop PVs (e.g. C2 −3.3 kPa) look like heating-chamber pressure. TIC vs PIC loops share number xx02. Treat the semantics as unresolved.
 6. **Pan size:** [ZOD] "drawings for 60 t units" and [SCHEME] "3x60 t / 2x60 t", but the drawing title blocks say **500 q (50 t) charge** [DWG-V], [DWG-R]. [DWG-B] is a different ~220 m² / 200 m² vapour body. The nameplate gives 300 m², 70.8 m³ [P:1786375479250].
