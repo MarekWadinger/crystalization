@@ -714,7 +714,9 @@ def main() -> None:
     text = report(cfg, checks)
     print(text)
     if checks is not None:
-        DOC_PATH.write_text(text)
+        DOC_PATH.write_text(
+            text.rstrip("\n") + "\n"
+        )  # end-of-file hook wants one final newline
         print(f"wrote {DOC_PATH.relative_to(REPO)}")
 
 
