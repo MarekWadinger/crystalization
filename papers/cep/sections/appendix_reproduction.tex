@@ -15,8 +15,7 @@ uv run pytest -q tests/test_optics.py \
 uv run pytest -q tests/test_softsensor.py  # 21
 uv run python scripts/softsensor_results.py
 \end{verbatim}}
-\noindent The full suite (\code{uv run pytest -q}) gives 160 passed, 1 failed and 2 skipped; the failing frame-scale
-test of \code{test_crystal_rules} fails on the base branch too and concerns no number of this paper.
+\noindent The full suite (\code{uv run pytest -q}) passes (180 tests).
 \code{scripts/softsensor_results.py} writes the estimator results to \code{docs/softsensor/results.md}. \tabref{tab:repro} lists the generators.
 \code{scripts/rerun_paper_numbers.py} writes each computed optics and detector number with its
 previous value, source class and generating function to \code{docs/optics/rerun_results.md};
