@@ -39,14 +39,14 @@
 # Analog B/W PAL CCD. Cells are read out along a line at the CCD clock; the DVR
 # re-samples that analog line at its own rate, so one DVR sample spans
 # cell_width × pixel_clock / dvr.sampling_rate on the sensor; one line = one cell row.
-model = "Ademco ACM570E-class"        # ESTIMATE: best match to the "ADEMCO VIDEO" body and its rear DIP panel (Aug-photos 20260810_111738.jpg, rear 111636.jpg); model sticker unread. Alternative ACM380E-class (500 × 582, 9.8 × 6.3 µm), manual manualslib.com/manual/892194
+model = "Ademco ACM570E-class"        # ESTIMATE: combination of two Ademco manuals, none describes this exact camera: rear panel = ACM570E (manualslib.com/manual/892194), PAL 752 × 582 1/3" Sony CCD = ACM574TPX/ACM575X (manualslib.com/manual/1181686); conflict: our 12 VDC/24 VAC supply vs ACM570E 24 VAC only. Sticker unread. Candidates and chips: docs/lens/README.md §1.1.1
 sensor_format = "1/3\""               # ESTIMATE: candidate datasheet; both candidates are 1/3" CCDs
-cell_width_um = 6.50                  # ESTIMATE: DATASHEET of the candidate's 752-cell PAL CCD (Sony ICX409AL-type, the B/W part; ICX409AK is the colour twin of the same geometry); the candidate itself is unconfirmed
+cell_width_um = 6.50                  # ESTIMATE: DATASHEET of the 1/3" 752 × 582 B/W CCIR Sony CCDs (ICX059CL, ICX409AL, ICX259AL all 6.50 × 6.25 µm); which one is inside is unconfirmed and does not change the value
 cell_height_um = 6.25                 # ESTIMATE: same datasheet; the ACM380E-class alternative is 6.3
-cells_h = 752                         # ESTIMATE: same datasheet (effective cells per row)
-cells_v = 582                         # ESTIMATE: same datasheet (effective rows; 576 reach the PAL picture)
+cells_h = 752                         # PLANT: "Camera resolution: 752x582 pixels", R. Gála (head of MaR) e-mail, date to be supplied (docs/sered/plant_email_gala_camera.jpg); effective cells per row
+cells_v = 582                         # PLANT: same e-mail (effective rows; 576 reach the PAL picture)
 pixel_clock_mhz = 14.1875             # ESTIMATE: horizontal CCD clock in the same datasheet; the 500-cell alternative (9.8 µm, 9.46875 MHz) gives 6.87 instead of 6.83 µm per DVR sample
-body_length_mm = 40.0                 # ASSUMED: drawing-only placeholder, no basis recorded; enters no number
+body_length_mm = 126.0                # DATASHEET: ACM380E/ACM570E manual p. 11, "65(W) x 56(H) x 126(D) mm", approximate (manualslib.com/manual/892194/Ademco-Acm380e.html?page=11); matches the tape on Aug-photo 20260810_111738 (≈ 11 → 24 cm). Drawing only; enters no number
 flange_distance_mm = 17.526           # DATASHEET: C-mount standard (lens side). No CS→C adapter ring in the 60 mm: author decision 2026-11-04 (with one, µm/px would be +8.9 %)
 
 [dvr]
