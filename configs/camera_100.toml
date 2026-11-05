@@ -47,6 +47,7 @@ cells_h = 752                         # PLANT: "Camera resolution: 752x582 pixel
 cells_v = 582                         # PLANT: same e-mail (effective rows; 576 reach the PAL picture)
 pixel_clock_mhz = 14.1875             # ESTIMATE: horizontal CCD clock in the same datasheet; the 500-cell alternative (9.8 µm, 9.46875 MHz) gives 6.87 instead of 6.83 µm per DVR sample
 body_length_mm = 126.0                # DATASHEET: ACM380E/ACM570E manual p. 11, "65(W) x 56(H) x 126(D) mm", approximate (manualslib.com/manual/892194/Ademco-Acm380e.html?page=11); matches the tape on Aug-photo 20260810_111738 (≈ 11 → 24 cm). Drawing only; enters no number
+body_height_mm = 56.0                 # DATASHEET: same manual p. 11, "65(W) x 56(H) x 126(D) mm". Drawing only; enters no number
 flange_distance_mm = 17.526           # DATASHEET: C-mount standard (lens side). No CS→C adapter ring in the 60 mm: author decision 2026-11-04 (with one, µm/px would be +8.9 %)
 
 [dvr]
@@ -70,6 +71,7 @@ stretch_y = 1.875                     # MEASURED: clip rows per PAL line, OSD le
 model = "Fujinon HF35HA-1B"           # PHOTO: lens label, docs/lens/20260205_122620.jpg, Aug-photos 20260810_112218.jpg
 focal_length_mm = 35.0                # PHOTO: lens engraving "1:1.6/35mm" (optical focal length, not body length)
 body_length_mm = 29.5                 # DATASHEET: docs/lens/fujinon-hf35ha-1b.pdf, length at FAR (∞); grows by focus_travel_mm when focused closer
+diameter_mm = 29.5                    # DATASHEET: docs/lens/fujinon-hf35ha-1b.pdf, barrel φ29.5. Drawing only; enters no number
 focus_travel_mm = 0.0                 # PHOTO: author decision, Marek Wadinger 2026-11-05: the lens is fully screwed in, at its FAR (∞) stop (Aug-photos 20260810_112149–112202). Replaces the 1 mm AI guess (commit b997e2f). The DATASHEET range is 0 (∞) to ≈ 5.5 mm (0.25 m MOD)
 f_number = 1.6                        # PLANT: Q&A item 9 "F = 1.6, if I read it correctly"; Aug-photos 20260810_112120 show the ring between 1.6 and 2. The "operator inspection 2026-06-15" has no surviving record
 iris_stops = [1.6, 2.0, 4.0, 8.0, 16.0]  # PHOTO: engraved on the iris ring, docs/lens/20260205_122600.jpg; drives the DoF-vs-F figure
@@ -99,6 +101,9 @@ max_size_um = 1000.0   # CHOICE: 0.821 mm rounded up. 0.821 mm = largest crystal
 # What-if sweeps and drawing choices for docs/optics/figures — not the installation.
 extension_sweep_mm = [5.0, 10.0, 20.0, 40.0]  # CHOICE: standard C-mount extension-ring kit; the installed tube is appended
 slurry_depth_mm = 40.0                # CHOICE: width of the slurry band in 18_optical_layout; the pan is far deeper
+tube_diameter_mm = 29.5               # CHOICE: drawing only; no source gives it, the photos (docs/lens/20260205_122510.jpg) show the tube about as wide as the lens
+tube_grooves = 9                      # PHOTO: ≈ 9 knurled grooves on docs/lens/20260205_122510.jpg; decorative, the tube is one piece
+glass_cut_mm = 24.0                   # CHOICE: half-height of the Ø150 glass drawn in Fig. A.2; the rest of the disc, the flange and the bolts are drawing only
 
 [focus]
 # i_fixed = f + e + focus_travel = 95 mm  ⇒  d_focus = f·i/(i−f) = 35·95/60 = 55.417 mm
