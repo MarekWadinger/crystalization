@@ -265,17 +265,8 @@ def _installation(ax: plt.Axes) -> None:
             )
         )
 
-    # light cone from the focused plane (inner glass face, optics.optical_layout) into the lens
-    ax.add_patch(
-        Polygon(
-            [(x_air, 12), (x_in, 4), (x_in, -4), (x_air, -12)],
-            fc="#fff3c4",
-            ec="none",
-        )
-    )
-    ax.plot(
-        [x_in + 1.2] * 2, [-16, 16], color=TEAL, lw=4, solid_capstyle="butt"
-    )
+    # no focal-plane marker or light cone: where the focal plane sits is not known
+    # (assumption dropped 2026-11-05, paper §sec:slab removed)
 
     _box(ax, x_tube, -13, g["e"], 26, INK)
     _box(ax, x_air - 5, -17, 5, 34, INK)  # front collar
