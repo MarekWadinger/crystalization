@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.12.0 (2026-11-05)
+
+### Fix
+
+- **optics**: drop the camera-candidate term from the scale budget
+
 ## v0.11.0 (2026-11-05)
 
 ### Feat

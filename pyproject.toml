@@ -1,6 +1,6 @@
 [project]
 name = "crystalization"
-version = "0.11.0"
+version = "0.12.0"
 description = "Crystal video layer decomposition and object detection"
 requires-python = ">=3.13"
 dependencies = []
