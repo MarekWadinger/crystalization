@@ -35,7 +35,7 @@ def test_enhance_raises_local_contrast():
 def test_ananya_enhance_keeps_frame_shape_and_alignment(crystal_frame):
     img, paint = crystal_frame
     paint(280, 200, 30, 30)
-    out = ananya_enhance(img, scale=576 / 1080)
+    out = ananya_enhance(img, scale=(576 / 1080, 576 / 1080))
     assert out.shape == img.shape and out.dtype == np.uint8
     # the resample round trip must not shift the crystal against the masks
     rim_cols = np.where(out[215, 260:330] < 60)[0] + 260

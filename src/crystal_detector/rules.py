@@ -20,12 +20,11 @@ from typing import TypedDict
 import cv2
 import numpy as np
 
-from optics.config import lens_from_config, load_camera
-from optics.model import mm_per_pixel_at
+from optics.config import lens_from_config, load_camera, um_per_px_xy_at_focus
 
 PAL_WIDTH, PAL_HEIGHT, HER_HEIGHT = 720, 576, 1080
-# annotation frame width -> source video width (export_frames.crop keeps 90 %)
-ANNOTATION_WIDTHS = {648: PAL_WIDTH, 1728: 1920}
+# annotation frame width -> source video size (export_frames.crop keeps 90 %)
+ANNOTATION_WIDTHS = {648: (PAL_WIDTH, PAL_HEIGHT), 1728: (1920, 1080)}
 
 # her settings cell; lengths in pixels of her frames
 EDGE_PERCENTILE = 30
@@ -50,23 +49,32 @@ class Candidate(TypedDict):
     body_rect: Rect  # body + dark rim, +1 px as in her length/width (masks)
 
 
-def um_per_px(source_width_px: int) -> float:
-    """Object-plane µm/px of a video frame of this width, from the config."""
+def um_per_px_xy(width_px: int, height_px: int) -> tuple[float, float]:
+    """Object-plane µm per pixel ``(x, y)`` of a video frame of this size."""
     cfg = load_camera()
-    lens = lens_from_config(cfg, frame_width_px=source_width_px)
-    d = cfg.focus_object_distance_mm
-    return float(mm_per_pixel_at(lens, d, np.array([d]))[0]) * 1000.0
+    return um_per_px_xy_at_focus(
+        cfg, lens_from_config(cfg, width_px, height_px)
+    )
 
 
-def frame_scale(width_px: int) -> float:
-    """Pixels of an exported annotation frame per pixel of her frames."""
+def frame_scale(width_px: int) -> tuple[float, float]:
+    """Pixels of an exported annotation frame per pixel of hers, ``(x, y)``.
+
+    Her frames are taken as PAL upscaled isotropically to 1080 rows
+    (pillarboxed); the DVR 1080p clips are PAL stretched anisotropically, so
+    the two axes differ there.
+    """
     if width_px not in ANNOTATION_WIDTHS:
         raise ValueError(
             f"{width_px} px wide is not an exported annotation frame "
             f"({' or '.join(map(str, ANNOTATION_WIDTHS))} px); scale unknown"
         )
-    her_um = um_per_px(PAL_WIDTH) * PAL_HEIGHT / HER_HEIGHT
-    return her_um / um_per_px(ANNOTATION_WIDTHS[width_px])
+    # ponytail: isotropic ×1.875. Her ~1285 px active width (pillarboxed) is within
+    # ~5 % of 1316–1350 px isotropic and far from the DVR's ×2.677 (1927 px).
+    up = HER_HEIGHT / PAL_HEIGHT
+    px, py = um_per_px_xy(PAL_WIDTH, PAL_HEIGHT)
+    ax, ay = um_per_px_xy(*ANNOTATION_WIDTHS[width_px])
+    return px / up / ax, py / up / ay
 
 
 def _box(cnt: np.ndarray, x0: int, y0: int) -> Rect:
@@ -189,10 +197,11 @@ def detect(
     return out
 
 
-def _to_frame(r: Rect, s: float) -> Rect:
-    """Rect on her grid -> rect on a frame ``s`` times her pixel size."""
-    (cx, cy), (w, h), ang = r
-    return ((cx + 0.5) * s - 0.5, (cy + 0.5) * s - 0.5), (w * s, h * s), ang
+def _to_frame(r: Rect, s: tuple[float, float]) -> Rect:
+    """Rect on her grid -> rect on a frame ``s = (sx, sy)`` times her pixel size."""
+    pts = (cv2.boxPoints(r) + 0.5) * s - 0.5
+    (cx, cy), (w, h), ang = cv2.minAreaRect(pts.astype(np.float32))
+    return (cx, cy), (w, h), ang
 
 
 def frame_candidates(gray: np.ndarray) -> list[Candidate]:
@@ -201,7 +210,7 @@ def frame_candidates(gray: np.ndarray) -> list[Candidate]:
     h, w = g.shape
     s = frame_scale(w)
     hers = cv2.resize(
-        g, (round(w / s), round(h / s)), interpolation=cv2.INTER_CUBIC
+        g, (round(w / s[0]), round(h / s[1])), interpolation=cv2.INTER_CUBIC
     )
     return [
         Candidate(
