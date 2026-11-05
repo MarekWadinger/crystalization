@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.13.0 (2026-11-05)
+
+### Fix
+
+- **optics**: DIN 8902 glass, focus travel 0 at the FAR stop, tube naming
+
 ## v0.12.0 (2026-11-05)
 
 ### Fix
