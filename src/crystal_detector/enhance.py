@@ -62,14 +62,18 @@ def level(gray: np.ndarray, sigma_px: float) -> np.ndarray:
     return out
 
 
-def ananya_enhance(gray: np.ndarray, scale: float = 1.0) -> np.ndarray:
-    """Her full chain on a grey frame; ``scale`` = px here per px of hers."""
+def ananya_enhance(
+    gray: np.ndarray, scale: tuple[float, float] = (1.0, 1.0)
+) -> np.ndarray:
+    """Her full chain on a grey frame; ``scale`` = px here per px of hers, (x, y)."""
     g = np.clip(gray, 0, 255).astype(np.uint8)
-    if scale == 1.0:
+    if scale == (1.0, 1.0):
         return enhance(level(enhance(g), RESIDUAL_SIGMA_PX))
     h, w = g.shape
     hers = cv2.resize(
-        g, (round(w / scale), round(h / scale)), interpolation=cv2.INTER_CUBIC
+        g,
+        (round(w / scale[0]), round(h / scale[1])),
+        interpolation=cv2.INTER_CUBIC,
     )
     out = ananya_enhance(hers)
     return cv2.resize(out, (w, h), interpolation=cv2.INTER_AREA)

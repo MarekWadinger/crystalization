@@ -31,10 +31,15 @@ def labels_at(cands, x: float, y: float) -> list[str]:
 
 
 def test_frame_scale_converts_her_pixels_for_pal_and_1080p():
-    # her frames are PAL upscaled 1080/576 = 1.875×; our PAL crops are not
-    assert frame_scale(648) == pytest.approx(576 / 1080, rel=1e-3)
-    # native 1080p crop: 2.37 µm/px (hers) / 1.67 µm/px
-    assert frame_scale(1728) == pytest.approx(1.42, abs=0.01)
+    # her frames are PAL upscaled 1080/576 = 1.875× on both axes; our PAL crops are not
+    assert frame_scale(648) == pytest.approx(
+        (576 / 1080, 576 / 1080), rel=1e-3
+    )
+    # DVR 1080p clips are the same PAL upscaled to 1080 rows (y: same pixel as hers)
+    # but stretched ×2.677 horizontally (x: 2.677 / 1.875 her pixels per clip pixel)
+    sx, sy = frame_scale(1728)
+    assert sy == pytest.approx(1.0, abs=0.01)
+    assert sx == pytest.approx(2.677 / 1.875, abs=0.01)
 
 
 def test_frame_scale_refuses_frames_of_unknown_geometry():
