@@ -2,6 +2,12 @@
 
 <!-- kpi:unreleased -->
 
+## v0.14.0 (2026-11-05)
+
+### Fix
+
+- **optics**: scale_chain report ends with one newline
+
 ## v0.13.0 (2026-11-05)
 
 ### Fix
