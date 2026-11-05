@@ -12,7 +12,7 @@ needs: how the detectors work, the depth they admit and what their output follow
 
 The frame-level analyses below use 60 frames (every 15th) of the 1080p screen recording \code{2026-02-05 10-36-32.mp4},
 whose date is disputed and whose strike phase is unknown (\code{scripts/check_clip_overlap.py}), with sizes
-area-equivalent at the modelled geometric-mean scale of 1.673~\um{} per clip pixel; they are detector outputs, not
+area-equivalent at the modelled geometric-mean scale of 1.701~\um{} per clip pixel; they are detector outputs, not
 crystal sizes.
 
 \subsection{Edge and watershed detectors}\label{sec:edge}
@@ -35,15 +35,15 @@ each basin is fitted and filtered as above. A detection's size is the geometric 
 \code{optics.config.detection_area_px}. Its lower bound is $3^2 = 9$ samples$^2$ (\code{min_side_px} $= 3$, choice);
 its upper bound is the area of a 1~mm square at the focal plane, $\mathit{max\_size}^2 / (\mu_\mathrm{x} \mu_\mathrm{y})$, where the 1~mm
 (\code{max_size_um}, choice) rounds up the 0.821~mm largest crystal of the first microscope reading. On the 1080p clips
-the window is $[9,\ 356\,474]$~px$^2$, an area-equivalent 5--1000~\um; on the PAL recording it is
-$[9,\ 71\,020]$~samples$^2$, where three samples are $11.8 \times 10.8$~\um. The earlier fixed window
+the window is $[9,\ 345\,389]$~px$^2$, an area-equivalent 5--1000~\um; on the PAL recording it is
+$[9,\ 68\,811]$~samples$^2$, where three samples are $12.0 \times 10.9$~\um. The earlier fixed window
 $[80,\ 8000]$~px$^2$ corresponds on the clips to an area-equivalent 15--150~\um.
 
 \subsection{Depth range admitted and the near/far question}\label{sec:selectivity}
 
 Both detectors need dark outlines a few samples wide, so they admit only crystals near the focal plane. If a detector
 loses an outline once the CoC exceeds five PAL samples (an assumption, not a measured threshold), the F/1.6 lens
-admits $\delta = \pm 47$~\um{} around focus (Eq.~\ref{eq:coc}); counting in clip pixels gives $\pm 21$~\um.
+admits $\delta = \pm 48$~\um{} around focus (Eq.~\ref{eq:coc}); counting in clip pixels gives $\pm 22$~\um.
 
 \label{sec:ambiguity}Defocus blur is symmetric in reciprocal object distance (\ref{sec:coc}), so two depths
 $d_\mathrm{near}$ and $d_\mathrm{far}$ with equal blur cannot be told apart from the blur. The apparent size of a crystal
@@ -53,7 +53,7 @@ with object distance (Eq.~\ref{eq:pixelsize}). For a near-side defocus $|\delta|
 \frac{w_\mathrm{c}/\mu(d_\mathrm{near})}{w_\mathrm{c}/\mu(d_\mathrm{far})} - 1 = \frac{d_\mathrm{far}}{d_\mathrm{near}} - 1
 \approx \frac{2|\delta|}{d_\mathrm{focus}}.
 \end{equation}
-Over the admitted $\pm 47$~\um{} the ratio departs from one by at most 0.17\,\% (0.08\,\% in clip pixels), whereas
+Over the admitted $\pm 48$~\um{} the ratio departs from one by at most 0.17\,\% (0.08\,\% in clip pixels), whereas
 5\,\% needs $|\delta| \approx 1.3$~mm. This bounds the magnification change used in
 \secref{sec:layer}. It also answers the near/far question of the earlier pipeline: a size prior cannot separate
 hypotheses that differ by 0.17\,\%, and on the clip 99.6--99.9\,\% of the off-focus detections had a near probability
@@ -65,16 +65,16 @@ median size (\code{scripts/rerun_paper_numbers.py}).
 
 On 60 frames of the clip (\code{scripts/rerun_paper_numbers.py}), sizes are detector outputs, not crystal sizes.
 Widening the window from 15--150~\um{} to 5--1000~\um{} raises the edge detections from 18\,823 to 47\,414, halves the
-median from 0.037 to 0.018~mm and raises the CV from 0.83 to 2.16: the edge-detector distribution depends on the area
+median from 0.037 to 0.019~mm and raises the CV from 0.83 to 2.16: the edge-detector distribution depends on the area
 window. By visual reading, not checked against labels, the small detections are outline fragments and the large ones
 rectangles around blurred regions.
 
 \label{sec:watershed}The watershed output hardly changes with the window (52\,302 against 52\,784 detections, median
-0.075~mm under both). Varying its seed constants directly (\tabref{tab:ws-sweep}; \code{scripts/detector_checks.py
-sweep}, six single frames, so the configured median is 88 rather than 75~\um) shows that the kept basins cover
+0.076~mm under both). Varying its seed constants directly (\tabref{tab:ws-sweep}; \code{scripts/detector_checks.py
+sweep}, six single frames, so the configured median is 89 rather than 75~\um) shows that the kept basins cover
 86\,\% of the cropped frame: the detector tiles the picture whether or not a crystal outline separates the basins. The
-median hardly moves with the seed spacing between 6 and 16~px, but it follows the seed clearance, from 63 to 108~\um{}
-for 3 to 9~px, and from 60 to 148~\um{} when both constants are scaled together. A second sweep on three frames with the
+median hardly moves with the seed spacing between 6 and 16~px, but it follows the seed clearance, from 64 to 109~\um{}
+for 3 to 9~px, and from 61 to 150~\um{} when both constants are scaled together. A second sweep on three frames with the
 three sharpness layers pooled (\code{scripts/watershed_seed_sweep.py}) gives median basins of 36.5, 45.2 and
 90.3 clip pixels for the constants 6/3, 12/6 and 24/12~px. A narrower CV than the edge
 detector's is therefore not evidence of a narrower crystal distribution.
@@ -89,13 +89,13 @@ inside kept basins.}\label{tab:ws-sweep}
 \toprule
 Spacing (px) & Clearance (px) & Per frame & Median (\textmu m) & Coverage \\
 \midrule
-6 & 6 & 693 & 87 & 86\,\% \\
-12 & 6 & 680 & 88 & 86\,\% \\
-24 & 6 & 565 & 99 & 85\,\% \\
-12 & 3 & 1304 & 63 & 91\,\% \\
-12 & 9 & 335 & 108 & 73\,\% \\
-6 & 3 & 1363 & 60 & 91\,\% \\
-24 & 12 & 166 & 148 & 59\,\% \\
+6 & 6 & 693 & 88 & 86\,\% \\
+12 & 6 & 680 & 89 & 86\,\% \\
+24 & 6 & 565 & 100 & 85\,\% \\
+12 & 3 & 1304 & 64 & 91\,\% \\
+12 & 9 & 335 & 109 & 73\,\% \\
+6 & 3 & 1363 & 61 & 91\,\% \\
+24 & 12 & 166 & 150 & 59\,\% \\
 \bottomrule
 \end{tabular}
 \end{table}

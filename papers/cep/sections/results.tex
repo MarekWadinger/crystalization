@@ -14,8 +14,8 @@ first real camera points (RQ3).
 A size signal must at least move when the crystals grow. We ran the edge and watershed detectors of the earlier
 pipeline (\ref{app:detectors}) on strike b2 of the 2026-02-04 PAL recording: 10 frames, 1~s apart, at 13
 times from 40~min before seeding to 200~min after it, with the configured window of $[9,\ 71\,020]$ PAL samples$^2$
-(\code{scripts/detector_checks.py time}; \figref{fig:time}). At the modelled scale the edge median stays at 31--36~\um{} and the
-watershed median at 180--216~\um{} over the whole strike, within 16\,\% and 20\,\%. Both return before seeding, when the pan
+(\code{scripts/detector_checks.py time}; \figref{fig:time}). At the modelled scale the edge median stays at 32--37~\um{} and the
+watershed median at 183--219~\um{} over the whole strike, within 16\,\% and 20\,\%. Both return before seeding, when the pan
 holds concentrating syrup, the same values as at its end. In the 2026-10-30 run the microscope medians grow 17-fold,
 from 29 to 483~\um{} within 122~min. That run is from another day, but a growth of this order is what seeding and
 boiling imply. A detector whose median does not move over 240~min does not measure crystal size. Only the
@@ -167,11 +167,11 @@ packing ramp & 0.001 & 0.330 & 0.295 & 0.806 & 0.562 & 0 / 0 \\
 The only REAL camera signal so far is the blind AI chord tracing of \secref{sec:bias}: 12 frame-and-reader medians
 from 6 frames at two sample times of b1, up to 62~min, run through the filter with $\sigma_v = 0.18$ and b2 as the
 nominal curve. In the window the points cover, which holds the held-out samples at 49 and 60~min, the filter is no
-better than the nominal curve in log size: 0.060 with the anchor and 0.075 without, against 0.046 for the nominal curve
+better than the nominal curve in log size: 0.059 with the anchor and 0.067 without, against 0.046 for the nominal curve
 and 0.095 and 0.073 for the anchor-only references shifted in $\ln L$ and in time. Its $G/L$ error, 0.54~\%/min, lies
 between the nominal curve's 0.66 and the time-shifted reference's 0.46. No flag is raised. As EXTRAPOLATION beyond the
-camera data, open loop, the filter follows b1 to 122~min (494~\um{} against 483~\um) and then overshoots the plateau
-(673~\um{} against 486~\um{} at 160~min). Two held-out samples and a dozen AI-traced points are thin evidence.
+camera data, open loop, the filter follows b1 to 122~min (501~\um{} against 483~\um) and then overshoots the plateau
+(683~\um{} against 486~\um{} at 160~min). Two held-out samples and a dozen AI-traced points are thin evidence.
 
 The claim that the camera aids the estimator waits on the fine-tuned detector: detector metrics against the hand
 labels \pending{precision, recall, $F_1$ of the three detectors and held-out AP@0.5 of the fine-tuned model,
