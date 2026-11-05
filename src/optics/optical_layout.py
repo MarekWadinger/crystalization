@@ -15,11 +15,25 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as pe
 from matplotlib.patches import Rectangle
 
 from optics.config import SOURCE_RANK, load_camera, source_classes
 
-FIG_DIR = Path(__file__).resolve().parents[2] / "docs" / "optics" / "figures"
+REPO = Path(__file__).resolve().parents[2]
+FIG_DIR = REPO / "docs" / "optics" / "figures"
+# Side view of the installation (Aug-photos 20260810_111738, resized to 2000 px).
+# Only cropped and labelled here; the pixels are not altered.
+PHOTO = REPO / "docs" / "lens" / "20260810_111738.jpg"
+PHOTO_CROP = (650, 375, 2000, 1175)  # left, top, right, bottom in PHOTO pixels
+# Label → (text x, text y, arrow tip x, arrow tip y) in PHOTO pixels.
+PHOTO_LABELS = {
+    "camera": (800, 1110, 880, 900),
+    "tube": (1250, 1130, 1430, 880),
+    "lens": (1620, 1130, 1585, 885),
+    "sight glass": (1800, 500, 1780, 700),
+    "tape measure (cm)": (1050, 470, 1150, 755),
+}
 # Arrow colour = how well the length is sourced (tags in configs/camera_100.toml).
 SOURCE_COLOR = {
     **dict.fromkeys(("MEASURED", "PHOTO", "DATASHEET", "CHOICE"), "black"),
@@ -120,8 +134,30 @@ def _geometry() -> dict[str, float]:
     }
 
 
+def _photo(ax: plt.Axes) -> None:
+    left, top, right, bottom = PHOTO_CROP
+    ax.imshow(plt.imread(PHOTO)[top:bottom, left:right])
+    halo = [pe.withStroke(linewidth=3, foreground="black")]
+    for text, (tx, ty, ax_, ay) in PHOTO_LABELS.items():
+        ax.annotate(
+            text,
+            (ax_ - left, ay - top),
+            (tx - left, ty - top),
+            color="white",
+            ha="center",
+            fontsize=13,
+            path_effects=halo,
+            arrowprops={"arrowstyle": "->", "color": "white", "lw": 2},
+        )
+    ax.axis("off")
+
+
 def _draw(
-    labels: dict[str, str], out: Path, g: dict[str, float], src: dict[str, str]
+    labels: dict[str, str],
+    out: Path,
+    g: dict[str, float],
+    src: dict[str, str],
+    photo: bool = False,
 ) -> None:
     segs = [
         ("body", g["camera"], "#333333", "white"),
@@ -131,7 +167,13 @@ def _draw(
         ("glass", g["t"], "#c6e2fb", "black"),
         ("slurry", g["slurry"], "#c9a05a", "black"),
     ]
-    fig, ax = plt.subplots(figsize=(16, 5))
+    if photo:
+        fig, (pax, ax) = plt.subplots(
+            1, 2, figsize=(22, 5), gridspec_kw={"width_ratios": [6, 16]}
+        )
+        _photo(pax)
+    else:
+        fig, ax = plt.subplots(figsize=(16, 5))
     x = 0.0
     edges: dict[str, float] = {}
     sensor = g["camera"] - g["flange"]
@@ -244,7 +286,7 @@ def main() -> None:
         "dim_t": f"(C) hrúbka skla\n{g['t']:.0f} mm",
         "dim_body": f"objektív\n{g['body']:.1f} mm",
     }
-    _draw(en, FIG_DIR / "18_optical_layout.png", g, src)
+    _draw(en, FIG_DIR / "18_optical_layout.png", g, src, photo=True)
     _draw(sk, FIG_DIR / "18_optical_layout_sk_variables.png", g, src)
     for k, v in g.items():
         print(f"{k:>8} = {v:.3f}")
